@@ -8,6 +8,7 @@ import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 
+//TESTING GIT 
 class Menu extends Component {
   render() {
     return (
