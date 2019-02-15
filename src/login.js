@@ -9,9 +9,10 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
 
 /* 
-  HER SKAL ALLE ELEMENTER SETTES SAMMEN TIL FOR Å LAGE SELVE APPLIKASJONEN 
-  
-  BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
+    LOG IN MENY FOR Å VELGE BRUKER, SOM VIL HA PÅVIRKNING PÅ 
+    HVA BRUKEREN KAN SE PÅ SKJERMEN 
+    
+    SKAL EXPORTERES
 */
 
 class Menu extends Component {
