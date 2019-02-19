@@ -1,54 +1,8 @@
 body{
-    width: 80%;
-    background-color: #FFFFFF;
-    margin-left: 10%;
-  }
-  
-  .navbar{
-    margin-top: 3%;
-    border: 2px solid black;
-    text-align: center;
-    font-size: 23px;
-    color: black;
-    margin-bottom: 2%;
-    text-decoration-color: black;
     width: 100%;
-    background: #77CCA4;
   }
 
-  .navbar a {
-    text-decoration: none;
+  a {
     color: black;
-  }
 
-  .navbar a:hover{
-    color: slategray;
-  }
-
-  .students, .subjects {
-    padding: 2%;
-  }
-
-  .students a, .subjects a, .subDetails a, .studDetilas a{
-    text-decoration: none;
-    color: black;
-  }
-
-  .students a:hover, .subjects a:hover, .subDetails a:hover, .studDetilas a:hover{
-    color: slategray;
-  }
-
-  .students, .students th, .students td, .subjects, .subjects th, .subjects td{
-    border: 2px solid black;
-    font-size: 20px;
-    color: black;
-    text-decoration: none;
-    list-style-type: none;
-  }
-
-  .subDetails, .studDetails{
-    padding: 2%;
-    border: 2px solid black;
-    list-style-type: none;
-    text-decoration: none;
   }
