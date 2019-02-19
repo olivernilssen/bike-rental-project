@@ -13,7 +13,70 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
   
   BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
 */
+let ansattKomponent = require('./ansatt');
+let overview = new ansattKomponent.Overview;
+let booking = new ansattKomponent.Booking;
+let sykler = new ansattKomponent.Bicycles;
+let kunder = new ansattKomponent.Customers;
+let handlekurv = new ansattKomponent.Basket;
+let lokasjoner = new ansattKomponent.Locations;
 
+let loggedIn = false;
+
+class LoginMenu extends Component {
+  username = '';
+  password = '';
+
+  render() {
+    return (
+      <div className="container">
+        <div className="d-flex justify-content-center h-100">
+          <div className="card">
+            <div className="card-header">
+              <h3>Sign In</h3>
+            </div>
+            <div className="card-body">
+              <form>
+                <div className="input-group form-group">
+                  <input type="text" value={this.username} onChange={event => (this.username = event.target.value)} className="form-control" placeholder="Employee Name"></input>
+                  
+                </div>
+                <div className="input-group form-group">
+                  <input type="password" value={this.password} onChange={event => (this.password = event.target.value)} className="form-control" placeholder="Password"></input>
+                </div>
+                  
+                <div className="form-group">
+                  <input type="submit" value="Login" onClick={this.login} className="btn float-right login_btn"></input>
+                </div>
+              </form>
+            </div>
+            <div className="card-footer">
+              <div className="d-flex justify-content-center">
+                <a href="#">Forgot your password?</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  
+  login () {
+
+    if(this.username == 'Oliver' && this.password == "1234")
+    { 
+      loggedIn = true;
+    }
+    else if(this.username == null || this.password == null){
+      alert("Please type something!");
+    }
+    else {
+      alert("log in name or password was wrong");
+    }
+  }
+}
+}
 
 
 class Menu extends Component {
@@ -46,66 +109,31 @@ class Menu extends Component {
   }
 }
 
-class Overview extends Component {
-  render(){
-    return(
-      <h1>OVERSIKT</h1>
-    );
-  }
+
+if(loggedIn == true){
+  ReactDOM.render(
+    <HashRouter>
+      <div>
+        <Menu /> 
+        <Route path="/overview/" component={overview} />
+        <Route path="/booking/" component={booking} />
+        <Route path="/bicycles/" component={sykler} />
+        <Route path="/customers/" component={kunder} />
+        <Route path="/basket/" component={handlekurv} />
+        <Route path="/locations/" component={lokasjoner} />
+      </div>
+    </HashRouter>,
+    document.getElementById('root')
+  );
 }
-
-class Booking extends Component {
-  render(){
-    return(
-      <h1>BOOKING</h1>
-    );
-  }
+else 
+{
+  ReactDOM.render(
+    <HashRouter>
+        <div>
+          <LoginMenu />
+        </div>
+    </HashRouter>,
+    document.getElementById('root')
+  );
 }
-
-class Bicycles extends Component {
-  render(){
-    return(
-      <h1>SYKLER</h1>
-    );
-  }
-}
-
-class Locations extends Component {
-  render(){
-    return(
-      <h1>LOKASJONER</h1>
-    );
-  }
-}
-
-class Customers extends Component {
-  render(){
-    return(
-      <h1>KUNDER</h1>
-    );
-  }
-}
-
-class Basket extends Component {
-  render(){
-    return(
-      <h1>HANDLEKURV</h1>
-    );
-  }
-}
-
-
-ReactDOM.render(
-  <HashRouter>
-    <div>
-       <Menu /> 
-       <Route path="/overview/" component={Overview} />
-       <Route path="/booking/" component={Booking} />
-       <Route path="/bicycles/" component={Bicycles} />
-       <Route path="/customers/" component={Customers} />
-       <Route path="/basket/" component={Basket} />
-       <Route path="/locations/" component={Locations} />
-    </div>
-  </HashRouter>,
-  document.getElementById('root')
-);

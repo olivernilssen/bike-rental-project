@@ -38,7 +38,7 @@ class Bicycles extends Component {
   }
 }
 
-class locations extends Component {
+class Locations extends Component {
   render(){
     return(
       <h1>LOKASJONER</h1>
@@ -46,7 +46,7 @@ class locations extends Component {
   }
 }
 
-class customers extends Component {
+class Customers extends Component {
   render(){
     return(
       <h1>KUNDER</h1>
@@ -54,7 +54,7 @@ class customers extends Component {
   }
 }
 
-class basket extends Component {
+class Basket extends Component {
   render(){
     return(
       <h1>HANDLEKURV</h1>
@@ -62,4 +62,5 @@ class basket extends Component {
   }
 }
 
+module.exports = {Overview, Booking, Bicycles, Locations, Customers, Basket}
 

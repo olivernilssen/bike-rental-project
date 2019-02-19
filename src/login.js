@@ -2,19 +2,28 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { studentService } from './services';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 
 /* 
-    LOG IN MENY FOR Å VELGE BRUKER, SOM VIL HA PÅVIRKNING PÅ 
-    HVA BRUKEREN KAN SE PÅ SKJERMEN 
-    
-    SKAL EXPORTERES
+  HER SKAL ALLE ELEMENTER SETTES SAMMEN TIL FOR Å LAGE SELVE APPLIKASJONEN 
+  
+  BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
 */
+let ansattKomponent = require('./ansatt');
+let overview = new ansattKomponent.Overview;
+let booking = new ansattKomponent.Booking;
+let sykler = new ansattKomponent.Bicycles;
+let kunder = new ansattKomponent.Customers;
+let handlekurv = new ansattKomponent.Basket;
+let lokasjoner = new ansattKomponent.Locations;
 
-class LogIn extends Component {
+let loggedIn = false;
+
+class LoginMenu extends Component {
   username = '';
   password = '';
 
@@ -57,7 +66,8 @@ class LogIn extends Component {
 
     if(this.username == 'Oliver' && this.password == "1234")
     { 
-      // HER LASTES HOVED SIDEN OM LOG IN DETALJER ER RIKITG
+      loggedIn = true;
+      console.log("hva skjer? " + loggedIn);
     }
     else if(this.username == null || this.password == null){
       alert("Please type something!");
@@ -66,14 +76,64 @@ class LogIn extends Component {
       alert("log in name or password was wrong");
     }
   }
-
 }
 
-ReactDOM.render(
-  <HashRouter>
-    <div>
-       <LogIn />
-    </div>
-  </HashRouter>,
-  document.getElementById('root')
-);
+
+class Menu extends Component {
+  render() {
+    return (
+      <nav class="navbar navbar-inverse navbar-fixed-left">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Sykkel Utleie 9000</a>
+          </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><NavLink to="/overview">Oversikt</NavLink></li>
+            <li><NavLink to="/booking">Book</NavLink></li>
+            <li><NavLink to="/bicycles">Sykler</NavLink></li>
+            <li><NavLink to="/customers">Kunder</NavLink></li>
+            <li><NavLink to="/locations">Lokasjoner</NavLink></li>
+            <li><NavLink to="/basket">Handlekurv</NavLink></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    );
+  }
+}
+
+
+if(loggedIn == true){
+  ReactDOM.render(
+    <HashRouter>
+      <div>
+        <Menu /> 
+        <Route path="/overview/" component={overview} />
+        <Route path="/booking/" component={booking} />
+        <Route path="/bicycles/" component={sykler} />
+        <Route path="/customers/" component={kunder} />
+        <Route path="/basket/" component={handlekurv} />
+        <Route path="/locations/" component={lokasjoner} />
+      </div>
+    </HashRouter>,
+    document.getElementById('root')
+  );
+}
+else 
+{
+  ReactDOM.render(
+    <HashRouter>
+        <div>
+          <LoginMenu />
+        </div>
+    </HashRouter>,
+    document.getElementById('root')
+  );
+}
