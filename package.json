@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
+    "start": "electron -r @babel/register .",
     "build": "webpack --config prod.config.js"
   },
   "dependencies": {
