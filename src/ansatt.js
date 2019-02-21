@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { studentService } from './services';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import PropTypes from 'prop-types';
+// import { studentService } from './services';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -53,22 +50,8 @@ class Booking extends Component {
               <form method="post">
                 {/* Date entry */}
                 <div className="form-group">
-                  <DatePicker
-                    selected={this.state.startDate}
-                    minDate={new Date()}
-                    selectsStart
-                    startDate={this.state.startDate}
-                    endDate={this.state.endDate}
-                    onChange={this.handleChangeStart}
-                  />
+                  
 
-                  <DatePicker
-                    selected={this.state.endDate}
-                    selectsEnd
-                    startDate={this.state.startDate}
-                    endDate={this.state.endDate}
-                    onChange={this.handleChangeEnd}
-                  />
                 </div>
                 {/* submit button */}
                 <div className="form-group">
