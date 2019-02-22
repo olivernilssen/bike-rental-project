@@ -18,27 +18,38 @@ class Overview extends Component {
 }
 
 class Booking extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      startDate: new Date(),
-      endDate: new Date()
-    };
+ constructor(props)
+ {
+   super(props);
+   this.today = new Date();
+   this.day = this.today.getDay();
+   this.month = this.today.getMonth();
+   this.year = this.today.getFullYear();
+   this.todaysDate = this.year + "-" + this.month + "-" + this.day;
+   this.state = {
+     startDate: "",
+     endDate: ""
+   }
 
-    // this.handleChange = this.handleChange.bind(this);
-  }
+   this.handlechangeStart = this.handlechangeStart.bind(this);
+   this.handlechangeEnd = this.handlechangeEnd.bind(this);
+   this.handleSubmit = this.handleSubmit.bind(this);
+ }
 
-  handleChangeStart(date) {
-    this.setState({
-      startDate: date
-    });
-  }
 
-  handleChangeEnd(date) {
-    this.setState({
-      endDate: date
-    });
-  }
+
+ handlechangeStart (event) {
+  this.setState({startDate: event.target.value})
+}
+
+handlechangeEnd (event) {
+  this.setState({endDate: event.target.value})
+}
+
+handleSubmit (event) {
+  alert(this.state.startDate + " " + this.todaysDate);
+  event.preventDefault();
+}
 
   render() {
     return (
@@ -47,17 +58,44 @@ class Booking extends Component {
           <div className="row">
             <div className="col-md-6 col-sm-6 col-xs-12">
               <h3>Booking</h3>
-              <form method="post">
+              <form onSubmit={this.handleSubmit}>
                 {/* Date entry */}
                 <div className="form-group">
-                  
+                  <input 
+                    type='date' 
+                    name='startDate' 
+                    min={this.todaysDate}
+                    value={this.state.startDate} 
+                    onChange={this.handlechangeStart}>
+                  </input>
 
+                  <input 
+                    type='date' 
+                    name='endDate' 
+                    min={this.state.startDate}
+                    value={this.state.endDate} 
+                    onChange={this.handlechangeEnd}>
+                  </input>
+
+                  <select name='locations'>
+                    <option value=''>Any Location</option>
+                    <option value='Voss'>Voss</option>
+                    <option value='Finnsnes'>Finnsnes</option>
+                    <option value='Røros'>Røros</option>
+                  </select>
+
+                  <select name='bikeType'>
+                    <option value=''>Any Type of bike</option>
+                    <option value='citybike'>City bike</option>
+                    <option value='mountainbike'>Mountain Bike</option>
+                    <option value='tandem'>Tandem</option>
+                    <option value='dutchbike'>Dutch Bike</option>
+                    <option value='childbike'>Childrens Bike</option>
+                  </select>
                 </div>
                 {/* submit button */}
                 <div className="form-group">
-                  <button className="btn btn-primary " name="submit" type="submit">
-                    Submit
-                  </button>
+                  <input name="submit" type="submit" value='Submit' />
                 </div>
               </form>
             </div>
@@ -66,6 +104,9 @@ class Booking extends Component {
       </div>
     );
   }
+
+
+
 }
 
 class Bicycles extends Component {
