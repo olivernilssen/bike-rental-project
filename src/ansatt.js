@@ -17,25 +17,49 @@ class Overview extends Component {
   }
 }
 
+let today = new Date();
+let day = today.getDate();
+let month = today.getMonth() + 1;
+let year = today.getFullYear();
+
+if(day < 10)
+{
+  day = "0" + day;
+}
+
+if(month < 10){
+  month = "0" + month;
+}
+
 class Booking extends Component {
  constructor(props)
  {
    super(props);
-   this.today = new Date();
-   this.day = this.today.getDay();
-   this.month = this.today.getMonth();
-   this.year = this.today.getFullYear();
-   this.todaysDate = this.year + "-" + this.month + "-" + this.day;
+   this.todaysDate = year + "-" + month + "-" + day;
    this.state = {
-     startDate: "",
+     startDate: this.todaysDate,
      endDate: ""
    }
-
    this.handlechangeStart = this.handlechangeStart.bind(this);
    this.handlechangeEnd = this.handlechangeEnd.bind(this);
    this.handleSubmit = this.handleSubmit.bind(this);
+
+  if(this.month < "10"){
+    console.log("DAJWDNKANWJND");
+   this.month = "0" + toString(this.month);
+  }
+  
+  if(toString(this.day).length == 1){
+    this.day = "0" + toString(this.day);
+  }
+
  }
 
+ setMonthorDay(value) {
+   if(value < 10){
+     
+   }
+ }
 
 
  handlechangeStart (event) {
@@ -47,11 +71,12 @@ handlechangeEnd (event) {
 }
 
 handleSubmit (event) {
-  alert(this.state.startDate + " " + this.todaysDate);
+  alert("noe skjedde her");
   event.preventDefault();
 }
 
   render() {
+    console.log(this.today + " \n\n " + this.todaysDate  + " \n\n " + this.state.startDate);
     return (
       <div className="bootstrap-iso">
         <div className="container-fluid">
