@@ -3,6 +3,7 @@ import { Component } from 'react-simplified';
 // import { studentService } from './services';
 
 import createHashHistory from 'history/createHashHistory';
+import { start } from 'repl';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 let today = new Date();
@@ -10,14 +11,10 @@ let day = today.getDate();
 let month = today.getMonth() + 1;
 let year = today.getFullYear();
 
-if(day < 10)
-{
-  day = "0" + day;
-}
+if(day < 10) day = "0" + day;
 
-if(month < 10){
-  month = "0" + month;
-}
+if(month < 10) month = "0" + month;
+
 
 /*
     ELEMENTER FOR ALLE BRUKERE INKLUDERT VANLIGE ANSATTE OG ADMIN
@@ -37,14 +34,13 @@ class Booking extends Component {
    super(props);
    this.todaysDate = year + "-" + month + "-" + day;
    this.dayRent = false;
-   this.hoursRenting = 0;
    this.state = {
      startDate: this.todaysDate,
-     endDate: ""
+     endDate: "",
+     hoursRenting: 0,
+     typeSelect: "*",
+     locationSelect: "*"
    }
-   this.bikes = {
-     bike1: {type: "Tandem", id: "123", brand: "Merida", location: "Voss"}
-   };
 
    this.handlechangeStart = this.handlechangeStart.bind(this);
    this.handlechangeEnd = this.handlechangeEnd.bind(this);
@@ -56,10 +52,12 @@ class Booking extends Component {
 
 handlechangeStart (event) {
   this.setState({startDate: event.target.value})
+  history.push("/booking/");
 }
 
 handlechangeEnd (event) {
   this.setState({endDate: event.target.value})
+  history.push("/booking/");
 }
 
 handleCheckChange (event) {
@@ -75,19 +73,34 @@ handleCheckChange (event) {
 
 handleHourChange (event) {
   this.setState({hoursRenting: event.target.value})
+  history.push("/booking/");
 }
 
-handleSubmit (event) {
+handleSubmit () {
   this.props.history.push({
     pathname: "/booking/bookingDetails/",
-    startDate: {
+    states: {
       startDate: this.state.startDate, 
-      endDate: this.state.end,
+      typeSelect: this.state.typeSelect,
+      locationSelect: this.state.locationSelect,
+      endDate: this.state.endDate,
       dayRent: this.dayRent,
-      bikes: this.bikes,
-      hoursRenting:this.hoursRenting
+      bikes: this.state.bikes,
+      hoursRenting:this.state.hoursRenting
     }
-  });
+  }); 
+}
+
+handlelocationChange (event) 
+{
+  this.setState({locationSelect: event.target.value})
+  history.push("/booking/");
+}
+
+handleTypeChange (event) 
+{
+  this.setState({typeSelect: event.target.value})
+  history.push("/booking/");
 }
 
 
@@ -98,7 +111,7 @@ handleSubmit (event) {
           <div className="row">
             <div className="col-md-6 col-sm-6 col-xs-12">
               <h3>Booking</h3>
-              <form onSubmit={this.handleSubmit}>
+              <div>
                 
                 {/* Date entry */}
                 <div className="form-group">
@@ -110,7 +123,7 @@ handleSubmit (event) {
                     type='date' 
                     name='startDate' 
                     disabled={this.dayRent}
-                    min={this.todaysDate}
+                    min={this.state.todaysDate}
                     value={this.state.startDate} 
                     onChange={this.handlechangeStart}>
                   </input>
@@ -127,29 +140,28 @@ handleSubmit (event) {
                   <br></br>
                   <br></br>
 
-                  <select name='locations'>
-                    <option value=''>Any Location</option>
+                  <select name='locations' value={this.state.locationSelect} onChange={this.handlelocationChange}>
+                    <option value='*'>Any Location</option>
                     <option value='Voss'>Voss</option>
                     <option value='Finnsnes'>Finnsnes</option>
                     <option value='Røros'>Røros</option>
                   </select>
 
-                  <select name='bikeType'>
-                    <option value=''>Any Type of bike</option>
-                    <option value='citybike'>City bike</option>
+                  <select name='bikeType' value={this.state.typeSelect} onChange={this.handleTypeChange}>
+                    <option value='*'>Any Type of bike</option>
+                    <option value='City Bike'>City bike</option>
                     <option value='mountainbike'>Mountain Bike</option>
-                    <option value='tandem'>Tandem</option>
-                    <option value='dutchbike'>Dutch Bike</option>
+                    <option value='Tandem'>Tandem</option>
+                    <option value='Dutch Bike'>Dutch Bike</option>
                     <option value='childbike'>Childrens Bike</option>
                   </select>
                 </div>
 
                 {/* submit button */}
                 <div className="form-group">
-                  <input name="submit" type="submit" value='Submit' />
-                  {/* <BookingDetails startDate={this.state.startDate} endDate={this.state.endDate} dayRent={this.dayRent} bikes={this.bikes} hoursRenting={this.hoursRenting}></BookingDetails> */}
+                  <button name="submit" type="button" onClick={this.handleSubmit}>Søk</button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -162,14 +174,74 @@ handleSubmit (event) {
 
 
 class BookingDetails extends Component {
+  constructor(props)
+  {
+    super(props);
+    this.bikes =
+    [
+       {type: "Tandem", id: "111", name: "Bike1", brand: "Merida", location: "Voss"},
+       {type: "Dutch Bike", id: "222", name: "Bike2", brand: "Merida", location: "Finnsnes"},
+       {type: "City Bike", id: "333", name: "Bike3", brand: "Merida", location: "Røros"},
+    ]
+    
+    this.bikes4User = [];
+    
+  }
+
   render() {
-    console.log(this.props.location.state);
+
+    if(this.props.location.states == null){
+      history.push("/booking/");
+    }
+
     return (
       <div className="bootstrap-iso">
-        <h3>Available bikes</h3>
-          
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-6 col-sm-6 col-xs-12">
+              <h3>Ledige Sykler</h3>
+              <ul>
+              {this.bikes4User.map(bike => (
+                <li  key={bike.id}>
+                  {bike.name} <br></br>
+                  {bike.type} <br></br>
+                  {bike.id} <br></br>
+                  {bike.location} <br></br><br></br>
+                </li> 
+               ))}
+              </ul>
+            </div>
+          </div>
         </div>
+      </div>
     );
+  }
+
+  //SQL SPØRRING ved å bruke this.props.location.states.(startdate, enddate, dayrent etc)
+  mounted() {
+    for(let i = 0; i < this.bikes.length; i++) {
+      if(this.props.location.states.locationSelect == "*" && this.props.location.states.typeSelect != "*"){
+        if(this.bikes[i].type == this.props.location.states.typeSelect)
+        {
+          this.bikes4User.push(this.bikes[i]);
+        }
+      }
+      else if(this.props.location.states.locationSelect != "*" && this.props.location.states.typeSelect == "*"){
+        if(this.bikes[i].location == this.props.location.states.locationSelect)
+        {
+          this.bikes4User.push(this.bikes[i]);
+        }
+      }
+      else if(this.props.location.states.locationSelect != "*" && this.props.location.states.typeSelect != "*"){
+        if(this.bikes[i].type == this.props.location.states.typeSelect && this.bikes[i].location == this.props.location.states.locationSelect)
+        {
+          this.bikes4User.push(this.bikes[i]);
+        }
+      }
+      else{
+        this.bikes4User.push(this.bikes[i]);
+      }
+    }
   }
 }
 

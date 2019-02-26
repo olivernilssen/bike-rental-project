@@ -254,7 +254,6 @@ class SubjectDetails extends Component {
         </ul>
         );}
           
-
     update(){
       history.push("/subjectEdit/" + this.props.match.params.sub_code + "/edit");
     }
