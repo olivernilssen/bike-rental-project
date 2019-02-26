@@ -5,18 +5,6 @@ import { Component } from 'react-simplified';
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
-/*
-    ELEMENTER FOR ALLE BRUKERE INKLUDERT VANLIGE ANSATTE OG ADMIN
-
-    SKAL EXPORTERES
-*/
-
-class Overview extends Component {
-  render() {
-    return <h1>OVERSIKT</h1>;
-  }
-}
-
 let today = new Date();
 let day = today.getDate();
 let month = today.getMonth() + 1;
@@ -31,38 +19,42 @@ if(month < 10){
   month = "0" + month;
 }
 
+/*
+    ELEMENTER FOR ALLE BRUKERE INKLUDERT VANLIGE ANSATTE OG ADMIN
+
+    SKAL EXPORTERES
+*/
+
+class Overview extends Component {
+  render() {
+    return <h1>OVERSIKT</h1>;
+  }
+}
+
 class Booking extends Component {
  constructor(props)
  {
    super(props);
    this.todaysDate = year + "-" + month + "-" + day;
+   this.dayRent = false;
+   this.hoursRenting = 0;
    this.state = {
      startDate: this.todaysDate,
      endDate: ""
    }
+   this.bikes = {
+     bike1: {type: "Tandem", id: "123", brand: "Merida", location: "Voss"}
+   };
+
    this.handlechangeStart = this.handlechangeStart.bind(this);
    this.handlechangeEnd = this.handlechangeEnd.bind(this);
    this.handleSubmit = this.handleSubmit.bind(this);
-
-  if(this.month < "10"){
-    console.log("DAJWDNKANWJND");
-   this.month = "0" + toString(this.month);
-  }
-  
-  if(toString(this.day).length == 1){
-    this.day = "0" + toString(this.day);
-  }
+   this.handleCheckChange = this.handleCheckChange.bind(this);
+   this.handleHourChange = this.handleHourChange.bind(this);
 
  }
 
- setMonthorDay(value) {
-   if(value < 10){
-     
-   }
- }
-
-
- handlechangeStart (event) {
+handlechangeStart (event) {
   this.setState({startDate: event.target.value})
 }
 
@@ -70,13 +62,36 @@ handlechangeEnd (event) {
   this.setState({endDate: event.target.value})
 }
 
-handleSubmit (event) {
-  alert("noe skjedde her");
-  event.preventDefault();
+handleCheckChange (event) {
+  if(this.dayRent == false) {
+    this.dayRent = true;
+    
+  }
+  else 
+  {
+    this.dayRent = false;
+  }
 }
 
+handleHourChange (event) {
+  this.setState({hoursRenting: event.target.value})
+}
+
+handleSubmit (event) {
+  this.props.history.push({
+    pathname: "/booking/bookingDetails/",
+    startDate: {
+      startDate: this.state.startDate, 
+      endDate: this.state.end,
+      dayRent: this.dayRent,
+      bikes: this.bikes,
+      hoursRenting:this.hoursRenting
+    }
+  });
+}
+
+
   render() {
-    console.log(this.today + " \n\n " + this.todaysDate  + " \n\n " + this.state.startDate);
     return (
       <div className="bootstrap-iso">
         <div className="container-fluid">
@@ -84,11 +99,17 @@ handleSubmit (event) {
             <div className="col-md-6 col-sm-6 col-xs-12">
               <h3>Booking</h3>
               <form onSubmit={this.handleSubmit}>
+                
                 {/* Date entry */}
                 <div className="form-group">
+                  <input type="checkbox" checked={this.dayRent} onChange={this.handleCheckChange} value="Times leie?"></input>
+                  <label> Times leie?</label>
+                  <input type="number" disabled={!this.dayRent} onChange={this.handleHourChange} value={this.hoursRenting}></input>
+                  <br></br>
                   <input 
                     type='date' 
                     name='startDate' 
+                    disabled={this.dayRent}
                     min={this.todaysDate}
                     value={this.state.startDate} 
                     onChange={this.handlechangeStart}>
@@ -97,10 +118,14 @@ handleSubmit (event) {
                   <input 
                     type='date' 
                     name='endDate' 
+                    disabled={this.dayRent}
                     min={this.state.startDate}
                     value={this.state.endDate} 
                     onChange={this.handlechangeEnd}>
                   </input>
+
+                  <br></br>
+                  <br></br>
 
                   <select name='locations'>
                     <option value=''>Any Location</option>
@@ -118,9 +143,11 @@ handleSubmit (event) {
                     <option value='childbike'>Childrens Bike</option>
                   </select>
                 </div>
+
                 {/* submit button */}
                 <div className="form-group">
                   <input name="submit" type="submit" value='Submit' />
+                  {/* <BookingDetails startDate={this.state.startDate} endDate={this.state.endDate} dayRent={this.dayRent} bikes={this.bikes} hoursRenting={this.hoursRenting}></BookingDetails> */}
                 </div>
               </form>
             </div>
@@ -130,8 +157,20 @@ handleSubmit (event) {
     );
   }
 
+  
+}
 
 
+class BookingDetails extends Component {
+  render() {
+    console.log(this.props.location.state);
+    return (
+      <div className="bootstrap-iso">
+        <h3>Available bikes</h3>
+          
+        </div>
+    );
+  }
 }
 
 class Bicycles extends Component {
@@ -158,4 +197,4 @@ class Basket extends Component {
   }
 }
 
-module.exports = { Overview, Booking, Bicycles, Locations, Customers, Basket };
+module.exports = { Overview, Booking, BookingDetails, Bicycles, Locations, Customers, Basket };

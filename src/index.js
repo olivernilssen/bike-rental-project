@@ -3,7 +3,7 @@ import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { studentService } from './services';
-import {Overview, Booking, Bicycles, Customers, Locations, Basket} from './ansatt.js';
+import {Overview, Booking, BookingDetails, Bicycles, Customers, Locations, Basket} from './ansatt.js';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -129,13 +129,14 @@ ReactDOM.render(
     <div>
       <Menu isLoggedIn={false}/>
 
-      <Route path='/login/'     component={LoginMenu} />
-      <Route path="/overview/"  component={Overview} />
+      <Route exact path='/login/'     component={LoginMenu} />
+      <Route exact path="/overview/"  component={Overview} />
       <Route path="/booking/"   component={Booking} />
-      <Route path="/bicycles/"  component={Bicycles} />
-      <Route path="/customers/" component={Customers} />
-      <Route path="/basket/"    component={Basket} />
-      <Route path="/locations/" component={Locations} />
+      <Route exact path="/bicycles/"  component={Bicycles} />
+      <Route exact path="/customers/" component={Customers} />
+      <Route exact path="/basket/"    component={Basket} />
+      <Route exact path="/locations/" component={Locations} />
+      <Route exact path="/booking/bookingDetails/" component={BookingDetails} />
     </div>
   </HashRouter>,
   document.getElementById('root')
