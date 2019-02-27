@@ -61,6 +61,14 @@ class RentalService {
       success(results[0]);
     });
   }
+
+  getLocations(success) {
+    connection.query('select * from Locations', (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
 }
 
 export let rentalService = new RentalService();
