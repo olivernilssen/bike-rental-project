@@ -5,10 +5,14 @@
 a {
   color: black;
 } */
+#root {
+  margin-top: 5em;
+}
 
 body {
   font-size: 0.875rem;
   margin-left: 15em;
+  background-color: lightblue;
 }
 
 .feather {
@@ -17,6 +21,10 @@ body {
   vertical-align: text-bottom;
 }
 
+#logIn {
+  margin-left: -15em;
+  margin-top: 10em;
+}
 /*
  * Sidebar
  */
@@ -28,7 +36,7 @@ body {
   left: 0;
   z-index: 100; /* Behind the navbar */
   padding: 48px 0 0; /* Height of navbar */
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-sticky {
@@ -38,20 +46,28 @@ body {
   padding-top: 0.5rem;
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-}
-#navbar {
   max-width: 180px !important;
 }
 
+#navbar {
+  max-width: 180px;
+}
+
 @media (max-width: 767px) {
-  #navbar {
-    max-width: 150px !important;
-    min-width: 100px;
+  .sidebar-sticky {
+    max-width: 150px;
+    /* min-width: 100px; */
   }
 }
 @media (max-width: 575px) {
-  #navbar {
-    padding-top: 7em;
+  .sidebar-sticky {
+    padding-top: 4em;
+  }
+  #root {
+    margin-top: 8em;
+  }
+  .navbar #dangerBtn {
+    margin-bottom: 5px;
   }
 }
 
@@ -73,12 +89,16 @@ body {
 }
 
 .sidebar .nav-link.active {
-  color: #007bff;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 1px 0 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .sidebar .nav-link:hover .feather,
 .sidebar .nav-link.active .feather {
-  color: inherit;
+  color: #007bff;
+}
+.sidebar .nav-link:hover {
+  color: #007bff;
 }
 
 .sidebar-heading {

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
+import { Card, Tab, Row, Column, NavBar, Button, Form } from './widgets';
+import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
+import { connection } from './mysql_connection';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -172,15 +174,20 @@ class Bicycles extends Component {
 
   render() {
     return (
-      <div className="container">
-        <Card>
-          <List>
+      <div className="bootstrap-iso">
+        <Card title="Sykler">
+          <Column right>
+            <NavLink to={'/add/bikeType/'}>
+              <Button.Light>Legg inn ny sykkeltype</Button.Light>
+            </NavLink>
+          </Column>
+          <Tab>
             {this.bikeTypes.map(bike => (
-              <List.Item key={bike.id} to={'/bicycles/' + bike.id}>
+              <Tab.Item key={bike.id} to={'/bicycles/' + bike.id}>
                 {bike.typeName}
-              </List.Item>
+              </Tab.Item>
             ))}
-          </List>
+          </Tab>
         </Card>
       </div>
     );
@@ -189,6 +196,47 @@ class Bicycles extends Component {
   mounted() {
     rentalService.getBikeTypes(bikeTypes => {
       this.bikeTypes = bikeTypes;
+    });
+  }
+}
+
+class BicycleDetails extends Component {
+  bike = null;
+  bikes = [];
+
+  render() {
+    if (!this.bike) return null;
+
+    return (
+      <div>
+        <Card>
+          <Row>
+            <Column width={6}>
+              <Card>
+                <h5>Sykler av typen {this.bike.typeName}</h5>
+                <br />
+                <Row>
+                  <Column>
+                    <List>
+                      {this.bikes.map(bike => (
+                        <List.Item key={bike.id}>{bike.id}</List.Item>
+                      ))}
+                    </List>
+                  </Column>
+                </Row>
+              </Card>
+            </Column>
+          </Row>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    connection.query('select id from Bikes where type_id = ?)', [this.props.match.params.id], (error, results) => {
+      if (error) return console.error(error);
+
+      this.bikes = results;
     });
   }
 }
@@ -211,4 +259,4 @@ class Basket extends Component {
   }
 }
 
-module.exports = { Overview, Booking, BookingDetails, Bicycles, Locations, Customers, Basket };
+module.exports = { Overview, Booking, BookingDetails, Bicycles, BicycleDetails, Locations, Customers, Basket };

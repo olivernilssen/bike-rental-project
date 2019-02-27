@@ -8,6 +8,7 @@ export class Card extends Component {
   render() {
     return (
       <div className="card">
+        <div className="card-header">{this.props.header}</div>
         <div className="card-body">
           <h5 className="card-title">{this.props.title}</h5>
           <div className="card-text">{this.props.children}</div>
@@ -19,24 +20,24 @@ export class Card extends Component {
 
 // Renders a list group item using Bootstrap styles
 // Attributes: to
-class ListItem extends Component {
+class TabItem extends Component {
   render() {
     return this.props.to ? (
-      <NavLink className="list-group-item" activeClassName="active" to={this.props.to}>
+      <NavLink className="nav-link" activeClassName="active" to={this.props.to}>
         {this.props.children}
       </NavLink>
     ) : (
-      <li className="list-group-item">{this.props.children}</li>
+      <li className="nav-item">{this.props.children}</li>
     );
   }
 }
 
 // Renders a list group using Bootstrap styles
-export class List extends Component {
-  static Item = ListItem;
+export class Tab extends Component {
+  static Item = TabItem;
 
   render() {
-    return <ul className="list-group list-group-horizontal">{this.props.children}</ul>;
+    return <ul className="nav nav-tabs">{this.props.children}</ul>;
   }
 }
 
@@ -65,10 +66,12 @@ export class Column extends Component {
 // Attributes: exact, to
 class NavBarLink extends Component {
   render() {
-    return (
+    return this.props.to ? (
       <NavLink className="nav-link" activeClassName="active" exact={this.props.exact} to={this.props.to}>
         {this.props.children}
       </NavLink>
+    ) : (
+      <li className="nav-item text-nowrap">{this.props.children}</li>
     );
   }
 }
@@ -80,13 +83,51 @@ export class NavBar extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-expand-sm bg-light navbar-light">
+      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
         {
-          <NavLink className="navbar-brand" activeClassName="active" exact to="/">
+          <NavLink className="navbar-brand col-sm-3 col-md-2 mr-0" activeClassName="active" exact to="/">
             {this.props.brand}
           </NavLink>
         }
-        <ul className="navbar-nav">{this.props.children}</ul>
+        <ul className="navbar-nav px-3">{this.props.children}</ul>
+      </nav>
+    );
+  }
+}
+
+class SideNavBarLink extends Component {
+  render() {
+    return this.props.to ? (
+      <NavLink className="nav-link" activeClassName="active" exact={this.props.exact} to={this.props.to}>
+        {this.props.children}
+      </NavLink>
+    ) : (
+      <li className="nav-item">{this.props.children}</li>
+    );
+  }
+}
+
+export class SideNavHeading extends Component {
+  render() {
+    return (
+      <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        {this.props.children}
+      </h6>
+    );
+  }
+}
+
+// Renders a NavBar using Bootstrap styles
+// Attributes: brand
+export class SideNavBar extends Component {
+  static SideLink = SideNavBarLink;
+
+  render() {
+    return (
+      <nav className="col-md-2 d-md-block bg-light sidebar" id="navbar">
+        <div className="sidebar-sticky">
+          <ul className="nav flex-column">{this.props.children}</ul>
+        </div>
       </nav>
     );
   }
@@ -109,7 +150,7 @@ class ButtonSuccess extends Component {
 class ButtonDanger extends Component {
   render() {
     return (
-      <button type="button" className="btn btn-danger" onClick={this.props.onClick}>
+      <button type="button" className="btn btn-danger" id="dangerBtn" onClick={this.props.onClick}>
         {this.props.children}
       </button>
     );
@@ -158,6 +199,14 @@ class FormInput extends Component {
     );
   }
 }
+
+export class CenterContent extends Component {
+  render() {
+    return <div className="d-flex justify-content-center">{this.props.children}</div>;
+  }
+}
+
+export class LogIn extends Component {}
 
 // Renders form components using Bootstrap styles
 export class Form {
