@@ -1,6 +1,13 @@
 import { connection } from './mysql_connection';
 
 class RentalService {
+  getBikeTypes(success) {
+    connection.query('select * from BikeType', (error, results) => {
+      if (error) console.error(error);
+
+      success(results);
+    });
+  }
   getBikes(success) {
     connection.query('select * from Bikes', (error, results) => {
       if (error) return console.error(error);

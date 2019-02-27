@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="React, HTML, CSS, JavaScript, JSX, date, datepicker">
+    <title>SykkelUtleie 9000</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <meta name="keywords" content="React, HTML, CSS, JavaScript, JSX, date, datepicker" /> -->
+    <link rel="stylesheet" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="login_style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 
   <body>
     <div id="root"></div>
-    
-    <script>window.$ = window.jQuery = require('jquery');</script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/mladenplavsic/bootstrap-navbar-sidebar/3bd282bd/docs/docs.js"></script>
-   
-    <link rel="stylesheet" href="https://cdn.rawgit.com/mladenplavsic/bootstrap-navbar-sidebar/3bd282bd/docs/navbar-fixed-left.min.css">
-    <link rel="stylesheet" type="text/css" href="login_style.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script>
+      window.$ = window.jQuery = require('jquery');
+    </script>
+
+    <!--
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js">
+        </script>
+
+      <script src="https://cdn.rawgit.com/mladenplavsic/bootstrap-navbar-sidebar/3bd282bd/docs/docs.js"></script>
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.rawgit.com/mladenplavsic/bootstrap-navbar-sidebar/3bd282bd/docs/navbar-fixed-left.min.css"
+      />
+    -->
 
     <script>
       window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = { isDisabled: true };
-      require("@babel/register");
-      require("../src/index.js");
+      require('@babel/register');
+      require('../src/index.js');
     </script>
-
   </body>
 </html>
