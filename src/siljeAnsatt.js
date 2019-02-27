@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, Row, Column, NavBar, Button, Form } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import { connection } from './mysql_connection';
@@ -201,30 +201,69 @@ class Bicycles extends Component {
 }
 
 class BicycleDetails extends Component {
-  bike = null;
+  bikeType = null;
+  bikeTypeDetails = [];
   bikes = [];
 
   render() {
-    if (!this.bike) return null;
+    if (!this.bikeType) return null;
 
     return (
       <div>
         <Card>
           <Row>
-            <Column width={6}>
-              <Card>
-                <h5>Sykler av typen {this.bike.typeName}</h5>
-                <br />
-                <Row>
-                  <Column>
-                    <List>
-                      {this.bikes.map(bike => (
-                        <List.Item key={bike.id}>{bike.id}</List.Item>
-                      ))}
-                    </List>
-                  </Column>
-                </Row>
-              </Card>
+            <Column>
+              <h6>Detaljert beskrivelse</h6>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Modell</Table.Th>
+                  <Table.Th>Årsmodell</Table.Th>
+                  <Table.Th>Rammestørrelse</Table.Th>
+                  <Table.Th>Hjulstørrelse</Table.Th>
+                  <Table.Th>Antall gir</Table.Th>
+                  <Table.Th>Girsystem</Table.Th>
+                  <Table.Th>Bremsesytem</Table.Th>
+                  <Table.Th>Vekt</Table.Th>
+                  <Table.Th>Beregnet for</Table.Th>
+                  <Table.Th>Timespris</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.bikeTypeDetails.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>{bike.model}</Table.Td>
+                      <Table.Td>{bike.year}</Table.Td>
+                      <Table.Td>{bike.frameSize}</Table.Td>
+                      <Table.Td>{bike.wheelSize}</Table.Td>
+                      <Table.Td>{bike.gears}</Table.Td>
+                      <Table.Td>{bike.gearSystem}</Table.Td>
+                      <Table.Td>{bike.brakeSystem}</Table.Td>
+                      <Table.Td>{bike.weight_kg}</Table.Td>
+                      <Table.Td>{bike.suitedFor}</Table.Td>
+                      <Table.Td>{bike.price}</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+              <br />
+              <h6>Sykler av denne typen:</h6>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Lokasjon</Table.Th>
+                  <Table.Th>Status</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.bikes.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.location_id}</Table.Td>
+                      <Table.Td>{bike.bikeStatus}</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
             </Column>
           </Row>
         </Card>
@@ -233,11 +272,25 @@ class BicycleDetails extends Component {
   }
 
   mounted() {
-    connection.query('select id from Bikes where type_id = ?)', [this.props.match.params.id], (error, results) => {
+    rentalService.getBikeTypes(bikeType => {
+      this.bikeType = bikeType;
+    });
+
+    connection.query('select * from BikeType where id = ?', [this.props.match.params.id], (error, results) => {
       if (error) return console.error(error);
 
-      this.bikes = results;
+      this.bikeTypeDetails = results;
     });
+
+    connection.query(
+      'select id, location_id, bikeStatus from Bikes where type_id = ?',
+      [this.props.match.params.id],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        this.bikes = results;
+      }
+    );
   }
 }
 

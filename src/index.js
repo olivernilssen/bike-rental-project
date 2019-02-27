@@ -4,7 +4,19 @@ import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import { Overview, Booking, BookingDetails, Bicycles, BicycleDetails, Customers, Locations, Basket } from './ansatt.js';
-import { Card, Tabs, Row, Column, NavBar, SideNavBar, SideNavHeading, Button, Form, CenterContent } from './widgets';
+import {
+  Card,
+  Tabs,
+  Link,
+  Row,
+  Column,
+  NavBar,
+  SideNavBar,
+  SideNavHeading,
+  Button,
+  Form,
+  CenterContent
+} from './widgets';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -153,7 +165,7 @@ ReactDOM.render(
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
       <Route path="/bicycles/" component={Bicycles} />
-      <Route exact path="/bicycles/:id" component={BicycleDetails} />
+      <Route exact path="/bicycles/:id/" component={BicycleDetails} />
       <Route exact path="/customers/" component={Customers} />
       <Route exact path="/basket/" component={Basket} />
       <Route exact path="/locations/" component={Locations} />
