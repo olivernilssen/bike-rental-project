@@ -82,68 +82,68 @@ class Menu extends Component {
       return (
         <div>
           <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-            <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
-              Company name
+            <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="#/">
+              SykkelUtleie9000
             </a>
-            <input
+            {/*<input
               className="form-control form-control-dark w-100"
               type="text"
               placeholder="Search"
               aria-label="Search"
-            />
+            />*/}
             <ul className="navbar-nav px-3">
               <li className="nav-item text-nowrap">
-                <a className="nav-link" href="#">
+                <a className="nav-link" onClick={this.logout}>
                   Sign out
                 </a>
               </li>
             </ul>
           </nav>
 
-          <div className="container-fluid">
+          <div>
             <div className="row">
-              <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+              <nav className="col-md-2 d-md-block bg-light sidebar" id="navbar">
                 <div className="sidebar-sticky">
                   <ul className="nav flex-column">
                     <li className="nav-item">
-                      <a className="nav-link active" href="#">
+                      <a className="nav-link active" href="#/overview/">
                         <span data-feather="home" />
-                        Dashboard <span className="sr-only">(current)</span>
+                        Oversikt<span className="sr-only">(current)</span>
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="#">
+                      <a className="nav-link" href="#/booking/">
                         <span data-feather="file" />
-                        Orders
+                        Booking
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="#">
+                      <a className="nav-link" href="#/locations/">
                         <span data-feather="shopping-cart" />
-                        Products
+                        Lokasjoner
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="#">
+                      <a className="nav-link" href="#/bicycles/">
                         <span data-feather="users" />
-                        Customers
+                        Sykler
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link" href="#">
+                      <a className="nav-link" href="#/customers/">
                         <span data-feather="bar-chart-2" />
-                        Reports
+                        Kundeliste
                       </a>
                     </li>
-                    <li className="nav-item">
+                    {/*<li className="nav-item">
                       <a className="nav-link" href="#">
                         <span data-feather="layers" />
                         Integrations
                       </a>
-                    </li>
+                    </li>*/}
                   </ul>
 
-                  <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                  {/*<h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Saved reports</span>
                     <a className="d-flex align-items-center text-muted" href="#">
                       <span data-feather="plus-circle" />
@@ -174,13 +174,13 @@ class Menu extends Component {
                         Year-end sale
                       </a>
                     </li>
-                  </ul>
+                  </ul>*/}
                 </div>
               </nav>
 
               <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
                 <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                  <h1 className="h2">Dashboard</h1>
+                  {/*<h1 className="h2">Dashboard</h1>
                   <div className="btn-toolbar mb-2 mb-md-0">
                     <div className="btn-group mr-2">
                       <button type="button" className="btn btn-sm btn-outline-secondary">
@@ -194,7 +194,7 @@ class Menu extends Component {
                       <span data-feather="calendar" />
                       This week
                     </button>
-                  </div>
+                  </div>*/}
                 </div>
               </main>
             </div>
@@ -217,7 +217,7 @@ class Menu extends Component {
   }
 
   logout() {
-    history.push('/login/');
+    // history.push('/login/');
     this.setState({ isLoggedIn: false });
   }
 }

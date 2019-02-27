@@ -8,6 +8,7 @@ a {
 
 body {
   font-size: 0.875rem;
+  margin-left: 15em;
 }
 
 .feather {
@@ -39,6 +40,16 @@ body {
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
 
+@media (max-width: 850px) {
+  #navbar {
+    width: 150px;
+  }
+}
+@media (max-width: 575px) {
+  #navbar {
+    padding-top: 7em;
+  }
+}
 @supports ((position: -webkit-sticky) or (position: sticky)) {
   .sidebar-sticky {
     position: -webkit-sticky;
@@ -74,15 +85,20 @@ body {
  * Content
  */
 
-[role='main'] {
+/* [role='main'] {
   padding-top: 133px; /* Space for fixed navbar */
-}
 
-@media (min-width: 768px) {
+@media (max-width: 575) {
   [role='main'] {
-    padding-top: 48px; /* Space for fixed navbar */
+    padding-top: 133px;
   }
 }
+
+/* @media (min-width: 768px) {
+  [role='main'] {
+    padding-top: 48px; 
+  }
+} */
 
 /*
  * Navbar
