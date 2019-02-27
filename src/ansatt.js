@@ -42,25 +42,21 @@ class Booking extends Component {
      locationSelect: "*"
    }
 
-   this.handlechangeStart = this.handlechangeStart.bind(this);
-   this.handlechangeEnd = this.handlechangeEnd.bind(this);
+   this.allBikes =
+    [
+       {type: "Tandem", id: "111", brand: "Bike1", brand: "Merida", location: "Voss", framesize: "15'", hrPrice: "100", year: "2019", weight: "15kg"},
+       {type: "Dutch Bike", id: "222", brand: "Bike2", brand: "KLM", location: "Finnsnes", framesize: "19'", hrPrice: "50", year: "2011", weight: "15kg"},
+       {type: "City Bike", id: "333", brand: "Bike3", brand: "Jonnsen", location: "Røros", framesize: "12'", hrPrice: "120", year: "2017", weight: "12kg"},
+    ]
+
+   this.availableBikes = this.allBikes;
    this.handleSubmit = this.handleSubmit.bind(this);
    this.handleCheckChange = this.handleCheckChange.bind(this);
-   this.handleHourChange = this.handleHourChange.bind(this);
-
+   this.handleChange = this.handleChange.bind(this);
+   
  }
 
-handlechangeStart (event) {
-  this.setState({startDate: event.target.value})
-  history.push("/booking/");
-}
-
-handlechangeEnd (event) {
-  this.setState({endDate: event.target.value})
-  history.push("/booking/");
-}
-
-handleCheckChange (event) {
+handleCheckChange () {
   if(this.dayRent == false) {
     this.dayRent = true;
     
@@ -71,38 +67,14 @@ handleCheckChange (event) {
   }
 }
 
-handleHourChange (event) {
-  this.setState({hoursRenting: event.target.value})
-  history.push("/booking/");
+handleChange(e) {
+  this.setState({ [e.target.name] : e.target.value });
+  this.findAvailBikes();
 }
 
 handleSubmit () {
-  this.props.history.push({
-    pathname: "/booking/bookingDetails/",
-    states: {
-      startDate: this.state.startDate, 
-      typeSelect: this.state.typeSelect,
-      locationSelect: this.state.locationSelect,
-      endDate: this.state.endDate,
-      dayRent: this.dayRent,
-      bikes: this.state.bikes,
-      hoursRenting:this.state.hoursRenting
-    }
-  }); 
+  this.findAvailBikes();
 }
-
-handlelocationChange (event) 
-{
-  this.setState({locationSelect: event.target.value})
-  history.push("/booking/");
-}
-
-handleTypeChange (event) 
-{
-  this.setState({typeSelect: event.target.value})
-  history.push("/booking/");
-}
-
 
   render() {
     return (
@@ -115,9 +87,9 @@ handleTypeChange (event)
                 
                 {/* Date entry */}
                 <div className="form-group">
-                  <input type="checkbox" checked={this.dayRent} onChange={this.handleCheckChange} value="Times leie?"></input>
+                  <input type="checkbox" name="dayRent" checked={this.dayRent} onChange={this.handleCheckChange} value="Times leie?"></input>
                   <label> Times leie?</label>
-                  <input type="number" disabled={!this.dayRent} onChange={this.handleHourChange} value={this.hoursRenting}></input>
+                  <input type="number" name="hoursRenting" disabled={!this.dayRent} onChange={this.handleChange} value={this.hoursRenting}></input>
                   <br></br>
                   <input 
                     type='date' 
@@ -125,7 +97,7 @@ handleTypeChange (event)
                     disabled={this.dayRent}
                     min={this.state.todaysDate}
                     value={this.state.startDate} 
-                    onChange={this.handlechangeStart}>
+                    onChange={this.handleChange}>
                   </input>
 
                   <input 
@@ -134,20 +106,20 @@ handleTypeChange (event)
                     disabled={this.dayRent}
                     min={this.state.startDate}
                     value={this.state.endDate} 
-                    onChange={this.handlechangeEnd}>
+                    onChange={this.handleChange}>
                   </input>
 
                   <br></br>
                   <br></br>
 
-                  <select name='locations' value={this.state.locationSelect} onChange={this.handlelocationChange}>
+                  <select name='locationSelect' value={this.state.locationSelect} onChange={this.handleChange}>
                     <option value='*'>Any Location</option>
                     <option value='Voss'>Voss</option>
                     <option value='Finnsnes'>Finnsnes</option>
                     <option value='Røros'>Røros</option>
                   </select>
 
-                  <select name='bikeType' value={this.state.typeSelect} onChange={this.handleTypeChange}>
+                  <select name='typeSelect' value={this.state.typeSelect} onChange={this.handleChange}>
                     <option value='*'>Any Type of bike</option>
                     <option value='City Bike'>City bike</option>
                     <option value='mountainbike'>Mountain Bike</option>
@@ -165,51 +137,38 @@ handleTypeChange (event)
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
 
-  
-}
-
-
-class BookingDetails extends Component {
-  constructor(props)
-  {
-    super(props);
-    this.bikes =
-    [
-       {type: "Tandem", id: "111", name: "Bike1", brand: "Merida", location: "Voss"},
-       {type: "Dutch Bike", id: "222", name: "Bike2", brand: "Merida", location: "Finnsnes"},
-       {type: "City Bike", id: "333", name: "Bike3", brand: "Merida", location: "Røros"},
-    ]
-    
-    this.bikes4User = [];
-    
-  }
-
-  render() {
-
-    if(this.props.location.states == null){
-      history.push("/booking/");
-    }
-
-    return (
-      <div className="bootstrap-iso">
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-6 col-sm-6 col-xs-12">
               <h3>Ledige Sykler</h3>
-              <ul>
-              {this.bikes4User.map(bike => (
-                <li  key={bike.id}>
-                  {bike.name} <br></br>
-                  {bike.type} <br></br>
-                  {bike.id} <br></br>
-                  {bike.location} <br></br><br></br>
-                </li> 
+              <table>
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Merke</th>
+                  <th>Lokasjon</th>
+                  <th>Hjul</th>
+                  <th>Vekt</th>
+                  <th>Times Pris</th>
+                </tr>
+                </thead>
+                <tbody>
+                {this.availableBikes.map(bike => (
+                <tr  key={bike.id}>
+                  <td>{bike.id}</td>
+                  <td>{bike.type}</td>
+                  <td>{bike.brand}</td>
+                  <td>{bike.location}</td>
+                  <td>{bike.framesize}</td>
+                  <td>{bike.weight}</td>
+                  <td>{bike.hrPrice}</td>
+                  <td><button type="button" onClick={this.detailBike(bike)}>Velg</button></td>
+                </tr> 
                ))}
-              </ul>
+               </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -217,30 +176,41 @@ class BookingDetails extends Component {
     );
   }
 
-  //SQL SPØRRING ved å bruke this.props.location.states.(startdate, enddate, dayrent etc)
-  mounted() {
-    for(let i = 0; i < this.bikes.length; i++) {
-      if(this.props.location.states.locationSelect == "*" && this.props.location.states.typeSelect != "*"){
-        if(this.bikes[i].type == this.props.location.states.typeSelect)
+  detailBike(bike) {
+    //Do something here
+    // this.props.history.push("/bikedetails/" + bike.id);
+  }
+
+  //SQL SPØRRING HER
+  findAvailBikes() {
+    this.availableBikes = [];
+
+    for(let i = 0; i < this.allBikes.length; i++) {
+      if(this.state.locationSelect == "*" && this.state.typeSelect != "*"){
+        if(this.allBikes[i].type == this.state.typeSelect)
         {
-          this.bikes4User.push(this.bikes[i]);
+          this.availableBikes.push(this.allBikes[i]);
+        } 
+      }
+      else if(this.state.locationSelect  != "*" && this.state.typeSelect == "*"){
+        if(this.allBikes[i].location == this.state.locationSelect )
+        {
+          this.availableBikes.push(this.allBikes[i]);
         }
       }
-      else if(this.props.location.states.locationSelect != "*" && this.props.location.states.typeSelect == "*"){
-        if(this.bikes[i].location == this.props.location.states.locationSelect)
+      else if(this.state.locationSelect  != "*" && this.state.typeSelect != "*"){
+        if(this.allBikes[i].type == this.state.typeSelect && this.allBikes[i].location == this.state.locationSelect )
         {
-          this.bikes4User.push(this.bikes[i]);
-        }
-      }
-      else if(this.props.location.states.locationSelect != "*" && this.props.location.states.typeSelect != "*"){
-        if(this.bikes[i].type == this.props.location.states.typeSelect && this.bikes[i].location == this.props.location.states.locationSelect)
-        {
-          this.bikes4User.push(this.bikes[i]);
+          this.availableBikes.push(this.allBikes[i]);
         }
       }
       else{
-        this.bikes4User.push(this.bikes[i]);
+        this.availableBikes.push(this.allBikes[i]);
       }
+    }
+
+    if(this.availableBikes.length == 0){
+      this.availableBikes.push({"name": "Ingenting tilgjengelig i denne kategorien", "id": "Gjør et nytt søk"});
     }
   }
 }
@@ -269,4 +239,4 @@ class Basket extends Component {
   }
 }
 
-module.exports = { Overview, Booking, BookingDetails, Bicycles, Locations, Customers, Basket };
+module.exports = { Overview, Booking, Bicycles, Locations, Customers, Basket };
