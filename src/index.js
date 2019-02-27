@@ -157,7 +157,6 @@ ReactDOM.render(
       <Route exact path="/customers/" component={Customers} />
       <Route exact path="/basket/" component={Basket} />
       <Route exact path="/locations/" component={Locations} />
-      <Route exact path="/booking/bookingDetails/" component={BookingDetails} />
     </div>
   </HashRouter>,
   document.getElementById('root')
