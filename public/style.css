@@ -5,6 +5,12 @@
 a {
   color: black;
 } */
+.feather {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
 #root {
   margin-top: 5em;
   margin-right: 1em;
@@ -52,6 +58,11 @@ body {
 
 #navbar {
   max-width: 180px;
+}
+
+#subLinks .nav-link {
+  font-style: italic;
+  padding-left: 2em;
 }
 
 @media (max-width: 767px) {

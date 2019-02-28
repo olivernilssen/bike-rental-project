@@ -117,7 +117,13 @@ export class NavBar extends Component {
 class SideNavBarLink extends Component {
   render() {
     return this.props.to ? (
-      <NavLink className="nav-link" activeClassName="active" exact={this.props.exact} to={this.props.to}>
+      <NavLink
+        className="nav-link"
+        activeClassName="active"
+        exact={this.props.exact}
+        to={this.props.to}
+        onClick={this.props.onClick}
+      >
         {this.props.children}
       </NavLink>
     ) : (

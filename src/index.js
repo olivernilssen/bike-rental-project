@@ -7,8 +7,8 @@ import {
   Overview,
   Booking,
   BookingDetails,
-  Bicycles,
-  BicycleDetails,
+  BikeTypes,
+  BikeTypeDetails,
   Customers,
   LocationList,
   BikesOnLocation,
@@ -36,7 +36,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
   BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
 */
-
+export let basket = [{ status: 3, id: 'Handlekurven er tom :()' }];
 let employeeID = 0;
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
@@ -51,11 +51,17 @@ class LoginMenu extends Component {
 class Menu extends Component {
   constructor(props) {
     super(props);
-    this.state = { isLoggedIn: true }; //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
+    this.state = { isLoggedIn: true, menu: false }; //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
+    this.toggleMenu = this.toggleMenu.bind(this);
+  }
+
+  toggleMenu() {
+    this.setState({ menu: !this.state.menu });
   }
 
   render() {
     const isLoggedIn = this.state.isLoggedIn;
+    const show = this.state.menu ? 'show' : '';
 
     if (isLoggedIn == false) {
       history.push('/login/');
@@ -111,36 +117,30 @@ class Menu extends Component {
                   <span>MENY</span>
                 </SideNavHeading>
                 <SideNavBar.SideLink to="/overview">
-                  <span data-feather="home" />
                   Oversikt<span className="sr-only">(current)</span>
                 </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/booking/">
-                  <span data-feather="file" />
-                  Booking
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/locations/">
-                  <span data-feather="shopping-cart" />
-                  Lokasjoner
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/bicycles/">
-                  <span data-feather="users" />
+                <SideNavBar.SideLink to="/booking/">Booking</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/locations/">Lokasjoner</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/bikeTypes/" onClick={this.toggleMenu}>
                   Sykler
                 </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/customers/">
-                  <span data-feather="bar-chart-2" />
-                  Kundeliste
-                </SideNavBar.SideLink>
+
+                <div className={'collapse navbar-collapse ' + show}>
+                  <div id="subLinks">
+                    <SideNavBar.SideLink to="/bikeTypes/">Etter sykkeltype</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="#">Etter lokasjon</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="#">Etter status</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="#">Etter pris</SideNavBar.SideLink>
+                  </div>
+                </div>
+
+                <SideNavBar.SideLink to="/customers/">Kundeliste</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/basket/">Handlekurv</SideNavBar.SideLink>
                 <SideNavHeading>
                   <span>MIN SIDE</span>
                 </SideNavHeading>
-                <SideNavBar.SideLink to="#">
-                  <span data-feather="file-text" />
-                  Informasjon
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="#">
-                  <span data-feather="file-text" />
-                  Mine salg
-                </SideNavBar.SideLink>
+                <SideNavBar.SideLink to="#">Informasjon</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="#">Mine salg</SideNavBar.SideLink>
               </SideNavBar>
             </Row>
           </div>
@@ -174,11 +174,11 @@ ReactDOM.render(
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
-      <Route path="/bicycles/" component={Bicycles} />
-      <Route exact path="/bicycles/:id/" component={BicycleDetails} />
+      <Route path="/bikeTypes/" component={BikeTypes} />
+      <Route exact path="/bikeTypes/:id/" component={BikeTypeDetails} />
       <Route exact path="/customers/" component={Customers} />
       <Route exact path="/basket/" component={Basket} />
-      <Route exact path="/locations/" component={LocationList} />
+      <Route path="/locations/" component={LocationList} />
       <Route exact path="/locations/:id" component={BikesOnLocation} />
     </div>
   </HashRouter>,
