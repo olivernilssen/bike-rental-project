@@ -4,6 +4,7 @@ import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './wid
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import { connection } from './mysql_connection';
+import { basket } from './index.js'
 
 import createHashHistory from 'history/createHashHistory';
 import { start } from 'repl';
@@ -40,8 +41,10 @@ class Booking extends Component {
       endDate: '',
       hoursRenting: 0,
       typeSelect: '*',
-      locationSelect: '*'
+      locationSelect: 'Voss'
     };
+
+    this.emptyList = "display: block;";
 
     this.allBikes = [
       {
@@ -53,7 +56,8 @@ class Booking extends Component {
         framesize: "15'",
         hrPrice: '100',
         year: '2019',
-        weight: '15kg'
+        weight: '15kg',
+        status: 1
       },
       {
         type: 'Dutch Bike',
@@ -64,7 +68,8 @@ class Booking extends Component {
         framesize: "19'",
         hrPrice: '50',
         year: '2011',
-        weight: '15kg'
+        weight: '15kg',
+        status: 1
       },
       {
         type: 'City Bike',
@@ -75,14 +80,17 @@ class Booking extends Component {
         framesize: "12'",
         hrPrice: '120',
         year: '2017',
-        weight: '12kg'
+        weight: '12kg',
+        status: 0
       }
     ];
 
-    this.availableBikes = this.allBikes;
+    this.availableBikes = [];
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCheckChange = this.handleCheckChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.chooseBike = this.chooseBike.bind(this);
   }
 
   handleCheckChange() {
@@ -95,14 +103,43 @@ class Booking extends Component {
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-    this.findAvailBikes();
+    this.availableBikes = [];
   }
 
   handleSubmit() {
     this.findAvailBikes();
   }
 
+  chooseBike(bike){
+    if(bike.status == 3){
+      console.log("ingen sykkel her");
+      return;
+    }
+
+    if(basket[0].status == 3){
+      basket.splice(0, 1);
+    }
+    
+    basket.push(bike);
+
+    for(let i = 0; i < this.allBikes.length; i++)
+    {
+      if(bike.id == this.allBikes[i].id)
+      {
+        this.allBikes[i].status = 0;
+      }
+    }
+
+   this.availableBikes = [];
+  }
+
   render() {
+    if(this.availableBikes.length == 0){
+      {this.findAvailBikes()};
+    }
+    
+    console.log("In basket: " + basket.length);
+
     return (
       <div className="container-fluid">
         <div className="row">
@@ -200,7 +237,7 @@ class Booking extends Component {
                       <Table.Td>{bike.weight}</Table.Td>
                       <Table.Td>{bike.hrPrice}</Table.Td>
                       <Table.Td>
-                        <Button.Success onClick={this.detailBike(bike)}>Velg</Button.Success>
+                        <Button.Success style={this.emptyList} onClick={() => { this.chooseBike(bike)}}>Velg</Button.Success>
                       </Table.Td>
                     </Table.Tr>
                   ))}
@@ -213,35 +250,46 @@ class Booking extends Component {
     );
   }
 
-  detailBike(bike) {
-    //Do something here
-    // this.props.history.push("/bikedetails/" + bike.id);
-  }
-
   //SQL SPØRRING HER
   findAvailBikes() {
     this.availableBikes = [];
+    this.emptyList = "display: block;";
 
+    // FJERN DUPLIKASJONER FRA HANDLEKURV (DETTE BLIR ANNERLEDES VED SPORRINGER)
+    for (let i of this.allBikes){
+      for (let j of basket){
+        if(i.id == j.id) {
+          this.allBikes.splice(i, 1);
+        }
+      }
+    } 
+
+    //FINN ALLE TILGJENGELIGE SYKLER BASSERT PÅ STATUS, LOKASJON, DATO(kommer) OG TYPE SYKKEL
     for (let i = 0; i < this.allBikes.length; i++) {
-      if (this.state.locationSelect == '*' && this.state.typeSelect != '*') {
-        if (this.allBikes[i].type == this.state.typeSelect) {
+      if(this.allBikes[i].status == 1) {
+        if (this.state.locationSelect == '*' && this.state.typeSelect != '*') {
+          if (this.allBikes[i].type == this.state.typeSelect) {
+            this.availableBikes.push(this.allBikes[i]);
+          }
+        } else if ((this.state.locationSelect != '*' && this.state.typeSelect == '*') && this.allBikes[i].status == 1) {
+          if (this.allBikes[i].location == this.state.locationSelect) {
+            this.availableBikes.push(this.allBikes[i]);
+          }
+        } else if ((this.state.locationSelect != '*' && this.state.typeSelect != '*') && this.allBikes[i].status == 1) {
+          if (this.allBikes[i].type == this.state.typeSelect && this.allBikes[i].location == this.state.locationSelect) {
+            this.availableBikes.push(this.allBikes[i]);
+          }
+        } else {
           this.availableBikes.push(this.allBikes[i]);
         }
-      } else if (this.state.locationSelect != '*' && this.state.typeSelect == '*') {
-        if (this.allBikes[i].location == this.state.locationSelect) {
-          this.availableBikes.push(this.allBikes[i]);
-        }
-      } else if (this.state.locationSelect != '*' && this.state.typeSelect != '*') {
-        if (this.allBikes[i].type == this.state.typeSelect && this.allBikes[i].location == this.state.locationSelect) {
-          this.availableBikes.push(this.allBikes[i]);
-        }
-      } else {
-        this.availableBikes.push(this.allBikes[i]);
       }
     }
 
+    //OM DET IKKE ER NOEN TILGJENGELIGE SYKLER I DENNE KATEGORIEN, SI TIL BRUKER AT DET IKKE ER NOE DER
+    //OG LEGG NOE I LISTEN MED STATUS 3, SLIK AT RENDER IKKE KJØRER UENDELIG
     if (this.availableBikes.length == 0) {
-      this.availableBikes.push({ name: 'Ingenting tilgjengelig i denne kategorien', id: 'Gjør et nytt søk' });
+      this.availableBikes.push({ status: 3, id: 'Gjør et nytt søk' });
+      this.emptyList = "display: none;";
     }
   }
 }
@@ -430,9 +478,73 @@ class Customers extends Component {
 }
 
 class Basket extends Component {
+  removeBike = this.removeBike.bind(this);
+  inBasket = basket;
+
+  //REMOVE BIKE FROM BASKET
+  removeBike(bike) {
+    for(let i of basket)
+    {
+      if(bike == i)
+      {
+        basket.splice(i, 1);
+      }
+    }
+
+    this.checkifEmpty();
+  }
+
+  checkifEmpty(){
+    this.inBasket = basket;
+
+    if(this.inBasket.length == 0)
+    {
+      this.inBasket.push({status: 3, id: "Handlekurven er tom :("})
+    }
+  }
+
   render() {
-    return <h1>HANDLEKURV</h1>;
+    if(this.inBasket.length == 0){
+      {this.checkifEmpty()};
+    }
+
+    return (
+      <div className="row">
+          <div>
+            <h3>Sykler i handlekurv</h3>
+            <Card>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Lokasjon</Table.Th>
+                  <Table.Th>Hjul</Table.Th>
+                  <Table.Th>Vekt</Table.Th>
+                  <Table.Th>Times Pris</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {basket.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.type}</Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>{bike.location}</Table.Td>
+                      <Table.Td>{bike.framesize}</Table.Td>
+                      <Table.Td>{bike.weight}</Table.Td>
+                      <Table.Td>{bike.hrPrice}</Table.Td>
+                      <Table.Td>
+                        <Button.Success onClick={() => { this.removeBike(bike)}}>Delete</Button.Success>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Card>
+          </div>
+        </div>
+    );
   }
 }
 
-module.exports = { Overview, Booking, Bicycles, BicycleDetails, LocationList, BikesOnLocation, Customers, Basket };
+module.exports = { Overview, Booking, Bicycles, BicycleDetails, LocationList, BikesOnLocation, Customers, Basket};
