@@ -9,6 +9,8 @@ import {
   BookingDetails,
   BikeTypes,
   BikeTypeDetails,
+  BikeStatus,
+  BikesByStatus,
   Customers,
   LocationList,
   BikesOnLocation,
@@ -129,7 +131,7 @@ class Menu extends Component {
                   <div id="subLinks">
                     <SideNavBar.SideLink to="/bikeTypes/">Etter sykkeltype</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="#">Etter lokasjon</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="#">Etter status</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/bikeStatus/">Etter status</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="#">Etter pris</SideNavBar.SideLink>
                   </div>
                 </div>
@@ -176,6 +178,8 @@ ReactDOM.render(
       <Route path="/booking/" component={Booking} />
       <Route path="/bikeTypes/" component={BikeTypes} />
       <Route exact path="/bikeTypes/:id/" component={BikeTypeDetails} />
+      <Route path="/bikeStatus/" component={BikeStatus} />
+      <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
       <Route exact path="/customers/" component={Customers} />
       <Route exact path="/basket/" component={Basket} />
       <Route path="/locations/" component={LocationList} />

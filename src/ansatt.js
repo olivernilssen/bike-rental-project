@@ -246,22 +246,22 @@ class Booking extends Component {
   }
 }
 
-class Bicycles extends Component {
+class BikeTypes extends Component {
   bikeTypes = [];
 
   render() {
     return (
       <div className="bootstrap-iso">
-        <Card title="Sykler">
+        <Card title="Sykkeltyper">
           <Column right>
             <NavLink to={'/add/bikeType/'}>
               <Button.Light>Legg inn ny sykkeltype</Button.Light>
             </NavLink>
           </Column>
           <Tab>
-            {this.bikeTypes.map(bike => (
-              <Tab.Item key={bike.id} to={'/bicycles/' + bike.id}>
-                {bike.typeName}
+            {this.bikeTypes.map(bikeType => (
+              <Tab.Item key={bikeType.id} to={'/bikeTypes/' + bikeType.id}>
+                {bikeType.typeName}
               </Tab.Item>
             ))}
           </Tab>
@@ -277,7 +277,7 @@ class Bicycles extends Component {
   }
 }
 
-class BicycleDetails extends Component {
+class BikeTypeDetails extends Component {
   bikeType = null;
   bikeTypeDetails = [];
   bikes = [];
@@ -368,6 +368,75 @@ class BicycleDetails extends Component {
         this.bikes = results;
       }
     );
+  }
+}
+
+class BikeStatus extends Component {
+  bikeStatus = [];
+
+  render() {
+    return (
+      <div className="bootstrap-iso">
+        <Card title="Sykkelstatus">
+          <Tab>
+            {this.bikeStatus.map(status => (
+              <Tab.Item key={status.bikeStatus} to={'/bikeStatus/' + status.bikeStatus}>
+                {status.bikeStatus}
+              </Tab.Item>
+            ))}
+          </Tab>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getBikeStatus(bikeStatus => {
+      this.bikeStatus = bikeStatus;
+    });
+  }
+}
+
+class BikesByStatus extends Component {
+  bikeStatus = null;
+  bikes = [];
+
+  render() {
+    if (!this.bikeStatus) return null;
+
+    return (
+      <div>
+        <Card>
+          <h6>Sykler med denne statusen:</h6>
+          <Table>
+            <Table.Thead>
+              <Table.Th>ID</Table.Th>
+              <Table.Th>Lokasjon</Table.Th>
+              <Table.Th>Sykkeltype</Table.Th>
+            </Table.Thead>
+            <Table.Tbody>
+              {this.bikes.map(bike => (
+                <Table.Tr key={bike.id}>
+                  <Table.Td>{bike.id}</Table.Td>
+                  <Table.Td>{bike.name}</Table.Td>
+                  <Table.Td>{bike.typeName}</Table.Td>
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getBikeStatus(bikeStatus => {
+      this.bikeStatus = bikeStatus;
+    });
+
+    rentalService.getBikesByStatus(this.props.match.params.bikeStatus, bikes => {
+      this.bikes = bikes;
+    });
   }
 }
 
@@ -478,4 +547,15 @@ class Basket extends Component {
   }
 }
 
-module.exports = { Overview, Booking, Bicycles, BicycleDetails, LocationList, BikesOnLocation, Customers, Basket };
+module.exports = {
+  Overview,
+  Booking,
+  BikeTypes,
+  BikeTypeDetails,
+  BikeStatus,
+  BikesByStatus,
+  LocationList,
+  BikesOnLocation,
+  Customers,
+  Basket
+};
