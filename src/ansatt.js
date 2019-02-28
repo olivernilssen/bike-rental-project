@@ -371,9 +371,55 @@ class BicycleDetails extends Component {
   }
 }
 
-class Locations extends Component {
+class LocationList extends Component {
+  locations = [];
+
   render() {
-    return <h1>LOKASJONER</h1>;
+    return (
+      <div className="container">
+        <Card>
+          <List>
+            {this.locations.map(location => (
+              <List.Item key={location.id} to={'/locations/' + location.id + '/bikes'}>
+                {location.name}
+              </List.Item>
+            ))}
+          </List>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getLocations(locations => {
+      this.locations = locations;
+    });
+  }
+}
+
+class BikesOnLocation extends Component {
+  bikeLocations = [];
+
+  render() {
+    return (
+      <div className="container">
+        <Card>
+          <List>
+            {this.bikeLocations.map(bikeLocation => (
+              <List.Item key={bikeLocation.id} to={'/locations/' + location.id + '/bikes'}>
+                {location.name}
+              </List.Item>
+            ))}
+          </List>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getBikesByLocation(bikesByLocations => {
+      this.bikesByLocations = bikesByLocations;
+    });
   }
 }
 
@@ -389,4 +435,4 @@ class Basket extends Component {
   }
 }
 
-module.exports = { Overview, Booking, Bicycles, BicycleDetails, Locations, Customers, Basket };
+module.exports = { Overview, Booking, Bicycles, BicycleDetails, LocationList, BikesOnLocation, Customers, Basket };

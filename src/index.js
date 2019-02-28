@@ -3,7 +3,7 @@ import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
-import { Overview, Booking, BookingDetails, Bicycles, BicycleDetails, Customers, Locations, Basket } from './ansatt.js';
+import { Overview, Booking, BookingDetails, Bicycles, BicycleDetails, Customers, LocationList, BikesOnLocation, Basket } from './ansatt.js';
 import {
   Card,
   Tabs,
@@ -168,7 +168,8 @@ ReactDOM.render(
       <Route exact path="/bicycles/:id/" component={BicycleDetails} />
       <Route exact path="/customers/" component={Customers} />
       <Route exact path="/basket/" component={Basket} />
-      <Route exact path="/locations/" component={Locations} />
+      <Route exact path="/locations/" component={LocationList} />
+      <Route exact path="/locations/:id" component={BikesOnLocation}
     </div>
   </HashRouter>,
   document.getElementById('root')
