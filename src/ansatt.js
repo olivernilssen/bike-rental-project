@@ -104,113 +104,109 @@ class Booking extends Component {
 
   render() {
     return (
-      <div className="bootstrap-iso">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-6 col-sm-6 col-xs-12">
-              <h3>Booking</h3>
-              <div>
-                {/* Date entry */}
-                <div className="form-group">
-                  <input
-                    type="checkbox"
-                    name="dayRent"
-                    checked={this.dayRent}
-                    onChange={this.handleCheckChange}
-                    value="Times leie?"
-                  />
-                  <label> Times leie?</label>
-                  <input
-                    type="number"
-                    name="hoursRenting"
-                    disabled={!this.dayRent}
-                    onChange={this.handleChange}
-                    value={this.hoursRenting}
-                  />
-                  <br />
-                  <input
-                    type="date"
-                    name="startDate"
-                    disabled={this.dayRent}
-                    min={this.state.todaysDate}
-                    value={this.state.startDate}
-                    onChange={this.handleChange}
-                  />
+      <div className="container-fluid">
+        <div className="row">
+          <div>
+            <h3>Booking</h3>
+            <div>
+              {/* Date entry */}
+              <div className="form-group">
+                <input
+                  type="checkbox"
+                  name="dayRent"
+                  checked={this.dayRent}
+                  onChange={this.handleCheckChange}
+                  value="Times leie?"
+                />
+                <label> Times leie?</label>
+                <input
+                  type="number"
+                  name="hoursRenting"
+                  disabled={!this.dayRent}
+                  onChange={this.handleChange}
+                  value={this.hoursRenting}
+                />
+                <br />
+                <input
+                  type="date"
+                  name="startDate"
+                  disabled={this.dayRent}
+                  min={this.state.todaysDate}
+                  value={this.state.startDate}
+                  onChange={this.handleChange}
+                />
 
-                  <input
-                    type="date"
-                    name="endDate"
-                    disabled={this.dayRent}
-                    min={this.state.startDate}
-                    value={this.state.endDate}
-                    onChange={this.handleChange}
-                  />
+                <input
+                  type="date"
+                  name="endDate"
+                  disabled={this.dayRent}
+                  min={this.state.startDate}
+                  value={this.state.endDate}
+                  onChange={this.handleChange}
+                />
 
-                  <br />
-                  <br />
+                <br />
+                <br />
 
-                  <select name="locationSelect" value={this.state.locationSelect} onChange={this.handleChange}>
-                    <option value="*">Any Location</option>
-                    <option value="Voss">Voss</option>
-                    <option value="Finnsnes">Finnsnes</option>
-                    <option value="Røros">Røros</option>
-                  </select>
+                <select name="locationSelect" value={this.state.locationSelect} onChange={this.handleChange}>
+                  <option value="*">Any Location</option>
+                  <option value="Voss">Voss</option>
+                  <option value="Finnsnes">Finnsnes</option>
+                  <option value="Røros">Røros</option>
+                </select>
 
-                  <select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
-                    <option value="*">Any Type of bike</option>
-                    <option value="City Bike">City bike</option>
-                    <option value="mountainbike">Mountain Bike</option>
-                    <option value="Tandem">Tandem</option>
-                    <option value="Dutch Bike">Dutch Bike</option>
-                    <option value="childbike">Childrens Bike</option>
-                  </select>
-                </div>
+                <select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
+                  <option value="*">Any Type of bike</option>
+                  <option value="City Bike">City bike</option>
+                  <option value="mountainbike">Mountain Bike</option>
+                  <option value="Tandem">Tandem</option>
+                  <option value="Dutch Bike">Dutch Bike</option>
+                  <option value="childbike">Childrens Bike</option>
+                </select>
+              </div>
 
-                {/* submit button */}
-                <div className="form-group">
-                  <button name="submit" type="button" onClick={this.handleSubmit}>
-                    Søk
-                  </button>
-                </div>
+              {/* submit button */}
+              <div className="form-group">
+                <button name="submit" type="button" onClick={this.handleSubmit}>
+                  Søk
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-6 col-sm-6 col-xs-12">
-              <h3>Ledige Sykler</h3>
-              <Card>
-                <Table>
-                  <Table.Thead>
-                    <Table.Th>ID</Table.Th>
-                    <Table.Th>Type</Table.Th>
-                    <Table.Th>Merke</Table.Th>
-                    <Table.Th>Lokasjon</Table.Th>
-                    <Table.Th>Hjul</Table.Th>
-                    <Table.Th>Vekt</Table.Th>
-                    <Table.Th>Times Pris</Table.Th>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {this.availableBikes.map(bike => (
-                      <Table.Tr key={bike.id}>
-                        <Table.Td>{bike.id}</Table.Td>
-                        <Table.Td>{bike.type}</Table.Td>
-                        <Table.Td>{bike.brand}</Table.Td>
-                        <Table.Td>{bike.location}</Table.Td>
-                        <Table.Td>{bike.framesize}</Table.Td>
-                        <Table.Td>{bike.weight}</Table.Td>
-                        <Table.Td>{bike.hrPrice}</Table.Td>
-                        <Table.Td>
-                          <Button.Success onClick={this.detailBike(bike)}>Velg</Button.Success>
-                        </Table.Td>
-                      </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
-              </Card>
-            </div>
+        <div className="row">
+          <div>
+            <h3>Ledige Sykler</h3>
+            <Card>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Lokasjon</Table.Th>
+                  <Table.Th>Hjul</Table.Th>
+                  <Table.Th>Vekt</Table.Th>
+                  <Table.Th>Times Pris</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.availableBikes.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.type}</Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>{bike.location}</Table.Td>
+                      <Table.Td>{bike.framesize}</Table.Td>
+                      <Table.Td>{bike.weight}</Table.Td>
+                      <Table.Td>{bike.hrPrice}</Table.Td>
+                      <Table.Td>
+                        <Button.Success onClick={this.detailBike(bike)}>Velg</Button.Success>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Card>
           </div>
         </div>
       </div>
