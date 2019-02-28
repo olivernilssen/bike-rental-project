@@ -69,6 +69,18 @@ class RentalService {
       success(results);
     });
   }
+
+  getBikesOnLocation(id, success) {
+    connection.query(
+      'select *, type_id from BikeType, Bikes b, Locations lok where b.location_id=lok.id and lok.id=? order by type_id',
+      [id],
+      (error, results) => {
+        if (error) return console.error(error);
+        // console.log(results.length);
+        success(results);
+      }
+    );
+  }
 }
 
 export let rentalService = new RentalService();
