@@ -15,6 +15,24 @@ class RentalService {
       success(results);
     });
   }
+  getBikeStatus(success) {
+    connection.query('select distinct bikeStatus from Bikes', (error, results) => {
+      if (error) console.error(error);
+
+      success(results);
+    });
+  }
+  getBikesByStatus(bikeStatus, success) {
+    connection.query(
+      'select b.id, l.name, bt.typeName from Bikes b, Locations l, BikeType bt where b.location_id = l.id and b.type_id = bt.id and b.bikeStatus = ?',
+      [bikeStatus],
+      (error, results) => {
+        if (error) console.error(error);
+
+        success(results);
+      }
+    );
+  }
   getAvailableBikes(success) {
     connection.query(
       'select * from Bikes where object_id in (select object_id from RentalObjects where objectStatus = "OK"))',
