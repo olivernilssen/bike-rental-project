@@ -38,12 +38,12 @@ class Booking extends Component {
     startDate: this.todaysDate,
     endDate: '',
     hoursRenting: 0,
-    typeSelect: '*',
+    typeSelect: '%',
     locationSelect: 'Voss'
   };
 
   styleState = {
-    display: 'none',
+    display: 'block',
     clear: 'both'
   };
 
@@ -99,6 +99,8 @@ class Booking extends Component {
     } else {
       this.dayRent = false;
     }
+
+    this.availableBikes = [];
   }
 
   handleChange(e) {
@@ -121,14 +123,6 @@ class Booking extends Component {
     }
 
     basket.push(bike);
-
-    for (let i = 0; i < this.allBikes.length; i++) {
-      if (bike.id == this.allBikes[i].id) {
-        this.allBikes[i].status = 0;
-      }
-    }
-
-    this.availableBikes = [];
   }
 
   render() {
@@ -194,19 +188,19 @@ class Booking extends Component {
                 <br />
 
                 <select name="locationSelect" value={this.state.locationSelect} onChange={this.handleChange}>
-                  <option value="*">Any Location</option>
+                  <option value="%">Any Location</option>
+                  <option value="Finse">Finse</option>
+                  <option value="Flåm">Flåm</option>
+                  <option value="Haugastøl">Haugastøl</option>
                   <option value="Voss">Voss</option>
-                  <option value="Finnsnes">Finnsnes</option>
-                  <option value="Røros">Røros</option>
                 </select>
 
                 <select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
-                  <option value="*">Any Type of bike</option>
-                  <option value="City Bike">City bike</option>
-                  <option value="mountainbike">Mountain Bike</option>
-                  <option value="Tandem">Tandem</option>
-                  <option value="Dutch Bike">Dutch Bike</option>
-                  <option value="childbike">Childrens Bike</option>
+                  <option value="%">Any Type of bike</option>
+                  <option value="Terreng">Terreng</option>
+                  <option value="Downhill">Downhill</option>
+                  <option value="Landevei">Landevei</option>
+                  <option value="Barn">Barn</option>
                 </select>
               </div>
 
@@ -231,19 +225,17 @@ class Booking extends Component {
                   <Table.Th>Merke</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Hjul</Table.Th>
-                  <Table.Th>Vekt</Table.Th>
-                  <Table.Th>Times Pris</Table.Th>
+                  <Table.Th>Pris</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
                   {this.availableBikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.type}</Table.Td>
+                      <Table.Td>{bike.typeName}</Table.Td>
                       <Table.Td>{bike.brand}</Table.Td>
-                      <Table.Td>{bike.location}</Table.Td>
-                      <Table.Td>{bike.framesize}</Table.Td>
-                      <Table.Td>{bike.weight}</Table.Td>
-                      <Table.Td>{bike.hrPrice}</Table.Td>
+                      <Table.Td>{bike.name}</Table.Td>
+                      <Table.Td>{bike.wheelSize}</Table.Td>
+                      <Table.Td>{bike.price}</Table.Td>
                       <Table.Td>
                         <Button.Success
                           style={btnStyle}
@@ -268,45 +260,57 @@ class Booking extends Component {
   //SQL SPØRRING HER
   findAvailBikes() {
     this.availableBikes = [];
+    console.log("something happend");
 
-    // FJERN DUPLIKASJONER FRA HANDLEKURV (DETTE BLIR ANNERLEDES VED SPORRINGER)
-    for (let i of this.allBikes) {
-      for (let j of basket) {
-        if (i.id == j.id) {
-          this.allBikes.splice(i, 1);
-        }
-      }
-    }
+    this.startDate = this.startDate + "%";
+    this.endDate = this.endDate + "%";
 
-    //FINN ALLE TILGJENGELIGE SYKLER BASSERT PÅ STATUS, LOKASJON, DATO(kommer) OG TYPE SYKKEL
-    for (let i = 0; i < this.allBikes.length; i++) {
-      if (this.allBikes[i].status == 1) {
-        if (this.state.locationSelect == '*' && this.state.typeSelect != '*') {
-          if (this.allBikes[i].type == this.state.typeSelect) {
-            this.availableBikes.push(this.allBikes[i]);
-          }
-        } else if (this.state.locationSelect != '*' && this.state.typeSelect == '*' && this.allBikes[i].status == 1) {
-          if (this.allBikes[i].location == this.state.locationSelect) {
-            this.availableBikes.push(this.allBikes[i]);
-          }
-        } else if (this.state.locationSelect != '*' && this.state.typeSelect != '*' && this.allBikes[i].status == 1) {
-          if (
-            this.allBikes[i].type == this.state.typeSelect &&
-            this.allBikes[i].location == this.state.locationSelect
-          ) {
-            this.availableBikes.push(this.allBikes[i]);
-          }
-        } else {
-          this.availableBikes.push(this.allBikes[i]);
-        }
-      }
-    }
+    rentalService.getBookingSearch(this.state.locationSelect, this.state.typeSelect, this.state.startDate, this.state.endDate, result => {
+      this.availableBikes = result;
+    })
 
-    //OM DET IKKE ER NOEN TILGJENGELIGE SYKLER I DENNE KATEGORIEN, SI TIL BRUKER AT DET IKKE ER NOE DER
-    //OG LEGG NOE I LISTEN MED STATUS 3, SLIK AT RENDER IKKE KJØRER UENDELIG
+  //   this.availableBikes = [];
+
+  //   // FJERN DUPLIKASJONER FRA HANDLEKURV (DETTE BLIR ANNERLEDES VED SPORRINGER)
+  //   for (let i of this.allBikes) {
+  //     for (let j of basket) {
+  //       if (i.id == j.id) {
+  //         this.allBikes.splice(i, 1);
+  //       }
+  //     }
+  //   }
+
+  //   //FINN ALLE TILGJENGELIGE SYKLER BASSERT PÅ STATUS, LOKASJON, DATO(kommer) OG TYPE SYKKEL
+  //   for (let i = 0; i < this.allBikes.length; i++) {
+  //     if (this.allBikes[i].status == 1) {
+  //       if (this.state.locationSelect == '*' && this.state.typeSelect != '*') {
+  //         if (this.allBikes[i].type == this.state.typeSelect) {
+  //           this.availableBikes.push(this.allBikes[i]);
+  //         }
+  //       } else if (this.state.locationSelect != '*' && this.state.typeSelect == '*' && this.allBikes[i].status == 1) {
+  //         if (this.allBikes[i].location == this.state.locationSelect) {
+  //           this.availableBikes.push(this.allBikes[i]);
+  //         }
+  //       } else if (this.state.locationSelect != '*' && this.state.typeSelect != '*' && this.allBikes[i].status == 1) {
+  //         if (
+  //           this.allBikes[i].type == this.state.typeSelect &&
+  //           this.allBikes[i].location == this.state.locationSelect
+  //         ) {
+  //           this.availableBikes.push(this.allBikes[i]);
+  //         }
+  //       } else {
+  //         this.availableBikes.push(this.allBikes[i]);
+  //       }
+  //     }
+  //   }
+
+  //   //OM DET IKKE ER NOEN TILGJENGELIGE SYKLER I DENNE KATEGORIEN, SI TIL BRUKER AT DET IKKE ER NOE DER
+  //   //OG LEGG NOE I LISTEN MED STATUS 3, SLIK AT RENDER IKKE KJØRER UENDELIG
     if (this.availableBikes.length == 0) {
       this.availableBikes.push({ status: 3, id: 'Gjør et nytt søk' });
     }
+
+    console.log(this.availableBikes.length);
 
     if (this.availableBikes[0].status == 3) {
       this.setState({ styleState: (this.styleState.display = 'none') });

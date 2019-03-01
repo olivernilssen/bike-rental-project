@@ -109,6 +109,21 @@ class RentalService {
       }
     );
   }
+
+  // "b.id not in (select ob.bike_id from OrderedBike ob, " +
+  // "Orders o where ob.order_id = o.id and o.fromDateTime " + 
+  // "between ? and ? and o.toDateTime between ? and ?) " +
+
+  getBookingSearch(locName, typeName, startDate, endDate,success) {
+    connection.query(
+      "select b.id, bt.typeName, bt.brand, l.name, bt.wheelSize, bt.weight_kg, bt.price from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and l.name like ? and bt.typeName like ? and b.id not in (select ob.bike_id from OrderedBike ob, Orders o where ob.order_id = o.id and o.fromDateTime between ? and ? and o.toDateTime between ? and ?) order by b.id", 
+      [locName, typeName, startDate, endDate, startDate, endDate],
+      (error, results) => {
+        if (error) return console.error(error);
+        success(results);
+      }
+    )
+  }
 }
 
 export let rentalService = new RentalService();

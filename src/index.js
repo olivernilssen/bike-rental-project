@@ -178,9 +178,9 @@ ReactDOM.render(
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
       <Route exact path="/allBikes/" component={AllBikes} />
-      <Route path="/bikeTypes/1" component={BikeTypes} />
+      <Route path="/bikeTypes/" component={BikeTypes} />
       <Route exact path="/bikeTypes/:id/" component={BikeTypeDetails} />
-      <Route path="/bikeStatus/OK" component={BikeStatus} />
+      <Route path="/bikeStatus/" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
       <Route exact path="/customers/" component={Customers} />
       <Route exact path="/basket/" component={Basket} />
