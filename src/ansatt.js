@@ -32,11 +32,9 @@ class Overview extends Component {
 }
 
 class Booking extends Component {
-  constructor(props) {
-    super(props);
-    this.todaysDate = year + '-' + month + '-' + day;
-    this.dayRent = false;
-    this.state = {
+    todaysDate = year + '-' + month + '-' + day;
+    dayRent = false;
+    state = {
       startDate: this.todaysDate,
       endDate: '',
       hoursRenting: 0,
@@ -44,9 +42,12 @@ class Booking extends Component {
       locationSelect: 'Voss'
     };
 
-    this.emptyList = 'display: block;';
+    styleState = {
+      display: 'none',
+      clear: 'both'
+    };
 
-    this.allBikes = [
+    allBikes = [
       {
         type: 'Tandem',
         id: '111',
@@ -85,13 +86,12 @@ class Booking extends Component {
       }
     ];
 
-    this.availableBikes = [];
+    availableBikes = [];
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCheckChange = this.handleCheckChange.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.chooseBike = this.chooseBike.bind(this);
-  }
+    handleSubmit = this.handleSubmit.bind(this);
+    handleCheckChange = this.handleCheckChange.bind(this);
+    handleChange = this.handleChange.bind(this);
+    chooseBike = this.chooseBike.bind(this);
 
   handleCheckChange() {
     if (this.dayRent == false) {
@@ -137,6 +137,14 @@ class Booking extends Component {
         this.findAvailBikes();
       }
     }
+
+    const styles = {
+      btnStyle: {
+        display: this.styleState.display,
+      }
+    };
+
+    const { btnStyle } = styles;
 
     console.log('In basket: ' + basket.length);
 
@@ -238,7 +246,7 @@ class Booking extends Component {
                       <Table.Td>{bike.hrPrice}</Table.Td>
                       <Table.Td>
                         <Button.Success
-                          style={this.emptyList}
+                          style={btnStyle}
                           onClick={() => {
                             this.chooseBike(bike);
                           }}
@@ -260,7 +268,6 @@ class Booking extends Component {
   //SQL SPØRRING HER
   findAvailBikes() {
     this.availableBikes = [];
-    this.emptyList = 'display: block;';
 
     // FJERN DUPLIKASJONER FRA HANDLEKURV (DETTE BLIR ANNERLEDES VED SPORRINGER)
     for (let i of this.allBikes) {
@@ -299,7 +306,13 @@ class Booking extends Component {
     //OG LEGG NOE I LISTEN MED STATUS 3, SLIK AT RENDER IKKE KJØRER UENDELIG
     if (this.availableBikes.length == 0) {
       this.availableBikes.push({ status: 3, id: 'Gjør et nytt søk' });
-      this.emptyList = 'display: none;';
+    }
+
+    if(this.availableBikes[0].status == 3){
+      this.setState({styleState: this.styleState.display = 'none'});
+    }
+    else {
+      this.setState({styleState: this.styleState.display = 'block'});
     }
   }
 }
@@ -602,6 +615,10 @@ class Customers extends Component {
 class Basket extends Component {
   removeBike = this.removeBike.bind(this);
   inBasket = basket;
+  styleState = {
+    display: 'block',
+    clear: 'both'
+  };
 
   //REMOVE BIKE FROM BASKET
   removeBike(bike) {
@@ -620,6 +637,13 @@ class Basket extends Component {
     if (this.inBasket.length == 0) {
       this.inBasket.push({ status: 3, id: 'Handlekurven er tom :(' });
     }
+
+    if(this.inBasket[0].status == 3){
+      this.setState({styleState: this.styleState.display = 'none'});
+    }
+    else {
+      this.setState({styleState: this.styleState.display = 'block'});
+    }
   }
 
   render() {
@@ -628,6 +652,14 @@ class Basket extends Component {
         this.checkifEmpty();
       }
     }
+
+    const styles = {
+      btnStyle: {
+        display: this.styleState.display,
+      }
+    };
+
+    const { btnStyle } = styles;
 
     return (
       <div className="row">
@@ -656,6 +688,7 @@ class Basket extends Component {
                     <Table.Td>{bike.hrPrice}</Table.Td>
                     <Table.Td>
                       <Button.Success
+                        style={btnStyle}
                         onClick={() => {
                           this.removeBike(bike);
                         }}
@@ -686,5 +719,3 @@ module.exports = {
   Customers,
   Basket
 };
-
-module.exports = { Overview, Booking, LocationList, BikesOnLocation, Customers, Basket };

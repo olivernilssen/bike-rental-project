@@ -163,7 +163,9 @@ export class SideNavBar extends Component {
 class ButtonSuccess extends Component {
   render() {
     return (
-      <button type="button" className="btn btn-success" onClick={this.props.onClick}>
+      <button type="button" className="btn btn-success" 
+        onClick={this.props.onClick} 
+        style={this.props.style}>
         {this.props.children}
       </button>
     );
