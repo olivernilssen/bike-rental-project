@@ -15,6 +15,16 @@ class RentalService {
       success(results);
     });
   }
+  getAllBikesByType(success) {
+    connection.query(
+      'select b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id',
+      (error, results) => {
+        if (error) console.error(error);
+
+        success(results);
+      }
+    );
+  }
   getBikeStatus(success) {
     connection.query('select distinct bikeStatus from Bikes', (error, results) => {
       if (error) console.error(error);

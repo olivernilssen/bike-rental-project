@@ -14,7 +14,8 @@ import {
   Customers,
   LocationList,
   BikesOnLocation,
-  Basket
+  Basket,
+  AllBikes
 } from './ansatt.js';
 import {
   Card,
@@ -123,15 +124,15 @@ class Menu extends Component {
                 </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/booking/">Booking</SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/locations/">Lokasjoner</SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/bikeTypes/" onClick={this.toggleMenu}>
+                <SideNavBar.SideLink to="/allBikes/" onClick={this.toggleMenu}>
                   Sykler
                 </SideNavBar.SideLink>
 
                 <div className={'collapse navbar-collapse ' + show}>
                   <div id="subLinks">
-                    <SideNavBar.SideLink to="/bikeTypes/">Etter sykkeltype</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/bikeTypes/1">Etter sykkeltype</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="#">Etter lokasjon</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="/bikeStatus/">Etter status</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/bikeStatus/OK">Etter status</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="#">Etter pris</SideNavBar.SideLink>
                   </div>
                 </div>
@@ -176,9 +177,10 @@ ReactDOM.render(
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
-      <Route path="/bikeTypes/" component={BikeTypes} />
+      <Route exact path="/allBikes/" component={AllBikes} />
+      <Route path="/bikeTypes/1" component={BikeTypes} />
       <Route exact path="/bikeTypes/:id/" component={BikeTypeDetails} />
-      <Route path="/bikeStatus/" component={BikeStatus} />
+      <Route path="/bikeStatus/OK" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
       <Route exact path="/customers/" component={Customers} />
       <Route exact path="/basket/" component={Basket} />

@@ -32,66 +32,66 @@ class Overview extends Component {
 }
 
 class Booking extends Component {
-    todaysDate = year + '-' + month + '-' + day;
-    dayRent = false;
-    state = {
-      startDate: this.todaysDate,
-      endDate: '',
-      hoursRenting: 0,
-      typeSelect: '*',
-      locationSelect: 'Voss'
-    };
+  todaysDate = year + '-' + month + '-' + day;
+  dayRent = false;
+  state = {
+    startDate: this.todaysDate,
+    endDate: '',
+    hoursRenting: 0,
+    typeSelect: '*',
+    locationSelect: 'Voss'
+  };
 
-    styleState = {
-      display: 'none',
-      clear: 'both'
-    };
+  styleState = {
+    display: 'none',
+    clear: 'both'
+  };
 
-    allBikes = [
-      {
-        type: 'Tandem',
-        id: '111',
-        brand: 'Bike1',
-        brand: 'Merida',
-        location: 'Voss',
-        framesize: "15'",
-        hrPrice: '100',
-        year: '2019',
-        weight: '15kg',
-        status: 1
-      },
-      {
-        type: 'Dutch Bike',
-        id: '222',
-        brand: 'Bike2',
-        brand: 'KLM',
-        location: 'Finnsnes',
-        framesize: "19'",
-        hrPrice: '50',
-        year: '2011',
-        weight: '15kg',
-        status: 1
-      },
-      {
-        type: 'City Bike',
-        id: '333',
-        brand: 'Bike3',
-        brand: 'Jonnsen',
-        location: 'Røros',
-        framesize: "12'",
-        hrPrice: '120',
-        year: '2017',
-        weight: '12kg',
-        status: 0
-      }
-    ];
+  allBikes = [
+    {
+      type: 'Tandem',
+      id: '111',
+      brand: 'Bike1',
+      brand: 'Merida',
+      location: 'Voss',
+      framesize: "15'",
+      hrPrice: '100',
+      year: '2019',
+      weight: '15kg',
+      status: 1
+    },
+    {
+      type: 'Dutch Bike',
+      id: '222',
+      brand: 'Bike2',
+      brand: 'KLM',
+      location: 'Finnsnes',
+      framesize: "19'",
+      hrPrice: '50',
+      year: '2011',
+      weight: '15kg',
+      status: 1
+    },
+    {
+      type: 'City Bike',
+      id: '333',
+      brand: 'Bike3',
+      brand: 'Jonnsen',
+      location: 'Røros',
+      framesize: "12'",
+      hrPrice: '120',
+      year: '2017',
+      weight: '12kg',
+      status: 0
+    }
+  ];
 
-    availableBikes = [];
+  availableBikes = [];
 
-    handleSubmit = this.handleSubmit.bind(this);
-    handleCheckChange = this.handleCheckChange.bind(this);
-    handleChange = this.handleChange.bind(this);
-    chooseBike = this.chooseBike.bind(this);
+  handleSubmit = this.handleSubmit.bind(this);
+  handleCheckChange = this.handleCheckChange.bind(this);
+  handleChange = this.handleChange.bind(this);
+  chooseBike = this.chooseBike.bind(this);
 
   handleCheckChange() {
     if (this.dayRent == false) {
@@ -140,7 +140,7 @@ class Booking extends Component {
 
     const styles = {
       btnStyle: {
-        display: this.styleState.display,
+        display: this.styleState.display
       }
     };
 
@@ -308,12 +308,66 @@ class Booking extends Component {
       this.availableBikes.push({ status: 3, id: 'Gjør et nytt søk' });
     }
 
-    if(this.availableBikes[0].status == 3){
-      this.setState({styleState: this.styleState.display = 'none'});
+    if (this.availableBikes[0].status == 3) {
+      this.setState({ styleState: (this.styleState.display = 'none') });
+    } else {
+      this.setState({ styleState: (this.styleState.display = 'block') });
     }
-    else {
-      this.setState({styleState: this.styleState.display = 'block'});
-    }
+  }
+}
+
+class AllBikes extends Component {
+  bikes = [];
+
+  render() {
+    return (
+      <div>
+        <Card>
+          <Row>
+            <Column>
+              <h6>Alle sykler</h6>
+              <Column right>
+                <NavLink to={'/add/bikeType/'}>
+                  <Button.Light>Legg inn ny sykkeltype</Button.Light>
+                </NavLink>
+              </Column>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Modell</Table.Th>
+                  <Table.Th>Årsmodell</Table.Th>
+                  <Table.Th>Beregnet for</Table.Th>
+                  <Table.Th>Timespris</Table.Th>
+                  <Table.Th>Lokasjon</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.bikes.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.typeName}</Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>{bike.model}</Table.Td>
+                      <Table.Td>{bike.year}</Table.Td>
+                      <Table.Td>{bike.suitedFor}</Table.Td>
+                      <Table.Td>{bike.price}</Table.Td>
+                      <Table.Td>{bike.name}</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getAllBikesByType(bikes => {
+      this.bikes = bikes;
+    });
   }
 }
 
@@ -638,11 +692,10 @@ class Basket extends Component {
       this.inBasket.push({ status: 3, id: 'Handlekurven er tom :(' });
     }
 
-    if(this.inBasket[0].status == 3){
-      this.setState({styleState: this.styleState.display = 'none'});
-    }
-    else {
-      this.setState({styleState: this.styleState.display = 'block'});
+    if (this.inBasket[0].status == 3) {
+      this.setState({ styleState: (this.styleState.display = 'none') });
+    } else {
+      this.setState({ styleState: (this.styleState.display = 'block') });
     }
   }
 
@@ -655,7 +708,7 @@ class Basket extends Component {
 
     const styles = {
       btnStyle: {
-        display: this.styleState.display,
+        display: this.styleState.display
       }
     };
 
@@ -710,6 +763,7 @@ class Basket extends Component {
 module.exports = {
   Overview,
   Booking,
+  AllBikes,
   BikeTypes,
   BikeTypeDetails,
   BikeStatus,
