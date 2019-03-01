@@ -123,7 +123,7 @@ class Menu extends Component {
                   Oversikt<span className="sr-only">(current)</span>
                 </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/booking/">Booking</SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/locations/">Lokasjoner</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/locations/1">Lokasjoner</SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/allBikes/" onClick={this.toggleMenu}>
                   Sykler
                 </SideNavBar.SideLink>
@@ -131,7 +131,7 @@ class Menu extends Component {
                 <div className={'collapse navbar-collapse ' + show}>
                   <div id="subLinks">
                     <SideNavBar.SideLink to="/bikeTypes/1">Etter sykkeltype</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="#">Etter lokasjon</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/locations/1">Etter lokasjon</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="/bikeStatus/OK">Etter status</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="#">Etter pris</SideNavBar.SideLink>
                   </div>

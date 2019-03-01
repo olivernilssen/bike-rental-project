@@ -163,9 +163,7 @@ export class SideNavBar extends Component {
 class ButtonSuccess extends Component {
   render() {
     return (
-      <button type="button" className="btn btn-success" 
-        onClick={this.props.onClick} 
-        style={this.props.style}>
+      <button type="button" className="btn btn-success" onClick={this.props.onClick} style={this.props.style}>
         {this.props.children}
       </button>
     );
@@ -275,7 +273,7 @@ export class Table extends Component {
   static Tbody = Tbody;
 
   render() {
-    return <table className="table">{this.props.children}</table>;
+    return <table className="table table-striped">{this.props.children}</table>;
   }
 }
 

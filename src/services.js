@@ -100,7 +100,7 @@ class RentalService {
 
   getBikesOnLocation(id, success) {
     connection.query(
-      'select *, type_id from BikeType, Bikes b, Locations lok where b.location_id=lok.id and lok.id=? order by type_id',
+      'select b.id, bt.typeName, bt.brand, bt.year, bt.frameSize, bt.wheelSize, bt.gears, bt.gearSystem, bt.brakeSystem, bt.weight_kg, bt.suitedFor, bt.price from BikeType bt, Bikes b, Locations lok where b.location_id=lok.id and bt.id = b.type_id and lok.id=? order by b.id',
       [id],
       (error, results) => {
         if (error) return console.error(error);
@@ -116,8 +116,8 @@ class RentalService {
 
   getBookingSearch(locName, typeName, startDate, endDate, success) {
     connection.query(
-      'select b.id, bt.typeName, bt.brand, l.name, bt.wheelSize, bt.weight_kg, bt.price from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and l.name like ? and bt.typeName like ? and b.id not in (select ob.bike_id from OrderedBike ob, Orders o where ob.order_id = o.id and (o.fromDateTime <= ?) and (o.toDateTime between ? and ?)) order by b.id',
-      [locName, typeName, startDate, startDate, endDate],
+      'select b.id, bt.typeName, bt.brand, l.name, bt.wheelSize, bt.weight_kg, bt.price from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and l.name like ? and bt.typeName like ? and b.id not in (select ob.bike_id from OrderedBike ob, Orders o where ob.order_id = o.id and (o.fromDateTime <= ?) and (o.toDateTime >= ?)) order by b.id',
+      [locName, typeName, startDate, endDate],
       (error, results) => {
         if (error) return console.error(error);
         success(results);

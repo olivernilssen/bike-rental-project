@@ -260,52 +260,58 @@ class Booking extends Component {
   //SQL SPØRRING HER
   findAvailBikes() {
     this.availableBikes = [];
-    console.log("something happend");
+    console.log('something happend');
 
-    this.startDate = this.startDate + "%";
-    this.endDate = this.endDate + "%";
+    this.startDate = this.startDate + '%';
+    this.endDate = this.endDate + '%';
 
-    rentalService.getBookingSearch(this.state.locationSelect, this.state.typeSelect, this.state.startDate, this.state.endDate, result => {
-      this.availableBikes = result;
-    })
+    rentalService.getBookingSearch(
+      this.state.locationSelect,
+      this.state.typeSelect,
+      this.state.startDate,
+      this.state.endDate,
+      result => {
+        this.availableBikes = result;
+      }
+    );
 
-  //   this.availableBikes = [];
+    //   this.availableBikes = [];
 
-  //   // FJERN DUPLIKASJONER FRA HANDLEKURV (DETTE BLIR ANNERLEDES VED SPORRINGER)
-  //   for (let i of this.allBikes) {
-  //     for (let j of basket) {
-  //       if (i.id == j.id) {
-  //         this.allBikes.splice(i, 1);
-  //       }
-  //     }
-  //   }
+    //   // FJERN DUPLIKASJONER FRA HANDLEKURV (DETTE BLIR ANNERLEDES VED SPORRINGER)
+    //   for (let i of this.allBikes) {
+    //     for (let j of basket) {
+    //       if (i.id == j.id) {
+    //         this.allBikes.splice(i, 1);
+    //       }
+    //     }
+    //   }
 
-  //   //FINN ALLE TILGJENGELIGE SYKLER BASSERT PÅ STATUS, LOKASJON, DATO(kommer) OG TYPE SYKKEL
-  //   for (let i = 0; i < this.allBikes.length; i++) {
-  //     if (this.allBikes[i].status == 1) {
-  //       if (this.state.locationSelect == '*' && this.state.typeSelect != '*') {
-  //         if (this.allBikes[i].type == this.state.typeSelect) {
-  //           this.availableBikes.push(this.allBikes[i]);
-  //         }
-  //       } else if (this.state.locationSelect != '*' && this.state.typeSelect == '*' && this.allBikes[i].status == 1) {
-  //         if (this.allBikes[i].location == this.state.locationSelect) {
-  //           this.availableBikes.push(this.allBikes[i]);
-  //         }
-  //       } else if (this.state.locationSelect != '*' && this.state.typeSelect != '*' && this.allBikes[i].status == 1) {
-  //         if (
-  //           this.allBikes[i].type == this.state.typeSelect &&
-  //           this.allBikes[i].location == this.state.locationSelect
-  //         ) {
-  //           this.availableBikes.push(this.allBikes[i]);
-  //         }
-  //       } else {
-  //         this.availableBikes.push(this.allBikes[i]);
-  //       }
-  //     }
-  //   }
+    //   //FINN ALLE TILGJENGELIGE SYKLER BASSERT PÅ STATUS, LOKASJON, DATO(kommer) OG TYPE SYKKEL
+    //   for (let i = 0; i < this.allBikes.length; i++) {
+    //     if (this.allBikes[i].status == 1) {
+    //       if (this.state.locationSelect == '*' && this.state.typeSelect != '*') {
+    //         if (this.allBikes[i].type == this.state.typeSelect) {
+    //           this.availableBikes.push(this.allBikes[i]);
+    //         }
+    //       } else if (this.state.locationSelect != '*' && this.state.typeSelect == '*' && this.allBikes[i].status == 1) {
+    //         if (this.allBikes[i].location == this.state.locationSelect) {
+    //           this.availableBikes.push(this.allBikes[i]);
+    //         }
+    //       } else if (this.state.locationSelect != '*' && this.state.typeSelect != '*' && this.allBikes[i].status == 1) {
+    //         if (
+    //           this.allBikes[i].type == this.state.typeSelect &&
+    //           this.allBikes[i].location == this.state.locationSelect
+    //         ) {
+    //           this.availableBikes.push(this.allBikes[i]);
+    //         }
+    //       } else {
+    //         this.availableBikes.push(this.allBikes[i]);
+    //       }
+    //     }
+    //   }
 
-  //   //OM DET IKKE ER NOEN TILGJENGELIGE SYKLER I DENNE KATEGORIEN, SI TIL BRUKER AT DET IKKE ER NOE DER
-  //   //OG LEGG NOE I LISTEN MED STATUS 3, SLIK AT RENDER IKKE KJØRER UENDELIG
+    //   //OM DET IKKE ER NOEN TILGJENGELIGE SYKLER I DENNE KATEGORIEN, SI TIL BRUKER AT DET IKKE ER NOE DER
+    //   //OG LEGG NOE I LISTEN MED STATUS 3, SLIK AT RENDER IKKE KJØRER UENDELIG
     if (this.availableBikes.length == 0) {
       this.availableBikes.push({ status: 3, id: 'Gjør et nytt søk' });
     }
@@ -629,7 +635,7 @@ class BikesOnLocation extends Component {
                   <Table.Th>Timespris</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.bikeLocations.map(bike => (
+                  {this.bikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
                       <Table.Td>{bike.typeName}</Table.Td>
@@ -655,10 +661,12 @@ class BikesOnLocation extends Component {
   }
 
   mounted() {
-    this.bikeLocations = [];
+    rentalService.getLocations(locations => {
+      this.bikeLocations = locations;
+    });
 
     rentalService.getBikesOnLocation(this.props.match.params.id, bikes => {
-      this.bikeLocations = bikes;
+      this.bikes = bikes;
       // console.log(this.props.history.location.pathname);
     });
   }
