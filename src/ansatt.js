@@ -14,8 +14,10 @@ let today = new Date();
 let day = today.getDate();
 let month = today.getMonth() + 1;
 let year = today.getFullYear();
+let day2 = day + 2;
 
 if (day < 10) day = '0' + day;
+if (day2 < 10) day2 = '0' + day2;
 
 if (month < 10) month = '0' + month;
 
@@ -33,10 +35,11 @@ class Overview extends Component {
 
 class Booking extends Component {
   todaysDate = year + '-' + month + '-' + day;
+  nextDay = year + '-' + month + '-' + (day2);
   dayRent = false;
   state = {
     startDate: this.todaysDate,
-    endDate: '',
+    endDate: this.nextDay,
     hoursRenting: 0,
     typeSelect: '%',
     locationSelect: '%'
@@ -207,11 +210,6 @@ class Booking extends Component {
   }
 
   mounted() {
-    this.availableBikes = [];
-
-    this.startDate = this.startDate + '%';
-    this.endDate = this.endDate + '%';
-
     rentalService.getBookingSearch(
       this.state.locationSelect,
       this.state.typeSelect,

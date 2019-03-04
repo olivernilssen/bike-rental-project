@@ -39,7 +39,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
   BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
 */
-export let basket = [{ status: 3, id: 'Handlekurven er tom :()' }];
+export let basket = [{ status: 3, id: 'Handlekurven er tom' }];
 let employeeID = 0;
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
