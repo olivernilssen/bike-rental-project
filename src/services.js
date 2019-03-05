@@ -110,6 +110,18 @@ class RentalService {
     );
   }
 
+  getCustomerSearch(phrase, success) {
+    connection.query(
+      'select DISTINCT firstName, lastName, id from Customers where firstName like ? OR lastName like ? or id like ?',
+      [phrase, phrase, phrase], 
+      (error, results) => {
+        if(error) return console.error(error);
+
+        success(results);
+      }
+    )
+  }
+
   // "b.id not in (select ob.bike_id from OrderedBike ob, " +
   // "Orders o where ob.order_id = o.id and o.fromDateTime " +
   // "between ? and ? and o.toDateTime between ? and ?) " +

@@ -76,6 +76,14 @@ class Booking extends Component {
   }
 
   chooseBike(bike) {
+    if(basket.length == 0)
+    {
+
+    }
+    else if(basket[0].id == "Handlekurven er tom"){
+      basket.splice(0, 1);
+    }
+
     basket.push(bike);
     this.findAvailBikes();
   }
@@ -279,7 +287,6 @@ class Booking extends Component {
             {
               if(result[i].id == basket[j].id)
               {
-                console.log("sykkel i handlekurv: " + result[i].id + " med basket: " + basket[j].id);
                 result.splice(i, 1);
               }
             }
@@ -609,12 +616,12 @@ class BikesOnLocation extends Component {
                   <Table.Th>ID</Table.Th>
                   <Table.Th>Typenavn</Table.Th>
                   <Table.Th>Produsent</Table.Th>
-                  <Table.Th>Årsmodell</Table.Th>
-                  <Table.Th>Rammestørrelse</Table.Th>
-                  <Table.Th>Hjulstørrelse</Table.Th>
+                  <Table.Th>År</Table.Th>
+                  <Table.Th>Ramme</Table.Th>
+                  <Table.Th>Hjul</Table.Th>
                   <Table.Th>Antall gir</Table.Th>
-                  <Table.Th>Girsystem</Table.Th>
-                  <Table.Th>Bremsesytem</Table.Th>
+                  <Table.Th>Gir</Table.Th>
+                  <Table.Th>Bremser</Table.Th>
                   <Table.Th>Vekt</Table.Th>
                   <Table.Th>Beregnet for</Table.Th>
                   <Table.Th>Timespris</Table.Th>
@@ -665,7 +672,14 @@ class Customers extends Component {
 
 class Basket extends Component {
   removeBike = this.removeBike.bind(this);
-  inBasket = basket;
+  updateBasket = this.updateBasket.bind(this);
+  handleChangePhrase = this.handleChangePhrase.bind(this);
+  chooseCustomer = this.chooseCustomer.bind(this);
+  state = {
+    inBasket: basket,
+    kunder: [],
+    phrase: "%"
+  }
   styleState = {
     display: 'block',
     clear: 'both'
@@ -675,31 +689,85 @@ class Basket extends Component {
   removeBike(bike) {
     for (let i of basket) {
       if (bike == i) {
-        basket.splice(i, 1);
+        basket.splice(basket.indexOf(i), 1);
+        this.updateBasket();
       }
     }
-
-    this.checkifEmpty();
   }
 
-  checkifEmpty() {
-    this.inBasket = basket;
-
-    if (this.inBasket.length == 0) {
-      this.inBasket.push({ status: 3, id: 'Handlekurven er tom :(' });
-    }
-
-    if (this.inBasket[0].status == 3) {
+  updateBasket() {
+    this.state.inBasket = [];
+    if (basket.length == 0) {
       this.setState({ styleState: (this.styleState.display = 'none') });
     } else {
       this.setState({ styleState: (this.styleState.display = 'block') });
     }
+
+    if (basket.length == 0) {
+      this.setState(state => {
+        const inBasket = state.inBasket.concat({id: "TOMT HER"});
+        return {
+          inBasket
+        };
+      });
+    }
+    else {
+      this.setState(state => {
+        const inBasket = state.inBasket.concat(basket);
+        return {
+          inBasket, 
+          basket,
+        };
+      });
+    }
+  }
+
+  handleChangePhrase(event){
+    this.setState({phrase: event.target.value}, this.findCustomers())
+  }
+
+  findCustomers() {
+    let queryPhrase = "";
+
+    if(this.state.phrase == " "){
+      queryPhrase = "%";
+    }
+    else {
+      queryPhrase = "%" + this.state.phrase + "%";
+    }
+    rentalService.getCustomerSearch(queryPhrase, results => {
+      this.state.kunder = [];
+      if(results.length == 0){
+        this.setState(state => {
+          console.log(queryPhrase);
+          const kunder = state.kunder.concat({firstName: "Søk igjen"});
+          return {
+            kunder, 
+          };
+        });
+      }
+      else {
+        this.setState(state => {
+        console.log(queryPhrase);
+        const kunder = state.kunder.concat(results);
+        return {
+          kunder, 
+          results,
+        };
+      });
+      }
+      
+    })
+  }
+
+  chooseCustomer(customer) {
+
   }
 
   render() {
-    if (this.inBasket.length == 0) {
+    if (basket.length == 0 && this.state.inBasket.length == 0) {
       {
-        this.checkifEmpty();
+        this.updateBasket();
       }
     }
 
@@ -708,52 +776,93 @@ class Basket extends Component {
         display: this.styleState.display
       }
     };
-
     const { btnStyle } = styles;
 
+    if(this.state.kunder.length == 0)
+    {
+      this.findCustomers();
+    }
+    
     return (
-      <div className="row">
         <div>
-          <h3>Sykler i handlekurv</h3>
-          <Card>
-            <Table>
-              <Table.Thead>
-                <Table.Th>ID</Table.Th>
-                <Table.Th>Type</Table.Th>
-                <Table.Th>Merke</Table.Th>
-                <Table.Th>Lokasjon</Table.Th>
-                <Table.Th>Hjul</Table.Th>
-                <Table.Th>Vekt</Table.Th>
-                <Table.Th>Times Pris</Table.Th>
-              </Table.Thead>
-              <Table.Tbody>
-                {basket.map(bike => (
-                  <Table.Tr key={bike.id}>
-                      <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.typeName}</Table.Td>
-                      <Table.Td>{bike.brand}</Table.Td>
-                      <Table.Td>{bike.name}</Table.Td>
-                      <Table.Td>{bike.wheelSize}</Table.Td>
-                      <Table.Td>{bike.weight_kg}</Table.Td>
-                      <Table.Td>{bike.price}</Table.Td>
-                    <Table.Td>
-                      <Button.Success
-                        style={btnStyle}
-                        onClick={() => {
-                          this.removeBike(bike);
-                        }}
-                      >
-                        Delete
-                      </Button.Success>
-                    </Table.Td>
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Card>
+          <div className="row">
+            <Card title="Handlekurv">
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Lokasjon</Table.Th>
+                  <Table.Th>Hjul</Table.Th>
+                  <Table.Th>Vekt</Table.Th>
+                  <Table.Th>Times Pris</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.state.inBasket.map(bike => (
+                    <Table.Tr key={bike.id}>
+                        <Table.Td>{bike.id}</Table.Td>
+                        <Table.Td>{bike.typeName}</Table.Td>
+                        <Table.Td>{bike.brand}</Table.Td>
+                        <Table.Td>{bike.name}</Table.Td>
+                        <Table.Td>{bike.wheelSize}</Table.Td>
+                        <Table.Td>{bike.weight_kg}</Table.Td>
+                        <Table.Td>{bike.price}</Table.Td>
+                        <Table.Td>
+                          <Button.Success
+                            style={btnStyle}
+                            onClick={() => {this.removeBike(bike);}}> Delete 
+                          </Button.Success>
+                        </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Card>
+          </div>
+          <div className="row">
+            <Card title="Søk etter kunde">
+              <input value={this.phrase} onChange={this.handleChangePhrase}></input>
+              <br></br>
+              <br></br>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Fornavn</Table.Th>
+                  <Table.Th>Etternavn</Table.Th>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th></Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.state.kunder.map(kunde => (
+                    <Table.Tr key={kunde.id}>
+                        <Table.Td>{kunde.firstName}</Table.Td>
+                        <Table.Td>{kunde.lastName}</Table.Td>
+                        <Table.Td>{kunde.id}</Table.Td>
+                        <Table.Td>
+                          <Button.Success
+                            onClick={() => {this.chooseCustomer(kunde);}}> Velg 
+                          </Button.Success>
+                        </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Card>
+          </div>
         </div>
-      </div>
     );
+  }
+
+  mounted () {
+    rentalService.getCustomerSearch("%", results => {
+      this.setState(state => {
+        const kunder = state.kunder.concat(results);
+        console.log(results.length);
+        return {
+          kunder, 
+          results,
+        };
+      });
+    })
   }
 }
 
