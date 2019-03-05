@@ -42,7 +42,9 @@ class Booking extends Component {
     endDate: this.nextDay,
     hoursRenting: 0,
     typeSelect: '%',
-    locationSelect: '%'
+    locationSelect: '%',
+    allBikes: [],
+    availableBikes: []
   };
 
   styleState = {
@@ -50,8 +52,6 @@ class Booking extends Component {
     clear: 'both'
   };
 
-  allBikes = [ ];
-  availableBikes = [];
   handleSubmit = this.handleSubmit.bind(this);
   handleCheckChange = this.handleCheckChange.bind(this);
   handleChange = this.handleChange.bind(this);
@@ -68,8 +68,7 @@ class Booking extends Component {
   }
 
   handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-    this.findAvailBikes();
+    this.setState({ [e.target.name]: e.target.value }, this.handleSubmit);
   }
 
   handleSubmit() {
@@ -77,12 +76,7 @@ class Booking extends Component {
   }
 
   chooseBike(bike) {
-    if (basket[0].status == 3) {
-      basket.splice(0, 1);
-    }
-
     basket.push(bike);
-    console.log(basket.length);
     this.findAvailBikes();
   }
 
@@ -179,9 +173,11 @@ class Booking extends Component {
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Hjul</Table.Th>
                   <Table.Th>Pris</Table.Th>
+                  <Table.Th></Table.Th>
+                  
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.availableBikes.map(bike => (
+                  {this.state.availableBikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
                       <Table.Td>{bike.typeName}</Table.Td>
@@ -210,43 +206,8 @@ class Booking extends Component {
   }
 
   mounted() {
-    rentalService.getBookingSearch(
-      this.state.locationSelect,
-      this.state.typeSelect,
-      this.state.startDate,
-      this.state.endDate,
-      result => {
-
-        this.availableBikes = result;
-
-        for(let i = 0; i < this.availableBikes.length; i++){
-          {
-            for (let j = 0; j < basket.length; j++)
-            {
-              if(this.availableBikes[i].id == basket[j].id)
-              {
-                result.splice(i, 1);
-              }
-            }
-          }
-        }
-        
-        if (this.availableBikes.length == 0) {
-          this.availableBikes.push({ status: 3, id: 'Gjør et nytt søk' });
-        }
-    
-        if (this.availableBikes[0].id == 'Gjør et nytt søk') {
-          this.setState({ styleState: (this.styleState.display = 'none') });
-        } else {
-          this.setState({ styleState: (this.styleState.display = 'block') });
-        }
-      }
-    );
-  }
-
-  //SQL SPØRRING HER
-  findAvailBikes() {
-    this.availableBikes = [];
+    this.state.availableBikes = [];
+    let empty = {id: 'Gjør et nytt søk'};
 
     this.startDate = this.startDate + '%';
     this.endDate = this.endDate + '%';
@@ -258,13 +219,11 @@ class Booking extends Component {
       this.state.endDate,
       result => {
 
-        this.availableBikes = result;
-
-        for(let i = 0; i < this.availableBikes.length; i++){
+        for(let i = 0; i < result.length; i++){
           {
             for (let j = 0; j < basket.length; j++)
             {
-              if(this.availableBikes[i].id == basket[j].id)
+              if(result[i].id == basket[j].id)
               {
                 result.splice(i, 1);
               }
@@ -272,23 +231,83 @@ class Booking extends Component {
           }
         }
         
-        if (this.availableBikes.length == 0) {
-          this.availableBikes.push({ status: 3, id: 'Gjør et nytt søk' });
-        }
-    
-        if (this.availableBikes[0].id == 'Gjør et nytt søk') {
+        if (result.length == 0) {
           this.setState({ styleState: (this.styleState.display = 'none') });
-        } else {
+          this.setState(state => {
+            const availableBikes = state.availableBikes.concat(empty);
+            return {
+              availableBikes, 
+              empty,
+            };
+          });
+        }
+        else {
           this.setState({ styleState: (this.styleState.display = 'block') });
+          this.setState(state => {
+            const availableBikes = state.availableBikes.concat(result);
+            return {
+              availableBikes, 
+              result,
+            };
+          });
         }
       }
     );
+  }
 
-    
+  //SQL SPØRRING HER
+  findAvailBikes() {
+    this.state.availableBikes = [];
+    let empty = {id: 'Gjør et nytt søk'};
 
-    //   //OM DET IKKE ER NOEN TILGJENGELIGE SYKLER I DENNE KATEGORIEN, SI TIL BRUKER AT DET IKKE ER NOE DER
-    //   //OG LEGG NOE I LISTEN MED STATUS 3, SLIK AT RENDER IKKE KJØRER UENDELIG
-    
+    this.startDate = this.startDate + '%';
+    this.endDate = this.endDate + '%';
+
+    rentalService.getBookingSearch(
+      this.state.locationSelect,
+      this.state.typeSelect,
+      this.state.startDate,
+      this.state.endDate,
+      result => {
+
+        for(let i = 0; i < result.length; i++){
+          {
+            if(result.length == 0){
+              break;
+            }
+            for (let j = 0; j < basket.length; j++)
+            {
+              if(result[i].id == basket[j].id)
+              {
+                console.log("sykkel i handlekurv: " + result[i].id + " med basket: " + basket[j].id);
+                result.splice(i, 1);
+              }
+            }
+          }
+        }
+        
+        if (result.length == 0) {
+          this.setState({ styleState: (this.styleState.display = 'none') });
+          this.setState(state => {
+            const availableBikes = state.availableBikes.concat(empty);
+            return {
+              availableBikes, 
+              empty,
+            };
+          });
+        }
+        else {
+          this.setState({ styleState: (this.styleState.display = 'block') });
+          this.setState(state => {
+            const availableBikes = state.availableBikes.concat(result);
+            return {
+              availableBikes, 
+              result,
+            };
+          });
+        }
+      }
+    );
   }
 }
 
@@ -710,13 +729,13 @@ class Basket extends Component {
               <Table.Tbody>
                 {basket.map(bike => (
                   <Table.Tr key={bike.id}>
-                    <Table.Td>{bike.id}</Table.Td>
-                    <Table.Td>{bike.type}</Table.Td>
-                    <Table.Td>{bike.brand}</Table.Td>
-                    <Table.Td>{bike.location}</Table.Td>
-                    <Table.Td>{bike.framesize}</Table.Td>
-                    <Table.Td>{bike.weight}</Table.Td>
-                    <Table.Td>{bike.hrPrice}</Table.Td>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.typeName}</Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>{bike.name}</Table.Td>
+                      <Table.Td>{bike.wheelSize}</Table.Td>
+                      <Table.Td>{bike.weight_kg}</Table.Td>
+                      <Table.Td>{bike.price}</Table.Td>
                     <Table.Td>
                       <Button.Success
                         style={btnStyle}
