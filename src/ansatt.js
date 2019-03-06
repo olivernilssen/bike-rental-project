@@ -675,10 +675,16 @@ class Basket extends Component {
   updateBasket = this.updateBasket.bind(this);
   handleChangePhrase = this.handleChangePhrase.bind(this);
   chooseCustomer = this.chooseCustomer.bind(this);
+  findCustomers = this.findCustomers.bind(this);
+  removeCustomer = this.removeCustomer.bind(this);
+
   state = {
     inBasket: basket,
     kunder: [],
-    phrase: "%"
+    phrase: "",
+    activeCustomer: "Ingen Kunde valgt",
+    displayCustomer: 'block',
+    CustomerActive: false
   }
   styleState = {
     display: 'block',
@@ -723,7 +729,7 @@ class Basket extends Component {
   }
 
   handleChangePhrase(event){
-    this.setState({phrase: event.target.value}, this.findCustomers())
+    this.setState({state: (this.state.phrase = event.target.value)}, this.findCustomers());
   }
 
   findCustomers() {
@@ -737,6 +743,7 @@ class Basket extends Component {
     }
     rentalService.getCustomerSearch(queryPhrase, results => {
       this.state.kunder = [];
+
       if(results.length == 0){
         this.setState(state => {
           console.log(queryPhrase);
@@ -761,7 +768,15 @@ class Basket extends Component {
   }
 
   chooseCustomer(customer) {
+    this.setState({state: (this.state.activeCustomer = customer)});
+    this.setState({state: (this.state.displayCustomer = 'none') });
+  }
 
+  removeCustomer() {
+    this.setState({state: (this.state.activeCustomer = "Velg ny kunde")});
+    this.setState({state: (this.state.displayCustomer = 'block') });
+    this.setState({state: (this.state.phrase = "")});
+    this.findCustomers();
   }
 
   render() {
@@ -774,18 +789,19 @@ class Basket extends Component {
     const styles = {
       btnStyle: {
         display: this.styleState.display
+      },
+      divStyle: {
+        display: this.state.displayCustomer
       }
     };
-    const { btnStyle } = styles;
 
-    if(this.state.kunder.length == 0)
-    {
-      this.findCustomers();
-    }
+    const { divStyle } = styles;
+
+    const { btnStyle } = styles;
     
     return (
         <div>
-          <div className="row">
+          <Row>
             <Card title="Handlekurv">
               <Table>
                 <Table.Thead>
@@ -810,7 +826,7 @@ class Basket extends Component {
                         <Table.Td>
                           <Button.Success
                             style={btnStyle}
-                            onClick={() => {this.removeBike(bike);}}> Delete 
+                            onClick={() => {this.removeBike(bike)}}> Delete 
                           </Button.Success>
                         </Table.Td>
                     </Table.Tr>
@@ -818,36 +834,42 @@ class Basket extends Component {
                 </Table.Tbody>
               </Table>
             </Card>
-          </div>
-          <div className="row">
+          </Row>
+
+          <Row>
+          
             <Card title="Søk etter kunde">
-              <input value={this.phrase} onChange={this.handleChangePhrase}></input>
-              <br></br>
-              <br></br>
-              <Table>
-                <Table.Thead>
-                  <Table.Th>Fornavn</Table.Th>
-                  <Table.Th>Etternavn</Table.Th>
-                  <Table.Th>ID</Table.Th>
-                  <Table.Th></Table.Th>
-                </Table.Thead>
-                <Table.Tbody>
-                  {this.state.kunder.map(kunde => (
-                    <Table.Tr key={kunde.id}>
-                        <Table.Td>{kunde.firstName}</Table.Td>
-                        <Table.Td>{kunde.lastName}</Table.Td>
-                        <Table.Td>{kunde.id}</Table.Td>
-                        <Table.Td>
-                          <Button.Success
-                            onClick={() => {this.chooseCustomer(kunde);}}> Velg 
-                          </Button.Success>
-                        </Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
+              <Form.Label>Valgt Kunde: {this.state.activeCustomer.firstName} </Form.Label> <br></br>
+              <Button.Success onClick={() => {this.removeCustomer()}}> Fjern Kunde </Button.Success> <br></br><br></br>
+              <div style={divStyle}>
+                  <Form.Input value={this.state.phrase} onChange={this.handleChangePhrase}></Form.Input>
+                  <br></br>
+                  <br></br>
+                  <Table>
+                    <Table.Thead>
+                      <Table.Th>Fornavn</Table.Th>
+                      <Table.Th>Etternavn</Table.Th>
+                      <Table.Th>ID</Table.Th>
+                      <Table.Th></Table.Th>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      {this.state.kunder.map(kunde => (
+                        <Table.Tr key={kunde.id}>
+                            <Table.Td>{kunde.firstName}</Table.Td>
+                            <Table.Td>{kunde.lastName}</Table.Td>
+                            <Table.Td>{kunde.id}</Table.Td>
+                            <Table.Td>
+                              <Button.Success
+                                onClick={() => {this.chooseCustomer(kunde);}}> Velg 
+                              </Button.Success>
+                            </Table.Td>
+                        </Table.Tr>
+                      ))}
+                    </Table.Tbody>
+                  </Table>
+                </div>
             </Card>
-          </div>
+          </Row>
         </div>
     );
   }
