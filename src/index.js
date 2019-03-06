@@ -5,7 +5,6 @@ import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import {
   Overview,
-  Booking,
   BookingDetails,
   BikeTypes,
   BikeTypeDetails,
@@ -14,9 +13,12 @@ import {
   Customers,
   LocationList,
   BikesOnLocation,
-  Basket,
   AllBikes
 } from './ansatt.js';
+
+import {Booking} from './booking.js';
+import {Basket} from './basket.js';
+
 import {
   Card,
   Tabs,
@@ -71,7 +73,7 @@ class Menu extends Component {
 
       return (
         <div>
-          <NavBar brand="SykkelUtleie9000" />
+          <NavBar brand="CycleOn Rentals" />
 
           <div id="logIn">
             <CenterContent>
@@ -110,7 +112,7 @@ class Menu extends Component {
     } else {
       return (
         <div>
-          <NavBar brand="SykkelUtleie9000">
+          <NavBar brand="CycleOn Rentals">
             <Button.Danger onClick={this.logout}>Logg ut</Button.Danger>
           </NavBar>
           <div>
