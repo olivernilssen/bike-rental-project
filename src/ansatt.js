@@ -27,27 +27,27 @@ class AllBikes extends Component {
   handleChange = this.handleChange.bind(this);
   state = {
     bikes: [],
-    searchWord: ""
-  }
+    searchWord: ''
+  };
 
   handleChange(event) {
-    this.setState({state: (this.state.searchWord = event.target.value)}, this.searchBikes());
+    this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchBikes());
   }
 
   searchBikes() {
-    let searchWord = "%" + this.state.searchWord + "%";
+    let searchWord = '%' + this.state.searchWord + '%';
 
-    console.log("searchbikes");
+    console.log('searchbikes');
     rentalService.searchBikes(searchWord, results => {
       this.setState(state => {
-        this.setState({state: (this.state.bikes = [])});
+        this.setState({ state: (this.state.bikes = []) });
         const bikes = state.bikes.concat(results);
         return {
-          bikes, 
-          results,
+          bikes,
+          results
         };
       });
-    })
+    });
   }
 
   render() {
@@ -102,8 +102,8 @@ class AllBikes extends Component {
       this.setState(state => {
         const bikes = state.bikes.concat(results);
         return {
-          bikes, 
-          results,
+          bikes,
+          results
         };
       });
     });
@@ -402,8 +402,57 @@ class BikesOnLocation extends Component {
 }
 
 class Customers extends Component {
+  customers = [
+    {
+      id: 'testnummer',
+      firstName: 'fornavn1',
+      lastName: 'etternavn1',
+      email: 'epostTest',
+      phoneNumber: '1234',
+      adress: 'adressetest'
+    }
+  ];
+
+  searchCustomerFunction() {
+    var customerSearch = '';
+    console.log('test!');
+  }
   render() {
-    return <h1>KUNDER</h1>;
+    return (
+      <Card>
+        <Row>
+          <Column>
+            <h6>Kundeliste</h6>
+            <input id="testSearch" type="search" onChange={this.searchCustomerFunction} placeholder="Søk etter kunde" />
+
+            <br />
+            <br />
+            <Table>
+              <Table.Thead>
+                <Table.Th>KundeID</Table.Th>
+                <Table.Th>Fornavn</Table.Th>
+                <Table.Th>Etternavn</Table.Th>
+                <Table.Th>Epost</Table.Th>
+                <Table.Th>Telefonnummer</Table.Th>
+                <Table.Th>Adresse</Table.Th>
+              </Table.Thead>
+              <Table.Tbody>
+                {this.customers.map(customer => (
+                  <Table.Tr key={customer.id}>
+                    <Table.Td>{customer.id}</Table.Td>
+                    <Table.Td>{customer.firstName}</Table.Td>
+                    <Table.Td>{customer.lastName}</Table.Td>
+                    <Table.Td>{customer.email}</Table.Td>
+                    <Table.Td>{customer.phoneNumber}</Table.Td>
+                    <Table.Td>{customer.adress}</Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Column>
+        </Row>
+      </Card>
+    );
   }
 }
 
