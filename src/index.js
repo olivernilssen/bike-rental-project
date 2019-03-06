@@ -13,7 +13,8 @@ import {
   Customers,
   LocationList,
   BikesOnLocation,
-  AllBikes
+  AllBikes,
+  SelectedCustomer
 } from './ansatt.js';
 
 import {Booking} from './booking.js';
@@ -184,7 +185,8 @@ ReactDOM.render(
       <Route exact path="/bikeTypes/:id/" component={BikeTypeDetails} />
       <Route path="/bikeStatus/" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
-      <Route exact path="/customers/" component={Customers} />
+      <Route path="/customers/" component={Customers} />
+      <Route exact path="/customers/:id" component={SelectedCustomer} />
       <Route exact path="/basket/" component={Basket} />
       <Route path="/locations/" component={LocationList} />
       <Route exact path="/locations/:id" component={BikesOnLocation} />
