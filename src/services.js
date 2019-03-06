@@ -1,4 +1,5 @@
 import { connection } from './mysql_connection';
+import { start } from 'repl';
 
 class RentalService {
   getBikeTypes(success) {
@@ -8,6 +9,7 @@ class RentalService {
       success(results);
     });
   }
+
   getBikes(success) {
     connection.query('select * from Bikes', (error, results) => {
       if (error) return console.error(error);
@@ -15,6 +17,7 @@ class RentalService {
       success(results);
     });
   }
+
   getAllBikesByType(success) {
     connection.query(
       'select b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id',
@@ -25,6 +28,7 @@ class RentalService {
       }
     );
   }
+
   getBikeStatus(success) {
     connection.query('select distinct bikeStatus from Bikes', (error, results) => {
       if (error) console.error(error);
@@ -32,6 +36,7 @@ class RentalService {
       success(results);
     });
   }
+
   getBikesByStatus(bikeStatus, success) {
     connection.query(
       'select b.id, l.name, bt.typeName from Bikes b, Locations l, BikeType bt where b.location_id = l.id and b.type_id = bt.id and b.bikeStatus = ?',
@@ -43,6 +48,7 @@ class RentalService {
       }
     );
   }
+
   getAvailableBikes(success) {
     connection.query(
       'select * from Bikes where object_id in (select object_id from RentalObjects where objectStatus = "OK"))',
@@ -59,6 +65,16 @@ class RentalService {
       if (error) return console.error(error);
 
       success(results[0]);
+    });
+  }
+  
+  searchBikes(searchWord, success) {
+    connection.query(
+      "select distinct b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and (b.id like ? or l.name like ? or bt.typeName like ? or bt.model like ?)",
+      [searchWord, searchWord, searchWord, searchWord],
+      (error, results) => {
+      if(error) return console.error(error);
+      success(results);
     });
   }
 
@@ -128,8 +144,8 @@ class RentalService {
 
   getBookingSearch(locName, typeName, startDate, endDate, success) {
     connection.query(
-      'select b.id, bt.typeName, bt.brand, l.name, bt.wheelSize, bt.weight_kg, bt.price from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and l.name like ? and bt.typeName like ? and b.id not in (select ob.bike_id from OrderedBike ob, Orders o where ob.order_id = o.id and ((o.fromDateTime <= ? and o.toDateTime >= ?) or (o.fromDateTime >= ? and o.toDateTime >= ?))) order by b.id',
-      [locName, typeName, endDate, startDate, endDate, startDate],
+      'select b.id, bt.typeName, bt.brand, l.name, bt.wheelSize, bt.weight_kg, bt.price from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and l.name like ? and bt.typeName like ? and b.id not in (select ob.bike_id from OrderedBike ob, Orders o where ob.order_id = o.id and ((o.fromDateTime between ? and ?) or (o.toDateTime between ? and ?) or (o.fromDateTime <= ? and o.toDateTime >= ?))) order by b.id',
+      [locName, typeName, startDate, endDate, startDate, endDate, startDate, endDate],
       (error, results) => {
         if (error) return console.error(error);
         success(results);

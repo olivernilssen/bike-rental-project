@@ -319,7 +319,32 @@ class Booking extends Component {
 }
 
 class AllBikes extends Component {
-  bikes = [];
+  searchBikes = this.searchBikes.bind(this);
+  handleChange = this.handleChange.bind(this);
+  state = {
+    bikes: [],
+    searchWord: ""
+  }
+
+  handleChange(event) {
+    this.setState({state: (this.state.searchWord = event.target.value)}, this.searchBikes());
+  }
+
+  searchBikes() {
+    let searchWord = "%" + this.state.searchWord + "%";
+
+    console.log("searchbikes");
+    rentalService.searchBikes(searchWord, results => {
+      this.setState(state => {
+        this.setState({state: (this.state.bikes = [])});
+        const bikes = state.bikes.concat(results);
+        return {
+          bikes, 
+          results,
+        };
+      });
+    })
+  }
 
   render() {
     return (
@@ -329,6 +354,8 @@ class AllBikes extends Component {
             <Column>
               <h6>Alle sykler</h6>
               <Column right>
+                <Form.Label>Søk på sykkel etter sykkel-ID</Form.Label>
+                <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
                 <NavLink to={'/add/bikeType/'}>
                   <Button.Light>Legg inn ny sykkeltype</Button.Light>
                 </NavLink>
@@ -345,7 +372,7 @@ class AllBikes extends Component {
                   <Table.Th>Lokasjon</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.bikes.map(bike => (
+                  {this.state.bikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
                       <Table.Td>{bike.typeName}</Table.Td>
@@ -367,8 +394,14 @@ class AllBikes extends Component {
   }
 
   mounted() {
-    rentalService.getAllBikesByType(bikes => {
-      this.bikes = bikes;
+    rentalService.getAllBikesByType(results => {
+      this.setState(state => {
+        const bikes = state.bikes.concat(results);
+        return {
+          bikes, 
+          results,
+        };
+      });
     });
   }
 }
@@ -837,7 +870,6 @@ class Basket extends Component {
           </Row>
 
           <Row>
-          
             <Card title="Søk etter kunde">
               <Form.Label>Valgt Kunde: {this.state.activeCustomer.firstName} </Form.Label> <br></br>
               <Button.Success onClick={() => {this.removeCustomer()}}> Fjern Kunde </Button.Success> <br></br><br></br>
@@ -878,7 +910,6 @@ class Basket extends Component {
     rentalService.getCustomerSearch("%", results => {
       this.setState(state => {
         const kunder = state.kunder.concat(results);
-        console.log(results.length);
         return {
           kunder, 
           results,
