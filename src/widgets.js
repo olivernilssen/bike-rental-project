@@ -175,7 +175,7 @@ class ButtonSuccess extends Component {
 class ButtonDanger extends Component {
   render() {
     return (
-      <button type="button" className="btn btn-danger" id="dangerBtn" onClick={this.props.onClick}>
+      <button type="button" className="btn btn-danger" id="dangerBtn" onClick={this.props.onClick} style={this.props.style}>
         {this.props.children}
       </button>
     );
