@@ -10,15 +10,6 @@ import createHashHistory from 'history/createHashHistory';
 import { start } from 'repl';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
-let today = new Date();
-let day = today.getDate();
-let month = today.getMonth() + 1;
-let year = today.getFullYear();
-
-if (day < 10) day = '0' + day;
-
-if (month < 10) month = '0' + month;
-
 /*
     ELEMENTER FOR ALLE BRUKERE INKLUDERT VANLIGE ANSATTE OG ADMIN
 
@@ -31,281 +22,33 @@ class Overview extends Component {
   }
 }
 
-class Booking extends Component {
-  constructor(props) {
-    super(props);
-    this.todaysDate = year + '-' + month + '-' + day;
-    this.dayRent = false;
-    this.state = {
-      startDate: this.todaysDate,
-      endDate: '',
-      hoursRenting: 0,
-      typeSelect: '*',
-      locationSelect: 'Voss'
-    };
-
-    this.emptyList = 'display: block;';
-
-    this.allBikes = [
-      {
-        type: 'Tandem',
-        id: '111',
-        brand: 'Bike1',
-        brand: 'Merida',
-        location: 'Voss',
-        framesize: "15'",
-        hrPrice: '100',
-        year: '2019',
-        weight: '15kg',
-        status: 1
-      },
-      {
-        type: 'Dutch Bike',
-        id: '222',
-        brand: 'Bike2',
-        brand: 'KLM',
-        location: 'Finnsnes',
-        framesize: "19'",
-        hrPrice: '50',
-        year: '2011',
-        weight: '15kg',
-        status: 1
-      },
-      {
-        type: 'City Bike',
-        id: '333',
-        brand: 'Bike3',
-        brand: 'Jonnsen',
-        location: 'Røros',
-        framesize: "12'",
-        hrPrice: '120',
-        year: '2017',
-        weight: '12kg',
-        status: 0
-      }
-    ];
-
-    this.availableBikes = [];
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleCheckChange = this.handleCheckChange.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.chooseBike = this.chooseBike.bind(this);
-  }
-
-  handleCheckChange() {
-    if (this.dayRent == false) {
-      this.dayRent = true;
-    } else {
-      this.dayRent = false;
-    }
-  }
-
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-    this.availableBikes = [];
-  }
-
-  handleSubmit() {
-    this.findAvailBikes();
-  }
-
-  chooseBike(bike) {
-    if (bike.status == 3) {
-      console.log('ingen sykkel her');
-      return;
-    }
-
-    if (basket[0].status == 3) {
-      basket.splice(0, 1);
-    }
-
-    basket.push(bike);
-
-    for (let i = 0; i < this.allBikes.length; i++) {
-      if (bike.id == this.allBikes[i].id) {
-        this.allBikes[i].status = 0;
-      }
-    }
-
-    this.availableBikes = [];
-  }
-
-  render() {
-    if (this.availableBikes.length == 0) {
-      {
-        this.findAvailBikes();
-      }
-    }
-
-    console.log('In basket: ' + basket.length);
-
-    return (
-      <div className="container-fluid">
-        <div className="row">
-          <div>
-            <h3>Booking</h3>
-            <div>
-              {/* Date entry */}
-              <div className="form-group">
-                <input
-                  type="checkbox"
-                  name="dayRent"
-                  checked={this.dayRent}
-                  onChange={this.handleCheckChange}
-                  value="Times leie?"
-                />
-                <label> Times leie?</label>
-                <input
-                  type="number"
-                  name="hoursRenting"
-                  disabled={!this.dayRent}
-                  onChange={this.handleChange}
-                  value={this.hoursRenting}
-                />
-                <br />
-                <input
-                  type="date"
-                  name="startDate"
-                  disabled={this.dayRent}
-                  min={this.state.todaysDate}
-                  value={this.state.startDate}
-                  onChange={this.handleChange}
-                />
-
-                <input
-                  type="date"
-                  name="endDate"
-                  disabled={this.dayRent}
-                  min={this.state.startDate}
-                  value={this.state.endDate}
-                  onChange={this.handleChange}
-                />
-
-                <br />
-                <br />
-
-                <select name="locationSelect" value={this.state.locationSelect} onChange={this.handleChange}>
-                  <option value="*">Any Location</option>
-                  <option value="Voss">Voss</option>
-                  <option value="Finnsnes">Finnsnes</option>
-                  <option value="Røros">Røros</option>
-                </select>
-
-                <select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
-                  <option value="*">Any Type of bike</option>
-                  <option value="City Bike">City bike</option>
-                  <option value="mountainbike">Mountain Bike</option>
-                  <option value="Tandem">Tandem</option>
-                  <option value="Dutch Bike">Dutch Bike</option>
-                  <option value="childbike">Childrens Bike</option>
-                </select>
-              </div>
-
-              {/* submit button */}
-              <div className="form-group">
-                <button name="submit" type="button" onClick={this.handleSubmit}>
-                  Søk
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div>
-            <h3>Ledige Sykler</h3>
-            <Card>
-              <Table>
-                <Table.Thead>
-                  <Table.Th>ID</Table.Th>
-                  <Table.Th>Type</Table.Th>
-                  <Table.Th>Merke</Table.Th>
-                  <Table.Th>Lokasjon</Table.Th>
-                  <Table.Th>Hjul</Table.Th>
-                  <Table.Th>Vekt</Table.Th>
-                  <Table.Th>Times Pris</Table.Th>
-                </Table.Thead>
-                <Table.Tbody>
-                  {this.availableBikes.map(bike => (
-                    <Table.Tr key={bike.id}>
-                      <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.type}</Table.Td>
-                      <Table.Td>{bike.brand}</Table.Td>
-                      <Table.Td>{bike.location}</Table.Td>
-                      <Table.Td>{bike.framesize}</Table.Td>
-                      <Table.Td>{bike.weight}</Table.Td>
-                      <Table.Td>{bike.hrPrice}</Table.Td>
-                      <Table.Td>
-                        <Button.Success
-                          style={this.emptyList}
-                          onClick={() => {
-                            this.chooseBike(bike);
-                          }}
-                        >
-                          Velg
-                        </Button.Success>
-                      </Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-            </Card>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  //SQL SPØRRING HER
-  findAvailBikes() {
-    this.availableBikes = [];
-    this.emptyList = 'display: block;';
-
-    // FJERN DUPLIKASJONER FRA HANDLEKURV (DETTE BLIR ANNERLEDES VED SPORRINGER)
-    for (let i of this.allBikes) {
-      for (let j of basket) {
-        if (i.id == j.id) {
-          this.allBikes.splice(i, 1);
-        }
-      }
-    }
-
-    //FINN ALLE TILGJENGELIGE SYKLER BASSERT PÅ STATUS, LOKASJON, DATO(kommer) OG TYPE SYKKEL
-    for (let i = 0; i < this.allBikes.length; i++) {
-      if (this.allBikes[i].status == 1) {
-        if (this.state.locationSelect == '*' && this.state.typeSelect != '*') {
-          if (this.allBikes[i].type == this.state.typeSelect) {
-            this.availableBikes.push(this.allBikes[i]);
-          }
-        } else if (this.state.locationSelect != '*' && this.state.typeSelect == '*' && this.allBikes[i].status == 1) {
-          if (this.allBikes[i].location == this.state.locationSelect) {
-            this.availableBikes.push(this.allBikes[i]);
-          }
-        } else if (this.state.locationSelect != '*' && this.state.typeSelect != '*' && this.allBikes[i].status == 1) {
-          if (
-            this.allBikes[i].type == this.state.typeSelect &&
-            this.allBikes[i].location == this.state.locationSelect
-          ) {
-            this.availableBikes.push(this.allBikes[i]);
-          }
-        } else {
-          this.availableBikes.push(this.allBikes[i]);
-        }
-      }
-    }
-
-    //OM DET IKKE ER NOEN TILGJENGELIGE SYKLER I DENNE KATEGORIEN, SI TIL BRUKER AT DET IKKE ER NOE DER
-    //OG LEGG NOE I LISTEN MED STATUS 3, SLIK AT RENDER IKKE KJØRER UENDELIG
-    if (this.availableBikes.length == 0) {
-      this.availableBikes.push({ status: 3, id: 'Gjør et nytt søk' });
-      this.emptyList = 'display: none;';
-    }
-  }
-}
-
 class AllBikes extends Component {
-  bikes = [];
+  searchBikes = this.searchBikes.bind(this);
+  handleChange = this.handleChange.bind(this);
+  state = {
+    bikes: [],
+    searchWord: ''
+  };
+
+  handleChange(event) {
+    this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchBikes());
+  }
+
+  searchBikes() {
+    let searchWord = '%' + this.state.searchWord + '%';
+
+    console.log('searchbikes');
+    rentalService.searchBikes(searchWord, results => {
+      this.setState(state => {
+        this.setState({ state: (this.state.bikes = []) });
+        const bikes = state.bikes.concat(results);
+        return {
+          bikes,
+          results
+        };
+      });
+    });
+  }
 
   render() {
     return (
@@ -315,9 +58,8 @@ class AllBikes extends Component {
             <Column>
               <h6>Alle sykler</h6>
               <Column right>
-                <NavLink to={'/add/bikeType/'}>
-                  <Button.Light>Legg inn ny sykkeltype</Button.Light>
-                </NavLink>
+                <Form.Label>Søk etter sykkel</Form.Label>
+                <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
               </Column>
               <Table>
                 <Table.Thead>
@@ -331,7 +73,7 @@ class AllBikes extends Component {
                   <Table.Th>Lokasjon</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.bikes.map(bike => (
+                  {this.state.bikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
                       <Table.Td>{bike.typeName}</Table.Td>
@@ -353,8 +95,14 @@ class AllBikes extends Component {
   }
 
   mounted() {
-    rentalService.getAllBikesByType(bikes => {
-      this.bikes = bikes;
+    rentalService.getAllBikesByType(results => {
+      this.setState(state => {
+        const bikes = state.bikes.concat(results);
+        return {
+          bikes,
+          results
+        };
+      });
     });
   }
 }
@@ -367,13 +115,13 @@ class BikeTypes extends Component {
       <div className="bootstrap-iso">
         <Card title="Sykkeltyper">
           <Column right>
-            <NavLink to={'/add/bikeType/'}>
+            <NavLink to={'/bikeTypes/add'}>
               <Button.Light>Legg inn ny sykkeltype</Button.Light>
             </NavLink>
           </Column>
           <Tab>
             {this.bikeTypes.map(bikeType => (
-              <Tab.Item key={bikeType.id} to={'/bikeTypes/' + bikeType.id}>
+              <Tab.Item key={bikeType.typeName} to={'/bikeTypes/' + bikeType.typeName}>
                 {bikeType.typeName}
               </Tab.Item>
             ))}
@@ -387,6 +135,89 @@ class BikeTypes extends Component {
     rentalService.getBikeTypes(bikeTypes => {
       this.bikeTypes = bikeTypes;
     });
+  }
+}
+
+class AddBikeType extends Component {
+  typeName = '';
+  brand = '';
+  model = '';
+  year = 0;
+  frameSize = 0;
+  wheelSize = 0;
+  gears = 0;
+  gearSystem = '';
+  brakeSystem = '';
+  weight_kg = 0;
+  suitedFor = '';
+  price = 0;
+
+  render() {
+    return (
+      <div>
+        <Card>
+          <div className="container">
+            <h5>Ny sykkeltype</h5>
+            <br />
+            <Form.Label>Type:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
+            <Form.Label>Merke:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
+            <Form.Label>Modell:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.model = event.target.value)} />
+            <Form.Label>Årsmodell:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
+            <Form.Label>Rammestørrelse:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
+            <Form.Label>Hjulstørrelse:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
+            <Form.Label>Antall gir:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.gars = event.target.value)} />
+            <Form.Label>Girsystem:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
+            <Form.Label>Bremsesytem:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
+            <Form.Label>Vekt:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.weight_kg = event.target.value)} />
+            <Form.Label>Passer for:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
+            <Form.Label>Pris:</Form.Label>
+            <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
+            <br />
+            <Row>
+              <Column>
+                <Button.Success onClick={this.add}>Add</Button.Success>
+              </Column>
+              <Column right>
+                <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+              </Column>
+            </Row>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+  add() {
+    rentalService.newBikeType(
+      this.typeName,
+      this.brand,
+      this.model,
+      this.year,
+      this.frameSize,
+      this.wheelSize,
+      this.gears,
+      this.gearSystem,
+      this.brakeSystem,
+      this.weight_kg,
+      this.suitedFor,
+      this.price
+    );
+
+    history.push('/bikeTypes/');
+  }
+
+  cancel() {
+    history.push('/bikeTypes/' + this.props.match.params.id);
   }
 }
 
@@ -421,7 +252,9 @@ class BikeTypeDetails extends Component {
                 <Table.Tbody>
                   {this.bikeTypeDetails.map(bike => (
                     <Table.Tr key={bike.id}>
-                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>
+                        <NavLink to={'/bikeTypes/' + bike.id}>{bike.brand}</NavLink>
+                      </Table.Td>
                       <Table.Td>{bike.model}</Table.Td>
                       <Table.Td>{bike.year}</Table.Td>
                       <Table.Td>{bike.frameSize}</Table.Td>
@@ -438,6 +271,48 @@ class BikeTypeDetails extends Component {
               </Table>
               <br />
               <h6>Sykler av denne typen:</h6>
+            </Column>
+          </Row>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getBikeTypes(bikeType => {
+      this.bikeType = bikeType;
+    });
+
+    rentalService.getBikeTypeDetails(this.props.match.params.typeName, details => {
+      this.bikeTypeDetails = details;
+    });
+
+    connection.query(
+      'select b.id, l.name, b.bikeStatus from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and bt.id = ?',
+      [this.props.match.params.id],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        this.bikes = results;
+      }
+    );
+  }
+}
+
+class BikesByBrand extends Component {
+  bikeType = null;
+  bikeTypeDetails = [];
+  bikes = [];
+
+  render() {
+    if (!this.bikeType) return null;
+
+    return (
+      <div>
+        <Card>
+          <Row>
+            <Column>
+              <h6>Sykler av denne typen:</h6>
               <Table>
                 <Table.Thead>
                   <Table.Th>ID</Table.Th>
@@ -448,7 +323,7 @@ class BikeTypeDetails extends Component {
                   {this.bikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.location_id}</Table.Td>
+                      <Table.Td>{bike.name}</Table.Td>
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                     </Table.Tr>
                   ))}
@@ -462,18 +337,12 @@ class BikeTypeDetails extends Component {
   }
 
   mounted() {
-    rentalService.getBikeTypes(bikeType => {
-      this.bikeType = bikeType;
-    });
-
-    connection.query('select * from BikeType where id = ?', [this.props.match.params.id], (error, results) => {
-      if (error) return console.error(error);
-
-      this.bikeTypeDetails = results;
+    rentalService.getBikeTypeDetails(this.props.match.params.typeName, details => {
+      this.bikeTypeDetails = details;
     });
 
     connection.query(
-      'select id, location_id, bikeStatus from Bikes where type_id = ?',
+      'select b.id, l.name, b.bikeStatus from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and bt.id = ?',
       [this.props.match.params.id],
       (error, results) => {
         if (error) return console.error(error);
@@ -602,18 +471,18 @@ class BikesOnLocation extends Component {
                   <Table.Th>ID</Table.Th>
                   <Table.Th>Typenavn</Table.Th>
                   <Table.Th>Produsent</Table.Th>
-                  <Table.Th>Årsmodell</Table.Th>
-                  <Table.Th>Rammestørrelse</Table.Th>
-                  <Table.Th>Hjulstørrelse</Table.Th>
+                  <Table.Th>År</Table.Th>
+                  <Table.Th>Ramme</Table.Th>
+                  <Table.Th>Hjul</Table.Th>
                   <Table.Th>Antall gir</Table.Th>
-                  <Table.Th>Girsystem</Table.Th>
-                  <Table.Th>Bremsesytem</Table.Th>
+                  <Table.Th>Gir</Table.Th>
+                  <Table.Th>Bremser</Table.Th>
                   <Table.Th>Vekt</Table.Th>
                   <Table.Th>Beregnet for</Table.Th>
                   <Table.Th>Timespris</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.bikeLocations.map(bike => (
+                  {this.bikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
                       <Table.Td>{bike.typeName}</Table.Td>
@@ -639,106 +508,82 @@ class BikesOnLocation extends Component {
   }
 
   mounted() {
-    this.bikeLocations = [];
+    rentalService.getLocations(locations => {
+      this.bikeLocations = locations;
+    });
 
     rentalService.getBikesOnLocation(this.props.match.params.id, bikes => {
-      this.bikeLocations = bikes;
+      this.bikes = bikes;
       // console.log(this.props.history.location.pathname);
     });
   }
 }
 
 class Customers extends Component {
+  customers = [
+    {
+      id: 'testnummer',
+      firstName: 'fornavn1',
+      lastName: 'etternavn1',
+      email: 'epostTest',
+      phoneNumber: '1234',
+      adress: 'adressetest'
+    }
+  ];
+
+  searchCustomerFunction() {
+    var customerSearch = '';
+    console.log('test!');
+  }
   render() {
-    return <h1>KUNDER</h1>;
-  }
-}
-
-class Basket extends Component {
-  removeBike = this.removeBike.bind(this);
-  inBasket = basket;
-
-  //REMOVE BIKE FROM BASKET
-  removeBike(bike) {
-    for (let i of basket) {
-      if (bike == i) {
-        basket.splice(i, 1);
-      }
-    }
-
-    this.checkifEmpty();
-  }
-
-  checkifEmpty() {
-    this.inBasket = basket;
-
-    if (this.inBasket.length == 0) {
-      this.inBasket.push({ status: 3, id: 'Handlekurven er tom :(' });
-    }
-  }
-
-  render() {
-    if (this.inBasket.length == 0) {
-      {
-        this.checkifEmpty();
-      }
-    }
-
     return (
-      <div className="row">
-        <div>
-          <h3>Sykler i handlekurv</h3>
-          <Card>
+      <Card>
+        <Row>
+          <Column>
+            <h6>Kundeliste</h6>
+            <input id="testSearch" type="search" onChange={this.searchCustomerFunction} placeholder="Søk etter kunde" />
+
+            <br />
+            <br />
             <Table>
               <Table.Thead>
-                <Table.Th>ID</Table.Th>
-                <Table.Th>Type</Table.Th>
-                <Table.Th>Merke</Table.Th>
-                <Table.Th>Lokasjon</Table.Th>
-                <Table.Th>Hjul</Table.Th>
-                <Table.Th>Vekt</Table.Th>
-                <Table.Th>Times Pris</Table.Th>
+                <Table.Th>KundeID</Table.Th>
+                <Table.Th>Fornavn</Table.Th>
+                <Table.Th>Etternavn</Table.Th>
+                <Table.Th>Epost</Table.Th>
+                <Table.Th>Telefonnummer</Table.Th>
+                <Table.Th>Adresse</Table.Th>
               </Table.Thead>
               <Table.Tbody>
-                {basket.map(bike => (
-                  <Table.Tr key={bike.id}>
-                    <Table.Td>{bike.id}</Table.Td>
-                    <Table.Td>{bike.type}</Table.Td>
-                    <Table.Td>{bike.brand}</Table.Td>
-                    <Table.Td>{bike.location}</Table.Td>
-                    <Table.Td>{bike.framesize}</Table.Td>
-                    <Table.Td>{bike.weight}</Table.Td>
-                    <Table.Td>{bike.hrPrice}</Table.Td>
-                    <Table.Td>
-                      <Button.Success
-                        onClick={() => {
-                          this.removeBike(bike);
-                        }}
-                      >
-                        Delete
-                      </Button.Success>
-                    </Table.Td>
+                {this.customers.map(customer => (
+                  <Table.Tr key={customer.id}>
+                    <Table.Td>{customer.id}</Table.Td>
+                    <Table.Td>{customer.firstName}</Table.Td>
+                    <Table.Td>{customer.lastName}</Table.Td>
+                    <Table.Td>{customer.email}</Table.Td>
+                    <Table.Td>{customer.phoneNumber}</Table.Td>
+                    <Table.Td>{customer.adress}</Table.Td>
                   </Table.Tr>
                 ))}
               </Table.Tbody>
             </Table>
-          </Card>
-        </div>
-      </div>
+          </Column>
+        </Row>
+      </Card>
     );
   }
 }
 
 module.exports = {
   Overview,
-  Booking,
+  AllBikes,
   BikeTypes,
   BikeTypeDetails,
+  BikesByBrand,
+  AddBikeType,
   BikeStatus,
   BikesByStatus,
   LocationList,
   BikesOnLocation,
-  Customers,
-  Basket,
-  AllBikes
+  Customers
 };

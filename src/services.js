@@ -3,8 +3,15 @@ import { start } from 'repl';
 
 class RentalService {
   getBikeTypes(success) {
-    connection.query('select * from BikeType', (error, results) => {
+    connection.query('select distinct typeName from BikeType', (error, results) => {
       if (error) console.error(error);
+
+      success(results);
+    });
+  }
+  getBikeTypeDetails(typeName, success) {
+    connection.query('select * from BikeType where typeName = ?', [typeName], (error, results) => {
+      if (error) return console.error(error);
 
       success(results);
     });
@@ -25,6 +32,32 @@ class RentalService {
         if (error) console.error(error);
 
         success(results);
+      }
+    );
+  }
+
+  newBikeType(
+    typeName,
+    brand,
+    model,
+    year,
+    frameSize,
+    wheelSize,
+    gears,
+    gearSystem,
+    brakeSystem,
+    weight_kg,
+    suitedFor,
+    price,
+    success
+  ) {
+    connection.query(
+      'insert into BikeType (typeName, brand, model, year, frameSize, wheelSize, gears, gearSystem, brakeSystem, weight_kg, suitedFor, price) values (?,?,?,?,?,?,?,?,?,?,?,?)',
+      [typeName, brand, model, year, frameSize, wheelSize, gears, gearSystem, brakeSystem, weight_kg, suitedFor, price],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success();
       }
     );
   }
@@ -67,15 +100,16 @@ class RentalService {
       success(results[0]);
     });
   }
-  
+
   searchBikes(searchWord, success) {
     connection.query(
-      "select distinct b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and (b.id like ? or l.name like ? or bt.typeName like ? or bt.model like ?)",
+      'select distinct b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and (b.id like ? or l.name like ? or bt.typeName like ? or bt.model like ?)',
       [searchWord, searchWord, searchWord, searchWord],
       (error, results) => {
-      if(error) return console.error(error);
-      success(results);
-    });
+        if (error) return console.error(error);
+        success(results);
+      }
+    );
   }
 
   getBikesByLocation(location, success) {
@@ -128,14 +162,14 @@ class RentalService {
 
   getCustomerSearch(phrase, success) {
     connection.query(
-      'select DISTINCT firstName, lastName, id from Customers where firstName like ? OR lastName like ? or id like ?',
-      [phrase, phrase, phrase], 
+      'select DISTINCT * from Customers where firstName like ? OR lastName like ? or id like ?',
+      [phrase, phrase, phrase],
       (error, results) => {
-        if(error) return console.error(error);
+        if (error) return console.error(error);
 
         success(results);
       }
-    )
+    );
   }
 
   // "b.id not in (select ob.bike_id from OrderedBike ob, " +

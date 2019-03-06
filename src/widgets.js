@@ -175,7 +175,13 @@ class ButtonSuccess extends Component {
 class ButtonDanger extends Component {
   render() {
     return (
-      <button type="button" className="btn btn-danger" id="dangerBtn" onClick={this.props.onClick} style={this.props.style}>
+      <button
+        type="button"
+        className="btn btn-danger"
+        id="dangerBtn"
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
         {this.props.children}
       </button>
     );
@@ -273,7 +279,7 @@ export class Table extends Component {
   static Tbody = Tbody;
 
   render() {
-    return <table className="table table-striped">{this.props.children}</table>;
+    return <table className="table table-striped table-hover">{this.props.children}</table>;
   }
 }
 
