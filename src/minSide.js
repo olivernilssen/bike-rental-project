@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
@@ -26,3 +27,6 @@ class userInfo extends Component {
 module.exports = {
   userInfo
 };
+=======
+
+>>>>>>> ca32fe8eaaa6ce2102a11f0b5f412575ff02aa12
