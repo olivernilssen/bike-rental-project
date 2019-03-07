@@ -6,12 +6,9 @@ import { rentalService } from './services';
 import { connection } from './mysql_connection';
 import { basket, employeeID } from './index.js';
 import Chart from './charts.js';
-// import { Icons } from 'react-native-vector-icons/FontAwesome';
 
 import createHashHistory from 'history/createHashHistory';
-import { start } from 'repl';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
-
 
 class Customers extends Component {
     onChangeHandle = this.onChangeHandle.bind(this);
@@ -116,6 +113,7 @@ class Customers extends Component {
       // console.log("render selectedCustomer");
   
       return(
+        
           <Column>
               <h6>Valgt Kunde:</h6>
               <h6>{this.state.customer.firstName} {this.state.customer.lastName}</h6>
