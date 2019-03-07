@@ -5,6 +5,7 @@ import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import { connection } from './mysql_connection';
 import { basket } from './index.js';
+import Chart from './charts.js';
 
 import createHashHistory from 'history/createHashHistory';
 import { start } from 'repl';
@@ -18,7 +19,14 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
 class Overview extends Component {
   render() {
-    return <h1>OVERSIKT</h1>;
+    return (
+      <div>
+        <div>
+          <h6>Overview</h6>
+        </div>
+        <Chart />
+      </div>
+    );
   }
 }
 
@@ -411,8 +419,7 @@ class Customers extends Component {
   }
 
   onChangeHandle(event) {
-    this.setState({state: (this.state.searchWord = event.target.value)});
-
+    this.setState({ state: (this.state.searchWord = event.target.value) });
   }
 
   searchCustomer() {
@@ -437,8 +444,8 @@ class Customers extends Component {
               <Table.Tbody>
                 {this.state.customers.map(customer => (
                   <Table.Tr key={customer.id}>
-                    <NavLink to={"/customers/" + customer.id}>
-                    <Table.Td>{customer.id}</Table.Td>
+                    <NavLink to={'/customers/' + customer.id}>
+                      <Table.Td>{customer.id}</Table.Td>
                     </NavLink>
                     <Table.Td>{customer.firstName}</Table.Td>
                     <Table.Td>{customer.lastName}</Table.Td>
@@ -454,21 +461,19 @@ class Customers extends Component {
     );
   }
 
-  mounted(){
-    rentalService.getCustomerSearch("%", results => {
-      this.setState({state: (this.state.activeCustomer = results[0])})
+  mounted() {
+    rentalService.getCustomerSearch('%', results => {
+      this.setState({ state: (this.state.activeCustomer = results[0]) });
       this.setState(state => {
         const customers = state.customers.concat(results);
         return { customers, results };
       });
-    })
+    });
   }
-  
-
 }
 
 class SelectedCustomer extends Component {
-  customer = "";
+  customer = '';
 
   render() {
     console.log(this.props);
@@ -500,6 +505,7 @@ class SelectedCustomer extends Component {
       })
     }
   }
+}
 
 module.exports = {
   Overview,
