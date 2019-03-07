@@ -126,7 +126,7 @@ class RentalService {
   }
 
   getCustomer(id, success) {
-    connection.query('select * from Customers where customer_id=?', [id], (error, results) => {
+    connection.query('select * from Customers where id=?', [id], (error, results) => {
       if (error) return console.error(error);
 
       success(results[0]);

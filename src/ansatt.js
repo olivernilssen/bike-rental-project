@@ -4,7 +4,7 @@ import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './wid
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import { connection } from './mysql_connection';
-import { basket } from './index.js';
+import { basket, employeeID } from './index.js';
 import Chart from './charts.js';
 
 import createHashHistory from 'history/createHashHistory';
@@ -426,6 +426,10 @@ class Customers extends Component {
     //QUERY HERE
   }
 
+  activeCustomerChoose() {
+
+  }
+
   render() {
     return (
       <Card>
@@ -443,10 +447,8 @@ class Customers extends Component {
               </Table.Thead>
               <Table.Tbody>
                 {this.state.customers.map(customer => (
-                  <Table.Tr key={customer.id}>
-                    <NavLink to={'/customers/' + customer.id}>
-                      <Table.Td>{customer.id}</Table.Td>
-                    </NavLink>
+                  <Table.Tr key={customer.id} onClick={this.activeCustomerChoose()}>
+                    <Table.Td>{customer.id}</Table.Td>
                     <Table.Td>{customer.firstName}</Table.Td>
                     <Table.Td>{customer.lastName}</Table.Td>
                     {/* <Table.Td>{customer.email}</Table.Td>
@@ -505,7 +507,7 @@ class SelectedCustomer extends Component {
       })
     }
   }
-}
+
 
 module.exports = {
   Overview,

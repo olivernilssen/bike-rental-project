@@ -43,7 +43,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
   BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
 */
 export let basket = [];
-let employeeID = 0;
+export let employeeID = 1;
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
 så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
