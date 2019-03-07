@@ -4,7 +4,8 @@ import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './wid
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import { connection } from './mysql_connection';
-import { basket } from './index.js';
+import { basket, employeeID } from './index.js';
+import Chart from './charts.js';
 
 import createHashHistory from 'history/createHashHistory';
 import { start } from 'repl';
@@ -18,7 +19,14 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
 class Overview extends Component {
   render() {
-    return <h1>OVERSIKT</h1>;
+    return (
+      <div>
+        <div>
+          <h6>Overview</h6>
+        </div>
+        <Chart />
+      </div>
+    );
   }
 }
 
@@ -61,6 +69,7 @@ class AllBikes extends Component {
                 <Form.Label>Søk etter sykkel</Form.Label>
                 <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
               </Column>
+              <br />
               <Table>
                 <Table.Thead>
                   <Table.Th>ID</Table.Th>
@@ -115,30 +124,31 @@ class BikeTypes extends Component {
       <div className="bootstrap-iso">
         <Card title="Sykkeltyper">
           <Column right>
-            <NavLink to={'/bikeTypes/add'}>
+            <NavLink to={'/bikeTypes/add/'}>
               <Button.Light>Legg inn ny sykkeltype</Button.Light>
             </NavLink>
           </Column>
           <Tab>
             {this.bikeTypes.map(bikeType => (
-              <Tab.Item key={bikeType.typeName} to={'/bikeTypes/' + bikeType.typeName}>
+              <Tab.Item key={bikeType.id} to={'/bikeTypes/' + bikeType.typeName}>
                 {bikeType.typeName}
               </Tab.Item>
             ))}
           </Tab>
         </Card>
+        <br />
       </div>
     );
   }
 
   mounted() {
-    rentalService.getBikeTypes(bikeTypes => {
+    rentalService.getDistinctBikeType(bikeTypes => {
       this.bikeTypes = bikeTypes;
     });
   }
 }
 
-class AddBikeType extends Component {
+class NewBikeType extends Component {
   typeName = '';
   brand = '';
   model = '';
@@ -154,49 +164,53 @@ class AddBikeType extends Component {
 
   render() {
     return (
-      <div>
-        <Card>
-          <div className="container">
-            <h5>Ny sykkeltype</h5>
+      <Card>
+        <div className="container">
+          <h5>Ny sykkeltype</h5>
+          <Row>
+            <Column>
+              <Form.Label>Type:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
+              <Form.Label>Merke:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
+              <Form.Label>Årsmodell:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
+              <Form.Label>Rammestørrelse:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
+              <Form.Label>Hjulstørrelse:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
+              <Form.Label>Antall gir:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.gears = event.target.value)} />
+            </Column>
+            <Column>
+              <Form.Label>Girsystem:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
+              <Form.Label>Bremsesystem:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
+              <Form.Label>Vekt:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.weight_kg = event.target.value)} />
+              <Form.Label>Beregnet for:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
+              <Form.Label>Pris:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
+              <br />
+              <br />
+              <Row>
+                <Column>
+                  <Button.Success onClick={this.add}>Add</Button.Success>
+                </Column>
+                <Column right>
+                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                </Column>
+              </Row>
+            </Column>
             <br />
-            <Form.Label>Type:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
-            <Form.Label>Merke:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
-            <Form.Label>Modell:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.model = event.target.value)} />
-            <Form.Label>Årsmodell:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
-            <Form.Label>Rammestørrelse:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
-            <Form.Label>Hjulstørrelse:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
-            <Form.Label>Antall gir:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.gars = event.target.value)} />
-            <Form.Label>Girsystem:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
-            <Form.Label>Bremsesytem:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
-            <Form.Label>Vekt:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.weight_kg = event.target.value)} />
-            <Form.Label>Passer for:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
-            <Form.Label>Pris:</Form.Label>
-            <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
-            <br />
-            <Row>
-              <Column>
-                <Button.Success onClick={this.add}>Add</Button.Success>
-              </Column>
-              <Column right>
-                <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-              </Column>
-            </Row>
-          </div>
-        </Card>
-      </div>
+          </Row>
+        </div>
+      </Card>
     );
   }
+
   add() {
     rentalService.newBikeType(
       this.typeName,
@@ -252,9 +266,7 @@ class BikeTypeDetails extends Component {
                 <Table.Tbody>
                   {this.bikeTypeDetails.map(bike => (
                     <Table.Tr key={bike.id}>
-                      <Table.Td>
-                        <NavLink to={'/bikeTypes/' + bike.id}>{bike.brand}</NavLink>
-                      </Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
                       <Table.Td>{bike.model}</Table.Td>
                       <Table.Td>{bike.year}</Table.Td>
                       <Table.Td>{bike.frameSize}</Table.Td>
@@ -271,48 +283,6 @@ class BikeTypeDetails extends Component {
               </Table>
               <br />
               <h6>Sykler av denne typen:</h6>
-            </Column>
-          </Row>
-        </Card>
-      </div>
-    );
-  }
-
-  mounted() {
-    rentalService.getBikeTypes(bikeType => {
-      this.bikeType = bikeType;
-    });
-
-    rentalService.getBikeTypeDetails(this.props.match.params.typeName, details => {
-      this.bikeTypeDetails = details;
-    });
-
-    connection.query(
-      'select b.id, l.name, b.bikeStatus from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and bt.id = ?',
-      [this.props.match.params.id],
-      (error, results) => {
-        if (error) return console.error(error);
-
-        this.bikes = results;
-      }
-    );
-  }
-}
-
-class BikesByBrand extends Component {
-  bikeType = null;
-  bikeTypeDetails = [];
-  bikes = [];
-
-  render() {
-    if (!this.bikeType) return null;
-
-    return (
-      <div>
-        <Card>
-          <Row>
-            <Column>
-              <h6>Sykler av denne typen:</h6>
               <Table>
                 <Table.Thead>
                   <Table.Th>ID</Table.Th>
@@ -323,7 +293,7 @@ class BikesByBrand extends Component {
                   {this.bikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.name}</Table.Td>
+                      <Table.Td>{bike.location_id}</Table.Td>
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                     </Table.Tr>
                   ))}
@@ -337,12 +307,18 @@ class BikesByBrand extends Component {
   }
 
   mounted() {
-    rentalService.getBikeTypeDetails(this.props.match.params.typeName, details => {
-      this.bikeTypeDetails = details;
+    rentalService.getBikeTypes(bikeType => {
+      this.bikeType = bikeType;
+    });
+
+    connection.query('select * from BikeType where id = ?', [this.props.match.params.id], (error, results) => {
+      if (error) return console.error(error);
+
+      this.bikeTypeDetails = results;
     });
 
     connection.query(
-      'select b.id, l.name, b.bikeStatus from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and bt.id = ?',
+      'select id, location_id, bikeStatus from Bikes where type_id = ?',
       [this.props.match.params.id],
       (error, results) => {
         if (error) return console.error(error);
@@ -520,29 +496,31 @@ class BikesOnLocation extends Component {
 }
 
 class Customers extends Component {
-  customers = [
-    {
-      id: 'testnummer',
-      firstName: 'fornavn1',
-      lastName: 'etternavn1',
-      email: 'epostTest',
-      phoneNumber: '1234',
-      adress: 'adressetest'
-    }
-  ];
+  onChangeHandle = this.onChangeHandle.bind(this);
+  searchCustomer = this.searchCustomer.bind(this);
+  state = {
+    customers: [],
+    searchWord: '',
+    activeCustomer: ''
+  };
 
-  searchCustomerFunction() {
-    var customerSearch = '';
-    console.log('test!');
+  onChangeHandle(event) {
+    this.setState({ state: (this.state.searchWord = event.target.value) });
   }
+
+  searchCustomer() {
+    //QUERY HERE
+  }
+
+  activeCustomerChoose() {}
+
   render() {
     return (
       <Card>
         <Row>
           <Column>
             <h6>Kundeliste</h6>
-            <input id="testSearch" type="search" onChange={this.searchCustomerFunction} placeholder="Søk etter kunde" />
-
+            <Form.Input id="testSearch" type="search" onChange={this.onChangeHandle} placeholder="Søk etter kunde" />
             <br />
             <br />
             <Table>
@@ -550,19 +528,15 @@ class Customers extends Component {
                 <Table.Th>KundeID</Table.Th>
                 <Table.Th>Fornavn</Table.Th>
                 <Table.Th>Etternavn</Table.Th>
-                <Table.Th>Epost</Table.Th>
-                <Table.Th>Telefonnummer</Table.Th>
-                <Table.Th>Adresse</Table.Th>
               </Table.Thead>
               <Table.Tbody>
-                {this.customers.map(customer => (
-                  <Table.Tr key={customer.id}>
+                {this.state.customers.map(customer => (
+                  <Table.Tr key={customer.id} onClick={this.activeCustomerChoose()}>
                     <Table.Td>{customer.id}</Table.Td>
                     <Table.Td>{customer.firstName}</Table.Td>
                     <Table.Td>{customer.lastName}</Table.Td>
-                    <Table.Td>{customer.email}</Table.Td>
-                    <Table.Td>{customer.phoneNumber}</Table.Td>
-                    <Table.Td>{customer.adress}</Table.Td>
+                    {/* <Table.Td>{customer.email}</Table.Td>
+                    <Table.Td>{customer.tlf}</Table.Td> */}
                   </Table.Tr>
                 ))}
               </Table.Tbody>
@@ -572,6 +546,52 @@ class Customers extends Component {
       </Card>
     );
   }
+
+  mounted() {
+    rentalService.getCustomerSearch('%', results => {
+      this.setState({ state: (this.state.activeCustomer = results[0]) });
+      this.setState(state => {
+        const customers = state.customers.concat(results);
+        return { customers, results };
+      });
+    });
+  }
+}
+
+class SelectedCustomer extends Component {
+  customer = '';
+
+  render() {
+    console.log(this.props);
+    return (
+      <Column>
+        <Form.Label>Valgt Kunde</Form.Label>
+        <Form.Label>
+          {this.customer.firstName} {this.customer.lastName}
+        </Form.Label>
+        <Table>
+          <Table.Thead>
+            <Table.Th>KUNDE INFO</Table.Th>
+          </Table.Thead>
+          <Table.Tbody>
+            <Table.Tr>
+              <Table.Td>KundeID: {this.customer.id}</Table.Td>
+              <Table.Td>Fornavn: {this.customer.firstName}</Table.Td>
+              <Table.Td>Etternavn: {this.customer.lastName}</Table.Td>
+              <Table.Td>Epost: {this.customer.email}</Table.Td>
+              <Table.Td>Telefon: {this.customer.tlf}</Table.Td>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table>
+      </Column>
+    );
+  }
+
+  mounted() {
+    rentalService.getCustomer(this.props.match.params.id, result => {
+      this.setState({ state: (this.customer = result) });
+    });
+  }
 }
 
 module.exports = {
@@ -579,11 +599,11 @@ module.exports = {
   AllBikes,
   BikeTypes,
   BikeTypeDetails,
-  BikesByBrand,
-  AddBikeType,
+  NewBikeType,
   BikeStatus,
   BikesByStatus,
   LocationList,
   BikesOnLocation,
-  Customers
+  Customers,
+  SelectedCustomer
 };
