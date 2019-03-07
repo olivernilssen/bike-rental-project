@@ -111,13 +111,13 @@ class Customers extends Component {
       }
    
     render() {
-      const icon = <Icon name="rocket" />
+      // const icon = <Icon name="rocket" />
       if (!this.state.customer) return null;
       // console.log("render selectedCustomer");
   
       return(
           <Column>
-              <h6>Valgt Kunde: </h6>
+              <h6>Valgt Kunde:</h6>
               <h6>{this.state.customer.firstName} {this.state.customer.lastName}</h6>
               <Table>
                 <Table.Thead>
@@ -151,7 +151,7 @@ class Customers extends Component {
                   </Table.Tr>
                   <Table.Tr>
                     <Table.Td>Poststed:</Table.Td>
-                    <Table.Td>{icon} {this.state.customer.postalNum} {this.state.customer.place}</Table.Td>
+                    <Table.Td>{this.state.customer.postalNum} {this.state.customer.place}</Table.Td>
                   </Table.Tr>
                 </Table.Tbody>
               </Table>
