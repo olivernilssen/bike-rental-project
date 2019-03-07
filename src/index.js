@@ -17,6 +17,8 @@ import {
   SelectedCustomer
 } from './ansatt.js';
 
+import { userInfo } from './minSide';
+
 import { Booking } from './booking.js';
 import { Basket } from './basket.js';
 
@@ -145,7 +147,7 @@ class Menu extends Component {
                 <SideNavHeading>
                   <span>MIN SIDE</span>
                 </SideNavHeading>
-                <SideNavBar.SideLink to="#">Informasjon</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/information/">Informasjon</SideNavBar.SideLink>
                 <SideNavBar.SideLink to="#">Mine salg</SideNavBar.SideLink>
               </SideNavBar>
             </Row>
@@ -191,6 +193,7 @@ ReactDOM.render(
       <Route exact path="/basket/" component={Basket} />
       <Route path="/locations/" component={LocationList} />
       <Route exact path="/locations/:id" component={BikesOnLocation} />
+      <Route exact path="/information/" component={userInfo} />
     </div>
   </HashRouter>,
   document.getElementById('root')
