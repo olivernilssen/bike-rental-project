@@ -6,7 +6,7 @@ import { rentalService } from './services';
 import { connection } from './mysql_connection';
 import { basket, employeeID } from './index.js';
 import Chart from './charts.js';
-import { Icons } from 'react-native-vector-icons/FontAwesome';
+// import { Icons } from 'react-native-vector-icons/FontAwesome';
 
 import createHashHistory from 'history/createHashHistory';
 import { start } from 'repl';
