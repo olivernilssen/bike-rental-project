@@ -8,16 +8,17 @@ import {
   BookingDetails,
   BikeTypes,
   BikeTypeDetails,
+  NewBikeType,
   BikeStatus,
   BikesByStatus,
-  Customers,
   LocationList,
   BikesOnLocation,
-  AllBikes,
-  SelectedCustomer
+  AllBikes
 } from './ansatt.js';
 
-import { userInfo } from './minSide';
+import { UserInfo } from './minSide';
+
+import { Customers, AddCustomer } from './customer.js';
 
 import { Booking } from './booking.js';
 import { Basket } from './basket.js';
@@ -135,7 +136,7 @@ class Menu extends Component {
 
                 <div className={'collapse navbar-collapse ' + show}>
                   <div id="subLinks">
-                    <SideNavBar.SideLink to="/bikeTypes/1">Etter sykkeltype</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/bikeTypes/">Etter sykkeltype</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="/locations/1">Etter lokasjon</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="/bikeStatus/OK">Etter status</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="#">Etter pris</SideNavBar.SideLink>
@@ -185,15 +186,16 @@ ReactDOM.render(
       <Route path="/booking/" component={Booking} />
       <Route exact path="/allBikes/" component={AllBikes} />
       <Route path="/bikeTypes/" component={BikeTypes} />
+      <Route exact path="/bikeTypes/add/" component={NewBikeType} />
       <Route exact path="/bikeTypes/:id/" component={BikeTypeDetails} />
       <Route path="/bikeStatus/" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
       <Route path="/customers/" component={Customers} />
-      <Route exact path="/customers/:id" component={SelectedCustomer} />
+      <Route exact path="/customers/add" component={AddCustomer} />
       <Route exact path="/basket/" component={Basket} />
       <Route path="/locations/" component={LocationList} />
       <Route exact path="/locations/:id" component={BikesOnLocation} />
-      <Route exact path="/information/" component={userInfo} />
+      <Route exact path="/information/" component={UserInfo} />
     </div>
   </HashRouter>,
   document.getElementById('root')
