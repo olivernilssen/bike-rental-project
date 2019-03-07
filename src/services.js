@@ -3,15 +3,8 @@ import { start } from 'repl';
 
 class RentalService {
   getBikeTypes(success) {
-    connection.query('select distinct typeName from BikeType', (error, results) => {
+    connection.query('select * from BikeType', (error, results) => {
       if (error) console.error(error);
-
-      success(results);
-    });
-  }
-  getBikeTypeDetails(typeName, success) {
-    connection.query('select * from BikeType where typeName = ?', [typeName], (error, results) => {
-      if (error) return console.error(error);
 
       success(results);
     });

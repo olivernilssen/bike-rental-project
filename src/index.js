@@ -17,8 +17,8 @@ import {
   SelectedCustomer
 } from './ansatt.js';
 
-import {Booking} from './booking.js';
-import {Basket} from './basket.js';
+import { Booking } from './booking.js';
+import { Basket } from './basket.js';
 
 import {
   Card,
@@ -122,7 +122,7 @@ class Menu extends Component {
                 <SideNavHeading>
                   <span>MENY</span>
                 </SideNavHeading>
-                <SideNavBar.SideLink to="/overview">
+                <SideNavBar.SideLink to="/overview/">
                   Oversikt<span className="sr-only">(current)</span>
                 </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/booking/">Booking</SideNavBar.SideLink>
@@ -160,6 +160,7 @@ class Menu extends Component {
     if (this.username == 'Oliver' && this.password == '1234') {
       employeeID = this.username; //Dette blir endret til en spørring
       this.setState({ isLoggedIn: true });
+      history.push('/overview/');
     } else if (this.username == null || this.password == null) {
       alert('Please type something!');
     } else {
