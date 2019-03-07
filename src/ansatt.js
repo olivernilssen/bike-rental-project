@@ -8,7 +8,6 @@ import { basket, employeeID } from './index.js';
 import Chart from './charts.js';
 
 import createHashHistory from 'history/createHashHistory';
-import { start } from 'repl';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 /*
@@ -45,7 +44,7 @@ class AllBikes extends Component {
   searchBikes() {
     let searchWord = '%' + this.state.searchWord + '%';
 
-    console.log('searchbikes');
+    // console.log('searchbikes');
     rentalService.searchBikes(searchWord, results => {
       this.setState(state => {
         this.setState({ state: (this.state.bikes = []) });
@@ -404,109 +403,9 @@ class BikesOnLocation extends Component {
 
     rentalService.getBikesOnLocation(this.props.match.params.id, bikes => {
       this.bikes = bikes;
-      // console.log(this.props.history.location.pathname);
     });
   }
 }
-
-class Customers extends Component {
-  onChangeHandle = this.onChangeHandle.bind(this);
-  searchCustomer = this.searchCustomer.bind(this);
-  state = {
-    customers: [], 
-    searchWord: "",
-    activeCustomer: ""
-  }
-
-  onChangeHandle(event) {
-    this.setState({ state: (this.state.searchWord = event.target.value) });
-  }
-
-  searchCustomer() {
-    //QUERY HERE
-  }
-
-  activeCustomerChoose() {
-
-  }
-
-  render() {
-    return (
-      <Card>
-        <Row>
-          <Column>
-            <h6>Kundeliste</h6>
-            <Form.Input id="testSearch" type="search" onChange={this.onChangeHandle} placeholder="Søk etter kunde" />
-            <br />
-            <br />
-            <Table>
-              <Table.Thead>
-                <Table.Th>KundeID</Table.Th>
-                <Table.Th>Fornavn</Table.Th>
-                <Table.Th>Etternavn</Table.Th>
-              </Table.Thead>
-              <Table.Tbody>
-                {this.state.customers.map(customer => (
-                  <Table.Tr key={customer.id} onClick={this.activeCustomerChoose()}>
-                    <Table.Td>{customer.id}</Table.Td>
-                    <Table.Td>{customer.firstName}</Table.Td>
-                    <Table.Td>{customer.lastName}</Table.Td>
-                    {/* <Table.Td>{customer.email}</Table.Td>
-                    <Table.Td>{customer.tlf}</Table.Td> */}
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Column>
-        </Row>
-      </Card>
-    );
-  }
-
-  mounted() {
-    rentalService.getCustomerSearch('%', results => {
-      this.setState({ state: (this.state.activeCustomer = results[0]) });
-      this.setState(state => {
-        const customers = state.customers.concat(results);
-        return { customers, results };
-      });
-    });
-  }
-}
-
-class SelectedCustomer extends Component {
-  customer = '';
-
-  render() {
-    console.log(this.props);
-    return(
-        <Column>
-          <Form.Label>Valgt Kunde</Form.Label>
-            <Form.Label>{this.customer.firstName} {this.customer.lastName}</Form.Label>
-            <Table>
-              <Table.Thead>
-                <Table.Th>KUNDE INFO</Table.Th>
-              </Table.Thead>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>KundeID: {this.customer.id}</Table.Td>
-                  <Table.Td>Fornavn: {this.customer.firstName}</Table.Td>
-                  <Table.Td>Etternavn: {this.customer.lastName}</Table.Td>
-                  <Table.Td>Epost: {this.customer.email}</Table.Td>
-                  <Table.Td>Telefon: {this.customer.tlf}</Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
-        </Column>
-      );
-    }
-
-    mounted(){
-      rentalService.getCustomer(this.props.match.params.id, result => {
-        this.setState({state: (this.customer = result)})
-      })
-    }
-  }
 
 
 module.exports = {
@@ -518,6 +417,4 @@ module.exports = {
   BikesByStatus,
   LocationList,
   BikesOnLocation,
-  Customers,
-  SelectedCustomer
 };

@@ -21,6 +21,7 @@
     "mysql": "^2.16.0",
     "popper.js": "^1.14.7",
     "react-chartjs-2": "^2.7.4",
+    "react-native-vector-icons": "^6.3.0",
     "react-router-dom": "^4.3.1",
     "react-simplified": "^1.5.2"
   },

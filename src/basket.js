@@ -3,11 +3,9 @@ import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
-import { connection } from './mysql_connection';
 import { basket } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
-import { start } from 'repl';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Basket extends Component {

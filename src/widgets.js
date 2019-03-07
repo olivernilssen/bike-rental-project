@@ -17,6 +17,7 @@ export class Card extends Component {
     );
   }
 }
+
 class ListItem extends Component {
   render() {
     return this.props.to ? (
@@ -261,7 +262,7 @@ class Tbody extends Component {
 
 class Tr extends Component {
   render() {
-    return <tr>{this.props.children}</tr>;
+    return <tr onClick={this.props.onClick}>{this.props.children}</tr>;
   }
 }
 
