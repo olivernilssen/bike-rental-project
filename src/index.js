@@ -47,6 +47,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 */
 export let basket = [];
 export let employeeID = 1;
+export const activeCustomer = React.createContext("");
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
 så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
@@ -184,17 +185,23 @@ ReactDOM.render(
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
+
       <Route exact path="/allBikes/" component={AllBikes} />
       <Route path="/bikeTypes/" component={BikeTypes} />
       <Route exact path="/bikeTypes/add/" component={NewBikeType} />
-      <Route exact path="/bikeTypes/:id/" component={BikeTypeDetails} />
+      <Route exact path="/bikeTypes/:typeName/" component={BikeTypeDetails} />
+
       <Route path="/bikeStatus/" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
+
       <Route path="/customers/" component={Customers} />
       <Route exact path="/customers/add" component={AddCustomer} />
-      <Route exact path="/basket/" component={Basket} />
+
       <Route path="/locations/" component={LocationList} />
       <Route exact path="/locations/:id" component={BikesOnLocation} />
+
+      <Route exact path="/basket/" component={Basket} />
+
       <Route exact path="/information/" component={UserInfo} />
     </div>
   </HashRouter>,

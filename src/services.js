@@ -11,9 +11,7 @@ class RentalService {
   }
 
   getAnsatt(ansattId, success) {
-
     connection.query('select * from Workers w, Address a WHERE w.worker_id = ? and w.address_id = a.id', [ansattId], (error, results) => {
-
       if (error) return console.error(error);
 
       success(results[0]);
@@ -22,9 +20,7 @@ class RentalService {
 
 
   updateAnsatt(ansattId, fornavn, etternavn, email, tlf, gate, poststed, postnummer, gatenr, success) {
-
     connection.query('update Workers w, Address a set w.firstName = ?, w.lastName = ?, w.email = ?, w.tlf = ?, a.streetAddress = ?, a.postalNum = ?, a.place = ?, a.streetNum = ? where w.worker_id = ? and w.address_id = a.id', [fornavn, etternavn, email, tlf, gate, postnummer, poststed, gatenr, ansattId], (error, results) => {
-
       if (error) return console.error(error);
 
       success();
@@ -32,7 +28,7 @@ class RentalService {
   }
 
   getDistinctBikeType(success) {
-    connection.query("select distinct typeName from BikeType", (error, results) => {
+    connection.query("select distinct typeName, id from BikeType", (error, results) => {
       if (error) console.error(error);
 
       success(results);

@@ -3,7 +3,7 @@ import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
-import { basket } from './index.js';
+import { basket, activeCustomer } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -20,7 +20,7 @@ class Basket extends Component {
       inBasket: basket,
       kunder: [],
       phrase: "",
-      activeCustomer: "Ingen Kunde valgt",
+      activeC: activeCustomer,
       displayCustomer: 'block',
       CustomerActive: false
     }
@@ -38,13 +38,18 @@ class Basket extends Component {
         }
       }
     }
+
+    componentWillUpdate () {
+
+    }
   
     updateBasket() {
       this.state.inBasket = [];
+
       if (basket.length == 0) {
-        this.setState({ styleState: (this.styleState.display = 'none') });
+        this.setState({styleState: (this.styleState.display = 'none') });
       } else {
-        this.setState({ styleState: (this.styleState.display = 'block') });
+        this.setState({styleState: (this.styleState.display = 'block') });
       }
   
       if (basket.length == 0) {
@@ -90,24 +95,18 @@ class Basket extends Component {
     }
   
     chooseCustomer(customer) {
-      this.setState({state: (this.state.activeCustomer = customer)});
+      this.setState({state: (this.state.activeC = customer)});
       this.setState({state: (this.state.displayCustomer = 'none') });
     }
   
     removeCustomer() {
-      this.setState({state: (this.state.activeCustomer = "Velg ny kunde")});
+      this.setState({state: (this.state.activeC = "Velg ny kunde")});
       this.setState({state: (this.state.displayCustomer = 'block') });
       this.setState({state: (this.state.phrase = "")});
       this.findCustomers();
     }
   
     render() {
-      if (basket.length == 0 && this.state.inBasket.length == 0) {
-        {
-          this.updateBasket();
-        }
-      }
-  
       const styles = {
         btnStyle: {
           display: this.styleState.display
@@ -121,76 +120,75 @@ class Basket extends Component {
       const { btnStyle } = styles;
       
       return (
-          <div>
-            <Row>
-              <Card title="Handlekurv">
-                <Form.Label><h4>Kunde: {this.state.activeCustomer.id} {this.state.activeCustomer.firstName} {this.state.activeCustomer.lastName}</h4></Form.Label> <br></br>
-                <Button.Danger onClick={() => {this.removeCustomer()}}> Fjern Kunde </Button.Danger> <br></br><br></br>
-                <Table>
+        <Card title="Handlekurv">
+          <Row>
+            <Column>
+              <Form.Label><h4>Kunde: {this.state.activeC.id} {this.state.activeC.firstName} {this.state.activeC.lastName}</h4></Form.Label> <br></br>
+              <Button.Danger onClick={() => {this.removeCustomer()}}> Fjern Kunde </Button.Danger> <br></br><br></br>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Lokasjon</Table.Th>
+                  <Table.Th>Hjul</Table.Th>
+                  <Table.Th>Vekt</Table.Th>
+                  <Table.Th>Times Pris</Table.Th>
+                  <Table.Th>Fra Dato</Table.Th>
+                  <Table.Th>Til Dato</Table.Th>
+                  <Table.Th></Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.state.inBasket.map(bike => (
+                    <Table.Tr key={bike.id}>
+                        <Table.Td>{bike.id}</Table.Td>
+                        <Table.Td>{bike.typeName}</Table.Td>
+                        <Table.Td>{bike.brand}</Table.Td>
+                        <Table.Td>{bike.name}</Table.Td>
+                        <Table.Td>{bike.wheelSize}</Table.Td>
+                        <Table.Td>{bike.weight_kg}</Table.Td>
+                        <Table.Td>{bike.price}</Table.Td>
+                        <Table.Td>{bike.startDate}</Table.Td>
+                        <Table.Td>{bike.endDate}</Table.Td>
+                        <Table.Td>
+                          <Button.Danger
+                            style={btnStyle}
+                            onClick={() => {this.removeBike(bike)}}> Delete 
+                          </Button.Danger>
+                        </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+            <Column style={divStyle}>
+              <Form.Input value={this.state.phrase} onChange={this.handleChangePhrase}></Form.Input>
+              <br></br> <br></br>
+              <Table>
                   <Table.Thead>
-                    <Table.Th>ID</Table.Th>
-                    <Table.Th>Type</Table.Th>
-                    <Table.Th>Merke</Table.Th>
-                    <Table.Th>Lokasjon</Table.Th>
-                    <Table.Th>Hjul</Table.Th>
-                    <Table.Th>Vekt</Table.Th>
-                    <Table.Th>Times Pris</Table.Th>
-                    <Table.Th>Fra Dato</Table.Th>
-                    <Table.Th>Til Dato</Table.Th>
-                    <Table.Th></Table.Th>
+                      <Table.Th>Fornavn</Table.Th>
+                      <Table.Th>Etternavn</Table.Th>
+                      <Table.Th>ID</Table.Th>
+                      <Table.Th></Table.Th>
                   </Table.Thead>
                   <Table.Tbody>
-                    {this.state.inBasket.map(bike => (
-                      <Table.Tr key={bike.id}>
-                          <Table.Td>{bike.id}</Table.Td>
-                          <Table.Td>{bike.typeName}</Table.Td>
-                          <Table.Td>{bike.brand}</Table.Td>
-                          <Table.Td>{bike.name}</Table.Td>
-                          <Table.Td>{bike.wheelSize}</Table.Td>
-                          <Table.Td>{bike.weight_kg}</Table.Td>
-                          <Table.Td>{bike.price}</Table.Td>
-                          <Table.Td>{bike.startDate}</Table.Td>
-                          <Table.Td>{bike.endDate}</Table.Td>
+                      {this.state.kunder.map(kunde => (
+                      <Table.Tr key={kunde.id}>
+                          <Table.Td>{kunde.firstName}</Table.Td>
+                          <Table.Td>{kunde.lastName}</Table.Td>
+                          <Table.Td>{kunde.id}</Table.Td>
                           <Table.Td>
-                            <Button.Danger
-                              style={btnStyle}
-                              onClick={() => {this.removeBike(bike)}}> Delete 
-                            </Button.Danger>
+                              <Button.Success
+                              onClick={() => {this.chooseCustomer(kunde);}}> Velg 
+                              </Button.Success>
                           </Table.Td>
                       </Table.Tr>
-                    ))}
+                      ))}
                   </Table.Tbody>
-                </Table>
-              </Card>
-
-              <Card title="Søk etter kunde" style={divStyle}>
-                <Form.Input value={this.state.phrase} onChange={this.handleChangePhrase}></Form.Input>
-                    <br></br> <br></br>
-                    <Table>
-                        <Table.Thead>
-                            <Table.Th>Fornavn</Table.Th>
-                            <Table.Th>Etternavn</Table.Th>
-                            <Table.Th>ID</Table.Th>
-                            <Table.Th></Table.Th>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {this.state.kunder.map(kunde => (
-                            <Table.Tr key={kunde.id}>
-                                <Table.Td>{kunde.firstName}</Table.Td>
-                                <Table.Td>{kunde.lastName}</Table.Td>
-                                <Table.Td>{kunde.id}</Table.Td>
-                                <Table.Td>
-                                    <Button.Success
-                                    onClick={() => {this.chooseCustomer(kunde);}}> Velg 
-                                    </Button.Success>
-                                </Table.Td>
-                            </Table.Tr>
-                            ))}
-                        </Table.Tbody>
-                    </Table>
-                </Card>
-            </Row>
-        </div>
+              </Table>
+            </Column> 
+          </Row>
+        </Card>
       );
     }
   

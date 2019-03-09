@@ -74,8 +74,8 @@ export class Column extends Component {
   render() {
     return (
       <div
-        className={'col' + (this.props.width ? '-' + this.props.width : '') + (this.props.right ? ' text-right' : '')}
-      >
+        className={'col' + (this.props.width ? '-' + this.props.width : '') + 
+        (this.props.right ? ' text-right' : '')} style={this.props.style}>
         {this.props.children}
       </div>
     );

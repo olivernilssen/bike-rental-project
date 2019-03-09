@@ -143,6 +143,18 @@ class BikeTypes extends Component {
 
   mounted() {
     rentalService.getDistinctBikeType(bikeTypes => {
+      
+      console.log("startiterate");
+      for(let i = 0; i < bikeTypes.length; i++){
+        for(let j = 0; j < bikeTypes.length; j++){
+          if(bikeTypes[i].typeName == bikeTypes[j].typeName)
+          {
+            console.log("hmm");
+            bikeTypes.splice(i, 1);
+          }
+        }
+      }
+
       this.bikeTypes = bikeTypes;
     });
   }

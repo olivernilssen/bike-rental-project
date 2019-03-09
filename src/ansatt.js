@@ -46,8 +46,8 @@ class AllBikes extends Component {
 
     // console.log('searchbikes');
     rentalService.searchBikes(searchWord, results => {
+      this.setState({ state: (this.state.bikes = []) });
       this.setState(state => {
-        this.setState({ state: (this.state.bikes = []) });
         const bikes = state.bikes.concat(results);
         return {
           bikes,
@@ -65,7 +65,7 @@ class AllBikes extends Component {
             <Column>
               <h6>Alle sykler</h6>
               <Column right>
-                <Form.Label>Søk på sykkel etter sykkel-ID</Form.Label>
+                <Form.Label>Søk på sykkel etter id, type, modell eller lokasjon</Form.Label>
                 <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
                 <NavLink to={'/add/bikeType/'}>
                   <Button.Light>Legg inn ny sykkeltype</Button.Light>
@@ -125,13 +125,13 @@ class BikeTypes extends Component {
       <div className="bootstrap-iso">
         <Card title="Sykkeltyper">
           <Column right>
-            <NavLink to={'/add/bikeType/'}>
+            <NavLink to={'/bikeTypes/add/'}>
               <Button.Light>Legg inn ny sykkeltype</Button.Light>
             </NavLink>
           </Column>
           <Tab>
             {this.bikeTypes.map(bikeType => (
-              <Tab.Item key={bikeType.id} to={'/bikeTypes/' + bikeType.id}>
+              <Tab.Item key={bikeType.typeName} to={'/bikeTypes/' + bikeType.typeName}>
                 {bikeType.typeName}
               </Tab.Item>
             ))}
@@ -142,7 +142,21 @@ class BikeTypes extends Component {
   }
 
   mounted() {
-    rentalService.getBikeTypes(bikeTypes => {
+    rentalService.getDistinctBikeType(bikeTypes => {
+
+      for(let i = 0; i < bikeTypes.length; i++){
+        for(let j = 0; j < bikeTypes.length; j++){
+          if(i == j)
+          {
+            continue;
+          }
+          else if(bikeTypes[i].typeName == bikeTypes[j].typeName)
+          {
+            bikeTypes.splice(j, 1);
+          }
+        }
+      }
+
       this.bikeTypes = bikeTypes;
     });
   }
@@ -150,8 +164,11 @@ class BikeTypes extends Component {
 
 class BikeTypeDetails extends Component {
   bikeType = null;
-  bikeTypeDetails = [];
-  bikes = [];
+  state = {
+    bikes: [],
+    typeIds: 0, 
+    bikeTypeDetails: []
+  }
 
   render() {
     if (!this.bikeType) return null;
@@ -177,7 +194,7 @@ class BikeTypeDetails extends Component {
                   <Table.Th>Timespris</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.bikeTypeDetails.map(bike => (
+                  {this.state.bikeTypeDetails.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.brand}</Table.Td>
                       <Table.Td>{bike.model}</Table.Td>
@@ -203,7 +220,7 @@ class BikeTypeDetails extends Component {
                   <Table.Th>Status</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.bikes.map(bike => (
+                  {this.state.bikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
                       <Table.Td>{bike.location_id}</Table.Td>
@@ -220,27 +237,139 @@ class BikeTypeDetails extends Component {
   }
 
   mounted() {
+    this.state.bikes = [];
+    this.state.bikeTypeDetails = [];
+
     rentalService.getBikeTypes(bikeType => {
       this.bikeType = bikeType;
     });
 
-    connection.query('select * from BikeType where id = ?', [this.props.match.params.id], (error, results) => {
-      if (error) return console.error(error);
-
-      this.bikeTypeDetails = results;
-    });
-
     connection.query(
-      'select id, location_id, bikeStatus from Bikes where type_id = ?',
-      [this.props.match.params.id],
-      (error, results) => {
-        if (error) return console.error(error);
+      'select id from BikeType where typeName = ?', [this.props.match.params.typeName], (error, idResult) => {
+      if (error) return console.error(error);
+      this.setState({state: (this.state.typeIds = idResult)})
 
-        this.bikes = results;
-      }
-    );
+      for(let i = 0; i < idResult.length; i++){
+        connection.query(
+          'select id, location_id, bikeStatus from Bikes where type_id = ?',
+          [idResult[i].id],
+          (error, results) => {
+            if (error) return console.error(error);
+
+            this.setState(state => {
+              const bikes = state.bikes.concat(results);
+              return {
+                bikes, 
+                results,
+              };
+            });
+          });
+
+          connection.query('select * from BikeType where id = ?', [idResult[i].id], (error, typeResult) => {
+            if (error) return console.error(error);
+      
+            this.setState(state => {
+              const bikeTypeDetails = state.bikeTypeDetails.concat(typeResult);
+              return {
+                bikeTypeDetails, 
+                typeResult,
+              };
+            });
+          });
+        }
+    });
   }
 }
+
+class NewBikeType extends Component {
+  typeName = '';
+  brand = '';
+  model = '';
+  year = 0;
+  frameSize = 0;
+  wheelSize = 0;
+  gears = 0;
+  gearSystem = '';
+  brakeSystem = '';
+  weight_kg = 0;
+  suitedFor = '';
+  price = 0;
+
+  render() {
+    return (
+      <Card>
+        <div className="container">
+          <h5>Ny sykkeltype</h5>
+          <Row>
+            <Column>
+              <Form.Label>Type:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
+              <Form.Label>Merke:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
+              <Form.Label>Modell:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.model = event.target.value)} />
+              <Form.Label>Årsmodell:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
+              <Form.Label>Rammestørrelse:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
+              <Form.Label>Hjulstørrelse:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
+              <Form.Label>Antall gir:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.gears = event.target.value)} />
+            </Column>
+            <Column>
+              <Form.Label>Girsystem:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
+              <Form.Label>Bremsesystem:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
+              <Form.Label>Vekt:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.weight_kg = event.target.value)} />
+              <Form.Label>Beregnet for:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
+              <Form.Label>Pris:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
+              <br />
+              <br />
+              <Row>
+                <Column>
+                  <Button.Success onClick={this.add}>Add</Button.Success>
+                </Column>
+                <Column right>
+                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                </Column>
+              </Row>
+            </Column>
+            <br />
+          </Row>
+        </div>
+      </Card>
+    );
+  }
+
+  add() {
+    rentalService.newBikeType(
+      this.typeName,
+      this.brand,
+      this.model,
+      this.year,
+      this.frameSize,
+      this.wheelSize,
+      this.gears,
+      this.gearSystem,
+      this.brakeSystem,
+      this.weight_kg,
+      this.suitedFor,
+      this.price
+    );
+
+    history.push('/bikeTypes/');
+  }
+
+  cancel() {
+    history.push('/bikeTypes/' + this.props.match.params.typeName);
+  }
+}
+
 
 class BikeStatus extends Component {
   bikeStatus = [];
@@ -417,4 +546,5 @@ module.exports = {
   BikesByStatus,
   LocationList,
   BikesOnLocation,
+  NewBikeType
 };
