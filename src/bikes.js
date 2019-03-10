@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import { connection } from './mysql_connection';
@@ -46,17 +46,21 @@ class AllBikes extends Component {
   render() {
     return (
       <div>
+        <H1>Alle sykler</H1>
+        <br />
+
         <Card>
           <Row>
             <Column>
-              <h6>Alle sykler</h6>
               <Column right>
                 <Form.Label>Søk på sykkel etter id, type, modell eller lokasjon</Form.Label>
                 <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
-                <NavLink to={'/add/bikeType/'}>
-                  <Button.Light>Legg inn ny sykkeltype</Button.Light>
-                </NavLink>
               </Column>
+            </Column>
+          </Row>
+          <br />
+          <Row>
+            <Column>
               <Table>
                 <Table.Thead>
                   <Table.Th>ID</Table.Th>
@@ -108,21 +112,21 @@ class BikeTypes extends Component {
 
   render() {
     return (
-      <div className="bootstrap-iso">
-        <Card title="Sykkeltyper">
+      <div>
+        <H1>Sykkeltyper</H1>
+        <br />
+        <Tab>
+          {this.bikeTypes.map(bikeType => (
+            <Tab.Item key={bikeType.typeName} to={'/bikeTypes/' + bikeType.typeName}>
+              {bikeType.typeName}
+            </Tab.Item>
+          ))}
           <Column right>
             <NavLink to={'/bikeTypes/add/'}>
               <Button.Light>Legg inn ny sykkeltype</Button.Light>
             </NavLink>
           </Column>
-          <Tab>
-            {this.bikeTypes.map(bikeType => (
-              <Tab.Item key={bikeType.typeName} to={'/bikeTypes/' + bikeType.typeName}>
-                {bikeType.typeName}
-              </Tab.Item>
-            ))}
-          </Tab>
-        </Card>
+        </Tab>
       </div>
     );
   }
@@ -361,16 +365,16 @@ class BikeStatus extends Component {
 
   render() {
     return (
-      <div className="bootstrap-iso">
-        <Card title="Sykkelstatus">
-          <Tab>
-            {this.bikeStatus.map(status => (
-              <Tab.Item key={status.bikeStatus} to={'/bikeStatus/' + status.bikeStatus}>
-                {status.bikeStatus}
-              </Tab.Item>
-            ))}
-          </Tab>
-        </Card>
+      <div>
+        <H1>Sykler etter status</H1>
+        <br />
+        <Tab>
+          {this.bikeStatus.map(status => (
+            <Tab.Item key={status.bikeStatus} to={'/bikeStatus/' + status.bikeStatus}>
+              {status.bikeStatus}
+            </Tab.Item>
+          ))}
+        </Tab>
       </div>
     );
   }
@@ -430,21 +434,21 @@ class LocationList extends Component {
 
   render() {
     return (
-      <div className="bootstrap-iso">
-        <Card title="Lokasjoner">
+      <div>
+        <h1 className="display-4">Lokasjoner</h1>
+        <br />
+        <Tab>
+          {this.locations.map(location => (
+            <Tab.Item key={location.id} to={'/locations/' + location.id}>
+              {location.name}
+            </Tab.Item>
+          ))}
           <Column right>
             <NavLink to={'/add/lokasjon/'}>
               <Button.Light>Legg inn ny lokasjon</Button.Light>
             </NavLink>
           </Column>
-          <Tab>
-            {this.locations.map(location => (
-              <Tab.Item key={location.id} to={'/locations/' + location.id}>
-                {location.name}
-              </Tab.Item>
-            ))}
-          </Tab>
-        </Card>
+        </Tab>
       </div>
     );
   }

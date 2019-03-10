@@ -38,8 +38,6 @@ export class List extends Component {
   }
 }
 
-// Renders a list group item using Bootstrap styles
-// Attributes: to
 class TabItem extends Component {
   render() {
     return this.props.to ? (
@@ -47,12 +45,13 @@ class TabItem extends Component {
         {this.props.children}
       </NavLink>
     ) : (
-      <li className="nav-item">{this.props.children}</li>
+      <li className="nav-item" id="tab">
+        {this.props.children}
+      </li>
     );
   }
 }
 
-// Renders a list group using Bootstrap styles
 export class Tab extends Component {
   static Item = TabItem;
 
@@ -74,8 +73,9 @@ export class Column extends Component {
   render() {
     return (
       <div
-        className={'col' + (this.props.width ? '-' + this.props.width : '') + 
-        (this.props.right ? ' text-right' : '')} style={this.props.style}>
+        className={'col' + (this.props.width ? '-' + this.props.width : '') + (this.props.right ? ' text-right' : '')}
+        style={this.props.style}
+      >
         {this.props.children}
       </div>
     );
@@ -281,6 +281,12 @@ export class Table extends Component {
 
   render() {
     return <table className="table table-striped table-hover">{this.props.children}</table>;
+  }
+}
+
+export class H1 extends Component {
+  render() {
+    return <h1 className="display-4">{this.props.children}</h1>;
   }
 }
 
