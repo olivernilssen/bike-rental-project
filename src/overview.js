@@ -51,10 +51,9 @@ class Overview extends Component {
   render() {
     return (
       <div>
-        <div>
-          <h6>Overview</h6>
-        </div>
-        <Chart />
+        <Card title="Oversikt">
+          <Chart />
+        </Card>
       </div>
     );
   }

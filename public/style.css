@@ -13,7 +13,7 @@ a {
 
 #root {
   margin-top: 5em;
-  margin-right: 1em;
+  margin-right: 2em;
 }
 
 body {
@@ -62,7 +62,11 @@ body {
 
 #subLinks .nav-link {
   font-style: italic;
-  padding-left: 2em;
+  padding-left: 3em;
+}
+
+.navIcon {
+  margin-right: 10px;
 }
 
 @media (max-width: 767px) {

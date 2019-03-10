@@ -36,6 +36,20 @@ import {
   CenterContent
 } from './widgets';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChartPie,
+  faCoffee,
+  faShoppingCart,
+  faBicycle,
+  faCalendar,
+  faMapMarkerAlt,
+  faUsers
+} from '@fortawesome/free-solid-svg-icons';
+
+library.add(faCoffee, faChartPie, faShoppingCart, faBicycle, faCalendar, faMapMarkerAlt, faUsers);
+
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
@@ -126,25 +140,38 @@ class Menu extends Component {
                   <span>MENY</span>
                 </SideNavHeading>
                 <SideNavBar.SideLink to="/overview/">
-                  Oversikt<span className="sr-only">(current)</span>
+                  <FontAwesomeIcon className="navIcon" icon="chart-pie" />
+                  Oversikt
                 </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/booking/">Booking</SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/locations/1">Lokasjoner</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/booking/">
+                  <FontAwesomeIcon className="navIcon" icon="calendar" />
+                  Booking
+                </SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/locations/1">
+                  <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
+                  Lokasjoner
+                </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/allBikes/" onClick={this.toggleMenu}>
+                  <FontAwesomeIcon className="navIcon" icon="bicycle" />
                   Sykler
                 </SideNavBar.SideLink>
 
                 <div className={'collapse navbar-collapse ' + show}>
                   <div id="subLinks">
-                    <SideNavBar.SideLink to="/bikeTypes/Terreng">Etter sykkeltype</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="/locations/1">Etter lokasjon</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="/bikeStatus/OK">Etter status</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="#">Etter pris</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/locations/1">- Etter lokasjon</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                   </div>
                 </div>
 
-                <SideNavBar.SideLink to="/customers/">Kundeliste</SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/basket/">Handlekurv</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/customers/">
+                  <FontAwesomeIcon className="navIcon" icon="users" />
+                  Kundeliste
+                </SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/basket/">
+                  <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
+                  Handlekurv
+                </SideNavBar.SideLink>
                 <SideNavHeading>
                   <span>MIN SIDE</span>
                 </SideNavHeading>
