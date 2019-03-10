@@ -5,7 +5,6 @@ import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import { connection } from './mysql_connection';
 import { basket, employeeID } from './index.js';
-import Chart from './charts.js';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -15,19 +14,6 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
     SKAL EXPORTERES
 */
-
-class Overview extends Component {
-  render() {
-    return (
-      <div>
-        <div>
-          <h6>Overview</h6>
-        </div>
-        <Chart />
-      </div>
-    );
-  }
-}
 
 class AllBikes extends Component {
   searchBikes = this.searchBikes.bind(this);
@@ -143,15 +129,11 @@ class BikeTypes extends Component {
 
   mounted() {
     rentalService.getDistinctBikeType(bikeTypes => {
-
-      for(let i = 0; i < bikeTypes.length; i++){
-        for(let j = 0; j < bikeTypes.length; j++){
-          if(i == j)
-          {
+      for (let i = 0; i < bikeTypes.length; i++) {
+        for (let j = 0; j < bikeTypes.length; j++) {
+          if (i == j) {
             continue;
-          }
-          else if(bikeTypes[i].typeName == bikeTypes[j].typeName)
-          {
+          } else if (bikeTypes[i].typeName == bikeTypes[j].typeName) {
             bikeTypes.splice(j, 1);
           }
         }
@@ -166,9 +148,9 @@ class BikeTypeDetails extends Component {
   bikeType = null;
   state = {
     bikes: [],
-    typeIds: 0, 
+    typeIds: 0,
     bikeTypeDetails: []
-  }
+  };
 
   render() {
     if (!this.bikeType) return null;
@@ -245,39 +227,43 @@ class BikeTypeDetails extends Component {
     });
 
     connection.query(
-      'select id from BikeType where typeName = ?', [this.props.match.params.typeName], (error, idResult) => {
-      if (error) return console.error(error);
-      this.setState({state: (this.state.typeIds = idResult)})
+      'select id from BikeType where typeName = ?',
+      [this.props.match.params.typeName],
+      (error, idResult) => {
+        if (error) return console.error(error);
+        this.setState({ state: (this.state.typeIds = idResult) });
 
-      for(let i = 0; i < idResult.length; i++){
-        connection.query(
-          'select id, location_id, bikeStatus from Bikes where type_id = ?',
-          [idResult[i].id],
-          (error, results) => {
-            if (error) return console.error(error);
+        for (let i = 0; i < idResult.length; i++) {
+          connection.query(
+            'select id, location_id, bikeStatus from Bikes where type_id = ?',
+            [idResult[i].id],
+            (error, results) => {
+              if (error) return console.error(error);
 
-            this.setState(state => {
-              const bikes = state.bikes.concat(results);
-              return {
-                bikes, 
-                results,
-              };
-            });
-          });
+              this.setState(state => {
+                const bikes = state.bikes.concat(results);
+                return {
+                  bikes,
+                  results
+                };
+              });
+            }
+          );
 
           connection.query('select * from BikeType where id = ?', [idResult[i].id], (error, typeResult) => {
             if (error) return console.error(error);
-      
+
             this.setState(state => {
               const bikeTypeDetails = state.bikeTypeDetails.concat(typeResult);
               return {
-                bikeTypeDetails, 
-                typeResult,
+                bikeTypeDetails,
+                typeResult
               };
             });
           });
         }
-    });
+      }
+    );
   }
 }
 
@@ -369,7 +355,6 @@ class NewBikeType extends Component {
     history.push('/bikeTypes/' + this.props.match.params.typeName);
   }
 }
-
 
 class BikeStatus extends Component {
   bikeStatus = [];
@@ -536,9 +521,7 @@ class BikesOnLocation extends Component {
   }
 }
 
-
 module.exports = {
-  Overview,
   AllBikes,
   BikeTypes,
   BikeTypeDetails,

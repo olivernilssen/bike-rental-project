@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
+import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { rentalService } from './services';
+
+import createHashHistory from 'history/createHashHistory';
+const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Chart extends Component {
   constructor(props) {
@@ -41,4 +47,17 @@ class Chart extends Component {
   }
 }
 
-export default Chart;
+class Overview extends Component {
+  render() {
+    return (
+      <div>
+        <div>
+          <h6>Overview</h6>
+        </div>
+        <Chart />
+      </div>
+    );
+  }
+}
+
+module.exports = { Overview };

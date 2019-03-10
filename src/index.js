@@ -4,8 +4,6 @@ import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services';
 import {
-  Overview,
-  BookingDetails,
   BikeTypes,
   BikeTypeDetails,
   NewBikeType,
@@ -14,7 +12,7 @@ import {
   LocationList,
   BikesOnLocation,
   AllBikes
-} from './ansatt.js';
+} from './bikes.js';
 
 import { UserInfo } from './minSide';
 
@@ -22,6 +20,7 @@ import { Customers, AddCustomer } from './customer.js';
 
 import { Booking } from './booking.js';
 import { Basket } from './basket.js';
+import { Overview } from './overview.js';
 
 import {
   Card,
@@ -47,7 +46,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 */
 export let basket = [];
 export let employeeID = 1;
-export const activeCustomer = React.createContext("");
+export const activeCustomer = React.createContext('');
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
 så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
@@ -137,7 +136,7 @@ class Menu extends Component {
 
                 <div className={'collapse navbar-collapse ' + show}>
                   <div id="subLinks">
-                    <SideNavBar.SideLink to="/bikeTypes/">Etter sykkeltype</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/bikeTypes/Terreng">Etter sykkeltype</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="/locations/1">Etter lokasjon</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="/bikeStatus/OK">Etter status</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="#">Etter pris</SideNavBar.SideLink>
