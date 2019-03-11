@@ -9,13 +9,6 @@ import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Basket extends Component {
-    removeBike = this.removeBike.bind(this);
-    updateBasket = this.updateBasket.bind(this);
-    handleChangePhrase = this.handleChangePhrase.bind(this);
-    chooseCustomer = this.chooseCustomer.bind(this);
-    findCustomers = this.findCustomers.bind(this);
-    removeCustomer = this.removeCustomer.bind(this);
-  
     state = {
       inBasket: basket,
       kunder: [],

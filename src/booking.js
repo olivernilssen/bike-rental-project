@@ -37,10 +37,6 @@ class Booking extends Component {
     clear: 'both'
   };
 
-  handleSubmit = this.handleSubmit.bind(this);
-  handleCheckChange = this.handleCheckChange.bind(this);
-  handleChange = this.handleChange.bind(this);
-  chooseBike = this.chooseBike.bind(this);
 
   handleCheckChange() {
     if (this.dayRent == false) {
