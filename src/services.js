@@ -79,7 +79,7 @@ class RentalService {
     connection.query(
       'insert into BikeType (typeName, brand, model, year, frameSize, wheelSize, gears, gearSystem, brakeSystem, weight_kg, suitedFor, price) values (?,?,?,?,?,?,?,?,?,?,?,?)',
       [typeName, brand, model, year, frameSize, wheelSize, gears, gearSystem, brakeSystem, weight_kg, suitedFor, price],
-      (error, results) => {
+      (error) => {
         if (error) return console.error(error);
 
         success();
@@ -126,10 +126,21 @@ class RentalService {
     });
   }
 
+  addBike(locId, typeId, bikeStatus) {
+    connection.query(
+      'insert into bikes (id, location_id, type_id, bikeStatus) value (null, ?, ?, ?)',
+      [locId, typeId, bikeStatus],
+      (error) => {
+        if(error) return console.error(error);
+        success();
+      }
+    )
+  }
+
   searchBikes(searchWord, success) {
     connection.query(
-      'select distinct b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and (b.id like ? or l.name like ? or bt.typeName like ? or bt.model like ?)',
-      [searchWord, searchWord, searchWord, searchWord],
+      'select distinct b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and (b.id like ? or l.name like ? or bt.typeName like ? or bt.model like ? or bt.brand like ?)',
+      [searchWord, searchWord, searchWord, searchWord, searchWord],
       (error, results) => {
         if (error) return console.error(error);
         success(results);

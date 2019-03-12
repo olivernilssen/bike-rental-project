@@ -40,9 +40,9 @@ class Basket extends Component {
       this.state.inBasket = [];
 
       if (basket.length == 0) {
-        this.setState({styleState: (this.styleState.display = 'none') });
+        this.styleState.display = 'none';
       } else {
-        this.setState({styleState: (this.styleState.display = 'block') });
+        this.styleState.display = 'block';
       }
   
       if (basket.length == 0) {
@@ -88,13 +88,13 @@ class Basket extends Component {
     }
   
     chooseCustomer(customer) {
+      this.state.displayCustomer = 'none';
       this.setState({state: (this.state.activeC = customer)});
-      this.setState({state: (this.state.displayCustomer = 'none') });
     }
   
     removeCustomer() {
+      this.state.displayCustomer = 'block'
       this.setState({state: (this.state.activeC = "Velg ny kunde")});
-      this.setState({state: (this.state.displayCustomer = 'block') });
       this.setState({state: (this.state.phrase = "")});
       this.findCustomers();
     }

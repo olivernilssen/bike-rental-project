@@ -11,7 +11,8 @@ import {
   BikesByStatus,
   LocationList,
   BikesOnLocation,
-  AllBikes
+  AllBikes, 
+  AddBikes
 } from './bikes.js';
 
 import { UserInfo } from './minSide';
@@ -216,6 +217,7 @@ ReactDOM.render(
       <Route path="/bikeTypes/" component={BikeTypes} />
       <Route exact path="/bikeTypes/add/" component={NewBikeType} />
       <Route exact path="/bikeTypes/:typeName/" component={BikeTypeDetails} />
+      <Route exact path="/addBikes/" component={AddBikes} />
 
       <Route path="/bikeStatus/" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />

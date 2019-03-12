@@ -10,9 +10,6 @@ import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Customers extends Component {
-  onChangeHandle = this.onChangeHandle.bind(this);
-  searchCustomer = this.searchCustomer.bind(this);
-  chooseActive = this.chooseActive.bind(this);
   state = {
     customers: [],
     searchWord: '',

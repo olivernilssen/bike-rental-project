@@ -53,6 +53,11 @@ class AllBikes extends Component {
           <Row>
             <Column>
               <Column right>
+                <NavLink to={'/addBikes/'}>
+                  <Button.Light>Legg inn ny sykkel</Button.Light>
+                </NavLink>
+              </Column>
+              <Column right>
                 <Form.Label>Søk på sykkel etter id, type, modell eller lokasjon</Form.Label>
                 <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
               </Column>
@@ -142,9 +147,68 @@ class BikeTypes extends Component {
           }
         }
       }
-
       this.bikeTypes = bikeTypes;
     });
+  }
+}
+
+class AddBikes extends Component {
+  antall = 0;
+  bikeTypes = [];
+  locations = [];
+  price = 0;
+  typeSykkel = "";
+
+  render() {
+    return (
+      <Card>
+        <div className="container">
+          <h5>Ny sykkeltype</h5>
+          <Row>
+            <Column>
+              <Form.Label>Type:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
+              <select>
+                {this.bikeTypes.map(bikeType => (
+                  <option key={bikeType.id} value={this.typeSykkel} onChange={event => (this.typeSykkel = event.target.value)}>
+                    {bikeType.typeName} {bikeType.brand} {bikeType.model} {bikeType.year}
+                  </option>
+                ))}
+              </select>
+              <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
+              <br />
+              <br />
+              <Row>
+                <Column>
+                  <Button.Success onClick={this.add}>Add</Button.Success>
+                </Column>
+                <Column right>
+                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                </Column>
+              </Row>
+            </Column>
+            <br />
+          </Row>
+        </div>
+      </Card>
+    );
+  }
+
+  add() {
+    console.log("Ingenting skjedde enda");
+
+    history.push('/allBikes/');
+  }
+
+  cancel() {
+    history.push('/allBikes/');
+  }
+
+  mounted() {
+    rentalService.getDistinctBikeType(bikeTypes => {
+      this.typeSykkel = bikeTypes[0].typeName + " " + bikeTypes[0].brand + " " + bikeTypes[0].model + " " + bikeTypes[0].year;
+      this.bikeTypes = bikeTypes;
+    })
   }
 }
 
@@ -533,5 +597,6 @@ module.exports = {
   BikesByStatus,
   LocationList,
   BikesOnLocation,
-  NewBikeType
+  NewBikeType,
+  AddBikes
 };
