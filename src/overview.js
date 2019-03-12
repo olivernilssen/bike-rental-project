@@ -53,7 +53,9 @@ class Chart extends Component {
   }
 
   mounted() {
-    rentalService.getMontlyPrice(sales => {
+    this.state.sales = [];
+
+    rentalService.getMonthlyPrice(sales => {
       this.sales = sales;
     });
   }
