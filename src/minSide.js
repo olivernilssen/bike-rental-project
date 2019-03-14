@@ -271,28 +271,34 @@ class Bestilling extends Component {
   bikes = [];
   equipments = [];
   sales = [];
+  orderDate = "";
+
+  //Legge inn id og til/fra tidspunkt i kolonnene til fordel for noen av detaljene.
+  //
 
   render() {
     return (
       <div>
       <Card title = "Se på bestilling">
 
-      {this.equipments.map(sale => (<p>Under ser du innholdet til bestilling nr. {this.props.match.params.id}. Ordren ble bestilt av
-      av sjdfhsjkdfhk og varer fra sdjfkjsdf til sdkfhskjdfh. </p>))}
+
+      Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}.
 
       <br /> <br />
       <Row>
         <Column>
           <Table>
             <Table.Thead>
+            <Table.Th>ID</Table.Th>
             <Table.Th>Sykkeltype</Table.Th>
             <Table.Th>Merke</Table.Th>
+            <Table.Th>Fra:</Table.Th>
+            <Table.Th>Til:</Table.Th>
               <Table.Th>Modell</Table.Th>
               <Table.Th>År</Table.Th>
               <Table.Th>Rammestr.</Table.Th>
               <Table.Th>Hjulstr.</Table.Th>
               <Table.Th>Gir</Table.Th>
-              <Table.Th>Girsystem</Table.Th>
               <Table.Th>Bremsesystem</Table.Th>
               <Table.Th>Vekt</Table.Th>
               <Table.Th>Kjønn</Table.Th>
@@ -303,14 +309,16 @@ class Bestilling extends Component {
 
             {this.bikes.map(bike => (
               <Table.Tr key ={bike.id}>
+              <Table.Td>{bike.id}</Table.Td>
               <Table.Td>{bike.typeName}</Table.Td>
               <Table.Td>{bike.brand}</Table.Td>
+              <Table.Td>sdfsdfsdf</Table.Td>
+              <Table.Td>sdfsdf</Table.Td>
               <Table.Td>{bike.model}</Table.Td>
               <Table.Td>{bike.year}</Table.Td>
               <Table.Td>{bike.frameSize}</Table.Td>
               <Table.Td>{bike.wheelSize}</Table.Td>
-              <Table.Td>{bike.gears}</Table.Td>
-              <Table.Td>{bike.gearSystem}</Table.Td>
+              <Table.Td>{bike.gearSystem} ({bike.gears})</Table.Td>
               <Table.Td>{bike.brakeSystem}</Table.Td>
               <Table.Td>{bike.weight_kg} kg</Table.Td>
               <Table.Td>{bike.suitedFor}</Table.Td>
@@ -334,7 +342,6 @@ class Bestilling extends Component {
             </Table.Thead>
             <Table.Tbody>
 
-
             {this.equipments.map(equipment => (
               <Table.Tr key ={equipment.id}>
               <Table.Td>{equipment.typeName}</Table.Td>
@@ -352,7 +359,7 @@ class Bestilling extends Component {
 
 
       <Column>
-      <h4 align="right">Totalpris: 500 kr</h4>
+      <h4 align="right">Totalpris: {this.sales.price} kr</h4>
       </Column>
 
       </Card>
@@ -370,7 +377,8 @@ class Bestilling extends Component {
     });
 
   rentalService.getSales(employeeID, sales => {
-      this.sales = sales[this.props.match.params.id];
+      this.sales = sales[this.props.match.params.id - 1];
+      this.orderDate = this.sales.dateOrdered.toString().substring(4, 24);
     });
 
   }
