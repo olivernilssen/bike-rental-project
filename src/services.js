@@ -28,10 +28,31 @@ class RentalService {
       (error, results) => {
         if (error) return console.error(error);
 
-        console.log(results);
         success(results);
       }
     );
+  }
+
+  getBikesFromOrder(orderId, success) {
+    connection.query(
+      "select bt.id, bt.typeName, bt.brand, bt.model, bt.year, bt.frameSize, bt.wheelSize, bt.gears, bt.gearSystem, bt.brakeSystem, bt.weight_kg, bt.suitedFor, bt.price FROM BikeType bt, OrderedBike ob, Orders o where o.id = ob.order_id and ob.bike_id = bt.id and o.id = ?", [orderId],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    )
+  }
+
+  getEquipmentFromOrder(orderId, success) {
+    connection.query(
+      "select et.id, et.typeName, et.brand, et.year, et.comment, et.price FROM EquipmentType et, OrderedEquipment oe, Orders o where o.id = oe.order_id and oe.equip_id = et.id and o.id = ?", [orderId],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    )
   }
 
   updateAnsatt(ansattId, fornavn, etternavn, email, tlf, gate, poststed, postnummer, gatenr, success) {

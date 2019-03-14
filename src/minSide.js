@@ -268,38 +268,92 @@ class MineSalg extends Component {
 
 class Bestilling extends Component {
 
+  bikes = [];
+  equipments = [];
+  sales = [];
 
   render() {
     return (
       <div>
       <Card title = "Se på bestilling">
 
-      Under ser du innholdet til bestilling nr. {this.props.match.params.id}. <br /> <br />
+      {this.equipments.map(sale => (<p>Under ser du innholdet til bestilling nr. {this.props.match.params.id}. Ordren ble bestilt av
+      av sjdfhsjkdfhk og varer fra sdjfkjsdf til sdkfhskjdfh. </p>))}
 
+      <br /> <br />
       <Row>
         <Column>
           <Table>
             <Table.Thead>
-            <Table.Th>ID</Table.Th>
-              <Table.Th>Kunde</Table.Th>
-              <Table.Th>Type</Table.Th>
-              <Table.Th>Bestillingsdato</Table.Th>
-              <Table.Th>Start for utleie</Table.Th>
-              <Table.Th>Slutt for utleie</Table.Th>
+            <Table.Th>Sykkeltype</Table.Th>
+            <Table.Th>Merke</Table.Th>
+              <Table.Th>Modell</Table.Th>
+              <Table.Th>År</Table.Th>
+              <Table.Th>Rammestr.</Table.Th>
+              <Table.Th>Hjulstr.</Table.Th>
+              <Table.Th>Gir</Table.Th>
+              <Table.Th>Girsystem</Table.Th>
+              <Table.Th>Bremsesystem</Table.Th>
+              <Table.Th>Vekt</Table.Th>
+              <Table.Th>Kjønn</Table.Th>
               <Table.Th>Pris</Table.Th>
-              <Table.Th></Table.Th>
             </Table.Thead>
             <Table.Tbody>
 
 
-                  <Table.Tr>
-                  <Table.Td></Table.Td>
-                </Table.Tr>
+            {this.bikes.map(bike => (
+              <Table.Tr key ={bike.id}>
+              <Table.Td>{bike.typeName}</Table.Td>
+              <Table.Td>{bike.brand}</Table.Td>
+              <Table.Td>{bike.model}</Table.Td>
+              <Table.Td>{bike.year}</Table.Td>
+              <Table.Td>{bike.frameSize}</Table.Td>
+              <Table.Td>{bike.wheelSize}</Table.Td>
+              <Table.Td>{bike.gears}</Table.Td>
+              <Table.Td>{bike.gearSystem}</Table.Td>
+              <Table.Td>{bike.brakeSystem}</Table.Td>
+              <Table.Td>{bike.weight_kg} kg</Table.Td>
+              <Table.Td>{bike.suitedFor}</Table.Td>
+              <Table.Td>{bike.price} kr</Table.Td>
+            </Table.Tr>))}
 
             </Table.Tbody>
           </Table>
         </Column>
       </Row>
+
+      <Row>
+        <Column width={8}>
+          <Table>
+            <Table.Thead>
+            <Table.Th>Utstyrstype</Table.Th>
+              <Table.Th>Merke</Table.Th>
+              <Table.Th>År</Table.Th>
+              <Table.Th>Kommentar</Table.Th>
+              <Table.Th>Pris</Table.Th>
+            </Table.Thead>
+            <Table.Tbody>
+
+
+            {this.equipments.map(equipment => (
+              <Table.Tr key ={equipment.id}>
+              <Table.Td>{equipment.typeName}</Table.Td>
+              <Table.Td>{equipment.brand}</Table.Td>
+              <Table.Td>{equipment.year}</Table.Td>
+              <Table.Td>{equipment.comment}</Table.Td>
+              <Table.Td>{equipment.price}</Table.Td>
+            </Table.Tr>))}
+
+            </Table.Tbody>
+          </Table>
+        </Column>
+
+      </Row>
+
+
+      <Column>
+      <h4 align="right">Totalpris: 500 kr</h4>
+      </Column>
 
       </Card>
           </div>
@@ -307,9 +361,20 @@ class Bestilling extends Component {
   }
 
   mounted() {
+    rentalService.getBikesFromOrder(this.props.match.params.id, bikes => {
+      this.bikes = bikes;
+    });
 
+    rentalService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
+      this.equipments = equipments;
+    });
+
+  rentalService.getSales(employeeID, sales => {
+      this.sales = sales[this.props.match.params.id];
+    });
 
   }
+
 
 
 }
