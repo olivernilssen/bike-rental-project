@@ -10,6 +10,7 @@ import createHashHistory from 'history/createHashHistory';
 import { start } from 'repl';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
+
 class UserInfo extends Component {
   fornavn = '';
   etternavn = '';
@@ -20,7 +21,84 @@ class UserInfo extends Component {
   postnummer = '';
   nr = '';
 
-  ansattId = 1; //ID-en til den ansatte som vises
+  render() {
+    return (
+      <div>
+        <Card title="Brukerinformasjon">
+          <Row>
+            <Column width={5}>
+              <b>Fornavn:</b> {this.fornavn}
+            </Column>
+
+
+
+            <Column width={5}>
+              <b>Etternavn:</b> {this.etternavn}
+            </Column>
+          </Row>
+
+          <Row>
+            <Column width={5}>
+             <b>Epost:</b> {this.email}
+            </Column>
+
+            <Column width={5}>
+              <b>Telefonnummer:</b> {this.tlf}
+            </Column>
+          </Row>
+
+          <Row>
+            <Column width={10}>
+              <b>Gateadresse:</b> {this.gate} {this.nr}
+            </Column>
+          </Row>
+
+          <Row>
+            <Column width={5}>
+              <b>Poststed:</b> {this.poststed}
+            </Column>
+
+            <Column width={5}>
+              <b>Postnummer:</b> {this.postnummer}
+            </Column>
+          </Row>
+
+          <br />
+          <Button.Success type="button" onClick={ () => history.push("/EditUserInfo")}>
+            Endre informasjon
+          </Button.Success>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getAnsatt(employeeID, ansatt => {
+      this.fornavn = ansatt.firstName;
+      this.etternavn = ansatt.lastName;
+      this.email = ansatt.email;
+      this.tlf = ansatt.tlf;
+
+      this.nr = ansatt.streetNum;
+      this.gate = ansatt.streetAddress;
+      this.poststed = ansatt.place;
+      this.postnummer = ansatt.postalNum;
+    });
+  }
+
+
+}
+
+
+class EditUserInfo extends Component {
+  fornavn = '';
+  etternavn = '';
+  email = '';
+  tlf = '';
+  gate = '';
+  poststed = '';
+  postnummer = '';
+  nr = '';
 
   render() {
     return (
@@ -31,6 +109,8 @@ class UserInfo extends Component {
               <Form.Label>Fornavn:</Form.Label>
               <Form.Input type="text" value={this.fornavn} onChange={event => (this.fornavn = event.target.value)} />
             </Column>
+
+
 
             <Column width={5}>
               <Form.Label>Etternavn:</Form.Label>
@@ -86,13 +166,17 @@ class UserInfo extends Component {
           <Button.Success type="button" onClick={this.save}>
             Oppdatere informasjon
           </Button.Success>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <Button.Danger type="button" onClick={ () => history.push("/information")}>
+            Gå tilbake
+          </Button.Danger>
         </Card>
       </div>
     );
   }
 
   mounted() {
-    rentalService.getAnsatt(this.ansattId, ansatt => {
+    rentalService.getAnsatt(employeeID, ansatt => {
       this.fornavn = ansatt.firstName;
       this.etternavn = ansatt.lastName;
       this.email = ansatt.email;
@@ -107,7 +191,7 @@ class UserInfo extends Component {
 
   save() {
     rentalService.updateAnsatt(
-      this.ansattId,
+      employeeID,
       this.fornavn,
       this.etternavn,
       this.email,
@@ -117,12 +201,124 @@ class UserInfo extends Component {
       this.postnummer,
       this.nr,
       () => {
-        history.push('/overview');
+        history.push('/information');
       }
     );
   }
 }
 
+class MineSalg extends Component {
+
+  sales = [];
+
+
+  render() {
+    return (
+      <div>
+        <Card title="Mine salg">
+
+        Dette er en liste over salg du har gjort.
+        Hvis du ikke har solgt mye håper vi du har dårlig samvittighet.
+        <br /><br />
+
+              <Row>
+                <Column>
+                  <Table>
+                    <Table.Thead>
+                    <Table.Th>ID</Table.Th>
+                      <Table.Th>Kunde</Table.Th>
+                      <Table.Th>Type</Table.Th>
+                      <Table.Th>Bestillingsdato</Table.Th>
+                      <Table.Th>Start for utleie</Table.Th>
+                      <Table.Th>Slutt for utleie</Table.Th>
+                      <Table.Th>Pris</Table.Th>
+                      <Table.Th></Table.Th>
+                    </Table.Thead>
+                    <Table.Tbody>
+
+                        {this.sales.map(sale => (
+                          <Table.Tr key ={sale.id}>
+                          <Table.Td>{sale.id}</Table.Td>
+                          <Table.Td>{sale.firstName} {sale.lastName}</Table.Td>
+                          <Table.Td>{sale.typeName}</Table.Td>
+                          <Table.Td>{sale.dateOrdered.toString().substring(4, 24)}</Table.Td>
+                          <Table.Td>{sale.fromDateTime.toString().substring(4, 24)}</Table.Td>
+                          <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
+                          <Table.Td>{sale.price} kr</Table.Td>
+                          <Table.Td><Button.Success type="button"  onClick={ () => history.push("/MineSalg/" + sale.id + "/edit")} >Se bestilling</Button.Success></Table.Td>
+                        </Table.Tr>))}
+
+                    </Table.Tbody>
+                  </Table>
+                </Column>
+              </Row>
+            </Card>
+          </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getSales(employeeID, sales => {
+      this.sales = sales;
+    });
+  }
+
+
+}
+
+class Bestilling extends Component {
+
+
+  render() {
+    return (
+      <div>
+      <Card title = "Se på bestilling">
+
+      Under ser du innholdet til bestilling nr. {this.props.match.params.id}. <br /> <br />
+
+      <Row>
+        <Column>
+          <Table>
+            <Table.Thead>
+            <Table.Th>ID</Table.Th>
+              <Table.Th>Kunde</Table.Th>
+              <Table.Th>Type</Table.Th>
+              <Table.Th>Bestillingsdato</Table.Th>
+              <Table.Th>Start for utleie</Table.Th>
+              <Table.Th>Slutt for utleie</Table.Th>
+              <Table.Th>Pris</Table.Th>
+              <Table.Th></Table.Th>
+            </Table.Thead>
+            <Table.Tbody>
+
+
+                  <Table.Tr>
+                  <Table.Td></Table.Td>
+                </Table.Tr>
+
+            </Table.Tbody>
+          </Table>
+        </Column>
+      </Row>
+
+      </Card>
+          </div>
+    );
+  }
+
+  mounted() {
+
+
+  }
+
+
+}
+
+
+
 module.exports = {
-  UserInfo
+  UserInfo,
+  EditUserInfo,
+  MineSalg,
+  Bestilling
 };

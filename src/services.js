@@ -22,6 +22,18 @@ class RentalService {
     );
   }
 
+  getSales(ansattId, success) {
+    connection.query(
+      'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND  w.worker_id = ? AND ot.id = o.type_Id AND  w.worker_id = o.soldBy_id', [ansattId],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        console.log(results);
+        success(results);
+      }
+    );
+  }
+
   updateAnsatt(ansattId, fornavn, etternavn, email, tlf, gate, poststed, postnummer, gatenr, success) {
     connection.query(
       'update Workers w, Address a set w.firstName = ?, w.lastName = ?, w.email = ?, w.tlf = ?, a.streetAddress = ?, a.postalNum = ?, a.place = ?, a.streetNum = ? where w.worker_id = ? and w.address_id = a.id',

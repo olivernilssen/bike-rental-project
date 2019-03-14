@@ -11,11 +11,11 @@ import {
   BikesByStatus,
   LocationList,
   BikesOnLocation,
-  AllBikes, 
+  AllBikes,
   AddBikes
 } from './bikes.js';
 
-import { UserInfo } from './minSide';
+import { UserInfo, EditUserInfo, MineSalg, Bestilling } from './minSide';
 
 import { Customers, AddCustomer } from './customer.js';
 
@@ -177,7 +177,7 @@ class Menu extends Component {
                   <span>MIN SIDE</span>
                 </SideNavHeading>
                 <SideNavBar.SideLink to="/information/">Informasjon</SideNavBar.SideLink>
-                <SideNavBar.SideLink to="#">Mine salg</SideNavBar.SideLink>
+                <SideNavBar.SideLink to="/MineSalg">Mine salg</SideNavBar.SideLink>
               </SideNavBar>
             </Row>
           </div>
@@ -231,6 +231,10 @@ ReactDOM.render(
       <Route exact path="/basket/" component={Basket} />
 
       <Route exact path="/information/" component={UserInfo} />
+      <Route exact path="/EditUserInfo" component={EditUserInfo} />
+      <Route exact path="/MineSalg" component={MineSalg} />
+      <Route path="/MineSalg/:id/edit" component={Bestilling} />
+
     </div>
   </HashRouter>,
   document.getElementById('root')
