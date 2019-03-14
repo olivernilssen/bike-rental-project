@@ -9,11 +9,6 @@ import { basket, employeeID } from './index.js';
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
-/*
-    ELEMENTER FOR ALLE BRUKERE INKLUDERT VANLIGE ANSATTE OG ADMIN
-
-    SKAL EXPORTERES
-*/
 
 class AllBikes extends Component {
   searchBikes = this.searchBikes.bind(this);
@@ -156,8 +151,24 @@ class AddBikes extends Component {
   antall = 0;
   bikeTypes = [];
   locations = [];
-  price = 0;
   typeSykkel = "";
+  state = {
+    selectedBikeID: 1,
+    curLocation: ''
+
+  }
+  
+  onChangeType(event){
+    const selectedIndex = event.target.options.selectedIndex;
+    this.setState({state: (this.state.selectedBikeID = event.target.options[selectedIndex].getAttribute('data-key'))});
+    console.log(this.state.selectedBikeID);
+  }
+
+  onChangeLocation (event) {
+    const selectedIndex = event.target.options.selectedIndex;
+    this.setState({state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key'))});
+    console.log(this.state.curLocation);
+  }
 
   render() {
     return (
@@ -166,18 +177,27 @@ class AddBikes extends Component {
           <h5>Ny sykkeltype</h5>
           <Row>
             <Column>
-              <Form.Label>Type:</Form.Label>
+              <Form.Label>Antall:</Form.Label>
               <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
-              <select>
+      
+              <Form.Label>Type:</Form.Label>
+              <select onChange={this.onChangeType}>
                 {this.bikeTypes.map(bikeType => (
-                  <option key={bikeType.id} value={this.typeSykkel} onChange={event => (this.typeSykkel = event.target.value)}>
+                  <option key={bikeType.id} data-key={bikeType.id}>
                     {bikeType.typeName} {bikeType.brand} {bikeType.model} {bikeType.year}
                   </option>
                 ))}
               </select>
-              <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
-              <br />
-              <br />
+
+              <Form.Label>Lokasjon: </Form.Label>
+              <select onChange={this.onChangeLocation}>
+                {this.locations.map(lokasjon => (
+                  <option key={lokasjon.id} data-key={lokasjon.id} >
+                    {lokasjon.name}
+                  </option>
+                ))}
+              </select>
+              <br /> <br />
               <Row>
                 <Column>
                   <Button.Success onClick={this.add}>Add</Button.Success>
@@ -194,8 +214,36 @@ class AddBikes extends Component {
     );
   }
 
+  // addBike(locId, typeId, bikeStatus) {
+  //   connection.query(
+  //     'insert into Bikes (id, location_id, type_id, bikeStatus) value (null, ?, ?, ?)',
+  //     [locId, typeId, bikeStatus],
+  //     (error) => {
+  //       if(error) return console.error(error);
+  //       success();
+  //     }
+  //   )
+  // }
+  // getAllBikesByType(success) {
+  //   connection.query(
+  //     'select b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id',
+  //     (error, results) => {
+  //       if (error) console.error(error);
+
+  //       success(results);
+  //     }
+  //   );
+  // }
+
   add() {
-    console.log("Ingenting skjedde enda");
+    if(this.antall <= 0){
+      return;
+    }
+    else{
+      for(let i = 0; i < this.antall; i++){
+        rentalService.addBike(this.state.curLocation, this.state.selectedBikeID, "OK");
+      }
+    }
 
     history.push('/allBikes/');
   }
@@ -205,8 +253,13 @@ class AddBikes extends Component {
   }
 
   mounted() {
-    rentalService.getDistinctBikeType(bikeTypes => {
-      this.typeSykkel = bikeTypes[0].typeName + " " + bikeTypes[0].brand + " " + bikeTypes[0].model + " " + bikeTypes[0].year;
+    rentalService.getLocations(locations => {
+      this.state.curLocation = locations[0].id;
+      this.locations = locations;
+    })
+    
+    rentalService.getAllBikesTypes(bikeTypes => {
+      this.selectedBike = bikeTypes[0].id;
       this.bikeTypes = bikeTypes;
     })
   }

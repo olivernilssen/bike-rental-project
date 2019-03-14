@@ -142,6 +142,7 @@ class Booking extends Component {
               <option value="Flåm">Flåm</option>
               <option value="Haugastøl">Haugastøl</option>
               <option value="Voss">Voss</option>
+              <option value="Myrdal">Myrdal</option>
             </select>
 
             <select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
