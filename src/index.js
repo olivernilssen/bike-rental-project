@@ -16,9 +16,7 @@ import {
 } from './bikes.js';
 
 import { UserInfo, EditUserInfo, MineSalg, Bestilling } from './minSide';
-
 import { Customers, AddCustomer } from './customer.js';
-
 import { Booking } from './booking.js';
 import { Basket } from './basket.js';
 import { Overview } from './overview.js';
@@ -73,15 +71,18 @@ class LoginMenu extends Component {
 
 /* Set state for menyen. Hva vises, alt etter hvem som er logget inn */
 class Menu extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isLoggedIn: true, menu: false }; //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
-    this.toggleMenu = this.toggleMenu.bind(this);
-  }
+    state = { 
+      isLoggedIn: true, 
+      menu: false, 
+      username: "",
+      password: "",
+      userinfo: null
+    }; //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
 
   toggleMenu() {
     this.setState({ menu: !this.state.menu });
   }
+
 
   render() {
     const isLoggedIn = this.state.isLoggedIn;
@@ -89,43 +90,34 @@ class Menu extends Component {
 
     if (isLoggedIn == false) {
       history.push('/login/');
-
       return (
         <div>
           <NavBar brand="CycleOn Rentals" />
-
-          <div id="logIn">
             <CenterContent>
               <Card header="Logg inn">
                 <form onSubmit={this.login}>
                   <div className="input-group form-group">
-                    <input
+                    <Form.Input
                       type="text"
-                      value={this.username}
-                      onChange={event => (this.username = event.target.value)}
+                      onChange={event => (this.state.username = event.target.value)}
                       className="form-control"
-                      placeholder="Employee Name"
+                      placeholder="Employee Username"
                     />
                   </div>
                   <div className="input-group form-group">
-                    <input
+                    <Form.Input
                       type="password"
-                      value={this.password}
-                      onChange={event => (this.password = event.target.value)}
+                      onChange={event => (this.state.password = event.target.value)}
                       className="form-control"
                       placeholder="Password"
                     />
                   </div>
                   <div className="form-group">
-                    <input type="submit" value="Login" className="btn float-right login_btn" />
+                    <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
                   </div>
                 </form>
-                {/*<div className="d-flex justify-content-center">
-                  <NavLink to="#">Forgot your password?</NavLink>
-                </div>*/}
               </Card>
             </CenterContent>
-          </div>
         </div>
       );
     } else {
@@ -186,29 +178,39 @@ class Menu extends Component {
     }
   }
 
-  login(event) {
-    //SPØRRING KREVES
-    if (this.username == 'Oliver' && this.password == '1234') {
-      employeeID = this.username; //Dette blir endret til en spørring
-      this.setState({ isLoggedIn: true });
-      history.push('/overview/');
-    } else if (this.username == null || this.password == null) {
-      alert('Please type something!');
-    } else {
-      alert('log in name or password was wrong');
-    }
+  //DENNE TRENGES MER ARBEID MED, foreløbig virkning med ukryptert passord
+  login() {
+    rentalService.getLoginInfo(this.state.username, results =>
+      {
+        this.setState({state: (this.state.userinfo = results[0])});
+
+        if (this.state.username == null || this.state.password == null || this.state.username == "" || this.state.password == "") {
+          alert('One or more fields are empty, Please try again');
+        } else if (this.state.password != this.state.userinfo.password) {
+          alert('Password is wrong, contact Admin');
+        } else if (this.state.password == this.state.userinfo.password) {
+          employeeID = this.state.userinfo.user_id;
+          this.setState({ isLoggedIn: true });
+          history.push('/overview/');
+        } else {
+          alert('log in name or password was wrong');
+        }
+      })
+      console.log(this.state.password);
   }
 
   logout() {
     // history.push('/login/');
     this.setState({ isLoggedIn: false });
+    this.state.username = '';
+    this.state.password = '';
   }
 }
 
 ReactDOM.render(
   <HashRouter>
     <div>
-      <Menu isLoggedIn={false} />
+      <Menu isLoggedIn={true} />
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
@@ -232,7 +234,7 @@ ReactDOM.render(
 
       <Route exact path="/information/" component={UserInfo} />
       <Route exact path="/EditUserInfo" component={EditUserInfo} />
-      <Route exact path="/MineSalg" component={MineSalg} />
+      <Route exact path="/MineSalg/" component={MineSalg} />
       <Route path="/MineSalg/:id/edit" component={Bestilling} />
 
     </div>

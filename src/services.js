@@ -16,7 +16,6 @@ class RentalService {
       [ansattId],
       (error, results) => {
         if (error) return console.error(error);
-
         success(results[0]);
       }
     );
@@ -59,7 +58,7 @@ class RentalService {
     connection.query(
       'update Workers w, Address a set w.firstName = ?, w.lastName = ?, w.email = ?, w.tlf = ?, a.streetAddress = ?, a.postalNum = ?, a.place = ?, a.streetNum = ? where w.worker_id = ? and w.address_id = a.id',
       [fornavn, etternavn, email, tlf, gate, postnummer, poststed, gatenr, ansattId],
-      (error, results) => {
+      (error) => {
         if (error) return console.error(error);
 
         success();
@@ -284,9 +283,19 @@ class RentalService {
   getMonthlyPrice(success) {
     connection.query('select sum(price) from Orders', (error, results) => {
       if (error) return console.error(error);
-      console.log(results);
       success(results);
     });
   }
+
+  getLoginInfo(username, success) {
+    connection.query('select user_id, password from Account where username = ?', 
+      [username], 
+      (error, results) => {
+        if (error) return console.error(error)
+        success(results);
+      }
+    );
+  }
 }
+
 export let rentalService = new RentalService();

@@ -7,7 +7,6 @@ import { connection } from './mysql_connection';
 import { basket, employeeID } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
-import { start } from 'repl';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 
@@ -29,8 +28,6 @@ class UserInfo extends Component {
             <Column width={5}>
               <b>Fornavn:</b> {this.fornavn}
             </Column>
-
-
 
             <Column width={5}>
               <b>Etternavn:</b> {this.etternavn}
@@ -73,20 +70,18 @@ class UserInfo extends Component {
   }
 
   mounted() {
+    console.log(employeeID);
     rentalService.getAnsatt(employeeID, ansatt => {
       this.fornavn = ansatt.firstName;
       this.etternavn = ansatt.lastName;
       this.email = ansatt.email;
       this.tlf = ansatt.tlf;
-
       this.nr = ansatt.streetNum;
       this.gate = ansatt.streetAddress;
       this.poststed = ansatt.place;
       this.postnummer = ansatt.postalNum;
     });
   }
-
-
 }
 
 
@@ -109,8 +104,6 @@ class EditUserInfo extends Component {
               <Form.Label>Fornavn:</Form.Label>
               <Form.Input type="text" value={this.fornavn} onChange={event => (this.fornavn = event.target.value)} />
             </Column>
-
-
 
             <Column width={5}>
               <Form.Label>Etternavn:</Form.Label>
@@ -181,7 +174,6 @@ class EditUserInfo extends Component {
       this.etternavn = ansatt.lastName;
       this.email = ansatt.email;
       this.tlf = ansatt.tlf;
-
       this.nr = ansatt.streetNum;
       this.gate = ansatt.streetAddress;
       this.poststed = ansatt.place;
@@ -208,52 +200,45 @@ class EditUserInfo extends Component {
 }
 
 class MineSalg extends Component {
-
   sales = [];
-
 
   render() {
     return (
       <div>
         <Card title="Mine salg">
-
-        Dette er en liste over salg du har gjort.
-        Hvis du ikke har solgt mye håper vi du har dårlig samvittighet.
+        Dette er en liste over dine salg
         <br /><br />
-
-              <Row>
-                <Column>
-                  <Table>
-                    <Table.Thead>
-                    <Table.Th>ID</Table.Th>
-                      <Table.Th>Kunde</Table.Th>
-                      <Table.Th>Type</Table.Th>
-                      <Table.Th>Bestillingsdato</Table.Th>
-                      <Table.Th>Start for utleie</Table.Th>
-                      <Table.Th>Slutt for utleie</Table.Th>
-                      <Table.Th>Pris</Table.Th>
-                      <Table.Th></Table.Th>
-                    </Table.Thead>
-                    <Table.Tbody>
-
-                        {this.sales.map(sale => (
-                          <Table.Tr key ={sale.id}>
-                          <Table.Td>{sale.id}</Table.Td>
-                          <Table.Td>{sale.firstName} {sale.lastName}</Table.Td>
-                          <Table.Td>{sale.typeName}</Table.Td>
-                          <Table.Td>{sale.dateOrdered.toString().substring(4, 24)}</Table.Td>
-                          <Table.Td>{sale.fromDateTime.toString().substring(4, 24)}</Table.Td>
-                          <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
-                          <Table.Td>{sale.price} kr</Table.Td>
-                          <Table.Td><Button.Success type="button"  onClick={ () => history.push("/MineSalg/" + sale.id + "/edit")} >Se bestilling</Button.Success></Table.Td>
-                        </Table.Tr>))}
-
-                    </Table.Tbody>
-                  </Table>
-                </Column>
-              </Row>
-            </Card>
-          </div>
+            <Row>
+              <Column>
+                <Table>
+                  <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                    <Table.Th>Kunde</Table.Th>
+                    <Table.Th>Type</Table.Th>
+                    <Table.Th>Bestillingsdato</Table.Th>
+                    <Table.Th>Start for utleie</Table.Th>
+                    <Table.Th>Slutt for utleie</Table.Th>
+                    <Table.Th>Pris</Table.Th>
+                    <Table.Th></Table.Th>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {this.sales.map(sale => (
+                    <Table.Tr key ={sale.id}>
+                      <Table.Td>{sale.id}</Table.Td>
+                      <Table.Td>{sale.firstName} {sale.lastName}</Table.Td>
+                      <Table.Td>{sale.typeName}</Table.Td>
+                      <Table.Td>{sale.dateOrdered.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{sale.fromDateTime.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{sale.price} kr</Table.Td>
+                      <Table.Td><Button.Success type="button"  onClick={ () => history.push("/MineSalg/" + sale.id + "/edit")} >Se bestilling</Button.Success></Table.Td>
+                    </Table.Tr>))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+        </Card>
+      </div>
     );
   }
 
@@ -262,28 +247,21 @@ class MineSalg extends Component {
       this.sales = sales;
     });
   }
-
-
 }
 
 class Bestilling extends Component {
-
   bikes = [];
   equipments = [];
   sales = [];
   orderDate = "";
 
   //Legge inn id og til/fra tidspunkt i kolonnene til fordel for noen av detaljene.
-  //
-
   render() {
     return (
       <div>
       <Card title = "Se på bestilling">
 
-
       Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}.
-
       <br /> <br />
       <Row>
         <Column>
@@ -306,7 +284,6 @@ class Bestilling extends Component {
             </Table.Thead>
             <Table.Tbody>
 
-
             {this.bikes.map(bike => (
               <Table.Tr key ={bike.id}>
               <Table.Td>{bike.id}</Table.Td>
@@ -324,7 +301,6 @@ class Bestilling extends Component {
               <Table.Td>{bike.suitedFor}</Table.Td>
               <Table.Td>{bike.price} kr</Table.Td>
             </Table.Tr>))}
-
             </Table.Tbody>
           </Table>
         </Column>
@@ -354,9 +330,7 @@ class Bestilling extends Component {
             </Table.Tbody>
           </Table>
         </Column>
-
       </Row>
-
 
       <Column>
       <h4 align="right">Totalpris: {this.sales.price} kr</h4>
@@ -376,18 +350,12 @@ class Bestilling extends Component {
       this.equipments = equipments;
     });
 
-  rentalService.getSales(employeeID, sales => {
+    rentalService.getSales(employeeID, sales => {
       this.sales = sales[this.props.match.params.id - 1];
       this.orderDate = this.sales.dateOrdered.toString().substring(4, 24);
     });
-
   }
-
-
-
 }
-
-
 
 module.exports = {
   UserInfo,
