@@ -687,7 +687,7 @@ class BikesOnLocation extends Component {
       this.bikeLocations = locations;
     });
 
-    rentalService.getBikesOnLocation(this.props.match.params.id, bikes => {
+    bikeService.getBikesOnLocations(this.props.match.params.id, bikes => {
       this.bikes = bikes;
     });
   }
