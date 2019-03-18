@@ -12,7 +12,8 @@ import {
   LocationList,
   BikesOnLocation,
   AllBikes,
-  AddBikes
+  AddBikes, 
+  selectedBike
 } from './bikes.js';
 
 import { UserInfo, EditUserInfo, MineSalg, Bestilling } from './minSide';
@@ -228,6 +229,7 @@ ReactDOM.render(
       <Route exact path="/bikeTypes/add/" component={NewBikeType} />
       <Route exact path="/bikeTypes/:typeName/" component={BikeTypeDetails} />
       <Route exact path="/addBikes/" component={AddBikes} />
+      <Route exact path="/selectedBike/:id" component={selectedBike}/>
 
       <Route path="/bikeStatus/" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />

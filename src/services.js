@@ -87,7 +87,7 @@ class RentalService {
 
   getAllBikesByType(success) {
     connection.query(
-      'select b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id',
+      'select b.id, bt.typeName, b.bikeStatus, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id',
       (error, results) => {
         if (error) console.error(error);
 
@@ -175,7 +175,7 @@ class RentalService {
   }
 
   getBike(id, success) {
-    connection.query('select * from Bikes where object_id = ?', [id], (error, results) => {
+    connection.query('select * from BikeType bt, Bikes b where b.type_id = bt.id and b.id = ?', [id], (error, results) => {
       if (error) return console.error(error);
 
       success(results[0]);
@@ -195,8 +195,7 @@ class RentalService {
 
   searchBikes(searchWord, success) {
     connection.query(
-      'select distinct b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and (b.id like ? or l.name like ? or bt.typeName like ? or bt.model like ? or bt.brand like ?)',
-      [searchWord, searchWord, searchWord, searchWord, searchWord],
+      'select distinct b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name, b.bikeStatus from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and (b.id like ? or l.name like ? or bt.typeName like ? or bt.model like ? or bt.brand like ?)',      [searchWord, searchWord, searchWord, searchWord, searchWord],
       (error, results) => {
         if (error) return console.error(error);
         success(results);
