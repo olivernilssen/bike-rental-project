@@ -179,7 +179,7 @@ class SelectedOrder extends Component {
           </Column>
         </Row>
         <Row>
-          <Column width={5}>
+          <Column width={8}>
             <h6>Sykler:</h6>
             <Table>
               <Table.Tbody>
@@ -212,7 +212,10 @@ class SelectedOrder extends Component {
               </Table.Tbody>
             </Table>
           </Column>
-          <Column width={5}>
+        </Row>
+        <br />
+        <Row>
+          <Column width={8}>
             <h6>Utstyr</h6>
             <Table>
               <Table.Tbody>

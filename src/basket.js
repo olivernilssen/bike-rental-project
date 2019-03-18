@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services/services';
+import { customerService } from './services/customersService';
 import { basket, activeCustomer } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
@@ -69,7 +69,7 @@ class Basket extends Component {
       queryPhrase = '%' + this.state.phrase + '%';
     }
 
-    rentalService.getCustomerSearch(queryPhrase, results => {
+    customerService.getCustomerSearch(queryPhrase, results => {
       this.state.kunder = [];
 
       if (results.length == 0) {
@@ -209,7 +209,7 @@ class Basket extends Component {
   }
 
   mounted() {
-    rentalService.getCustomerSearch('%', results => {
+    customerService.getCustomerSearch('%', results => {
       this.setState(state => {
         const kunder = state.kunder.concat(results);
         return {
