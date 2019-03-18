@@ -12,18 +12,18 @@ import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Chart extends Component {
-  sales = [];
+  data = [];
   months = [];
 
   constructor(props) {
     super(props);
     this.state = {
       chartData: {
-        labels: [this.months],
+        labels: ['Hvor mye charts.js suger', 'Annet'],
         datasets: [
           {
             label: 'Salg',
-            data: [this.sales],
+            data: [99, 1],
             backgroundColor: [
               'rgba(130,99,132, 0.6)',
               'rgba(255,99,13, 0.6)',
@@ -40,7 +40,7 @@ class Chart extends Component {
   render() {
     return (
       <div className="chart">
-        <Bar
+        <Pie
           data={this.state.chartData}
           height={300}
           width={150}
@@ -53,10 +53,8 @@ class Chart extends Component {
   }
 
   mounted() {
-    this.state.sales = [];
-
-    rentalService.getMonthlyPrice(sales => {
-      this.sales = sales;
+    rentalService.getMonthlyPrice(data => {
+      this.data = sales;
     });
   }
 }
