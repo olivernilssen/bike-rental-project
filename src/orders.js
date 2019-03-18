@@ -41,7 +41,7 @@ class Orders extends Component {
     return (
       <Card>
         <Row>
-          <Column width={4}>
+          <Column width={5}>
             <h5>Alle bestillinger</h5>
             <Form.Input
               id="testSearch"
