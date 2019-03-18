@@ -3,6 +3,7 @@ import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
+import { bikeService } from './services/bikesService';
 import { connection } from './services/mysql_connection';
 import { basket, employeeID } from './index.js';
 
@@ -22,7 +23,7 @@ class AllBikes extends Component {
   searchBikes() {
     let searchWord = '%' + this.state.searchWord + '%';
 
-    rentalService.searchBikes(searchWord, results => {
+    bikeService.searchBikes(searchWord, results => {
       this.setState({ state: (this.state.bikes = []) });
       this.setState(state => {
         const bikes = state.bikes.concat(results);
@@ -101,7 +102,7 @@ class AllBikes extends Component {
   change() {}
 
   mounted() {
-    rentalService.getAllBikesByType(results => {
+    bikeService.getAllBikesByType(results => {
       this.setState({ bikes: results });
     });
   }
@@ -133,7 +134,7 @@ class SelectedBike extends Component {
   }
 
   mounted() {
-    rentalService.getBike(this.props.match.params.id, result => {
+    bikeService.getBike(this.props.match.params.id, result => {
       this.bike = result;
     });
   }
@@ -172,7 +173,7 @@ class BikeTypes extends Component {
   }
 
   mounted() {
-    rentalService.getDistinctBikeType(bikeTypes => {
+    bikeService.getDistinctBikeType(bikeTypes => {
       for (let i = 0; i < bikeTypes.length; i++) {
         for (let j = 0; j < bikeTypes.length; j++) {
           if (i == j) {
@@ -258,7 +259,7 @@ class AddBikes extends Component {
       return;
     } else {
       for (let i = 0; i < this.antall; i++) {
-        rentalService.addBike(this.state.curLocation, this.state.selectedBikeID, 'OK');
+        bikeService.addBike(this.state.curLocation, this.state.selectedBikeID, 'OK');
       }
     }
 
@@ -270,12 +271,12 @@ class AddBikes extends Component {
   }
 
   mounted() {
-    rentalService.getLocations(locations => {
+    bikeService.getLocations(locations => {
       this.state.curLocation = locations[0].id;
       this.locations = locations;
     });
 
-    rentalService.getAllBikesTypes(bikeTypes => {
+    bikeService.getAllBikesTypes(bikeTypes => {
       this.selectedBike = bikeTypes[0].id;
       this.bikeTypes = bikeTypes;
     });
@@ -360,7 +361,7 @@ class BikeTypeDetails extends Component {
     this.state.bikes = [];
     this.state.bikeTypeDetails = [];
 
-    rentalService.getBikeTypes(bikeType => {
+    bikeService.getBikeTypes(bikeType => {
       this.bikeType = bikeType;
     });
 
@@ -471,7 +472,7 @@ class NewBikeType extends Component {
   }
 
   add() {
-    rentalService.newBikeType(
+    bikeService.newBikeType(
       this.typeName,
       this.brand,
       this.model,
@@ -514,7 +515,7 @@ class BikeStatus extends Component {
   }
 
   mounted() {
-    rentalService.getBikeStatus(bikeStatus => {
+    bikeService.getBikeStatus(bikeStatus => {
       this.bikeStatus = bikeStatus;
     });
   }
@@ -553,11 +554,11 @@ class BikesByStatus extends Component {
   }
 
   mounted() {
-    rentalService.getBikeStatus(bikeStatus => {
+    bikeService.getBikeStatus(bikeStatus => {
       this.bikeStatus = bikeStatus;
     });
 
-    rentalService.getBikesByStatus(this.props.match.params.bikeStatus, bikes => {
+    bikeService.getBikesByStatus(this.props.match.params.bikeStatus, bikes => {
       this.bikes = bikes;
     });
   }
@@ -687,7 +688,7 @@ class BikesOnLocation extends Component {
       this.bikeLocations = locations;
     });
 
-    bikeService.getBikesOnLocations(this.props.match.params.id, bikes => {
+    bikeService.getBikesOnLocation(this.props.match.params.id, bikes => {
       this.bikes = bikes;
     });
   }
