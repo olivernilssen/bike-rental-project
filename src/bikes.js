@@ -271,12 +271,12 @@ class AddBikes extends Component {
   }
 
   mounted() {
-    bikeService.getLocations(locations => {
+    rentalService.getLocations(locations => {
       this.state.curLocation = locations[0].id;
       this.locations = locations;
     });
 
-    bikeService.getAllBikesTypes(bikeTypes => {
+    bikeService.getAllBikesByType(bikeTypes => {
       this.selectedBike = bikeTypes[0].id;
       this.bikeTypes = bikeTypes;
     });
@@ -601,20 +601,26 @@ class AddLocation extends Component {
 
   render() {
     return (
-      <div>
-        <h1 className="display-4">Lokasjoner</h1>
-        <br />
-        <Tab>
-          {this.area.map(area => (
-            <Tab.Item key={area.id} to={'/locations/add' + area.id}>
-              {area.name}
-            </Tab.Item>
-          ))}
-          <Column right>
-            {this.locations.map((area = <Tab.Item key={location.id} to={'/locations/add' + location.id} />))}
-          </Column>
-        </Tab>
-      </div>
+      <Card>
+        <div>
+          <h1 className="display-4">Lokasjoner</h1>
+          <br />
+          <Tab>
+            {this.area.map(area => (
+              <Tab.Item key={area.id} to={'/locations/add' + area.id}>
+                {area.name}
+              </Tab.Item>
+            ))}
+            <Column right>
+              {this.locations.map(area => (
+                <Tab.Item key={location.id} to={'/locations/add' + location.id}>
+                  {location.name}
+                </Tab.Item>
+              ))}
+            </Column>
+          </Tab>
+        </div>
+      </Card>
     );
   }
 
