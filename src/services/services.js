@@ -61,7 +61,7 @@ class RentalService {
   }
 
   getMonthlyPrice(success) {
-    connection.query('select sum(price) from Orders', (error, results) => {
+    connection.query('select sum(price) as sumPrice, month(dateOrdered) as month from Orders group by month(dateOrdered)', (error, results) => {
       if (error) return console.error(error);
       success(results);
     });
