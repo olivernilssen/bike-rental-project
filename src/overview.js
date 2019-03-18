@@ -6,7 +6,20 @@ import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 
 class Chart extends Component {
-  months = ["Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember"];
+  months = [
+    'Januar',
+    'Februar',
+    'Mars',
+    'April',
+    'Mai',
+    'Juni',
+    'Juli',
+    'August',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  ];
   newData = null;
   newLabel = null;
 
@@ -24,11 +37,9 @@ class Chart extends Component {
           ]
         }
       ]
-    }
+    };
 
-    
-
-    if(!this.newData || !this.newLabel) return null;
+    if (!this.newData || !this.newLabel) return null;
 
     return (
       <div>
@@ -36,11 +47,25 @@ class Chart extends Component {
         <div className="chart">
           <Bar
             data={chartData}
-            height={350}
+            height={50}
             width={150}
-            options={{
-              maintainAspectRatio: false
-            }}
+            options={
+              ({
+                maintainAspectRatio: false
+              },
+              {
+                scales: {
+                  yAxes: [
+                    {
+                      ticks: {
+                        beginAtZero: true,
+                        stepSize: 200
+                      }
+                    }
+                  ]
+                }
+              })
+            }
           />
         </div>
       </div>
@@ -55,10 +80,10 @@ class Chart extends Component {
     this.newData = [];
     this.newLabel = [];
 
-    rentalService.getMonthlyPrice(newdata => { 
-      for(let i = 0; i < newdata.length; i++){
-        tempData.push(newdata[i].sumPrice)
-        tempLabel.push(this.months[newdata[i].month - 1])
+    rentalService.getMonthlyPrice(newdata => {
+      for (let i = 0; i < newdata.length; i++) {
+        tempData.push(newdata[i].sumPrice);
+        tempLabel.push(this.months[newdata[i].month - 1]);
       }
 
       this.newData = tempData;
@@ -69,14 +94,14 @@ class Chart extends Component {
   mounted() {
     let tempData = [];
     let tempLabel = [];
-    
+
     this.newData = [];
     this.newLabel = [];
 
-    rentalService.getMonthlyPrice(newdata => { 
-      for(let i = 0; i < newdata.length; i++){
-        tempData.push(newdata[i].sumPrice)
-        tempLabel.push(this.months[newdata[i].month - 1 ])
+    rentalService.getMonthlyPrice(newdata => {
+      for (let i = 0; i < newdata.length; i++) {
+        tempData.push(newdata[i].sumPrice);
+        tempLabel.push(this.months[newdata[i].month - 1]);
       }
 
       this.newData = tempData;
