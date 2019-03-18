@@ -9,7 +9,6 @@ import { basket, employeeID } from './index.js';
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
-
 class AllBikes extends Component {
   state = {
     bikes: [],
@@ -69,7 +68,7 @@ class AllBikes extends Component {
                   <Table.Th>Timespris</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Status</Table.Th>
-                  <Table.Th></Table.Th>
+                  <Table.Th />
                 </Table.Thead>
                 <Table.Tbody>
                   {this.state.bikes.map(bike => (
@@ -83,7 +82,11 @@ class AllBikes extends Component {
                       <Table.Td>{bike.price}</Table.Td>
                       <Table.Td>{bike.name}</Table.Td>
                       <Table.Td>{bike.bikeStatus}</Table.Td>
-                      <Table.Td><NavLink to={'/selectedBike/' + bike.id}><Button.Success>Endre</Button.Success></NavLink></Table.Td>
+                      <Table.Td>
+                        <NavLink to={'/selectedBike/' + bike.id}>
+                          <Button.Success>Endre</Button.Success>
+                        </NavLink>
+                      </Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>
@@ -95,13 +98,11 @@ class AllBikes extends Component {
     );
   }
 
-  change() {
-
-  }
+  change() {}
 
   mounted() {
     rentalService.getAllBikesByType(results => {
-      this.setState({bikes: results});
+      this.setState({ bikes: results });
     });
   }
 }
@@ -109,8 +110,8 @@ class AllBikes extends Component {
 class selectedBike extends Component {
   bike = null;
   state = {
-    statusOnBike: ["OK", "Til Reperasjon", "Trenger Reperasjon", "Trenger Service", "Stjålet", "Utleid"]
-  }
+    statusOnBike: ['OK', 'Til Reperasjon', 'Trenger Reperasjon', 'Trenger Service', 'Stjålet', 'Utleid']
+  };
 
   render() {
     return (
@@ -118,22 +119,20 @@ class selectedBike extends Component {
         <H1>Sykkel med ID: {this.props.match.params.id}</H1>
         <br />
 
+        <Row>
+          <Column>
+            <Button.Success onClick={this.change}>Endre</Button.Success>
+          </Column>
 
-
-          <Row>
-            <Column>
-              <Button.Success onClick={this.change}>Endre</Button.Success>
-            </Column>
-
-            <Column right>
-              <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-            </Column>
-          </Row>
+          <Column right>
+            <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+          </Column>
+        </Row>
       </div>
     );
   }
 
-  mounted () {
+  mounted() {
     rentalService.getBike(this.props.match.params.id, result => {
       this.bike = result;
     });
@@ -192,21 +191,23 @@ class AddBikes extends Component {
   antall = 0;
   bikeTypes = [];
   locations = [];
-  typeSykkel = "";
+  typeSykkel = '';
   state = {
     selectedBikeID: 1,
     curLocation: ''
-  }
+  };
 
-  onChangeType(event){
+  onChangeType(event) {
     const selectedIndex = event.target.options.selectedIndex;
-    this.setState({state: (this.state.selectedBikeID = event.target.options[selectedIndex].getAttribute('data-key'))});
+    this.setState({
+      state: (this.state.selectedBikeID = event.target.options[selectedIndex].getAttribute('data-key'))
+    });
     console.log(this.state.selectedBikeID);
   }
 
-  onChangeLocation (event) {
+  onChangeLocation(event) {
     const selectedIndex = event.target.options.selectedIndex;
-    this.setState({state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key'))});
+    this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
     console.log(this.state.curLocation);
   }
 
@@ -219,7 +220,6 @@ class AddBikes extends Component {
             <Column>
               <Form.Label>Antall:</Form.Label>
               <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
-
               <Form.Label>Type:</Form.Label>
               <select onChange={this.onChangeType}>
                 {this.bikeTypes.map(bikeType => (
@@ -228,11 +228,10 @@ class AddBikes extends Component {
                   </option>
                 ))}
               </select>
-
               <Form.Label>Lokasjon: </Form.Label>
               <select onChange={this.onChangeLocation}>
                 {this.locations.map(lokasjon => (
-                  <option key={lokasjon.id} data-key={lokasjon.id} >
+                  <option key={lokasjon.id} data-key={lokasjon.id}>
                     {lokasjon.name}
                   </option>
                 ))}
@@ -254,14 +253,12 @@ class AddBikes extends Component {
     );
   }
 
-
   add() {
-    if(this.antall <= 0){
+    if (this.antall <= 0) {
       return;
-    }
-    else{
-      for(let i = 0; i < this.antall; i++){
-        rentalService.addBike(this.state.curLocation, this.state.selectedBikeID, "OK");
+    } else {
+      for (let i = 0; i < this.antall; i++) {
+        rentalService.addBike(this.state.curLocation, this.state.selectedBikeID, 'OK');
       }
     }
 
@@ -276,12 +273,12 @@ class AddBikes extends Component {
     rentalService.getLocations(locations => {
       this.state.curLocation = locations[0].id;
       this.locations = locations;
-    })
+    });
 
     rentalService.getAllBikesTypes(bikeTypes => {
       this.selectedBike = bikeTypes[0].id;
       this.bikeTypes = bikeTypes;
-    })
+    });
   }
 }
 
@@ -613,10 +610,7 @@ class AddLocation extends Component {
             </Tab.Item>
           ))}
           <Column right>
-          {this.locations.map(area = (
-            <Tab.Item key={location.id} to={'/locations/add' + location.id}>
-            </Tab.Item>
-          ))}
+            {this.locations.map((area = <Tab.Item key={location.id} to={'/locations/add' + location.id} />))}
           </Column>
         </Tab>
       </div>
@@ -632,7 +626,6 @@ class AddLocation extends Component {
       this.area = area;
     });
   }
-}
 }
 
 class BikesOnLocation extends Component {
