@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services';
-import { connection } from './mysql_connection';
+import { rentalService } from './services/services';
+import { connection } from './services/mysql_connection';
 import { basket, employeeID } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
