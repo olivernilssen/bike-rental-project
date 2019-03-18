@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services/services';
+import { rentalService } from './services';
 import {
   BikeTypes,
   BikeTypeDetails,
@@ -13,7 +13,8 @@ import {
   BikesOnLocation,
   AllBikes,
   AddBikes,
-  SelectedBike
+  SelectedBike,
+  AddLocation
 } from './bikes.js';
 
 import { UserInfo, EditUserInfo, MineSalg, Bestilling } from './minSide';
@@ -229,7 +230,7 @@ ReactDOM.render(
       <Route exact path="/bikeTypes/add/" component={NewBikeType} />
       <Route exact path="/bikeTypes/:typeName/" component={BikeTypeDetails} />
       <Route exact path="/addBikes/" component={AddBikes} />
-      <Route exact path="/selectedBike/:id" component={SelectedBike} />
+      <Route exact path="/selectedBike/:id" component={selectedBike} />
 
       <Route path="/bikeStatus/" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
@@ -239,7 +240,7 @@ ReactDOM.render(
 
       <Route path="/locations/" component={LocationList} />
       <Route exact path="/locations/:id" component={BikesOnLocation} />
-      <Route exact path="/locations/add" component={NewLocation} />
+      <Route exact path="/location/add" component={AddLocation} />
 
       <Route exact path="/basket/" component={Basket} />
 

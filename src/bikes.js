@@ -107,7 +107,7 @@ class AllBikes extends Component {
   }
 }
 
-class selectedBike extends Component {
+class SelectedBike extends Component {
   bike = null;
   state = {
     statusOnBike: ['OK', 'Til Reperasjon', 'Trenger Reperasjon', 'Trenger Service', 'Stjålet', 'Utleid']
@@ -703,5 +703,6 @@ module.exports = {
   BikesOnLocation,
   NewBikeType,
   AddBikes,
-  selectedBike
+  SelectedBike,
+  AddLocation
 };
