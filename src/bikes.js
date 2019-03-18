@@ -2,13 +2,12 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services';
-import { connection } from './mysql_connection';
+import { bikeService } from './services/bikesService';
+import { connection } from './services/mysql_connection';
 import { basket, employeeID } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
-
 
 class AllBikes extends Component {
   state = {
@@ -23,7 +22,7 @@ class AllBikes extends Component {
   searchBikes() {
     let searchWord = '%' + this.state.searchWord + '%';
 
-    rentalService.searchBikes(searchWord, results => {
+    bikeService.searchBikes(searchWord, results => {
       this.setState({ state: (this.state.bikes = []) });
       this.setState(state => {
         const bikes = state.bikes.concat(results);
@@ -69,7 +68,7 @@ class AllBikes extends Component {
                   <Table.Th>Timespris</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Status</Table.Th>
-                  <Table.Th></Table.Th>
+                  <Table.Th />
                 </Table.Thead>
                 <Table.Tbody>
                   {this.state.bikes.map(bike => (
@@ -83,7 +82,11 @@ class AllBikes extends Component {
                       <Table.Td>{bike.price}</Table.Td>
                       <Table.Td>{bike.name}</Table.Td>
                       <Table.Td>{bike.bikeStatus}</Table.Td>
-                      <Table.Td><NavLink to={'/selectedBike/' + bike.id}><Button.Success>Endre</Button.Success></NavLink></Table.Td>
+                      <Table.Td>
+                        <NavLink to={'/selectedBike/' + bike.id}>
+                          <Button.Success>Endre</Button.Success>
+                        </NavLink>
+                      </Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>
@@ -95,22 +98,20 @@ class AllBikes extends Component {
     );
   }
 
-  change() {
-
-  }
+  change() {}
 
   mounted() {
-    rentalService.getAllBikesByType(results => {
-      this.setState({bikes: results});
+    bikeService.getAllBikesByType(results => {
+      this.setState({ bikes: results });
     });
   }
 }
 
-class selectedBike extends Component {
+class SelectedBike extends Component {
   bike = null;
   state = {
-    statusOnBike: ["OK", "Til Reperasjon", "Trenger Reperasjon", "Trenger Service", "Stjålet", "Utleid"]
-  }
+    statusOnBike: ['OK', 'Til Reperasjon', 'Trenger Reperasjon', 'Trenger Service', 'Stjålet', 'Utleid']
+  };
 
   render() {
     return (
@@ -118,23 +119,21 @@ class selectedBike extends Component {
         <H1>Sykkel med ID: {this.props.match.params.id}</H1>
         <br />
 
+        <Row>
+          <Column>
+            <Button.Success onClick={this.change}>Endre</Button.Success>
+          </Column>
 
-        
-          <Row>
-            <Column>
-              <Button.Success onClick={this.change}>Endre</Button.Success>
-            </Column>
-
-            <Column right>
-              <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-            </Column>
-          </Row>
+          <Column right>
+            <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+          </Column>
+        </Row>
       </div>
     );
   }
 
-  mounted () {
-    rentalService.getBike(this.props.match.params.id, result => {
+  mounted() {
+    bikeService.getBike(this.props.match.params.id, result => {
       this.bike = result;
     });
   }
@@ -173,7 +172,7 @@ class BikeTypes extends Component {
   }
 
   mounted() {
-    rentalService.getDistinctBikeType(bikeTypes => {
+    bikeService.getDistinctBikeType(bikeTypes => {
       for (let i = 0; i < bikeTypes.length; i++) {
         for (let j = 0; j < bikeTypes.length; j++) {
           if (i == j) {
@@ -192,21 +191,23 @@ class AddBikes extends Component {
   antall = 0;
   bikeTypes = [];
   locations = [];
-  typeSykkel = "";
+  typeSykkel = '';
   state = {
     selectedBikeID: 1,
     curLocation: ''
-  }
-  
-  onChangeType(event){
+  };
+
+  onChangeType(event) {
     const selectedIndex = event.target.options.selectedIndex;
-    this.setState({state: (this.state.selectedBikeID = event.target.options[selectedIndex].getAttribute('data-key'))});
+    this.setState({
+      state: (this.state.selectedBikeID = event.target.options[selectedIndex].getAttribute('data-key'))
+    });
     console.log(this.state.selectedBikeID);
   }
 
-  onChangeLocation (event) {
+  onChangeLocation(event) {
     const selectedIndex = event.target.options.selectedIndex;
-    this.setState({state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key'))});
+    this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
     console.log(this.state.curLocation);
   }
 
@@ -219,7 +220,6 @@ class AddBikes extends Component {
             <Column>
               <Form.Label>Antall:</Form.Label>
               <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
-      
               <Form.Label>Type:</Form.Label>
               <select onChange={this.onChangeType}>
                 {this.bikeTypes.map(bikeType => (
@@ -228,11 +228,10 @@ class AddBikes extends Component {
                   </option>
                 ))}
               </select>
-
               <Form.Label>Lokasjon: </Form.Label>
               <select onChange={this.onChangeLocation}>
                 {this.locations.map(lokasjon => (
-                  <option key={lokasjon.id} data-key={lokasjon.id} >
+                  <option key={lokasjon.id} data-key={lokasjon.id}>
                     {lokasjon.name}
                   </option>
                 ))}
@@ -254,14 +253,12 @@ class AddBikes extends Component {
     );
   }
 
-
   add() {
-    if(this.antall <= 0){
+    if (this.antall <= 0) {
       return;
-    }
-    else{
-      for(let i = 0; i < this.antall; i++){
-        rentalService.addBike(this.state.curLocation, this.state.selectedBikeID, "OK");
+    } else {
+      for (let i = 0; i < this.antall; i++) {
+        bikeService.addBike(this.state.curLocation, this.state.selectedBikeID, 'OK');
       }
     }
 
@@ -276,12 +273,12 @@ class AddBikes extends Component {
     rentalService.getLocations(locations => {
       this.state.curLocation = locations[0].id;
       this.locations = locations;
-    })
-    
-    rentalService.getAllBikesTypes(bikeTypes => {
+    });
+
+    bikeService.getAllBikesTypes(bikeTypes => {
       this.selectedBike = bikeTypes[0].id;
       this.bikeTypes = bikeTypes;
-    })
+    });
   }
 }
 
@@ -363,7 +360,7 @@ class BikeTypeDetails extends Component {
     this.state.bikes = [];
     this.state.bikeTypeDetails = [];
 
-    rentalService.getBikeTypes(bikeType => {
+    bikeService.getBikeTypes(bikeType => {
       this.bikeType = bikeType;
     });
 
@@ -474,7 +471,7 @@ class NewBikeType extends Component {
   }
 
   add() {
-    rentalService.newBikeType(
+    bikeService.newBikeType(
       this.typeName,
       this.brand,
       this.model,
@@ -517,7 +514,7 @@ class BikeStatus extends Component {
   }
 
   mounted() {
-    rentalService.getBikeStatus(bikeStatus => {
+    bikeService.getBikeStatus(bikeStatus => {
       this.bikeStatus = bikeStatus;
     });
   }
@@ -556,11 +553,11 @@ class BikesByStatus extends Component {
   }
 
   mounted() {
-    rentalService.getBikeStatus(bikeStatus => {
+    bikeService.getBikeStatus(bikeStatus => {
       this.bikeStatus = bikeStatus;
     });
 
-    rentalService.getBikesByStatus(this.props.match.params.bikeStatus, bikes => {
+    bikeService.getBikesByStatus(this.props.match.params.bikeStatus, bikes => {
       this.bikes = bikes;
     });
   }
@@ -656,7 +653,7 @@ class BikesOnLocation extends Component {
       this.bikeLocations = locations;
     });
 
-    rentalService.getBikesOnLocation(this.props.match.params.id, bikes => {
+    bikeService.getBikesOnLocation(this.props.match.params.id, bikes => {
       this.bikes = bikes;
     });
   }
@@ -671,6 +668,6 @@ module.exports = {
   LocationList,
   BikesOnLocation,
   NewBikeType,
-  AddBikes, 
-  selectedBike
+  AddBikes,
+  SelectedBike
 };
