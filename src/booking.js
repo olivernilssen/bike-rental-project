@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services';
+import { rentalService } from './services/services';
 import { basket } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
@@ -36,7 +36,6 @@ class Booking extends Component {
     display: 'block',
     clear: 'both'
   };
-
 
   handleCheckChange() {
     if (this.dayRent == false) {

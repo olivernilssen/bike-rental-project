@@ -2,13 +2,12 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services';
-import { connection } from './mysql_connection';
+import { rentalService } from './services/services';
+import { orderService } from './services/ordersService';
 import { basket, employeeID } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
-
 
 class UserInfo extends Component {
   fornavn = '';
@@ -36,7 +35,7 @@ class UserInfo extends Component {
 
           <Row>
             <Column width={5}>
-             <b>Epost:</b> {this.email}
+              <b>Epost:</b> {this.email}
             </Column>
 
             <Column width={5}>
@@ -61,7 +60,7 @@ class UserInfo extends Component {
           </Row>
 
           <br />
-          <Button.Success type="button" onClick={ () => history.push("/EditUserInfo")}>
+          <Button.Success type="button" onClick={() => history.push('/EditUserInfo')}>
             Endre informasjon
           </Button.Success>
         </Card>
@@ -83,7 +82,6 @@ class UserInfo extends Component {
     });
   }
 }
-
 
 class EditUserInfo extends Component {
   fornavn = '';
@@ -160,7 +158,7 @@ class EditUserInfo extends Component {
             Oppdatere informasjon
           </Button.Success>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <Button.Danger type="button" onClick={ () => history.push("/information")}>
+          <Button.Danger type="button" onClick={() => history.push('/information')}>
             Gå tilbake
           </Button.Danger>
         </Card>
@@ -206,33 +204,41 @@ class MineSalg extends Component {
     return (
       <div>
         <Card title="Mine salg">
-        Dette er en liste over dine salg
-        <br /><br />
-            <Row>
-              <Column>
-                <Table>
-                  <Table.Thead>
+          Dette er en liste over dine salg
+          <br />
+          <br />
+          <Row>
+            <Column>
+              <Table>
+                <Table.Thead>
                   <Table.Th>ID</Table.Th>
-                    <Table.Th>Kunde</Table.Th>
-                    <Table.Th>Type</Table.Th>
-                    <Table.Th>Bestillingsdato</Table.Th>
-                    <Table.Th>Start for utleie</Table.Th>
-                    <Table.Th>Slutt for utleie</Table.Th>
-                    <Table.Th>Pris</Table.Th>
-                    <Table.Th></Table.Th>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {this.sales.map(sale => (
-                    <Table.Tr key ={sale.id}>
+                  <Table.Th>Kunde</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Bestillingsdato</Table.Th>
+                  <Table.Th>Start for utleie</Table.Th>
+                  <Table.Th>Slutt for utleie</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                  <Table.Th />
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.sales.map(sale => (
+                    <Table.Tr key={sale.id}>
                       <Table.Td>{sale.id}</Table.Td>
-                      <Table.Td>{sale.firstName} {sale.lastName}</Table.Td>
+                      <Table.Td>
+                        {sale.firstName} {sale.lastName}
+                      </Table.Td>
                       <Table.Td>{sale.typeName}</Table.Td>
                       <Table.Td>{sale.dateOrdered.toString().substring(4, 24)}</Table.Td>
                       <Table.Td>{sale.fromDateTime.toString().substring(4, 24)}</Table.Td>
                       <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
                       <Table.Td>{sale.price} kr</Table.Td>
-                      <Table.Td><Button.Success type="button"  onClick={ () => history.push("/MineSalg/" + sale.id + "/edit")} >Se bestilling</Button.Success></Table.Td>
-                    </Table.Tr>))}
+                      <Table.Td>
+                        <Button.Success type="button" onClick={() => history.push('/MineSalg/' + sale.id + '/edit')}>
+                          Se bestilling
+                        </Button.Success>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
                 </Table.Tbody>
               </Table>
             </Column>
@@ -253,100 +259,97 @@ class Bestilling extends Component {
   bikes = [];
   equipments = [];
   sales = [];
-  orderDate = "";
+  orderDate = '';
 
   //Legge inn id og til/fra tidspunkt i kolonnene til fordel for noen av detaljene.
   render() {
     return (
       <div>
-      <Card title = "Se på bestilling">
-
-      Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}.
-      <br /> <br />
-      <Row>
-        <Column>
-          <Table>
-            <Table.Thead>
-            <Table.Th>ID</Table.Th>
-            <Table.Th>Sykkeltype</Table.Th>
-            <Table.Th>Merke</Table.Th>
-            <Table.Th>Fra:</Table.Th>
-            <Table.Th>Til:</Table.Th>
-              <Table.Th>Modell</Table.Th>
-              <Table.Th>År</Table.Th>
-              <Table.Th>Rammestr.</Table.Th>
-              <Table.Th>Hjulstr.</Table.Th>
-              <Table.Th>Gir</Table.Th>
-              <Table.Th>Bremsesystem</Table.Th>
-              <Table.Th>Vekt</Table.Th>
-              <Table.Th>Kjønn</Table.Th>
-              <Table.Th>Pris</Table.Th>
-            </Table.Thead>
-            <Table.Tbody>
-
-            {this.bikes.map(bike => (
-              <Table.Tr key ={bike.id}>
-              <Table.Td>{bike.id}</Table.Td>
-              <Table.Td>{bike.typeName}</Table.Td>
-              <Table.Td>{bike.brand}</Table.Td>
-              <Table.Td>sdfsdfsdf</Table.Td>
-              <Table.Td>sdfsdf</Table.Td>
-              <Table.Td>{bike.model}</Table.Td>
-              <Table.Td>{bike.year}</Table.Td>
-              <Table.Td>{bike.frameSize}</Table.Td>
-              <Table.Td>{bike.wheelSize}</Table.Td>
-              <Table.Td>{bike.gearSystem} ({bike.gears})</Table.Td>
-              <Table.Td>{bike.brakeSystem}</Table.Td>
-              <Table.Td>{bike.weight_kg} kg</Table.Td>
-              <Table.Td>{bike.suitedFor}</Table.Td>
-              <Table.Td>{bike.price} kr</Table.Td>
-            </Table.Tr>))}
-            </Table.Tbody>
-          </Table>
-        </Column>
-      </Row>
-
-      <Row>
-        <Column width={8}>
-          <Table>
-            <Table.Thead>
-            <Table.Th>Utstyrstype</Table.Th>
-              <Table.Th>Merke</Table.Th>
-              <Table.Th>År</Table.Th>
-              <Table.Th>Kommentar</Table.Th>
-              <Table.Th>Pris</Table.Th>
-            </Table.Thead>
-            <Table.Tbody>
-
-            {this.equipments.map(equipment => (
-              <Table.Tr key ={equipment.id}>
-              <Table.Td>{equipment.typeName}</Table.Td>
-              <Table.Td>{equipment.brand}</Table.Td>
-              <Table.Td>{equipment.year}</Table.Td>
-              <Table.Td>{equipment.comment}</Table.Td>
-              <Table.Td>{equipment.price}</Table.Td>
-            </Table.Tr>))}
-
-            </Table.Tbody>
-          </Table>
-        </Column>
-      </Row>
-
-      <Column>
-      <h4 align="right">Totalpris: {this.sales.price} kr</h4>
-      </Column>
-
-      </Card>
-          </div>
+        <Card title="Se på bestilling">
+          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}.
+          <br /> <br />
+          <Row>
+            <Column>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Sykkeltype</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Fra:</Table.Th>
+                  <Table.Th>Til:</Table.Th>
+                  <Table.Th>Modell</Table.Th>
+                  <Table.Th>År</Table.Th>
+                  <Table.Th>Rammestr.</Table.Th>
+                  <Table.Th>Hjulstr.</Table.Th>
+                  <Table.Th>Gir</Table.Th>
+                  <Table.Th>Bremsesystem</Table.Th>
+                  <Table.Th>Vekt</Table.Th>
+                  <Table.Th>Kjønn</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.bikes.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.typeName}</Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>sdfsdfsdf</Table.Td>
+                      <Table.Td>sdfsdf</Table.Td>
+                      <Table.Td>{bike.model}</Table.Td>
+                      <Table.Td>{bike.year}</Table.Td>
+                      <Table.Td>{bike.frameSize}</Table.Td>
+                      <Table.Td>{bike.wheelSize}</Table.Td>
+                      <Table.Td>
+                        {bike.gearSystem} ({bike.gears})
+                      </Table.Td>
+                      <Table.Td>{bike.brakeSystem}</Table.Td>
+                      <Table.Td>{bike.weight_kg} kg</Table.Td>
+                      <Table.Td>{bike.suitedFor}</Table.Td>
+                      <Table.Td>{bike.price} kr</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={8}>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Utstyrstype</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>År</Table.Th>
+                  <Table.Th>Kommentar</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.equipments.map(equipment => (
+                    <Table.Tr key={equipment.id}>
+                      <Table.Td>{equipment.typeName}</Table.Td>
+                      <Table.Td>{equipment.brand}</Table.Td>
+                      <Table.Td>{equipment.year}</Table.Td>
+                      <Table.Td>{equipment.comment}</Table.Td>
+                      <Table.Td>{equipment.price}</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+          <Column>
+            <h4 align="right">Totalpris: {this.sales.price} kr</h4>
+          </Column>
+        </Card>
+      </div>
     );
   }
 
   mounted() {
-    rentalService.getBikesFromOrder(this.props.match.params.id, bikes => {
+    orderService.getBikesFromOrder(this.props.match.params.id, bikes => {
       this.bikes = bikes;
     });
 
-    rentalService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
+    orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
       this.equipments = equipments;
     });
 

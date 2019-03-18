@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ButtonLight } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services';
-import { connection } from './mysql_connection';
+import { customerService } from './services/customersService';
 import { basket, employeeID } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
@@ -23,7 +22,7 @@ class Customers extends Component {
   searchCustomer() {
     let word = '%' + this.state.searchWord + '%';
 
-    rentalService.getCustomerSearch(word, results => {
+    customerService.getCustomerSearch(word, results => {
       this.setState(state => {
         this.state.customers = [];
         const customers = state.customers.concat(results);
@@ -33,7 +32,7 @@ class Customers extends Component {
   }
 
   chooseActive(customer) {
-    rentalService.getCustomer(customer.id, result => {
+    customerService.getCustomer(customer.id, result => {
       // console.log("chooseActive()")
       this.setState({ state: (this.state.activeCustomer = result) });
     });
@@ -63,7 +62,8 @@ class Customers extends Component {
                     key={customer.id}
                     onClick={() => {
                       this.chooseActive(customer);
-                    }}>
+                    }}
+                  >
                     <Table.Td>{customer.id}</Table.Td>
                     <Table.Td>{customer.firstName}</Table.Td>
                     <Table.Td>{customer.lastName}</Table.Td>
@@ -82,16 +82,16 @@ class Customers extends Component {
   }
 
   mounted() {
-    rentalService.getCustomerSearch('%', results => {
+    customerService.getCustomerSearch('%', results => {
       this.setState(state => {
         const customers = state.customers.concat(results);
         return { customers, results };
       });
     });
 
-    rentalService.getCustomer('1', result => {
+    customerService.getCustomer('1', result => {
       // console.log("mounting")
-      this.setState({activeCustomer: result});
+      this.setState({ activeCustomer: result });
     });
   }
 }
@@ -161,7 +161,7 @@ class SelectedCustomer extends Component {
   }
 
   mounted() {
-    rentalService.getCustomer('1', result => {
+    customerService.getCustomer('1', result => {
       // console.log("Mounting2")
       this.setState({ state: (this.state.customer = result) });
     });
@@ -178,4 +178,4 @@ class AddCustomer extends Component {
   }
 }
 
-module.exports = {Customers, AddCustomer};
+module.exports = { Customers, AddCustomer };

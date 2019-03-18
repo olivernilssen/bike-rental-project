@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services/services.js';
+import { rentalService } from './services/services';
 import {
   BikeTypes,
   BikeTypeDetails,

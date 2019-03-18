@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ButtonLight } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { rentalService } from './services';
-import { connection } from './mysql_connection';
+import { orderService } from './services/ordersService';
 import { emplyoeeID } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
@@ -23,7 +22,7 @@ class Orders extends Component {
   searchOrder() {
     let word = '%' + this.state.searchWord + '%';
 
-    rentalService.getOrderSearch(word, results => {
+    orderService.getOrderSearch(word, results => {
       this.setState(state => {
         this.state.orders = [];
         const orders = state.orders.concat(results);
@@ -33,7 +32,7 @@ class Orders extends Component {
   }
 
   chooseActive(order) {
-    rentalService.getOrder(order.id, result => {
+    orderService.getOrder(order.id, result => {
       this.setState({ state: (this.state.activeOrder = result) });
     });
   }
@@ -84,14 +83,14 @@ class Orders extends Component {
   }
 
   mounted() {
-    rentalService.getOrderSearch('%', results => {
+    orderService.getOrderSearch('%', results => {
       this.setState(state => {
         const orders = state.orders.concat(results);
         return { orders, results };
       });
     });
 
-    rentalService.getOrder('1', result => {
+    orderService.getOrder('1', result => {
       this.setState({ state: (this.state.activeOrder = result) });
     });
   }
@@ -108,11 +107,11 @@ class SelectedOrder extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({ state: (this.state.order = nextProps.activeOrder) });
 
-    rentalService.getBikesFromOrder(this.state.order.id, bikes => {
+    orderService.getBikesFromOrder(this.state.order.id, bikes => {
       this.bikes = bikes;
     });
 
-    rentalService.getEquipmentFromOrder(this.state.order.id, equipments => {
+    orderService.getEquipmentFromOrder(this.state.order.id, equipments => {
       this.equipments = equipments;
     });
   }
@@ -248,16 +247,16 @@ class SelectedOrder extends Component {
   }
 
   mounted() {
-    rentalService.getOrder('1', result => {
+    orderService.getOrder('1', result => {
       this.setState({ state: (this.state.order = result) });
       console.log(this.state.order);
     });
 
-    rentalService.getBikesFromOrder(this.state.order.id, bikes => {
+    orderService.getBikesFromOrder(this.state.order.id, bikes => {
       this.bikes = bikes;
     });
 
-    rentalService.getEquipmentFromOrder(this.state.order.id, equipments => {
+    orderService.getEquipmentFromOrder(this.state.order.id, equipments => {
       this.equipments = equipments;
     });
   }
