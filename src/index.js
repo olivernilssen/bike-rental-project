@@ -20,6 +20,7 @@ import { Customers, AddCustomer } from './customer.js';
 import { Booking } from './booking.js';
 import { Basket } from './basket.js';
 import { Overview } from './overview.js';
+import { Orders } from './orders.js';
 
 import {
   Card,
@@ -44,10 +45,11 @@ import {
   faBicycle,
   faCalendar,
   faMapMarkerAlt,
-  faUsers
+  faUsers,
+  faFile
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faCoffee, faChartPie, faShoppingCart, faBicycle, faCalendar, faMapMarkerAlt, faUsers);
+library.add(faCoffee, faChartPie, faShoppingCart, faBicycle, faCalendar, faMapMarkerAlt, faUsers, faFile);
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -71,18 +73,17 @@ class LoginMenu extends Component {
 
 /* Set state for menyen. Hva vises, alt etter hvem som er logget inn */
 class Menu extends Component {
-    state = { 
-      isLoggedIn: true, 
-      menu: false, 
-      username: "",
-      password: "",
-      userinfo: null
-    }; //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
+  state = {
+    isLoggedIn: true,
+    menu: false,
+    username: '',
+    password: '',
+    userinfo: null
+  }; //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
 
   toggleMenu() {
     this.setState({ menu: !this.state.menu });
   }
-
 
   render() {
     const isLoggedIn = this.state.isLoggedIn;
@@ -93,31 +94,31 @@ class Menu extends Component {
       return (
         <div>
           <NavBar brand="CycleOn Rentals" />
-            <CenterContent>
-              <Card header="Logg inn">
-                <form onSubmit={this.login}>
-                  <div className="input-group form-group">
-                    <Form.Input
-                      type="text"
-                      onChange={event => (this.state.username = event.target.value)}
-                      className="form-control"
-                      placeholder="Employee Username"
-                    />
-                  </div>
-                  <div className="input-group form-group">
-                    <Form.Input
-                      type="password"
-                      onChange={event => (this.state.password = event.target.value)}
-                      className="form-control"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
-                  </div>
-                </form>
-              </Card>
-            </CenterContent>
+          <CenterContent>
+            <Card header="Logg inn">
+              <form onSubmit={this.login}>
+                <div className="input-group form-group">
+                  <Form.Input
+                    type="text"
+                    onChange={event => (this.state.username = event.target.value)}
+                    className="form-control"
+                    placeholder="Employee Username"
+                  />
+                </div>
+                <div className="input-group form-group">
+                  <Form.Input
+                    type="password"
+                    onChange={event => (this.state.password = event.target.value)}
+                    className="form-control"
+                    placeholder="Password"
+                  />
+                </div>
+                <div className="form-group">
+                  <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
+                </div>
+              </form>
+            </Card>
+          </CenterContent>
         </div>
       );
     } else {
@@ -156,7 +157,10 @@ class Menu extends Component {
                     <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                   </div>
                 </div>
-
+                <SideNavBar.SideLink to="/orders/">
+                  <FontAwesomeIcon className="navIcon" icon="file" />
+                  Ordrer
+                </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/customers/">
                   <FontAwesomeIcon className="navIcon" icon="users" />
                   Kundeliste
@@ -180,23 +184,27 @@ class Menu extends Component {
 
   //DENNE TRENGES MER ARBEID MED, foreløbig virkning med ukryptert passord
   login() {
-    rentalService.getLoginInfo(this.state.username, results =>
-      {
-        this.setState({state: (this.state.userinfo = results[0])});
+    rentalService.getLoginInfo(this.state.username, results => {
+      this.setState({ state: (this.state.userinfo = results[0]) });
 
-        if (this.state.username == null || this.state.password == null || this.state.username == "" || this.state.password == "") {
-          alert('One or more fields are empty, Please try again');
-        } else if (this.state.password != this.state.userinfo.password) {
-          alert('Password is wrong, contact Admin');
-        } else if (this.state.password == this.state.userinfo.password) {
-          employeeID = this.state.userinfo.user_id;
-          this.setState({ isLoggedIn: true });
-          history.push('/overview/');
-        } else {
-          alert('log in name or password was wrong');
-        }
-      })
-      console.log(this.state.password);
+      if (
+        this.state.username == null ||
+        this.state.password == null ||
+        this.state.username == '' ||
+        this.state.password == ''
+      ) {
+        alert('One or more fields are empty, Please try again');
+      } else if (this.state.password != this.state.userinfo.password) {
+        alert('Password is wrong, contact Admin');
+      } else if (this.state.password == this.state.userinfo.password) {
+        employeeID = this.state.userinfo.user_id;
+        this.setState({ isLoggedIn: true });
+        history.push('/overview/');
+      } else {
+        alert('log in name or password was wrong');
+      }
+    });
+    console.log(this.state.password);
   }
 
   logout() {
@@ -223,7 +231,7 @@ ReactDOM.render(
 
       <Route path="/bikeStatus/" component={BikeStatus} />
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
-
+      <Route path="/orders/" component={Orders} />
       <Route path="/customers/" component={Customers} />
       <Route exact path="/customers/add" component={AddCustomer} />
 
@@ -236,7 +244,6 @@ ReactDOM.render(
       <Route exact path="/EditUserInfo" component={EditUserInfo} />
       <Route exact path="/MineSalg/" component={MineSalg} />
       <Route path="/MineSalg/:id/edit" component={Bestilling} />
-
     </div>
   </HashRouter>,
   document.getElementById('root')
