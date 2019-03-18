@@ -48,10 +48,11 @@ import {
   faCalendar,
   faMapMarkerAlt,
   faUsers,
-  faFile
+  faArchive,
+  faTools
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faCoffee, faChartPie, faShoppingCart, faBicycle, faCalendar, faMapMarkerAlt, faUsers, faFile);
+library.add(faCoffee, faChartPie, faShoppingCart, faBicycle, faCalendar, faMapMarkerAlt, faUsers, faArchive, faTools);
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -159,8 +160,12 @@ class Menu extends Component {
                     <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                   </div>
                 </div>
+                <SideNavBar.SideLink to="/">
+                  <FontAwesomeIcon className="navIcon" icon="tools" />
+                  Sykkelutstyr
+                </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/orders/">
-                  <FontAwesomeIcon className="navIcon" icon="file" />
+                  <FontAwesomeIcon className="navIcon" icon="archive" />
                   Ordrer
                 </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/customers/">
