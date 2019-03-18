@@ -13,7 +13,7 @@ class Customers extends Component {
   state = {
     customers: [],
     searchWord: '',
-    activeCustomer: 1
+    activeCustomer: null
   };
 
   onChangeHandle(event) {
@@ -63,8 +63,7 @@ class Customers extends Component {
                     key={customer.id}
                     onClick={() => {
                       this.chooseActive(customer);
-                    }}
-                  >
+                    }}>
                     <Table.Td>{customer.id}</Table.Td>
                     <Table.Td>{customer.firstName}</Table.Td>
                     <Table.Td>{customer.lastName}</Table.Td>
@@ -92,7 +91,7 @@ class Customers extends Component {
 
     rentalService.getCustomer('1', result => {
       // console.log("mounting")
-      this.setState({ state: (this.state.activeCustomer = result) });
+      this.setState({activeCustomer: result});
     });
   }
 }
@@ -103,7 +102,7 @@ class SelectedCustomer extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ state: (this.state.customer = nextProps.activeCustomer) });
+    this.setState({ customer: nextProps.activeCustomer });
   }
 
   render() {
@@ -179,4 +178,4 @@ class AddCustomer extends Component {
   }
 }
 
-module.exports = { Customers, AddCustomer };
+module.exports = {Customers, AddCustomer};

@@ -11,8 +11,6 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
 
 class AllBikes extends Component {
-  searchBikes = this.searchBikes.bind(this);
-  handleChange = this.handleChange.bind(this);
   state = {
     bikes: [],
     searchWord: ''
@@ -25,7 +23,6 @@ class AllBikes extends Component {
   searchBikes() {
     let searchWord = '%' + this.state.searchWord + '%';
 
-    // console.log('searchbikes');
     rentalService.searchBikes(searchWord, results => {
       this.setState({ state: (this.state.bikes = []) });
       this.setState(state => {
@@ -71,6 +68,8 @@ class AllBikes extends Component {
                   <Table.Th>Beregnet for</Table.Th>
                   <Table.Th>Timespris</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
+                  <Table.Th>Status</Table.Th>
+                  <Table.Th></Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
                   {this.state.bikes.map(bike => (
@@ -83,6 +82,8 @@ class AllBikes extends Component {
                       <Table.Td>{bike.suitedFor}</Table.Td>
                       <Table.Td>{bike.price}</Table.Td>
                       <Table.Td>{bike.name}</Table.Td>
+                      <Table.Td>{bike.bikeStatus}</Table.Td>
+                      <Table.Td><NavLink to={'/selectedBike/' + bike.id}><Button.Success>Endre</Button.Success></NavLink></Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>
@@ -94,16 +95,56 @@ class AllBikes extends Component {
     );
   }
 
+  change() {
+
+  }
+
   mounted() {
     rentalService.getAllBikesByType(results => {
-      this.setState(state => {
-        const bikes = state.bikes.concat(results);
-        return {
-          bikes,
-          results
-        };
-      });
+      this.setState({bikes: results});
     });
+  }
+}
+
+class selectedBike extends Component {
+  bike = null;
+  state = {
+    statusOnBike: ["OK", "Til Reperasjon", "Trenger Reperasjon", "Trenger Service", "Stjålet", "Utleid"]
+  }
+
+  render() {
+    return (
+      <div>
+        <H1>Sykkel med ID: {this.props.match.params.id}</H1>
+        <br />
+
+
+        
+          <Row>
+            <Column>
+              <Button.Success onClick={this.change}>Endre</Button.Success>
+            </Column>
+
+            <Column right>
+              <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+            </Column>
+          </Row>
+      </div>
+    );
+  }
+
+  mounted () {
+    rentalService.getBike(this.props.match.params.id, result => {
+      this.bike = result;
+    });
+  }
+
+  change() {
+    history.push('/allBikes/');
+  }
+
+  cancel() {
+    history.push('/allBikes/');
   }
 }
 
@@ -155,7 +196,6 @@ class AddBikes extends Component {
   state = {
     selectedBikeID: 1,
     curLocation: ''
-
   }
   
   onChangeType(event){
@@ -631,5 +671,6 @@ module.exports = {
   LocationList,
   BikesOnLocation,
   NewBikeType,
-  AddBikes
+  AddBikes, 
+  selectedBike
 };
