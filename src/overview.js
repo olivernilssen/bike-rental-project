@@ -51,7 +51,7 @@ class Chart extends Component {
             width={150}
             options={
               ({
-                maintainAspectRatio: true
+                maintainAspectRatio: false
               },
               {
                 scales: {
@@ -59,7 +59,7 @@ class Chart extends Component {
                     {
                       ticks: {
                         beginAtZero: true,
-                        stepSize: 200
+                        stepSize: Math.max.apply(this.newData) / 5
                       }
                     }
                   ]
