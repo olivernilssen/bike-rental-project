@@ -110,15 +110,88 @@ class AllBikes extends Component {
 
 class SelectedBike extends Component {
   bike = null;
+  bikeType = null;
+  bikeLoc = null;
+  bikeStatus = null;
+  locations = [];
+  note = null;
   state = {
-    statusOnBike: ['OK', 'Til Reperasjon', 'Trenger Reperasjon', 'Trenger Service', 'Stjålet', 'Utleid']
+    location_id: null,
+    statusOnBike: ['OK', 'Til Reperasjon', 'Trenger Reperasjon', 'Trenger Service', 'Må flyttes', 'Stjålet', 'Utleid']
   };
 
   render() {
+    if(!this.bike) return null;
+
     return (
       <div>
-        <H1>Sykkel med ID: {this.props.match.params.id}</H1>
-        <br />
+        <Card title={"Sykkel med id: " + this.props.match.params.id}>
+        <img src="../pictures/bikeImage.png" width="30%"></img>
+          <Table>
+            <Table.Thead>
+              <Table.Th>Sykkel id</Table.Th>
+              <Table.Th>Type</Table.Th>
+              <Table.Th>Lokasjon</Table.Th>
+              <Table.Th>Status</Table.Th>
+            </Table.Thead>
+            
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td>{this.props.match.params.id}</Table.Td>
+                <Table.Td>{this.bike.typeName}</Table.Td>
+                <Table.Td>
+                  <select name="locationSelect" value={this.bikeLoc} onChange={this.onChangeLocation}>
+                    {this.locations.map(loc => (
+                        <option key={loc.id}  data-key={loc.id}>
+                          {loc.name}
+                        </option>
+                      ))}
+                  </select>
+                </Table.Td>
+                <Table.Td>
+                  <select name="status" value={this.bikeStatus} onChange={event => (this.bikeStatus = event.target.value)}>
+                    {this.state.statusOnBike.map(status => (
+                      <option key={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
+                </Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+          <br/><br/>
+            <Table>
+              <Table.Thead>
+                <Table.Th>Type id:</Table.Th>
+                <Table.Th>Merke</Table.Th>
+                <Table.Th>Model</Table.Th>
+                <Table.Th>År</Table.Th>
+                <Table.Th>Ramme</Table.Th>
+                <Table.Th>Girsystem</Table.Th>
+                <Table.Th>Bremser</Table.Th>
+                <Table.Th>Vekt</Table.Th>
+                <Table.Th>For</Table.Th>
+                <Table.Th>Pris</Table.Th>
+              </Table.Thead>
+              
+              <Table.Tbody>
+                <Table.Tr>
+                  <Table.Td>{this.bike.type_id}</Table.Td>
+                  <Table.Td>{this.bike.brand}</Table.Td>
+                  <Table.Td>{this.bike.model}</Table.Td>
+                  <Table.Td>{this.bike.year}</Table.Td>
+                  <Table.Td>{this.bike.frameSize}"</Table.Td>
+                  <Table.Td>{this.bike.gearSystem}/{this.bike.gears}</Table.Td>
+                  <Table.Td>{this.bike.brakeSystem}</Table.Td>
+                  <Table.Td>{this.bike.weight_kg}kg</Table.Td>
+                  <Table.Td>{this.bike.suitedFor}</Table.Td>
+                  <Table.Td>{this.bike.price}</Table.Td>
+                </Table.Tr>
+              </Table.Tbody>
+            </Table>
+            <textarea row='200' cols='100' value={this.note} onChange={event => (this.note = event.target.value)}></textarea>
+        </Card>
 
         <Row>
           <Column>
@@ -134,12 +207,28 @@ class SelectedBike extends Component {
   }
 
   mounted() {
+    rentalService.getLocations(result => {
+      this.locations = result;
+    })
+
     bikeService.getBike(this.props.match.params.id, result => {
       this.bike = result;
+      this.bikeLoc = result.name;
+      this.bikeType = result.typeName;
+      this.bikeStatus = result.bikeStatus;
+      this.note = result.bikeNote;
     });
   }
 
+  onChangeLocation(event) {
+    const selectedIndex = event.target.options.selectedIndex;
+    this.bikeLoc = event.target.value;
+    this.setState({ state: (this.state.location_id = event.target.options[selectedIndex].getAttribute('data-key')) });
+    console.log(this.state.location_id);
+  }
+
   change() {
+    bikeService.updateBikes(this.props.match.params.id, this.bikeStatus, this.state.location_id, this.note);
     history.push('/allBikes/');
   }
 

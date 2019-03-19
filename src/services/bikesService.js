@@ -26,6 +26,14 @@ class BikeService {
     });
   }
 
+  updateBikes (id, status, locID, note, success) {
+    connection.query('update Bikes set location_id = ?, bikeStatus = ?, bikeNote = ? where id = ?', [locID, status, note, id], 
+    (error) => {
+      if(error) return console.error(error);
+      success()
+    })
+  }
+
   addBike(locId, typeId, bikeStatus) {
     connection.query(
       'insert into Bikes (id, location_id, type_id, bikeStatus) value (null, ?, ?, ?)',
@@ -38,7 +46,7 @@ class BikeService {
   }
   getAllBikesByType(success) {
     connection.query(
-      'select b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id',
+      'select b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.suitedFor, bt.price, l.name, b.bikeStatus from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id',
       (error, results) => {
         if (error) console.error(error);
 
@@ -95,7 +103,7 @@ class BikeService {
 
   getBike(id, success) {
     connection.query(
-      'select * from BikeType bt, Bikes b where b.type_id = bt.id and b.id = ?',
+      'select * from BikeType bt, Bikes b, Locations l where l.id = b.location_id and b.type_id = bt.id and b.id = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
