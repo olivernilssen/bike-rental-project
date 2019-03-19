@@ -47,11 +47,11 @@ class Chart extends Component {
         <div className="chart">
           <Bar
             data={chartData}
-            height={50}
+            height={30}
             width={150}
             options={
               ({
-                maintainAspectRatio: false
+                maintainAspectRatio: true
               },
               {
                 scales: {
@@ -113,7 +113,7 @@ class Chart extends Component {
 class Overview extends Component {
   render() {
     return (
-      <div>
+      <div id="salg">
         <Card title="Oversikt">
           <Chart />
         </Card>

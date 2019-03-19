@@ -36,6 +36,11 @@ body {
  * Sidebar
  */
 
+#salg {
+  height: 1200px;
+  width: 800px;
+}
+
 .sidebar {
   position: fixed;
   top: 0;
