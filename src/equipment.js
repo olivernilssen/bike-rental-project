@@ -202,65 +202,68 @@ class AddEquipment extends Component {
     return (
       <div>
         <Card>
-          <h5>Legg inn nytt sykkelutstyr</h5>
-          <br />
           <div className="container">
-            <Row>
-              <Column width={3}>
-                <Row>
-                  <Form.Label>Utstyrstype:</Form.Label>
-                </Row>
-                <Row>
-                  <select onChange={this.onChangeType}>
-                    {this.equipmentTypes.map(type => (
-                      <option key={type.id} data-key={type.id}>
-                        {type.typeName} {type.brand} {type.year} {type.comment}
-                      </option>
-                    ))}
-                  </select>
-                </Row>
-              </Column>
-              <Column widht={3}>
-                <Row>
-                  <Form.Label>Lokasjon: </Form.Label>
-                </Row>
-                <Row>
-                  <select onChange={this.onChangeLocation}>
-                    {this.locations.map(lokasjon => (
-                      <option key={lokasjon.id} data-key={lokasjon.id}>
-                        {lokasjon.name}
-                      </option>
-                    ))}
-                  </select>
-                </Row>
-              </Column>
-            </Row>
+            <h5>Legg inn nytt sykkelutstyr</h5>
             <br />
-            <Row>
-              <Column width={3}>
-                <Row>
-                  <Form.Label>Antall:</Form.Label>
-                </Row>
-                <Row>
-                  <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
-                </Row>
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column>
-                <Button.Success onClick={this.add}>Add</Button.Success>
-              </Column>
-              <Column right>
-                <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-              </Column>
-            </Row>
+            <div className="container">
+              <Row>
+                <Column width={3}>
+                  <Row>
+                    <Form.Label>Utstyrstype:</Form.Label>
+                  </Row>
+                  <Row>
+                    <select onChange={this.onChangeType}>
+                      {this.equipmentTypes.map(type => (
+                        <option key={type.id} data-key={type.id}>
+                          {type.typeName} {type.brand} {type.year} {type.comment}
+                        </option>
+                      ))}
+                    </select>
+                  </Row>
+                </Column>
+                <Column widht={3}>
+                  <Row>
+                    <Form.Label>Lokasjon: </Form.Label>
+                  </Row>
+                  <Row>
+                    <select onChange={this.onChangeLocation}>
+                      {this.locations.map(lokasjon => (
+                        <option key={lokasjon.id} data-key={lokasjon.id}>
+                          {lokasjon.name}
+                        </option>
+                      ))}
+                    </select>
+                  </Row>
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column width={3}>
+                  <Row>
+                    <Form.Label>Antall:</Form.Label>
+                  </Row>
+                  <Row>
+                    <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
+                  </Row>
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <Button.Success onClick={this.add}>Add</Button.Success>
+                </Column>
+                <Column right>
+                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                </Column>
+              </Row>
+            </div>
           </div>
         </Card>
         <br />
-        <Card>
-          <h5>Legg til ny utstyrstype</h5>
-        </Card>
+        <div>
+          <NewEquipmentType />
+        </div>
+        <br />
       </div>
     );
   }
@@ -294,163 +297,60 @@ class AddEquipment extends Component {
   }
 }
 
-// class NewBikeType extends Component {
-//   typeName = '';
-//   brand = '';
-//   model = '';
-//   year = 0;
-//   frameSize = 0;
-//   wheelSize = 0;
-//   gears = 0;
-//   gearSystem = '';
-//   brakeSystem = '';
-//   weight_kg = 0;
-//   suitedFor = '';
-//   price = 0;
-//
-//   render() {
-//     return (
-//       <Card>
-//         <div className="container">
-//           <h5>Ny sykkeltype</h5>
-//           <Row>
-//             <Column>
-//               <Form.Label>Type:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
-//               <Form.Label>Merke:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
-//               <Form.Label>Modell:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.model = event.target.value)} />
-//               <Form.Label>Årsmodell:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
-//               <Form.Label>Rammestørrelse:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
-//               <Form.Label>Hjulstørrelse:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
-//               <Form.Label>Antall gir:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.gears = event.target.value)} />
-//             </Column>
-//             <Column>
-//               <Form.Label>Girsystem:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
-//               <Form.Label>Bremsesystem:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
-//               <Form.Label>Vekt:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.weight_kg = event.target.value)} />
-//               <Form.Label>Beregnet for:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
-//               <Form.Label>Pris:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
-//               <br />
-//               <br />
-//               <Row>
-//                 <Column>
-//                   <Button.Success onClick={this.add}>Add</Button.Success>
-//                 </Column>
-//                 <Column right>
-//                   <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-//                 </Column>
-//               </Row>
-//             </Column>
-//             <br />
-//           </Row>
-//         </div>
-//       </Card>
-//     );
-//   }
-//
-//   add() {
-//     bikeService.newBikeType(
-//       this.typeName,
-//       this.brand,
-//       this.model,
-//       this.year,
-//       this.frameSize,
-//       this.wheelSize,
-//       this.gears,
-//       this.gearSystem,
-//       this.brakeSystem,
-//       this.weight_kg,
-//       this.suitedFor,
-//       this.price
-//     );
-//
-//     history.push('/bikeTypes/');
-//   }
-//
-//   cancel() {
-//     history.push('/bikeTypes/' + this.props.match.params.typeName);
-//   }
-// }
+class NewEquipmentType extends Component {
+  typeName = '';
+  brand = '';
+  year = 0;
+  comment = '';
+  price = 0;
 
-// class BikeStatus extends Component {
-//   bikeStatus = [];
-//
-//   render() {
-//     return (
-//       <div>
-//         <H1>Sykler etter status</H1>
-//         <br />
-//         <Tab>
-//           {this.bikeStatus.map(status => (
-//             <Tab.Item key={status.bikeStatus} to={'/bikeStatus/' + status.bikeStatus}>
-//               {status.bikeStatus}
-//             </Tab.Item>
-//           ))}
-//         </Tab>
-//       </div>
-//     );
-//   }
-//
-//   mounted() {
-//     bikeService.getBikeStatus(bikeStatus => {
-//       this.bikeStatus = bikeStatus;
-//     });
-//   }
-// }
-//
-// class BikesByStatus extends Component {
-//   bikeStatus = null;
-//   bikes = [];
-//
-//   render() {
-//     if (!this.bikeStatus) return null;
-//
-//     return (
-//       <div>
-//         <Card>
-//           <h6>Sykler med denne statusen:</h6>
-//           <Table>
-//             <Table.Thead>
-//               <Table.Th>ID</Table.Th>
-//               <Table.Th>Lokasjon</Table.Th>
-//               <Table.Th>Sykkeltype</Table.Th>
-//             </Table.Thead>
-//             <Table.Tbody>
-//               {this.bikes.map(bike => (
-//                 <Table.Tr key={bike.id}>
-//                   <Table.Td>{bike.id}</Table.Td>
-//                   <Table.Td>{bike.name}</Table.Td>
-//                   <Table.Td>{bike.typeName}</Table.Td>
-//                 </Table.Tr>
-//               ))}
-//             </Table.Tbody>
-//           </Table>
-//         </Card>
-//       </div>
-//     );
-//   }
-//
-//   mounted() {
-//     bikeService.getBikeStatus(bikeStatus => {
-//       this.bikeStatus = bikeStatus;
-//     });
-//
-//     bikeService.getBikesByStatus(this.props.match.params.bikeStatus, bikes => {
-//       this.bikes = bikes;
-//     });
-//   }
-// }
+  render() {
+    return (
+      <Card>
+        <div className="container">
+          <h5>Ny utstyrstype</h5>
+          <Row>
+            <Column>
+              <Form.Label>Type:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
+              <Form.Label>Merke:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
+              <Form.Label>Årsmodell:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
+            </Column>
+            <Column>
+              <Form.Label>Størrelse:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.comment = event.target.value)} />
+              <Form.Label>Pris:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
+              <br />
+              <br />
+            </Column>
+          </Row>
+          <br />
+          <Row>
+            <Column>
+              <Button.Success onClick={this.add}>Add</Button.Success>
+            </Column>
+            <Column right>
+              <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+            </Column>
+          </Row>
+        </div>
+      </Card>
+    );
+  }
+
+  add() {
+    equipmentService.newEquipmentType(this.typeName, this.brand, this.year, this.comment, this.price);
+
+    history.push('/equipmentTypes/Helmet');
+  }
+
+  cancel() {
+    history.push('/equipmentTypes/Helmet');
+  }
+}
 
 module.exports = {
   EquipmentTypes,
