@@ -102,8 +102,6 @@ class Menu extends Component {
   }
 
   render() {
-    console.log(this.state.basket.length + 'local basket length');
-
     const spanstyle = {
       height: '22px',
       width: '22px',
@@ -270,7 +268,7 @@ ReactDOM.render(
       <Route exact path="/bikeStatus/:bikeStatus/" component={BikesByStatus} />
       <Route path="/orders/" component={Orders} />
       <Route path="/customers/" component={Customers} />
-      <Route exact path="/customers/add" component={AddCustomer} />
+      <Route exact path="/addCustomer/" component={AddCustomer} />
 
       <Route path="/locations/" component={LocationList} />
       <Route exact path="/locations/:id" component={BikesOnLocation} />

@@ -33,16 +33,12 @@ class Customers extends Component {
 
   chooseActive(customer) {
     customerService.getCustomer(customer.id, result => {
-      // console.log("chooseActive()")
       this.setState({ state: (this.state.activeCustomer = result) });
     });
   }
 
-  addCustomer() {}
 
   render() {
-    // console.log("render customer()");
-
     return (
       <Card>
         <Row>
@@ -62,8 +58,7 @@ class Customers extends Component {
                     key={customer.id}
                     onClick={() => {
                       this.chooseActive(customer);
-                    }}
-                  >
+                    }} >
                     <Table.Td>{customer.id}</Table.Td>
                     <Table.Td>{customer.firstName}</Table.Td>
                     <Table.Td>{customer.lastName}</Table.Td>
@@ -73,7 +68,11 @@ class Customers extends Component {
             </Table>
           </Column>
           <Column>
-            <Button.Light>Legg til ny kunde</Button.Light>
+            <Column right>
+              <NavLink to={'/addCustomer/'}>
+                <Button.Light>Legg til ny kunde</Button.Light>
+              </NavLink>
+            </Column>
             <SelectedCustomer activeCustomer={this.state.activeCustomer} />
           </Column>
         </Row>
@@ -87,7 +86,6 @@ class Customers extends Component {
     });
 
     customerService.getCustomer('1', result => {
-      // console.log("mounting")
       this.setState({ activeCustomer: result });
     });
   }
@@ -103,9 +101,7 @@ class SelectedCustomer extends Component {
   }
 
   render() {
-    // const icon = <Icon name="rocket" />
     if (!this.state.customer) return null;
-    // console.log("render selectedCustomer");
 
     return (
       <Column>
@@ -159,19 +155,108 @@ class SelectedCustomer extends Component {
 
   mounted() {
     customerService.getCustomer('1', result => {
-      // console.log("Mounting2")
       this.setState({ state: (this.state.customer = result) });
     });
   }
 }
 
 class AddCustomer extends Component {
+  firstName = '';
+  lastName = '';
+  email = '';
+  tlf = 0;
+  street = 0;
+  streetNum = 0;
+  postal = 0;
+  place = '';
+  addressID = null;
+
   render() {
     return (
       <Card>
-        <h6>Legg til kunde</h6>
+        <div className="container">
+          <h5>Ny sykkeltype</h5>
+          <Row>
+            <Column>
+              <Form.Label>Fornavn:</Form.Label>
+              <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
+              <Form.Label>Email:</Form.Label>
+              <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
+              <br /> <br />
+              <Form.Label>Gate addresse:</Form.Label>
+              <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
+              <Form.Label>Poststed:</Form.Label>
+              <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
+              <br /> <br />
+              <Row>
+                <Column>
+                  <Button.Success onClick={this.add}>Add</Button.Success>
+                </Column>
+              </Row>
+            </Column>
+            <Column>
+              <Form.Label>Etternavn</Form.Label>
+              <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
+              <Form.Label>Telefon:</Form.Label>
+              <Form.Input type="text" required={true} onChange={event => (this.tlf = event.target.value)} />
+              <br /> <br />
+              <Form.Label>Gate Nummer:</Form.Label>
+              <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
+              <Form.Label>Post Nummer:</Form.Label>
+              <Form.Input type="text" required={true}  onChange={event => (this.postalNum = event.target.value)} />
+              <br /><br />
+              <Row>
+             
+                <Column right>
+                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                </Column>
+              </Row>
+            </Column>
+            <br />
+          </Row>
+        </div>
       </Card>
     );
+  }
+
+  cancel () {
+    history.push('/customers/');
+  }
+
+  add() {
+    //Check if address already in database
+    customerService.getAddressID(
+      this.postalNum, this.postal, 
+      this.street, this.streetNum, 
+      result =>{
+        console.log(result);
+        if(result === undefined)
+        {
+          customerService.addAddress(
+            this.postalNum, this.postal,
+            this.street, this.streetNum
+          );
+  
+          customerService.getAddressID(
+            this.postalNum, this.postal, 
+            this.street, this.streetNum, 
+            newID =>{
+  
+
+              customerService.addCustomer(
+                this.firstName, this.lastName, 
+                this.email, this.tlf, newID.id)     
+          });  
+        }
+        else
+        {
+          customerService.addCustomer
+          (this.firstName, this.lastName, 
+            this.email, this.tlf, result.id)
+        }
+      })
+
+    // history.push('/customers/');
   }
 }
 

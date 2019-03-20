@@ -33,6 +33,33 @@ class CustomerService {
       }
     );
   }
+
+  getAddressID(postal, place, street, streetnum, success){
+    connection.query('select id from Address where postalNum = ? and place = ? and streetAddress = ? and streetNum = ?',
+    [postal, place, street, streetnum], 
+    (error, result) => {
+        if (error) return console.error(error);
+        success(result[0]);
+      }
+    );
+  }
+
+  addCustomer(first, last, email, tlf, addr_id){
+    connection.query("insert into Customers (firstName, lastName, email, tlf, address_id) values (?, ?, ?, ?, ?)", 
+      [first, last, email, tlf, addr_id],
+      (error) => {
+        if(error) return console.error(error);
+      }
+    )
+  }
+
+  addAddress(postalnr, place, street, streetnum) {
+    connection.query("insert into Address (postalNum, place, streetAddress, streetNum) values ( ?, ?, ?, ?)", 
+    [postalnr, place, street, streetnum],
+    (error) => {
+      if(error) return console.error(error);
+    })
+  }
 }
 
 export let customerService = new CustomerService();

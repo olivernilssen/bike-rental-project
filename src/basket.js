@@ -11,8 +11,7 @@ class Basket extends Component {
     kunder: [],
     phrase: '',
     activeC: activeCustomer,
-    displayCustomer: 'block',
-    CustomerActive: false
+    displayCustomer: 'block'
   };
   styleState = {
     display: 'block',
@@ -32,11 +31,8 @@ class Basket extends Component {
   updateBasket() {
     this.state.inBasket = [];
 
-    if (basket.length == 0) {
-      this.styleState.display = 'none';
-    } else {
-      this.styleState.display = 'block';
-    }
+    if (basket.length == 0) this.styleState.display = 'none';
+    else this.styleState.display = 'block';
 
     if (basket.length == 0) {
       this.setState(state => {
@@ -81,7 +77,7 @@ class Basket extends Component {
 
   chooseCustomer(customer) {
     this.state.displayCustomer = 'none';
-    activeCustomer[0].id = null;
+    activeCustomer.splice(0, 1);
     activeCustomer.push(customer);
     this.setState({ state: (this.state.activeC[0] = customer) });
   }
@@ -94,23 +90,13 @@ class Basket extends Component {
   }
 
   render() {
-    console.log(activeCustomer);
-    if(this.state.activeC[0].id == null ){
-      this.state.CustomerActive = false;
-      this.state.displayCustomer = 'block';
-    }
-    else{
-      this.state.CustomerActive = true;
-      this.state.displayCustomer = 'none';
-    }
+    if(this.state.activeC[0].id == null ) this.state.displayCustomer = 'block';
+    else this.state.displayCustomer = 'none';
+
 
     const styles = {
-      btnStyle: {
-        display: this.styleState.display
-      },
-      divStyle: {
-        display: this.state.displayCustomer
-      }
+      btnStyle: { display: this.styleState.display },
+      divStyle: { display: this.state.displayCustomer }
     };
 
     const { divStyle } = styles;
@@ -122,21 +108,16 @@ class Basket extends Component {
           <Column>
             <Form.Label>
               <h4>
-                Kunde: 
-                {this.state.activeC[0].id} 
-                {this.state.activeC[0].firstName} 
-                {this.state.activeC.lastName}
+                Kunde: {this.state.activeC[0].id} {this.state.activeC[0].firstName} {this.state.activeC[0].lastName}  
               </h4>
-            </Form.Label>
-            <br />
+            </Form.Label><br />
             <Button.Danger
               onClick={() => {
                 this.removeCustomer();
               }}>
               Fjern Kunde
             </Button.Danger>
-            <br />
-            <br />
+            <br /><br />
             <Table>
               <Table.Thead>
                 <Table.Th>ID</Table.Th>
