@@ -10,15 +10,12 @@ import {
   BikeStatus,
   BikesByStatus,
   AreaList,
-  AddArea,
-  LocationInArea,
-  AddLocation,
-  BikesOnLocation,
   AllBikes,
   AddBikes,
   SelectedBike
 } from './bikes.js';
 
+import { AddArea, LocationInArea, AddLocation, BikesOnLocation } from './location';
 import { UserInfo, EditUserInfo, MineSalg, Bestilling } from './minSide';
 import { Customers, AddCustomer } from './customer.js';
 import { Booking } from './booking.js';
