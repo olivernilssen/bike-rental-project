@@ -65,7 +65,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 */
 export let basket = [];
 export let employeeID = 1;
-export const activeCustomer = React.createContext('');
+export const activeCustomer = [{id: null, lastName: "", firstName: ""}];
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
 så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
@@ -78,18 +78,36 @@ class LoginMenu extends Component {
 /* Set state for menyen. Hva vises, alt etter hvem som er logget inn */
 class Menu extends Component {
   state = {
+    basket: basket,
     isLoggedIn: true,
     menu: false,
     username: '',
     password: '',
     userinfo: null
-  }; //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
+  }; 
+  //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
 
   toggleMenu() {
     this.setState({ menu: !this.state.menu });
   }
 
   render() {
+    console.log(this.state.basket.length + "local basket length");
+
+    const spanstyle = {
+      height: "22px",
+      width: "22px",
+      backgroundColor: "#DF4444",
+      color: "white",
+      borderRadius: "50%",
+      display: "inline-block",
+      textAlign: "center"
+    };
+
+    if(basket.length === 0){
+      spanstyle.display = "none";
+    }
+
     const isLoggedIn = this.state.isLoggedIn;
     const show = this.state.menu ? 'show' : '';
 
@@ -175,7 +193,7 @@ class Menu extends Component {
                 </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/basket/">
                   <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
-                  Handlekurv
+                  Handlekurv <span style={spanstyle}>{basket.length}</span>
                 </SideNavBar.SideLink>
                 <SideNavHeading>
                   <span>MIN SIDE</span>

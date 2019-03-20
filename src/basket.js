@@ -5,9 +5,6 @@ import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { customerService } from './services/customersService';
 import { basket, activeCustomer } from './index.js';
 
-import createHashHistory from 'history/createHashHistory';
-const history = createHashHistory(); // Use history.push(...) to programmatically change path
-
 class Basket extends Component {
   state = {
     inBasket: basket,
@@ -31,8 +28,6 @@ class Basket extends Component {
       }
     }
   }
-
-  componentWillUpdate() {}
 
   updateBasket() {
     this.state.inBasket = [];
@@ -63,11 +58,9 @@ class Basket extends Component {
   findCustomers() {
     let queryPhrase = '';
 
-    if (this.state.phrase == ' ') {
-      queryPhrase = '%';
-    } else {
-      queryPhrase = '%' + this.state.phrase + '%';
-    }
+    if (this.state.phrase == ' ') queryPhrase = '%';
+    else queryPhrase = '%' + this.state.phrase + '%';
+    
 
     customerService.getCustomerSearch(queryPhrase, results => {
       this.state.kunder = [];
@@ -88,17 +81,29 @@ class Basket extends Component {
 
   chooseCustomer(customer) {
     this.state.displayCustomer = 'none';
-    this.setState({ state: (this.state.activeC = customer) });
+    activeCustomer[0].id = null;
+    activeCustomer.push(customer);
+    this.setState({ state: (this.state.activeC[0] = customer) });
   }
 
   removeCustomer() {
     this.state.displayCustomer = 'block';
-    this.setState({ state: (this.state.activeC = 'Velg ny kunde') });
+    this.setState({ state: (this.state.activeC[0] = [{id: null}]) });
     this.setState({ state: (this.state.phrase = '') });
     this.findCustomers();
   }
 
   render() {
+    console.log(activeCustomer);
+    if(this.state.activeC[0].id == null ){
+      this.state.CustomerActive = false;
+      this.state.displayCustomer = 'block';
+    }
+    else{
+      this.state.CustomerActive = true;
+      this.state.displayCustomer = 'none';
+    }
+
     const styles = {
       btnStyle: {
         display: this.styleState.display
@@ -117,18 +122,19 @@ class Basket extends Component {
           <Column>
             <Form.Label>
               <h4>
-                Kunde: {this.state.activeC.id} {this.state.activeC.firstName} {this.state.activeC.lastName}
+                Kunde: 
+                {this.state.activeC[0].id} 
+                {this.state.activeC[0].firstName} 
+                {this.state.activeC.lastName}
               </h4>
-            </Form.Label>{' '}
+            </Form.Label>
             <br />
             <Button.Danger
               onClick={() => {
                 this.removeCustomer();
-              }}
-            >
-              {' '}
-              Fjern Kunde{' '}
-            </Button.Danger>{' '}
+              }}>
+              Fjern Kunde
+            </Button.Danger>
             <br />
             <br />
             <Table>
@@ -161,9 +167,7 @@ class Basket extends Component {
                         style={btnStyle}
                         onClick={() => {
                           this.removeBike(bike);
-                        }}
-                      >
-                        {' '}
+                        }}>
                         Delete
                       </Button.Danger>
                     </Table.Td>
@@ -192,9 +196,7 @@ class Basket extends Component {
                       <Button.Success
                         onClick={() => {
                           this.chooseCustomer(kunde);
-                        }}
-                      >
-                        {' '}
+                        }}>
                         Velg
                       </Button.Success>
                     </Table.Td>

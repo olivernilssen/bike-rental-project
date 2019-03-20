@@ -83,10 +83,7 @@ class Customers extends Component {
 
   mounted() {
     customerService.getCustomerSearch('%', results => {
-      this.setState(state => {
-        const customers = state.customers.concat(results);
-        return { customers, results };
-      });
+      this.state.customers = results;
     });
 
     customerService.getCustomer('1', result => {
