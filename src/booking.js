@@ -128,7 +128,7 @@ class Booking extends Component {
                       checked={this.dayRent}
                       onChange={this.handleCheckChange}
                     />
-                    <label className="form-check-label">Timesleie</label>
+                    <label className="form-check-label">Timesleie:</label>
                   </Form.Label>
                 </div>
 

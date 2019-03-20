@@ -260,7 +260,12 @@ export class Select extends Component {
 
   render() {
     return (
-      <select className="custom-select my-1 mr-sm-2" onChange={this.props.onChange}>
+      <select
+        className="custom-select my-1 mr-sm-2"
+        onChange={this.props.onChange}
+        name={this.props.name}
+        value={this.props.value}
+      >
         {this.props.children}
       </select>
     );

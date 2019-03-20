@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
@@ -37,16 +37,14 @@ class AllBikes extends Component {
     return (
       <div>
         <H1>Alle sykler</H1>
-        <br />
-
+        <Column right>
+          <NavLink to={'/addBikes/'}>
+            <Button.Light>Legg inn ny sykkel</Button.Light>
+          </NavLink>
+        </Column>
         <Card>
           <Row>
             <Column>
-              <Column right>
-                <NavLink to={'/addBikes/'}>
-                  <Button.Light>Legg inn ny sykkel</Button.Light>
-                </NavLink>
-              </Column>
               <Column right>
                 <Form.Label>Søk på sykkel etter id, type, modell eller lokasjon</Form.Label>
                 <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
@@ -93,6 +91,7 @@ class AllBikes extends Component {
             </Column>
           </Row>
         </Card>
+        <br />
       </div>
     );
   }
@@ -138,24 +137,24 @@ class SelectedBike extends Component {
                 <Table.Td>{this.props.match.params.id}</Table.Td>
                 <Table.Td>{this.bike.typeName}</Table.Td>
                 <Table.Td>
-                  <select name="locationSelect" value={this.bikeLoc} onChange={this.onChangeLocation}>
+                  <Select name="locationSelect" value={this.bikeLoc} onChange={this.onChangeLocation}>
                     {this.locations.map(loc => (
-                      <option key={loc.id} data-key={loc.id}>
+                      <Select.Option key={loc.id} dataKey={loc.id}>
                         {loc.name}
-                      </option>
+                      </Select.Option>
                     ))}
-                  </select>
+                  </Select>
                 </Table.Td>
                 <Table.Td>
-                  <select
+                  <Select
                     name="status"
                     value={this.bikeStatus}
                     onChange={event => (this.bikeStatus = event.target.value)}
                   >
                     {this.state.statusOnBike.map(status => (
-                      <option key={status}>{status}</option>
+                      <Select.Option key={status}>{status}</Select.Option>
                     ))}
-                  </select>
+                  </Select>
                 </Table.Td>
               </Table.Tr>
             </Table.Tbody>
@@ -193,18 +192,23 @@ class SelectedBike extends Component {
               </Table.Tr>
             </Table.Tbody>
           </Table>
+          <Form.Label>Skriv inn en kommentar om sykkelen:</Form.Label>
+          <br />
           <textarea row="200" cols="100" value={this.note} onChange={event => (this.note = event.target.value)} />
+          <br />
+          <br />
+          <Row>
+            <Column>
+              <Button.Success onClick={this.change}>Endre</Button.Success>
+            </Column>
+
+            <Column right>
+              <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+            </Column>
+          </Row>
         </Card>
 
-        <Row>
-          <Column>
-            <Button.Success onClick={this.change}>Endre</Button.Success>
-          </Column>
-
-          <Column right>
-            <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-          </Column>
-        </Row>
+        <br />
       </div>
     );
   }
@@ -324,21 +328,21 @@ class AddBikes extends Component {
               <Form.Label>Antall:</Form.Label>
               <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
               <Form.Label>Type:</Form.Label>
-              <select onChange={this.onChangeType}>
+              <Select onChange={this.onChangeType}>
                 {this.bikeTypes.map(bikeType => (
-                  <option key={bikeType.id} data-key={bikeType.id}>
+                  <Select.Option key={bikeType.id} dataKey={bikeType.id}>
                     {bikeType.typeName} {bikeType.brand} {bikeType.model} {bikeType.year}
-                  </option>
+                  </Select.Option>
                 ))}
-              </select>
+              </Select>
               <Form.Label>Lokasjon: </Form.Label>
-              <select onChange={this.onChangeLocation}>
+              <Select onChange={this.onChangeLocation}>
                 {this.locations.map(lokasjon => (
-                  <option key={lokasjon.id} data-key={lokasjon.id}>
+                  <Select.Option key={lokasjon.id} dataKey={lokasjon.id}>
                     {lokasjon.name}
-                  </option>
+                  </Select.Option>
                 ))}
-              </select>
+              </Select>
               <br /> <br />
               <Row>
                 <Column>
@@ -494,6 +498,7 @@ class BikeTypeDetails extends Component {
             </Column>
           </Row>
         </Card>
+        <br />
       </div>
     );
   }
@@ -674,6 +679,7 @@ class BikesByStatus extends Component {
             </Table.Tbody>
           </Table>
         </Card>
+        <br />
       </div>
     );
   }
@@ -824,13 +830,13 @@ class AddLocation extends Component {
               <Form.Label>Navn:</Form.Label>
               <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
               <Form.Label>Område: </Form.Label>
-              <select onChange={this.onChangeareaName}>
+              <Select onChange={this.onChangeareaName}>
                 {this.areaNames.map(areaN => (
-                  <option key={areaN.id} data-key={areaN.id}>
+                  <Select.Option key={areaN.id} dataKey={areaN.id}>
                     {areaN.areaName}
-                  </option>
+                  </Select.Option>
                 ))}
-              </select>
+              </Select>
               <br /> <br />
               <Row>
                 <Column>
