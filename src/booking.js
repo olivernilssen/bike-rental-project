@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, Select, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { basket } from './index.js';
@@ -87,31 +87,15 @@ class Booking extends Component {
 
     return (
       <div>
-        <Card title="Booking">
+        <H1>Booking</H1>
+        <br />
+        <Card>
           {/* Date entry */}
-          <div className="form-group">
-            <input
-              type="checkbox"
-              name="dayRent"
-              checked={this.dayRent}
-              onChange={this.handleCheckChange}
-              value="Timesleie?"
-            />
-            <Form.Label>Times leie? </Form.Label>
-            <input
-              type="number"
-              name="hoursRenting"
-              disabled={!this.dayRent}
-              onChange={this.handleChange}
-              value={this.hoursRenting}
-            />
-            <br />
-            <br />
-
+          <div className="container">
             <Row>
-              <Column width={2}>
+              <Column width={3}>
                 <Form.Label>Fra dato: </Form.Label>
-                <input
+                <Form.Input
                   type="date"
                   name="startDate"
                   disabled={this.dayRent}
@@ -121,9 +105,9 @@ class Booking extends Component {
                 />
               </Column>
 
-              <Column width={2}>
+              <Column width={3}>
                 <Form.Label>Til dato:</Form.Label>
-                <input
+                <Form.Input
                   type="date"
                   name="endDate"
                   disabled={this.dayRent}
@@ -132,32 +116,63 @@ class Booking extends Component {
                   onChange={this.handleChange}
                 />
               </Column>
+
+              <Column width={3}>
+                <div className="form-check">
+                  <Form.Label>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="Timesleie?"
+                      name="dayRent"
+                      checked={this.dayRent}
+                      onChange={this.handleCheckChange}
+                    />
+                    <label className="form-check-label">Timesleie</label>
+                  </Form.Label>
+                </div>
+
+                <Form.Input
+                  type="number"
+                  name="hoursRenting"
+                  disabled={!this.dayRent}
+                  onChange={this.handleChange}
+                  value={this.hoursRenting}
+                />
+              </Column>
             </Row>
             <br />
 
-            <select name="locationSelect" value={this.state.locationSelect} onChange={this.handleChange}>
-              <option value="%">Any Location</option>
-              <option value="Finse">Finse</option>
-              <option value="Flåm">Flåm</option>
-              <option value="Haugastøl">Haugastøl</option>
-              <option value="Voss">Voss</option>
-              <option value="Myrdal">Myrdal</option>
-            </select>
-
-            <select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
-              <option value="%">Any Type of bike</option>
-              <option value="Terreng">Terreng</option>
-              <option value="Downhill">Downhill</option>
-              <option value="Landevei">Landevei</option>
-              <option value="Barn">Barn</option>
-            </select>
-          </div>
-
-          {/* submit button */}
-          <div className="form-group">
-            <button name="submit" type="button" onClick={this.handleSubmit}>
-              Søk
-            </button>
+            <Row>
+              <Column width={3}>
+                <Form.Label>Lokasjon:</Form.Label>
+                <Select name="locationSelect" value={this.state.locationSelect} onChange={this.handleChange}>
+                  <Select.Option value="%">Any Location</Select.Option>
+                  <Select.Option value="Finse">Finse</Select.Option>
+                  <Select.Option value="Flåm">Flåm</Select.Option>
+                  <Select.Option value="Haugastøl">Haugastøl</Select.Option>
+                  <Select.Option value="Voss">Voss</Select.Option>
+                  <Select.Option value="Myrdal">Myrdal</Select.Option>
+                </Select>
+              </Column>
+              <Column width={3}>
+                <Form.Label>Sykkeltype:</Form.Label>
+                <Select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
+                  <Select.Option value="%">Any Type of bike</Select.Option>
+                  <Select.Option value="Terreng">Terreng</Select.Option>
+                  <Select.Option value="Downhill">Downhill</Select.Option>
+                  <Select.Option value="Landevei">Landevei</Select.Option>
+                  <Select.Option value="Barn">Barn</Select.Option>
+                </Select>
+              </Column>
+            </Row>
+            {/* submit button */}
+            <br />
+            <div className="form-group">
+              <Button.Success name="submit" onClick={this.handleSubmit}>
+                Søk
+              </Button.Success>
+            </div>
           </div>
           <br />
 

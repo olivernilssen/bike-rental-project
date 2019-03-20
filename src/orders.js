@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ButtonLight } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { orderService } from './services/ordersService';
 import { emplyoeeID } from './index.js';
@@ -39,46 +39,48 @@ class Orders extends Component {
 
   render() {
     return (
-      <Card>
-        <Row>
-          <Column width={5}>
-            <h5>Alle bestillinger</h5>
-            <Form.Input
-              id="testSearch"
-              type="search"
-              onChange={this.onChangeHandle}
-              placeholder="Søk etter bestilling"
-            />
-            <br /> <br />
-            <Table>
-              <Table.Thead>
-                <Table.Th>Ordredato</Table.Th>
-                <Table.Th>OrdreID</Table.Th>
-                <Table.Th>KundeID</Table.Th>
-              </Table.Thead>
-              <Table.Tbody>
-                {this.state.orders.map(order => (
-                  <Table.Tr
-                    key={order.id}
-                    onClick={() => {
-                      this.chooseActive(order);
-                    }}
-                  >
-                    <Table.Td>{order.dateOrdered.toString().substring(4, 16)}</Table.Td>
-                    <Table.Td>{order.id}</Table.Td>
-                    <Table.Td>{order.customer_id}</Table.Td>
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Column>
+      <div>
+        <H1>Ordrer</H1>
+        <br />
+        <Card>
+          <Row>
+            <Column width={5}>
+              <Form.Input
+                id="testSearch"
+                type="search"
+                onChange={this.onChangeHandle}
+                placeholder="Søk etter bestilling"
+              />
+              <br /> <br />
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Ordredato</Table.Th>
+                  <Table.Th>OrdreID</Table.Th>
+                  <Table.Th>KundeID</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.state.orders.map(order => (
+                    <Table.Tr
+                      key={order.id}
+                      onClick={() => {
+                        this.chooseActive(order);
+                      }}
+                    >
+                      <Table.Td>{order.dateOrdered.toString().substring(4, 16)}</Table.Td>
+                      <Table.Td>{order.id}</Table.Td>
+                      <Table.Td>{order.customer_id}</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
 
-          <Column>
-            <br />
-            <SelectedOrder activeOrder={this.state.activeOrder} />
-          </Column>
-        </Row>
-      </Card>
+            <Column>
+              <SelectedOrder activeOrder={this.state.activeOrder} />
+            </Column>
+          </Row>
+        </Card>
+      </div>
     );
   }
 
@@ -121,130 +123,132 @@ class SelectedOrder extends Component {
 
     return (
       <Card>
-        <h5>Valgt ordre: {this.state.order.id}</h5>
-        <br />
-        <Row>
-          <Column>
-            <Row>
-              <Column width={4}>
-                <b>Bestillingsdato:</b>
-              </Column>
-              <Column>{this.state.order.dateOrdered.toString().substring(4, 24)}</Column>
-            </Row>
-            <Row>
-              <Column width={4}>
-                <b>Ordre id:</b>
-              </Column>
-              <Column>{this.state.order.id}</Column>
-            </Row>
-            <Row>
-              <Column width={4}>
-                <b>Kunde id:</b>
-              </Column>
-              <Column>{this.state.order.customer_id}</Column>
-            </Row>
-            <Row>
-              <Column width={4}>
-                <b>Kundenavn:</b>
-              </Column>
-              <Column>
-                {this.state.order.firstName} {this.state.order.lastName}
-              </Column>
-            </Row>
-            <Row>
-              <Column width={4}>
-                <b>Leietype:</b>
-              </Column>
-              <Column>{this.state.order.typeName}</Column>
-            </Row>
-            <Row>
-              <Column width={4}>
-                <b>Fra dato:</b>
-              </Column>
-              <Column>{this.state.order.fromDateTime.toString().substring(4, 16)}</Column>
-            </Row>
-            <Row>
-              <Column width={4}>
-                <b>Til dato:</b>
-              </Column>
-              <Column>{this.state.order.toDateTime.toString().substring(4, 16)}</Column>
-            </Row>
-            <Row>
-              <Column width={4}>
-                <b>Pris:</b>
-              </Column>
-              <Column>{this.state.order.price}</Column>
-            </Row>
-            <br />
-          </Column>
-        </Row>
-        <Row>
-          <Column width={8}>
-            <h6>Sykler:</h6>
-            <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>
-                    <b>ID</b>
-                  </Table.Td>
-                  <Table.Td>
-                    <b>Sykkeltype</b>
-                  </Table.Td>
-                  <Table.Td>
-                    <b>Merke</b>
-                  </Table.Td>
-                  <Table.Td>
-                    <b>Modell</b>
-                  </Table.Td>
-                  <Table.Td>
-                    <b>Pris</b>
-                  </Table.Td>
-                </Table.Tr>
-                {this.bikes.map(bike => (
-                  <Table.Tr key={bike.id}>
-                    <Table.Td>{bike.id}</Table.Td>
-                    <Table.Td>{bike.typeName}</Table.Td>
-                    <Table.Td>{bike.brand}</Table.Td>
-                    <Table.Td>{bike.model}</Table.Td>
-                    <Table.Td>{bike.price} kr</Table.Td>
+        <div className="container">
+          <h5>Valgt ordre: {this.state.order.id}</h5>
+          <br />
+          <Row>
+            <Column>
+              <Row>
+                <Column width={4}>
+                  <b>Bestillingsdato:</b>
+                </Column>
+                <Column>{this.state.order.dateOrdered.toString().substring(4, 24)}</Column>
+              </Row>
+              <Row>
+                <Column width={4}>
+                  <b>Ordre id:</b>
+                </Column>
+                <Column>{this.state.order.id}</Column>
+              </Row>
+              <Row>
+                <Column width={4}>
+                  <b>Kunde id:</b>
+                </Column>
+                <Column>{this.state.order.customer_id}</Column>
+              </Row>
+              <Row>
+                <Column width={4}>
+                  <b>Kundenavn:</b>
+                </Column>
+                <Column>
+                  {this.state.order.firstName} {this.state.order.lastName}
+                </Column>
+              </Row>
+              <Row>
+                <Column width={4}>
+                  <b>Leietype:</b>
+                </Column>
+                <Column>{this.state.order.typeName}</Column>
+              </Row>
+              <Row>
+                <Column width={4}>
+                  <b>Fra dato:</b>
+                </Column>
+                <Column>{this.state.order.fromDateTime.toString().substring(4, 16)}</Column>
+              </Row>
+              <Row>
+                <Column width={4}>
+                  <b>Til dato:</b>
+                </Column>
+                <Column>{this.state.order.toDateTime.toString().substring(4, 16)}</Column>
+              </Row>
+              <Row>
+                <Column width={4}>
+                  <b>Pris:</b>
+                </Column>
+                <Column>{this.state.order.price}</Column>
+              </Row>
+              <br />
+            </Column>
+          </Row>
+          <Row>
+            <Column width={8}>
+              <h6>Sykler:</h6>
+              <Table>
+                <Table.Tbody>
+                  <Table.Tr>
+                    <Table.Td>
+                      <b>ID</b>
+                    </Table.Td>
+                    <Table.Td>
+                      <b>Sykkeltype</b>
+                    </Table.Td>
+                    <Table.Td>
+                      <b>Merke</b>
+                    </Table.Td>
+                    <Table.Td>
+                      <b>Modell</b>
+                    </Table.Td>
+                    <Table.Td>
+                      <b>Pris</b>
+                    </Table.Td>
                   </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Column>
-        </Row>
-        <br />
-        <Row>
-          <Column width={8}>
-            <h6>Utstyr</h6>
-            <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>
-                    <b>UtstyrsID</b>
-                  </Table.Td>
-                  <Table.Td>
-                    <b>Utstyrstype</b>
-                  </Table.Td>
-                  <Table.Td>
-                    <b>Merke</b>
-                  </Table.Td>
-                  <Table.Td>
-                    <b>Pris</b>
-                  </Table.Td>
-                </Table.Tr>
-                {this.equipments.map(equipment => (
-                  <Table.Tr key={equipment.id}>
-                    <Table.Td>{equipment.id}</Table.Td>
-                    <Table.Td>{equipment.typeName}</Table.Td>
-                    <Table.Td>{equipment.brand}</Table.Td>
-                    <Table.Td>{equipment.price}</Table.Td>
+                  {this.bikes.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.typeName}</Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>{bike.model}</Table.Td>
+                      <Table.Td>{bike.price} kr</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+          <br />
+          <Row>
+            <Column width={8}>
+              <h6>Utstyr</h6>
+              <Table>
+                <Table.Tbody>
+                  <Table.Tr>
+                    <Table.Td>
+                      <b>UtstyrsID</b>
+                    </Table.Td>
+                    <Table.Td>
+                      <b>Utstyrstype</b>
+                    </Table.Td>
+                    <Table.Td>
+                      <b>Merke</b>
+                    </Table.Td>
+                    <Table.Td>
+                      <b>Pris</b>
+                    </Table.Td>
                   </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Column>
-        </Row>
+                  {this.equipments.map(equipment => (
+                    <Table.Tr key={equipment.id}>
+                      <Table.Td>{equipment.id}</Table.Td>
+                      <Table.Td>{equipment.typeName}</Table.Td>
+                      <Table.Td>{equipment.brand}</Table.Td>
+                      <Table.Td>{equipment.price}</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+        </div>
       </Card>
     );
   }

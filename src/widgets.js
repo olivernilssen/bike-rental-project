@@ -211,7 +211,11 @@ export class Button {
 // Renders a form label using Bootstrap styles
 class FormLabel extends Component {
   render() {
-    return <label className="col-form-label">{this.props.children}</label>;
+    return (
+      <label className="col-form-label" htmlFor={this.props.for}>
+        {this.props.children}
+      </label>
+    );
   }
 }
 
@@ -223,12 +227,42 @@ class FormInput extends Component {
       <input
         className="form-control"
         type={this.props.type}
+        name={this.props.name}
+        disabled={this.props.disabled}
+        min={this.props.min}
         value={this.props.value}
         onChange={this.props.onChange}
         required={this.props.required}
         pattern={this.props.pattern}
         placeholder={this.props.placeholder}
+        checked={this.props.checked}
       />
+    );
+  }
+}
+class Option extends Component {
+  render() {
+    return (
+      <option
+        selected={this.props.selected}
+        value={this.props.value}
+        key={this.props.key}
+        data-key={this.props.dataKey}
+      >
+        {this.props.children}
+      </option>
+    );
+  }
+}
+
+export class Select extends Component {
+  static Option = Option;
+
+  render() {
+    return (
+      <select className="custom-select my-1 mr-sm-2" onChange={this.props.onChange}>
+        {this.props.children}
+      </select>
     );
   }
 }

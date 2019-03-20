@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Bar, Line, Pie } from 'react-chartjs-2';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 
@@ -43,7 +43,7 @@ class Chart extends Component {
 
     return (
       <div>
-        <button onClick={this.updateChart}>Knapp</button>
+        <Button.Light onClick={this.updateChart}>Oppdater</Button.Light>
         <div className="chart">
           <Bar
             data={chartData}
@@ -114,7 +114,9 @@ class Overview extends Component {
   render() {
     return (
       <div id="salg">
-        <Card title="Oversikt">
+        <H1>Oversikt</H1>
+        <br />
+        <Card>
           <Chart />
         </Card>
       </div>

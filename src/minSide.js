@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { orderService } from './services/ordersService';
@@ -22,7 +22,9 @@ class UserInfo extends Component {
   render() {
     return (
       <div>
-        <Card title="Brukerinformasjon">
+        <H1>Brukerinformasjon</H1>
+        <br />
+        <Card>
           <Row>
             <Column width={5}>
               <b>Fornavn:</b> {this.fornavn}

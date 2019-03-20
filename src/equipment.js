@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { equipmentService } from './services/equipmentService';
@@ -190,6 +190,7 @@ class AddEquipment extends Component {
     this.setState({
       state: (this.state.selectedEquipTypeID = event.target.options[selectedIndex].getAttribute('data-key'))
     });
+    console.log(this.state.selectedEquipTypeID);
   }
 
   onChangeLocation(event) {
@@ -212,27 +213,27 @@ class AddEquipment extends Component {
                     <Form.Label>Utstyrstype:</Form.Label>
                   </Row>
                   <Row>
-                    <select onChange={this.onChangeType}>
+                    <Select onChange={this.onChangeType}>
                       {this.equipmentTypes.map(type => (
-                        <option key={type.id} data-key={type.id}>
+                        <Select.Option key={type.id} dataKey={type.id}>
                           {type.typeName} {type.brand} {type.year} {type.comment}
-                        </option>
+                        </Select.Option>
                       ))}
-                    </select>
+                    </Select>
                   </Row>
                 </Column>
-                <Column widht={3}>
+                <Column width={3}>
                   <Row>
                     <Form.Label>Lokasjon: </Form.Label>
                   </Row>
                   <Row>
-                    <select onChange={this.onChangeLocation}>
+                    <Select onChange={this.onChangeLocation}>
                       {this.locations.map(lokasjon => (
-                        <option key={lokasjon.id} data-key={lokasjon.id}>
+                        <Select.Option key={lokasjon.id} dataKey={lokasjon.id}>
                           {lokasjon.name}
-                        </option>
+                        </Select.Option>
                       ))}
-                    </select>
+                    </Select>
                   </Row>
                 </Column>
               </Row>
