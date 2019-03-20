@@ -23,6 +23,7 @@ import { Booking } from './booking.js';
 import { Basket } from './basket.js';
 import { Overview } from './overview.js';
 import { Orders } from './orders.js';
+import { EquipmentTypes, EquipTypeDetails } from './equipment.js';
 
 import {
   Card,
@@ -160,7 +161,7 @@ class Menu extends Component {
                     <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                   </div>
                 </div>
-                <SideNavBar.SideLink to="/">
+                <SideNavBar.SideLink to="/equipmentTypes/">
                   <FontAwesomeIcon className="navIcon" icon="tools" />
                   Sykkelutstyr
                 </SideNavBar.SideLink>
@@ -246,7 +247,8 @@ ReactDOM.render(
       <Route path="/locations/" component={LocationList} />
       <Route exact path="/locations/:id" component={BikesOnLocation} />
       <Route exact path="/location/add" component={AddLocation} />
-
+      <Route path="/equipmentTypes/" component={EquipmentTypes} />
+      <Route exact path="/equipmentTypes/:typeName/" component={EquipTypeDetails} />
       <Route exact path="/basket/" component={Basket} />
 
       <Route exact path="/information/" component={UserInfo} />
