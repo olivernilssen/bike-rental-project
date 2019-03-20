@@ -23,7 +23,7 @@ import { Booking } from './booking.js';
 import { Basket } from './basket.js';
 import { Overview } from './overview.js';
 import { Orders } from './orders.js';
-import { EquipmentTypes, EquipTypeDetails } from './equipment.js';
+import { EquipmentTypes, EquipTypeDetails, AddEquipment } from './equipment.js';
 
 import {
   Card,
@@ -50,10 +50,20 @@ import {
   faMapMarkerAlt,
   faUsers,
   faArchive,
-  faTools
+  faPlusCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faCoffee, faChartPie, faShoppingCart, faBicycle, faCalendar, faMapMarkerAlt, faUsers, faArchive, faTools);
+library.add(
+  faCoffee,
+  faChartPie,
+  faShoppingCart,
+  faBicycle,
+  faCalendar,
+  faMapMarkerAlt,
+  faUsers,
+  faArchive,
+  faPlusCircle
+);
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -65,7 +75,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 */
 export let basket = [];
 export let employeeID = 1;
-export const activeCustomer = [{id: null, lastName: "", firstName: ""}];
+export const activeCustomer = [{ id: null, lastName: '', firstName: '' }];
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
 så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
@@ -84,7 +94,7 @@ class Menu extends Component {
     username: '',
     password: '',
     userinfo: null
-  }; 
+  };
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
 
   toggleMenu() {
@@ -92,20 +102,20 @@ class Menu extends Component {
   }
 
   render() {
-    console.log(this.state.basket.length + "local basket length");
+    console.log(this.state.basket.length + 'local basket length');
 
     const spanstyle = {
-      height: "22px",
-      width: "22px",
-      backgroundColor: "#DF4444",
-      color: "white",
-      borderRadius: "50%",
-      display: "inline-block",
-      textAlign: "center"
+      height: '22px',
+      width: '22px',
+      backgroundColor: '#DF4444',
+      color: 'white',
+      borderRadius: '50%',
+      display: 'inline-block',
+      textAlign: 'center'
     };
 
-    if(basket.length === 0){
-      spanstyle.display = "none";
+    if (basket.length === 0) {
+      spanstyle.display = 'none';
     }
 
     const isLoggedIn = this.state.isLoggedIn;
@@ -180,7 +190,7 @@ class Menu extends Component {
                   </div>
                 </div>
                 <SideNavBar.SideLink to="/equipmentTypes/Helmet">
-                  <FontAwesomeIcon className="navIcon" icon="tools" />
+                  <FontAwesomeIcon className="navIcon" icon="plus-circle" />
                   Sykkelutstyr
                 </SideNavBar.SideLink>
                 <SideNavBar.SideLink to="/orders/">
@@ -267,6 +277,7 @@ ReactDOM.render(
       <Route exact path="/location/add" component={AddLocation} />
       <Route path="/equipmentTypes/" component={EquipmentTypes} />
       <Route exact path="/equipmentTypes/:typeName/" component={EquipTypeDetails} />
+      <Route exact path="/equipments/add" component={AddEquipment} />
       <Route exact path="/basket/" component={Basket} />
 
       <Route exact path="/information/" component={UserInfo} />
