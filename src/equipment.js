@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { rentalService } from './services/services';
 import { equipmentService } from './services/equipmentService';
 import { connection } from './services/mysql_connection';
 
@@ -23,8 +24,8 @@ class EquipmentTypes extends Component {
             </Tab.Item>
           ))}
           <Column right>
-            <NavLink to={'/equipmentTypes/add/'}>
-              <Button.Light>Legg inn ny utstyrstype</Button.Light>
+            <NavLink to={'/equipments/add/'}>
+              <Button.Light>Legg inn nytt utstyr</Button.Light>
             </NavLink>
           </Column>
         </Tab>
@@ -48,108 +49,42 @@ class EquipmentTypes extends Component {
   }
 }
 
-// class AddBikes extends Component {
-//   antall = 0;
-//   bikeTypes = [];
-//   locations = [];
-//   typeSykkel = '';
-//   state = {
-//     selectedBikeID: 1,
-//     curLocation: ''
-//   };
-//
-//   onChangeType(event) {
-//     const selectedIndex = event.target.options.selectedIndex;
-//     this.setState({
-//       state: (this.state.selectedBikeID = event.target.options[selectedIndex].getAttribute('data-key'))
-//     });
-//     console.log(this.state.selectedBikeID);
-//   }
-//
-//   onChangeLocation(event) {
-//     const selectedIndex = event.target.options.selectedIndex;
-//     this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
-//     console.log(this.state.curLocation);
-//   }
-//
-//   render() {
-//     return (
-//       <Card>
-//         <div className="container">
-//           <h5>Ny sykkeltype</h5>
-//           <Row>
-//             <Column>
-//               <Form.Label>Antall:</Form.Label>
-//               <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
-//               <Form.Label>Type:</Form.Label>
-//               <select onChange={this.onChangeType}>
-//                 {this.bikeTypes.map(bikeType => (
-//                   <option key={bikeType.id} data-key={bikeType.id}>
-//                     {bikeType.typeName} {bikeType.brand} {bikeType.model} {bikeType.year}
-//                   </option>
-//                 ))}
-//               </select>
-//               <Form.Label>Lokasjon: </Form.Label>
-//               <select onChange={this.onChangeLocation}>
-//                 {this.locations.map(lokasjon => (
-//                   <option key={lokasjon.id} data-key={lokasjon.id}>
-//                     {lokasjon.name}
-//                   </option>
-//                 ))}
-//               </select>
-//               <br /> <br />
-//               <Row>
-//                 <Column>
-//                   <Button.Success onClick={this.add}>Add</Button.Success>
-//                 </Column>
-//                 <Column right>
-//                   <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-//                 </Column>
-//               </Row>
-//             </Column>
-//             <br />
-//           </Row>
-//         </div>
-//       </Card>
-//     );
-//   }
-//
-//   add() {
-//     if (this.antall <= 0) {
-//       return;
-//     } else {
-//       for (let i = 0; i < this.antall; i++) {
-//         bikeService.addBike(this.state.curLocation, this.state.selectedBikeID, 'OK');
-//       }
-//     }
-//
-//     history.push('/allBikes/');
-//   }
-//
-//   cancel() {
-//     history.push('/allBikes/');
-//   }
-//
-//   mounted() {
-//     rentalService.getLocations(locations => {
-//       this.state.curLocation = locations[0].id;
-//       this.locations = locations;
-//     });
-//
-//     bikeService.getAllBikesByType(bikeTypes => {
-//       this.selectedBike = bikeTypes[0].id;
-//       this.bikeTypes = bikeTypes;
-//     });
-//   }
-// }
-
 class EquipTypeDetails extends Component {
   equipType = null;
+  showingEquipment = 0;
   state = {
     equipments: [],
-    typeIds: 0,
+    typeIds: [],
     equipTypeDetails: []
   };
+
+  showThisType(id) {
+    if (this.showingEquipment === id) {
+      this.state.equipments = [];
+      let temp = [];
+
+      for (let i = 0; i < this.state.typeIds.length; i++) {
+        equipmentService.getEquipmentByTypeID(this.state.typeIds[i].id, results => {
+          this.showingEquipment = id;
+          this.setState(state => {
+            const equipments = state.equipments.concat(results);
+            return { equipments, results };
+          });
+        });
+      }
+
+      this.showingEquipment = 0;
+    } else {
+      this.state.equipments = [];
+      equipmentService.getEquipmentByTypeID(id, results => {
+        this.showingEquipment = id;
+        this.setState(state => {
+          const equipments = state.equipments.concat(results);
+          return { equipments, results };
+        });
+      });
+    }
+  }
 
   render() {
     if (!this.equipType) return null;
@@ -169,7 +104,12 @@ class EquipTypeDetails extends Component {
                 </Table.Thead>
                 <Table.Tbody>
                   {this.state.equipTypeDetails.map(type => (
-                    <Table.Tr key={type.id}>
+                    <Table.Tr
+                      key={type.id}
+                      onClick={() => {
+                        this.showThisType(type.id);
+                      }}
+                    >
                       <Table.Td>{type.brand}</Table.Td>
                       <Table.Td>{type.year}</Table.Td>
                       <Table.Td>{type.comment}</Table.Td>
@@ -211,44 +151,146 @@ class EquipTypeDetails extends Component {
       this.equipType = type;
     });
 
-    connection.query(
-      'select id from EquipmentType where typeName = ?',
-      [this.props.match.params.typeName],
-      (error, idResult) => {
-        if (error) return console.error(error);
-        this.setState({ state: (this.state.typeIds = idResult) });
+    equipmentService.getTypeID(this.props.match.params.typeName, idResult => {
+      this.state.typeIds = idResult;
 
-        for (let i = 0; i < idResult.length; i++) {
-          connection.query(
-            'select id, location_id, objectStatus from Equipment where type_id = ?',
-            [idResult[i].id],
-            (error, results) => {
-              if (error) return console.error(error);
-
-              this.setState(state => {
-                const equipments = state.equipments.concat(results);
-                return {
-                  equipments,
-                  results
-                };
-              });
-            }
-          );
-
-          connection.query('select * from EquipmentType where id = ?', [idResult[i].id], (error, typeResult) => {
-            if (error) return console.error(error);
-
-            this.setState(state => {
-              const equipTypeDetails = state.equipTypeDetails.concat(typeResult);
-              return {
-                equipTypeDetails,
-                typeResult
-              };
-            });
+      for (let i = 0; i < idResult.length; i++) {
+        equipmentService.getEquipmentByTypeID(idResult[i].id, results => {
+          this.setState(state => {
+            const equipments = state.equipments.concat(results);
+            return { equipments, results };
           });
-        }
+        });
+
+        equipmentService.getEquipmentTypesWhere(idResult[i].id, typeResult => {
+          this.setState(state => {
+            const equipTypeDetails = state.equipTypeDetails.concat(typeResult);
+            return {
+              equipTypeDetails,
+              typeResult
+            };
+          });
+        });
       }
+    });
+  }
+}
+
+class AddEquipment extends Component {
+  antall = 0;
+  equipmentTypes = [];
+  locations = [];
+  state = {
+    selectedEquipTypeID: 1,
+    curLocation: ''
+  };
+
+  onChangeType(event) {
+    const selectedIndex = event.target.options.selectedIndex;
+    this.setState({
+      state: (this.state.selectedEquipTypeID = event.target.options[selectedIndex].getAttribute('data-key'))
+    });
+  }
+
+  onChangeLocation(event) {
+    const selectedIndex = event.target.options.selectedIndex;
+    this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
+    console.log(this.state.curLocation);
+  }
+
+  render() {
+    return (
+      <div>
+        <Card>
+          <h5>Legg inn nytt sykkelutstyr</h5>
+          <br />
+          <div className="container">
+            <Row>
+              <Column width={3}>
+                <Row>
+                  <Form.Label>Utstyrstype:</Form.Label>
+                </Row>
+                <Row>
+                  <select onChange={this.onChangeType}>
+                    {this.equipmentTypes.map(type => (
+                      <option key={type.id} data-key={type.id}>
+                        {type.typeName} {type.brand} {type.year} {type.comment}
+                      </option>
+                    ))}
+                  </select>
+                </Row>
+              </Column>
+              <Column widht={3}>
+                <Row>
+                  <Form.Label>Lokasjon: </Form.Label>
+                </Row>
+                <Row>
+                  <select onChange={this.onChangeLocation}>
+                    {this.locations.map(lokasjon => (
+                      <option key={lokasjon.id} data-key={lokasjon.id}>
+                        {lokasjon.name}
+                      </option>
+                    ))}
+                  </select>
+                </Row>
+              </Column>
+            </Row>
+            <br />
+            <Row>
+              <Column width={3}>
+                <Row>
+                  <Form.Label>Antall:</Form.Label>
+                </Row>
+                <Row>
+                  <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
+                </Row>
+              </Column>
+            </Row>
+            <br />
+            <Row>
+              <Column>
+                <Button.Success onClick={this.add}>Add</Button.Success>
+              </Column>
+              <Column right>
+                <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+              </Column>
+            </Row>
+          </div>
+        </Card>
+        <br />
+        <Card>
+          <h5>Legg til ny utstyrstype</h5>
+        </Card>
+      </div>
     );
+  }
+
+  add() {
+    if (this.antall <= 0) {
+      return;
+    } else {
+      for (let i = 0; i < this.antall; i++) {
+        equipmentService.addEquipment(this.state.curLocation, this.state.selectedEquipTypeID, 'OK');
+      }
+    }
+
+    history.push('/equipmentTypes/Helmet');
+  }
+
+  cancel() {
+    history.push('/equipmentTypes/Helmet');
+  }
+
+  mounted() {
+    rentalService.getLocations(locations => {
+      this.state.curLocation = locations[0].id;
+      this.locations = locations;
+    });
+
+    equipmentService.getEquipmentTypes(type => {
+      this.selectedEquipment = type[0].id;
+      this.equipmentTypes = type;
+    });
   }
 }
 
@@ -412,5 +454,6 @@ class EquipTypeDetails extends Component {
 
 module.exports = {
   EquipmentTypes,
-  EquipTypeDetails
+  EquipTypeDetails,
+  AddEquipment
 };

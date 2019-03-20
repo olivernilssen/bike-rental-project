@@ -3,8 +3,7 @@ import { start } from 'repl';
 
 class BikeService {
   getBikeTypes(success) {
-    connection.query('select * from BikeType', 
-    (error, results) => {
+    connection.query('select * from BikeType order by typeName', (error, results) => {
       if (error) console.error(error);
 
       success(results);
@@ -12,18 +11,14 @@ class BikeService {
   }
 
   getTypeID(name, success) {
-    connection.query('select id from BikeType where typeName = ?',
-      [name],
-      (error, idResult) => {
-        if (error) return console.error(error);
-        success(idResult);
+    connection.query('select id from BikeType where typeName = ?', [name], (error, idResult) => {
+      if (error) return console.error(error);
+      success(idResult);
     });
   }
 
   getBikeTypesWhere(id, success) {
-    connection.query('select * from BikeType where id = ?',
-    [id], 
-    (error, results) => {
+    connection.query('select * from BikeType where id = ?', [id], (error, results) => {
       if (error) console.error(error);
 
       success(results);
@@ -31,8 +26,7 @@ class BikeService {
   }
 
   getDistinctBikeType(success) {
-    connection.query('select distinct typeName, id from BikeType', 
-    (error, results) => {
+    connection.query('select distinct typeName, id from BikeType', (error, results) => {
       if (error) console.error(error);
 
       success(results);
@@ -40,30 +34,28 @@ class BikeService {
   }
 
   getBikesbyTypeID(id, success) {
-    connection.query(
-      'select id, location_id, bikeStatus from Bikes where type_id = ?',
-      [id],
-      (error, results) => {
-        if (error) return console.error(error);
-        success(results);
-      }
-    );
+    connection.query('select id, location_id, bikeStatus from Bikes where type_id = ?', [id], (error, results) => {
+      if (error) return console.error(error);
+      success(results);
+    });
   }
 
   getBikes(success) {
-    connection.query('select * from Bikes', 
-    (error, results) => {
+    connection.query('select * from Bikes', (error, results) => {
       if (error) return console.error(error);
 
       success(results);
     });
   }
 
-  updateBikes (id, status, locID, note) {
-    connection.query('update Bikes set location_id = ?, bikeStatus = ?, bikeNote = ? where id = ?', [locID, status, note, id], 
-    (error) => {
-      if(error) return console.error(error);
-    })
+  updateBikes(id, status, locID, note) {
+    connection.query(
+      'update Bikes set location_id = ?, bikeStatus = ?, bikeNote = ? where id = ?',
+      [locID, status, note, id],
+      error => {
+        if (error) return console.error(error);
+      }
+    );
   }
 
   addBike(locId, typeId, bikeStatus) {
@@ -114,8 +106,7 @@ class BikeService {
   }
 
   getBikeStatus(success) {
-    connection.query('select distinct bikeStatus from Bikes', 
-    (error, results) => {
+    connection.query('select distinct bikeStatus from Bikes', (error, results) => {
       if (error) console.error(error);
 
       success(results);

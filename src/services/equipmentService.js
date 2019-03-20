@@ -18,6 +18,42 @@ class EquipmentService {
     });
   }
 
+  getTypeID(name, success) {
+    connection.query('select id from EquipmentType where typeName = ?', [name], (error, idResult) => {
+      if (error) return console.error(error);
+      success(idResult);
+    });
+  }
+
+  getEquipmentByTypeID(id, success) {
+    connection.query(
+      'select id, location_id, objectStatus from Equipment where type_id = ?',
+      [id],
+      (error, results) => {
+        if (error) return console.error(error);
+        success(results);
+      }
+    );
+  }
+
+  getEquipmentTypesWhere(id, success) {
+    connection.query('select * from EquipmentType where id = ?', [id], (error, results) => {
+      if (error) console.error(error);
+
+      success(results);
+    });
+  }
+
+  addEquipment(locId, typeId, objectStatu) {
+    connection.query(
+      'insert into Equipment (id, location_id, type_id, objectStatus) value (null, ?, ?, ?)',
+      [locId, typeId, objectStatus],
+      error => {
+        if (error) return console.error(error);
+        success();
+      }
+    );
+  }
   // getBikes(success) {
   //   connection.query('select * from Bikes', (error, results) => {
   //     if (error) return console.error(error);

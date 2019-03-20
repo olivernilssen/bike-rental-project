@@ -108,23 +108,23 @@ class AllBikes extends Component {
 
 class SelectedBike extends Component {
   bike = [];
-  bikeType = "";
-  bikeLoc = "";
-  bikeStatus = "";
+  bikeType = '';
+  bikeLoc = '';
+  bikeStatus = '';
   locations = [];
-  note = "";
+  note = '';
   state = {
     location_id: null,
     statusOnBike: ['OK', 'Til Reperasjon', 'Trenger Reperasjon', 'Trenger Service', 'Må flyttes', 'Stjålet', 'Utleid']
   };
 
   render() {
-    if(!this.bike) return null;
+    if (!this.bike) return null;
 
     return (
       <div>
-        <Card title={"Sykkel med id: " + this.props.match.params.id}>
-        <img src="../pictures/bikeImage.png" width="30%"></img>
+        <Card title={'Sykkel med id: ' + this.props.match.params.id}>
+          <img src="../pictures/bikeImage.png" width="30%" />
           <Table>
             <Table.Thead>
               <Table.Th>Sykkel id</Table.Th>
@@ -132,7 +132,7 @@ class SelectedBike extends Component {
               <Table.Th>Lokasjon</Table.Th>
               <Table.Th>Status</Table.Th>
             </Table.Thead>
-            
+
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>{this.props.match.params.id}</Table.Td>
@@ -140,55 +140,60 @@ class SelectedBike extends Component {
                 <Table.Td>
                   <select name="locationSelect" value={this.bikeLoc} onChange={this.onChangeLocation}>
                     {this.locations.map(loc => (
-                        <option key={loc.id}  data-key={loc.id}>
-                          {loc.name}
-                        </option>
-                      ))}
+                      <option key={loc.id} data-key={loc.id}>
+                        {loc.name}
+                      </option>
+                    ))}
                   </select>
                 </Table.Td>
                 <Table.Td>
-                  <select name="status" value={this.bikeStatus} onChange={event => (this.bikeStatus = event.target.value)}>
+                  <select
+                    name="status"
+                    value={this.bikeStatus}
+                    onChange={event => (this.bikeStatus = event.target.value)}
+                  >
                     {this.state.statusOnBike.map(status => (
-                      <option key={status}>
-                        {status}
-                      </option>
+                      <option key={status}>{status}</option>
                     ))}
                   </select>
                 </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>
-          <br/><br/>
-            <Table>
-              <Table.Thead>
-                <Table.Th>Type id:</Table.Th>
-                <Table.Th>Merke</Table.Th>
-                <Table.Th>Model</Table.Th>
-                <Table.Th>År</Table.Th>
-                <Table.Th>Ramme</Table.Th>
-                <Table.Th>Girsystem</Table.Th>
-                <Table.Th>Bremser</Table.Th>
-                <Table.Th>Vekt</Table.Th>
-                <Table.Th>For</Table.Th>
-                <Table.Th>Pris</Table.Th>
-              </Table.Thead>
-              
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>{this.bike.type_id}</Table.Td>
-                  <Table.Td>{this.bike.brand}</Table.Td>
-                  <Table.Td>{this.bike.model}</Table.Td>
-                  <Table.Td>{this.bike.year}</Table.Td>
-                  <Table.Td>{this.bike.frameSize}"</Table.Td>
-                  <Table.Td>{this.bike.gearSystem}/{this.bike.gears}</Table.Td>
-                  <Table.Td>{this.bike.brakeSystem}</Table.Td>
-                  <Table.Td>{this.bike.weight_kg}kg</Table.Td>
-                  <Table.Td>{this.bike.suitedFor}</Table.Td>
-                  <Table.Td>{this.bike.price}</Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
-            <textarea row='200' cols='100' value={this.note} onChange={event => (this.note = event.target.value)}></textarea>
+          <br />
+          <br />
+          <Table>
+            <Table.Thead>
+              <Table.Th>Type id:</Table.Th>
+              <Table.Th>Merke</Table.Th>
+              <Table.Th>Model</Table.Th>
+              <Table.Th>År</Table.Th>
+              <Table.Th>Ramme</Table.Th>
+              <Table.Th>Girsystem</Table.Th>
+              <Table.Th>Bremser</Table.Th>
+              <Table.Th>Vekt</Table.Th>
+              <Table.Th>For</Table.Th>
+              <Table.Th>Pris</Table.Th>
+            </Table.Thead>
+
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td>{this.bike.type_id}</Table.Td>
+                <Table.Td>{this.bike.brand}</Table.Td>
+                <Table.Td>{this.bike.model}</Table.Td>
+                <Table.Td>{this.bike.year}</Table.Td>
+                <Table.Td>{this.bike.frameSize}"</Table.Td>
+                <Table.Td>
+                  {this.bike.gearSystem}/{this.bike.gears}
+                </Table.Td>
+                <Table.Td>{this.bike.brakeSystem}</Table.Td>
+                <Table.Td>{this.bike.weight_kg}kg</Table.Td>
+                <Table.Td>{this.bike.suitedFor}</Table.Td>
+                <Table.Td>{this.bike.price}</Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+          <textarea row="200" cols="100" value={this.note} onChange={event => (this.note = event.target.value)} />
         </Card>
 
         <Row>
@@ -207,7 +212,7 @@ class SelectedBike extends Component {
   mounted() {
     rentalService.getLocations(result => {
       this.locations = result;
-    })
+    });
 
     bikeService.getBike(this.props.match.params.id, result => {
       this.bike = result;
@@ -215,9 +220,9 @@ class SelectedBike extends Component {
       this.bikeType = result.typeName;
       this.bikeStatus = result.bikeStatus;
       this.state.location_id = result.location_id;
-      if(result.bikeNote == null){
-        this.note = "";
-      }else{
+      if (result.bikeNote == null) {
+        this.note = '';
+      } else {
         this.note = result.bikeNote;
       }
     });
@@ -232,10 +237,8 @@ class SelectedBike extends Component {
 
   change() {
     console.log(this.state.location_id);
-    if(this.state.location_id == null) {
-      
-    }
-    else {
+    if (this.state.location_id == null) {
+    } else {
       bikeService.updateBikes(this.props.match.params.id, this.bikeStatus, this.state.location_id, this.note);
       console.log(this.bikeLoc, this.bikeType, this.bikeStatus, this.note);
       history.push('/allBikes/');
@@ -375,7 +378,7 @@ class AddBikes extends Component {
       this.locations = locations;
     });
 
-    bikeService.getAllBikesByType(bikeTypes => {
+    bikeService.getBikeTypes(bikeTypes => {
       this.selectedBike = bikeTypes[0].id;
       this.bikeTypes = bikeTypes;
     });
@@ -391,31 +394,30 @@ class BikeTypeDetails extends Component {
     bikeTypeDetails: []
   };
 
-  showThisType(id){
-    if(this.showingBikes === id){
+  showThisType(id) {
+    if (this.showingBikes === id) {
       this.state.bikes = [];
       let temp = [];
-      for(let i = 0; i < this.state.typeIds.length; i++){
+      for (let i = 0; i < this.state.typeIds.length; i++) {
         bikeService.getBikesbyTypeID(this.state.typeIds[i].id, results => {
           this.showingBikes = id;
           this.setState(state => {
             const bikes = state.bikes.concat(results);
-            return {bikes, results}; 
+            return { bikes, results };
           });
         });
       }
-      
+
       this.showingBikes = 0;
-    }
-    else {
+    } else {
       this.state.bikes = [];
       bikeService.getBikesbyTypeID(id, results => {
         this.showingBikes = id;
         this.setState(state => {
           const bikes = state.bikes.concat(results);
-          return {bikes, results}; 
+          return { bikes, results };
         });
-      });    
+      });
     }
   }
 
@@ -444,7 +446,12 @@ class BikeTypeDetails extends Component {
                 </Table.Thead>
                 <Table.Tbody>
                   {this.state.bikeTypeDetails.map(type => (
-                    <Table.Tr key={type.id} onClick={() => {this.showThisType(type.id);}}>
+                    <Table.Tr
+                      key={type.id}
+                      onClick={() => {
+                        this.showThisType(type.id);
+                      }}
+                    >
                       <Table.Td>{type.brand}</Table.Td>
                       <Table.Td>{type.model}</Table.Td>
                       <Table.Td>{type.year}</Table.Td>
@@ -467,7 +474,7 @@ class BikeTypeDetails extends Component {
                   <Table.Th>ID</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Status</Table.Th>
-                  <Table.Th></Table.Th>
+                  <Table.Th />
                 </Table.Thead>
                 <Table.Tbody>
                   {this.state.bikes.map(bike => (
@@ -499,29 +506,28 @@ class BikeTypeDetails extends Component {
       this.bikeType = bikeType;
     });
 
-      bikeService.getTypeID(this.props.match.params.typeName, idResult => {
-        this.state.typeIds = idResult;
+    bikeService.getTypeID(this.props.match.params.typeName, idResult => {
+      this.state.typeIds = idResult;
 
-        for (let i = 0; i < idResult.length; i++) {
-          bikeService.getBikesbyTypeID(idResult[i].id, results => {
-            this.setState(state => {
-              const bikes = state.bikes.concat(results);
-              return {bikes, results}; 
-            });
+      for (let i = 0; i < idResult.length; i++) {
+        bikeService.getBikesbyTypeID(idResult[i].id, results => {
+          this.setState(state => {
+            const bikes = state.bikes.concat(results);
+            return { bikes, results };
           });
+        });
 
-          bikeService.getBikeTypesWhere(idResult[i].id, typeResult => {
-            this.setState(state => {
-              const bikeTypeDetails = state.bikeTypeDetails.concat(typeResult);
-              return {
-                bikeTypeDetails,
-                typeResult
-              };
-            });
+        bikeService.getBikeTypesWhere(idResult[i].id, typeResult => {
+          this.setState(state => {
+            const bikeTypeDetails = state.bikeTypeDetails.concat(typeResult);
+            return {
+              bikeTypeDetails,
+              typeResult
+            };
           });
-        }
+        });
       }
-    );
+    });
   }
 }
 
