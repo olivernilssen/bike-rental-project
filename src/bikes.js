@@ -4,8 +4,6 @@ import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from '.
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
-import { connection } from './services/mysql_connection';
-import { basket, employeeID } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -109,12 +107,12 @@ class AllBikes extends Component {
 }
 
 class SelectedBike extends Component {
-  bike = null;
-  bikeType = null;
-  bikeLoc = null;
-  bikeStatus = null;
+  bike = [];
+  bikeType = "";
+  bikeLoc = "";
+  bikeStatus = "";
   locations = [];
-  note = null;
+  note = "";
   state = {
     location_id: null,
     statusOnBike: ['OK', 'Til Reperasjon', 'Trenger Reperasjon', 'Trenger Service', 'Må flyttes', 'Stjålet', 'Utleid']
@@ -216,7 +214,12 @@ class SelectedBike extends Component {
       this.bikeLoc = result.name;
       this.bikeType = result.typeName;
       this.bikeStatus = result.bikeStatus;
-      this.note = result.bikeNote;
+      this.state.location_id = result.location_id;
+      if(result.bikeNote == null){
+        this.note = "";
+      }else{
+        this.note = result.bikeNote;
+      }
     });
   }
 
@@ -228,8 +231,15 @@ class SelectedBike extends Component {
   }
 
   change() {
-    bikeService.updateBikes(this.props.match.params.id, this.bikeStatus, this.state.location_id, this.note);
-    history.push('/allBikes/');
+    console.log(this.state.location_id);
+    if(this.state.location_id == null) {
+      
+    }
+    else {
+      bikeService.updateBikes(this.props.match.params.id, this.bikeStatus, this.state.location_id, this.note);
+      console.log(this.bikeLoc, this.bikeType, this.bikeStatus, this.note);
+      history.push('/allBikes/');
+    }
   }
 
   cancel() {
@@ -374,11 +384,40 @@ class AddBikes extends Component {
 
 class BikeTypeDetails extends Component {
   bikeType = null;
+  showingBikes = 0;
   state = {
     bikes: [],
-    typeIds: 0,
+    typeIds: [],
     bikeTypeDetails: []
   };
+
+  showThisType(id){
+    if(this.showingBikes === id){
+      this.state.bikes = [];
+      let temp = [];
+      for(let i = 0; i < this.state.typeIds.length; i++){
+        bikeService.getBikesbyTypeID(this.state.typeIds[i].id, results => {
+          this.showingBikes = id;
+          this.setState(state => {
+            const bikes = state.bikes.concat(results);
+            return {bikes, results}; 
+          });
+        });
+      }
+      
+      this.showingBikes = 0;
+    }
+    else {
+      this.state.bikes = [];
+      bikeService.getBikesbyTypeID(id, results => {
+        this.showingBikes = id;
+        this.setState(state => {
+          const bikes = state.bikes.concat(results);
+          return {bikes, results}; 
+        });
+      });    
+    }
+  }
 
   render() {
     if (!this.bikeType) return null;
@@ -404,19 +443,19 @@ class BikeTypeDetails extends Component {
                   <Table.Th>Timespris</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.state.bikeTypeDetails.map(bike => (
-                    <Table.Tr key={bike.id}>
-                      <Table.Td>{bike.brand}</Table.Td>
-                      <Table.Td>{bike.model}</Table.Td>
-                      <Table.Td>{bike.year}</Table.Td>
-                      <Table.Td>{bike.frameSize}</Table.Td>
-                      <Table.Td>{bike.wheelSize}</Table.Td>
-                      <Table.Td>{bike.gears}</Table.Td>
-                      <Table.Td>{bike.gearSystem}</Table.Td>
-                      <Table.Td>{bike.brakeSystem}</Table.Td>
-                      <Table.Td>{bike.weight_kg}</Table.Td>
-                      <Table.Td>{bike.suitedFor}</Table.Td>
-                      <Table.Td>{bike.price}</Table.Td>
+                  {this.state.bikeTypeDetails.map(type => (
+                    <Table.Tr key={type.id} onClick={() => {this.showThisType(type.id);}}>
+                      <Table.Td>{type.brand}</Table.Td>
+                      <Table.Td>{type.model}</Table.Td>
+                      <Table.Td>{type.year}</Table.Td>
+                      <Table.Td>{type.frameSize}</Table.Td>
+                      <Table.Td>{type.wheelSize}</Table.Td>
+                      <Table.Td>{type.gears}</Table.Td>
+                      <Table.Td>{type.gearSystem}</Table.Td>
+                      <Table.Td>{type.brakeSystem}</Table.Td>
+                      <Table.Td>{type.weight_kg}</Table.Td>
+                      <Table.Td>{type.suitedFor}</Table.Td>
+                      <Table.Td>{type.price}</Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>
@@ -428,6 +467,7 @@ class BikeTypeDetails extends Component {
                   <Table.Th>ID</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Status</Table.Th>
+                  <Table.Th></Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
                   {this.state.bikes.map(bike => (
@@ -435,6 +475,11 @@ class BikeTypeDetails extends Component {
                       <Table.Td>{bike.id}</Table.Td>
                       <Table.Td>{bike.location_id}</Table.Td>
                       <Table.Td>{bike.bikeStatus}</Table.Td>
+                      <Table.Td>
+                        <NavLink to={'/selectedBike/' + bike.id}>
+                          <Button.Success>Endre</Button.Success>
+                        </NavLink>
+                      </Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>
@@ -454,33 +499,18 @@ class BikeTypeDetails extends Component {
       this.bikeType = bikeType;
     });
 
-    connection.query(
-      'select id from BikeType where typeName = ?',
-      [this.props.match.params.typeName],
-      (error, idResult) => {
-        if (error) return console.error(error);
-        this.setState({ state: (this.state.typeIds = idResult) });
+      bikeService.getTypeID(this.props.match.params.typeName, idResult => {
+        this.state.typeIds = idResult;
 
         for (let i = 0; i < idResult.length; i++) {
-          connection.query(
-            'select id, location_id, bikeStatus from Bikes where type_id = ?',
-            [idResult[i].id],
-            (error, results) => {
-              if (error) return console.error(error);
+          bikeService.getBikesbyTypeID(idResult[i].id, results => {
+            this.setState(state => {
+              const bikes = state.bikes.concat(results);
+              return {bikes, results}; 
+            });
+          });
 
-              this.setState(state => {
-                const bikes = state.bikes.concat(results);
-                return {
-                  bikes,
-                  results
-                };
-              });
-            }
-          );
-
-          connection.query('select * from BikeType where id = ?', [idResult[i].id], (error, typeResult) => {
-            if (error) return console.error(error);
-
+          bikeService.getBikeTypesWhere(idResult[i].id, typeResult => {
             this.setState(state => {
               const bikeTypeDetails = state.bikeTypeDetails.concat(typeResult);
               return {
