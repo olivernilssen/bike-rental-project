@@ -161,7 +161,7 @@ class Menu extends Component {
                     <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                   </div>
                 </div>
-                <SideNavBar.SideLink to="/equipmentTypes/">
+                <SideNavBar.SideLink to="/equipmentTypes/Helmet">
                   <FontAwesomeIcon className="navIcon" icon="tools" />
                   Sykkelutstyr
                 </SideNavBar.SideLink>
