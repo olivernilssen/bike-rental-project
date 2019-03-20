@@ -185,7 +185,7 @@ class Menu extends Component {
                 <div className={'collapse navbar-collapse ' + show}>
                   <div id="subLinks">
                     <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="/locations/1">- Etter lokasjon</SideNavBar.SideLink>
+                    <SideNavBar.SideLink to="/area/1">- Etter lokasjon</SideNavBar.SideLink>
                     <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                   </div>
                 </div>
