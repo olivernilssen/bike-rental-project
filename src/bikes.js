@@ -689,23 +689,21 @@ class BikesByStatus extends Component {
   }
 }
 
-class LocationList extends Component {
-  locations = [];
+class AreaList extends Component {
+  area = [];
 
   render() {
     return (
       <div>
-        <h1 className="display-4">Lokasjoner</h1>
-        <br />
         <Tab>
-          {this.locations.map(location => (
-            <Tab.Item key={location.id} to={'/locations/' + location.id}>
-              {location.name}
+          {this.area.map(area => (
+            <Tab.Item key={area.a_id} to={'/area/' + area.a_id}>
+              {area.areaName}
             </Tab.Item>
           ))}
           <Column right>
-            <NavLink to={'/add/lokasjon/'}>
-              <Button.Light>Legg inn ny lokasjon</Button.Light>
+            <NavLink to={'/addArea'}>
+              <Button.Light>Legg til nytt område</Button.Light>
             </NavLink>
           </Column>
         </Tab>
@@ -714,6 +712,85 @@ class LocationList extends Component {
   }
 
   mounted() {
+    rentalService.getArea(area => {
+      this.area = area;
+    });
+  }
+}
+
+class AddArea extends Component {
+  areaName = '';
+
+  render() {
+    return (
+      <Card>
+        <div className="container">
+          <h5>Nytt område</h5>
+          <Row>
+            <Column>
+              <Form.Label>Navn:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
+              <Row>
+                <Column>
+                  <Button.Success onClick={this.add}>Add</Button.Success>
+                </Column>
+                <Column right>
+                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                </Column>
+              </Row>
+            </Column>
+            <br />
+          </Row>
+        </div>
+      </Card>
+    );
+  }
+
+  add() {
+    rentalService.addArea(this.areaName);
+
+    history.push('/area/1');
+  }
+
+  cancel() {
+    history.push('/area/1');
+  }
+}
+
+class LocationInArea extends Component {
+  areaLocations = null;
+  locations = [];
+
+  render() {
+    if (!this.areaLocations) return null;
+
+    return (
+      <div>
+        <Card>
+          <h1 className="display-4">Lokasjoner</h1>
+          <br />
+          <Tab>
+            {this.locations.map(location => (
+              <Tab.Item key={location.id} to={'/area/' + location.id}>
+                {location.name}
+              </Tab.Item>
+            ))}
+            <Column right>
+              <NavLink to={'/addLocation/'}>
+                <Button.Light>Legg til ny lokasjon</Button.Light>
+              </NavLink>
+            </Column>
+          </Tab>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getArea(area => {
+      this.areaLocations = area;
+    });
+
     rentalService.getLocations(locations => {
       this.locations = locations;
     });
@@ -721,41 +798,77 @@ class LocationList extends Component {
 }
 
 class AddLocation extends Component {
-  area = [];
-  locations = [];
+  areaNames = [];
+  name = '';
+  postalNum = 0;
+  place = '';
+  streetAddress = '';
+  streetNum = 0;
+  state = { curArea: '' };
+
+  onChangeType(event) {
+    const selectedIndex = event.target.options.selectedIndex;
+    this.setState({
+      state: (this.state.curArea = event.target.options[selectedIndex].getAttribute('data-key'))
+    });
+    console.log(this.state.curArea);
+  }
 
   render() {
     return (
       <Card>
-        <div>
-          <h1 className="display-4">Lokasjoner</h1>
-          <br />
-          <Tab>
-            {this.area.map(area => (
-              <Tab.Item key={area.id} to={'/locations/add' + area.id}>
-                {area.name}
-              </Tab.Item>
-            ))}
-            <Column right>
-              {this.locations.map(area => (
-                <Tab.Item key={location.id} to={'/locations/add' + location.id}>
-                  {location.name}
-                </Tab.Item>
-              ))}
+        <div className="container">
+          <h5>Ny lokasjon</h5>
+          <Row>
+            <Column>
+              <Form.Label>Navn:</Form.Label>
+              <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
+              <Form.Label>Område: </Form.Label>
+              <select onChange={this.onChangeareaName}>
+                {this.areaNames.map(areaN => (
+                  <option key={areaN.id} data-key={areaN.id}>
+                    {areaN.areaName}
+                  </option>
+                ))}
+              </select>
+              <br /> <br />
+              <Row>
+                <Column>
+                  <Button.Success onClick={this.add}>Add</Button.Success>
+                </Column>
+                <Column right>
+                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                </Column>
+              </Row>
             </Column>
-          </Tab>
+            <br />
+          </Row>
         </div>
       </Card>
     );
   }
 
-  mounted() {
-    rentalService.getLocations(locations => {
-      this.locations = locations;
-    });
+  add() {
+    rentalService.addLocation(
+      this.Name,
+      this.postalNum,
+      this.place,
+      this.streetAddress,
+      this.streetNum,
+      this.state.curArea
+    );
 
-    rentalService.getArea(area => {
-      this.area = area;
+    history.push('/area/1');
+  }
+
+  cancel() {
+    history.push('/area/1');
+  }
+
+  mounted() {
+    rentalService.getArea(areaNames => {
+      this.state.curArea = areaNames[0].a_id;
+      this.areaNames = areaNames;
     });
   }
 }
@@ -831,7 +944,10 @@ module.exports = {
   BikeTypeDetails,
   BikeStatus,
   BikesByStatus,
-  LocationList,
+  AreaList,
+  AddArea,
+  LocationInArea,
+  AddLocation,
   BikesOnLocation,
   NewBikeType,
   AddBikes,

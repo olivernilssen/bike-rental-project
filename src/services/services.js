@@ -40,6 +40,33 @@ class RentalService {
   getLocations(success) {
     connection.query('select * from Locations', (error, results) => {
       if (error) return console.error(error);
+      success(results);
+    });
+  }
+
+  addLocation(id, name, postalNum, place, streetAddress, streetNum, area_id, success) {
+    connection.query(
+      'insert into Locations (name, postalNum, place, streetAddress, streetNum, area_id) value (null, ?, ?,?,?,?)',
+      [id, name, postalNum, place, streetAddress, streetNum, area_id],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
+  getArea(success) {
+    connection.query('select id as a_id, areaName from Area', (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
+
+  addArea(id, areaName, success) {
+    connection.query('insert into Area (id, areaName) value (null, ?)', [id, areaName], (error, results) => {
+      if (error) return console.error(error);
 
       success(results);
     });
@@ -61,10 +88,13 @@ class RentalService {
   }
 
   getMonthlyPrice(success) {
-    connection.query('select sum(price) as sumPrice, month(dateOrdered) as month from Orders group by month(dateOrdered)', (error, results) => {
-      if (error) return console.error(error);
-      success(results);
-    });
+    connection.query(
+      'select sum(price) as sumPrice, month(dateOrdered) as month from Orders group by month(dateOrdered)',
+      (error, results) => {
+        if (error) return console.error(error);
+        success(results);
+      }
+    );
   }
 
   getLoginInfo(username, success) {

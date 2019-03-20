@@ -9,12 +9,14 @@ import {
   NewBikeType,
   BikeStatus,
   BikesByStatus,
-  LocationList,
+  AreaList,
+  AddArea,
+  LocationInArea,
+  AddLocation,
   BikesOnLocation,
   AllBikes,
   AddBikes,
-  SelectedBike,
-  AddLocation
+  SelectedBike
 } from './bikes.js';
 
 import { UserInfo, EditUserInfo, MineSalg, Bestilling } from './minSide';
@@ -171,7 +173,7 @@ class Menu extends Component {
                   <FontAwesomeIcon className="navIcon" icon="calendar" />
                   Booking
                 </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/locations/1">
+                <SideNavBar.SideLink to="/area/1">
                   <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
                   Lokasjoner
                 </SideNavBar.SideLink>
@@ -270,9 +272,12 @@ ReactDOM.render(
       <Route path="/customers/" component={Customers} />
       <Route exact path="/addCustomer/" component={AddCustomer} />
 
-      <Route path="/locations/" component={LocationList} />
-      <Route exact path="/locations/:id" component={BikesOnLocation} />
-      <Route exact path="/location/add" component={AddLocation} />
+      <Route path="/area/" component={AreaList} />
+      <Route exact path="/addArea" component={AddArea} />
+      <Route exact path="/area/:a_id" component={LocationInArea} />
+      <Route exact path="/area/:id" component={BikesOnLocation} />
+      <Route exact path="/addLocation/" component={AddLocation} />
+
       <Route path="/equipmentTypes/" component={EquipmentTypes} />
       <Route exact path="/equipmentTypes/:typeName/" component={EquipTypeDetails} />
       <Route exact path="/equipments/add" component={AddEquipment} />
