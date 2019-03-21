@@ -98,7 +98,9 @@ class EditUserInfo extends Component {
   render() {
     return (
       <div>
-        <Card title="Brukerinformasjon">
+      <H1>Brukerinformasjon</H1>
+      <br/>
+        <Card>
           <Row>
             <Column width={5}>
               <Form.Label>Fornavn:</Form.Label>
@@ -205,8 +207,10 @@ class MineSalg extends Component {
   render() {
     return (
       <div>
-        <Card title="Mine salg">
-          Dette er en liste over dine salg
+      <H1>Mine salg</H1>
+      <br/>
+        <Card>
+          Dette er en liste over salgene du har gjort som selger.
           <br />
           <br />
           <Row>
@@ -264,11 +268,18 @@ class Bestilling extends Component {
   sales = [];
   orderDate = '';
 
-  //Legge inn id og til/fra tidspunkt i kolonnene til fordel for noen av detaljene.
   render() {
+    let merknad;
+
+    if (this.equipments.length == 0) {
+      merknad = <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
+    }
+
     return (
       <div>
-        <Card title="Se på bestilling">
+      <H1>Se på bestilling</H1>
+      <br/>
+        <Card>
           Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}.
           <br /> <br />
           <Row>
@@ -325,7 +336,7 @@ class Bestilling extends Component {
                   <Table.Th>Kommentar</Table.Th>
                   <Table.Th>Pris</Table.Th>
                 </Table.Thead>
-                <Table.Tbody>
+                <Table.Tbody>{merknad}
                   {this.equipments.map(equipment => (
                     <Table.Tr key={equipment.id}>
                       <Table.Td>{equipment.typeName}</Table.Td>
@@ -339,8 +350,13 @@ class Bestilling extends Component {
               </Table>
             </Column>
           </Row>
+
           <Column>
+
             <h4 align="right">Totalpris: {this.sales.price} kr</h4>
+            <Button.Success align="left" type="button" onClick={() => history.push('/MineSalg/')}>
+              Gå tilbake til salgsoversikten din
+            </Button.Success>
           </Column>
         </Card>
       </div>
@@ -354,6 +370,11 @@ class Bestilling extends Component {
 
     orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
       this.equipments = equipments;
+
+      if (equipments.length == 0) {
+
+      }
+
     });
 
     rentalService.getSales(employeeID, sales => {
