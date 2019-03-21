@@ -178,7 +178,7 @@ class RentedBikes extends Component {
                   <Table.Th>Sykkeltype</Table.Th>
                   <Table.Th>Merke og modell</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
-                  <Table.Th>Status</Table.Th>
+                  <Table.Th>Fradato</Table.Th>
                   <Table.Th />
                 </Table.Thead>
                 <Table.Tbody>
@@ -194,7 +194,7 @@ class RentedBikes extends Component {
                         {bike.brand} {bike.model}
                       </Table.Td>
                       <Table.Td>{bike.name}</Table.Td>
-                      <Table.Td>{bike.bikeStatus}</Table.Td>
+                      <Table.Td>{bike.fromDateTime.toString().substring(4, 16)}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selected/' + bike.id}>
                           <Button.Danger>Utlevering</Button.Danger>

@@ -124,7 +124,7 @@ class RentalService {
 
   getOrderedBikes(today, success) {
     connection.query(
-      'select b.id, b.bikeStatus, l.name, ob.order_id, c.firstName, c.lastName, bt.typeName, bt.brand, bt.model from Bikes b, BikeType bt, Orders o, OrderedBike ob, Customers c, Locations l where b.type_id = bt.id and c.id = o.customer_id and ob.order_id = o.id and ob.bike_id = b.id and b.location_id = l.id and b.bikeStatus != "Utleid" and ob.order_id in (select id from Orders where fromDateTime >= ?)',
+      'select b.id, b.bikeStatus, l.name, ob.order_id, c.firstName, c.lastName, bt.typeName, bt.brand, bt.model, o.fromDateTime from Bikes b, BikeType bt, Orders o, OrderedBike ob, Customers c, Locations l where b.type_id = bt.id and c.id = o.customer_id and ob.order_id = o.id and ob.bike_id = b.id and b.location_id = l.id and b.bikeStatus != "Utleid" and ob.order_id in (select id from Orders where fromDateTime >= ?)',
       [today],
       (error, results) => {
         if (error) return console.error(error);
