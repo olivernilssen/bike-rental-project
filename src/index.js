@@ -169,7 +169,7 @@ class Menu extends Component {
                   <FontAwesomeIcon className="navIcon" icon="calendar" />
                   Booking
                 </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/area/1">
+                <SideNavBar.SideLink to="/area/1/1">
                   <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
                   Lokasjoner
                 </SideNavBar.SideLink>
@@ -271,8 +271,8 @@ ReactDOM.render(
 
       <Route path="/area/" component={AreaList} />
       <Route exact path="/addArea" component={AddArea} />
-      <Route exact path="/area/:a_id" component={LocationInArea} />
-      <Route exact path="/area/:id" component={BikesOnLocation} />
+      <Route path="/area/:area_id" component={LocationInArea} />
+      <Route exact path="/area/:area_id/:id" component={BikesOnLocation} />
       <Route exact path="/addLocation/" component={AddLocation} />
 
       <Route path="/equipmentTypes/" component={EquipmentTypes} />

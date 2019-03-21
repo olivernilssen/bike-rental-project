@@ -39,13 +39,14 @@ class RentalService {
 
   getLocations(success) {
     connection.query('select * from Locations', (error, results) => {
-      if (error) return console.error(error);
-      success(results);
-    });
-  }
+      if (error) console.error(error);
 
-  getLocationsByAreaID(id, success) {
-    connection.query('select * from Locations where area_id = ?', [id], (error, results) => {
+      success(results);
+    })
+  }
+    // Denne funker ikke som den skal, hva er galt? får inn area_id fra
+  getLocationsByArea(area_id, success) {
+    connection.query('select l.id, l.name, l.area_id from Locations l, Area a where l.area_id = a.id and l.area_id = ?', [area_id], (error, results) => {
       if (error) return console.error(error);
       success(results);
     });
@@ -64,7 +65,7 @@ class RentalService {
   }
 
   getArea(success) {
-    connection.query('select id as a_id, areaName from Area', (error, results) => {
+    connection.query('select id as area_id, areaName from Area', (error, results) => {
       if (error) return console.error(error);
 
       success(results);
@@ -78,6 +79,7 @@ class RentalService {
       success(results);
     });
   }
+
 
   // "b.id not in (select ob.bike_id from OrderedBike ob, " +
   // "Orders o where ob.order_id = o.id and o.fromDateTime " +

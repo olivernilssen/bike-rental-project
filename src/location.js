@@ -15,7 +15,7 @@ class AreaList extends Component {
       <div>
         <Tab>
           {this.area.map(area => (
-            <Tab.Item key={area.a_id} to={'/area/' + area.a_id}>
+            <Tab.Item key={area.area_id} to={'/area/' + area.area_id}>
               {area.areaName}
             </Tab.Item>
           ))}
@@ -76,12 +76,12 @@ class AddArea extends Component {
 }
 
 class LocationInArea extends Component {
-  areaLocations = null;
+  area = null;
   locations = [];
 
   render() {
-    if (!this.areaLocations) return null;
-
+    if (!this.area) return null;
+    // console.log("returnerer den");
     return (
       <div>
         <Card>
@@ -89,7 +89,7 @@ class LocationInArea extends Component {
           <br />
           <Tab>
             {this.locations.map(location => (
-              <Tab.Item key={location.id} to={'/area/' + location.id}>
+              <Tab.Item key={location.id} to={'/area/' + this.props.match.params.area_id + "/" + location.id}>
                 {location.name}
               </Tab.Item>
             ))}
@@ -106,10 +106,10 @@ class LocationInArea extends Component {
 
   mounted() {
     rentalService.getArea(area => {
-      this.areaLocations = area;
+      this.area = area;
     });
 
-    rentalService.getLocations(locations => {
+    rentalService.getLocationsByArea(this.props.match.params.area_id, locations => {
       this.locations = locations;
     });
   }
@@ -194,9 +194,10 @@ class AddLocation extends Component {
 class BikesOnLocation extends Component {
   bikeLocations = null;
   bikes = [];
+  area = null;
 
   render() {
-    if (!this.bikeLocations) return null;
+    if (!this.bikeLocations && !this.area) return null;
 
     return (
       <div>
@@ -246,8 +247,13 @@ class BikesOnLocation extends Component {
   }
 
   mounted() {
+
+    rentalService.getArea(area => {
+      this.area = area;
+    });
+
     rentalService.getLocations(locations => {
-      this.bikeLocations = locations;
+      this.locations = locations;
     });
 
     bikeService.getBikesOnLocation(this.props.match.params.id, bikes => {
