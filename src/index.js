@@ -19,7 +19,7 @@ import { UserInfo, EditUserInfo, MineSalg, Bestilling } from './minSide';
 import { Customers, AddCustomer } from './customer.js';
 import { Booking } from './booking.js';
 import { Basket } from './basket.js';
-import { Overview } from './overview.js';
+import { Overview, Selected } from './overview.js';
 import { Orders } from './orders.js';
 import { EquipmentTypes, EquipTypeDetails, AddEquipment } from './equipment.js';
 
@@ -253,6 +253,7 @@ ReactDOM.render(
       <Menu isLoggedIn={true} />
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
+      <Route exact path="/selected/:id" component={Selected} />
       <Route path="/booking/" component={Booking} />
 
       <Route exact path="/allBikes/" component={AllBikes} />
