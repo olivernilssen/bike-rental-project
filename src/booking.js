@@ -175,42 +175,43 @@ class Booking extends Component {
             </div>
           </div>
           <br />
-
-          <h6>Ledige sykler:</h6>
-          <Table>
-            <Table.Thead>
-              <Table.Th>ID</Table.Th>
-              <Table.Th>Type</Table.Th>
-              <Table.Th>Merke</Table.Th>
-              <Table.Th>Lokasjon</Table.Th>
-              <Table.Th>Hjul</Table.Th>
-              <Table.Th>Pris</Table.Th>
-              <Table.Th />
-            </Table.Thead>
-            <Table.Tbody>
-              {this.state.availableBikes.map(bike => (
-                <Table.Tr key={bike.id}>
-                  <Table.Td>{bike.id}</Table.Td>
-                  <Table.Td>{bike.typeName}</Table.Td>
-                  <Table.Td>{bike.brand}</Table.Td>
-                  <Table.Td>{bike.name}</Table.Td>
-                  <Table.Td>{bike.wheelSize}</Table.Td>
-                  <Table.Td>{bike.price}</Table.Td>
-                  <Table.Td>
-                    <Button.Success
-                      style={btnStyle}
-                      onClick={() => {
-                        this.chooseBike(bike);
-                      }}
-                    >
-                      Velg
-                    </Button.Success>
-                  </Table.Td>
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
+          <Card header="LEDIGE SYKLER:">
+            <Table>
+              <Table.Thead>
+                <Table.Th>ID</Table.Th>
+                <Table.Th>Type</Table.Th>
+                <Table.Th>Merke</Table.Th>
+                <Table.Th>Lokasjon</Table.Th>
+                <Table.Th>Hjul</Table.Th>
+                <Table.Th>Pris</Table.Th>
+                <Table.Th />
+              </Table.Thead>
+              <Table.Tbody>
+                {this.state.availableBikes.map(bike => (
+                  <Table.Tr key={bike.id}>
+                    <Table.Td>{bike.id}</Table.Td>
+                    <Table.Td>{bike.typeName}</Table.Td>
+                    <Table.Td>{bike.brand}</Table.Td>
+                    <Table.Td>{bike.name}</Table.Td>
+                    <Table.Td>{bike.wheelSize}</Table.Td>
+                    <Table.Td>{bike.price}</Table.Td>
+                    <Table.Td>
+                      <Button.Success
+                        style={btnStyle}
+                        onClick={() => {
+                          this.chooseBike(bike);
+                        }}
+                      >
+                        Velg
+                      </Button.Success>
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Card>
         </Card>
+        <br />
       </div>
     );
   }

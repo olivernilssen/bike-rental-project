@@ -194,6 +194,7 @@ class Basket extends Component {
             </Column>
           </Row>
         </Card>
+        <br />
       </div>
     );
   }

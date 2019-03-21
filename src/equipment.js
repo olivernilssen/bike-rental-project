@@ -139,6 +139,7 @@ class EquipTypeDetails extends Component {
             </Column>
           </Row>
         </Card>
+        <br />
       </div>
     );
   }

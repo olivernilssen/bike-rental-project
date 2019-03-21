@@ -80,6 +80,7 @@ class Orders extends Component {
             </Column>
           </Row>
         </Card>
+        <br />
       </div>
     );
   }

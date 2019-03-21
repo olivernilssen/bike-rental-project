@@ -135,7 +135,7 @@ class RentedBikes extends Component {
       <div>
         <Row>
           <Column>
-            <Card title="Ikke innleverte sykler:">
+            <Card title="Registrere innlevering:">
               <Table>
                 <Table.Thead>
                   <Table.Th>SykkelID</Table.Th>
