@@ -9,13 +9,12 @@ import {
   NewBikeType,
   BikeStatus,
   BikesByStatus,
-  AreaList,
   AllBikes,
   AddBikes,
   SelectedBike
 } from './bikes.js';
 
-import { AddArea, LocationInArea, AddLocation, BikesOnLocation } from './location';
+import { AreaList, AddArea, LocationInArea, AddLocation, BikesOnLocation } from './location';
 import { UserInfo, EditUserInfo, MineSalg, Bestilling } from './minSide';
 import { Customers, AddCustomer } from './customer.js';
 import { Booking } from './booking.js';
