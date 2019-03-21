@@ -48,6 +48,7 @@ class AddArea extends Component {
             <Column>
               <Form.Label>Navn:</Form.Label>
               <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
+              <br /> <br />
               <Row>
                 <Column>
                   <Button.Success onClick={this.add}>Add</Button.Success>
