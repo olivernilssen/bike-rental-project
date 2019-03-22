@@ -15,7 +15,7 @@ import {
 } from './bikes.js';
 
 import { AreaList, AddArea, LocationInArea, AddLocation, BikesOnLocation } from './location';
-import { UserInfo, EditUserInfo, MySales, DetailedOrder } from './minSide';
+import { UserInfo, EditUserInfo, MySales, DetailedOrder } from './myPage';
 import { Customers, AddCustomer } from './customer.js';
 import { Booking } from './booking.js';
 import { Basket } from './basket.js';
