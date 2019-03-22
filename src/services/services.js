@@ -2,10 +2,10 @@ import { connection } from './mysql_connection';
 import { start } from 'repl';
 
 class RentalService {
-  getAnsatt(ansattId, success) {
+  getEmployee(employeeID, success) {
     connection.query(
       'select * from Workers w, Address a WHERE w.worker_id = ? and w.address_id = a.id',
-      [ansattId],
+      [employeeID],
       (error, results) => {
         if (error) return console.error(error);
         success(results[0]);
@@ -13,10 +13,10 @@ class RentalService {
     );
   }
 
-  updateAnsatt(ansattId, fornavn, etternavn, email, tlf, gate, poststed, postnummer, gatenr, success) {
+  updateEmployee(employeeID, firstName, surName, email, tel, street, place, postalCode, streetNum, success) {
     connection.query(
       'update Workers w, Address a set w.firstName = ?, w.lastName = ?, w.email = ?, w.tlf = ?, a.streetAddress = ?, a.postalNum = ?, a.place = ?, a.streetNum = ? where w.worker_id = ? and w.address_id = a.id',
-      [fornavn, etternavn, email, tlf, gate, postnummer, poststed, gatenr, ansattId],
+      [firstName, surName, email, tel, street, postalCode, place, streetNum, employeeID],
       error => {
         if (error) return console.error(error);
 
@@ -25,10 +25,10 @@ class RentalService {
     );
   }
 
-  getSales(ansattId, success) {
+  getSales(employeeID, success) {
     connection.query(
       'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND  w.worker_id = ? AND ot.id = o.type_Id AND  w.worker_id = o.soldBy_id',
-      [ansattId],
+      [employeeID],
       (error, results) => {
         if (error) return console.error(error);
 

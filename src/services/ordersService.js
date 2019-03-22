@@ -23,7 +23,7 @@ class OrderService {
   }
   getBikesFromOrder(orderId, success) {
     connection.query(
-      'select bt.id, bt.typeName, bt.brand, bt.model, bt.year, bt.frameSize, bt.wheelSize, bt.gears, bt.gearSystem, bt.brakeSystem, bt.weight_kg, bt.suitedFor, bt.price FROM BikeType bt, OrderedBike ob, Orders o where o.id = ob.order_id and ob.bike_id = bt.id and o.id = ?',
+      'select b.id, bt.typeName, bt.brand, bt.model, bt.year, bt.frameSize, bt.wheelSize, bt.gears, bt.gearSystem, bt.brakeSystem, bt.weight_kg, bt.suitedFor, bt.price FROM BikeType bt, OrderedBike ob, Orders o, Bikes b WHERE o.id = ob.order_id and ob.bike_id = b.id and b.type_id = bt.id and o.id = ?',
       [orderId],
       (error, results) => {
         if (error) return console.error(error);

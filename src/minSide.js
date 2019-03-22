@@ -10,14 +10,14 @@ import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class UserInfo extends Component {
-  fornavn = '';
-  etternavn = '';
+  firstName = '';
+  surName = '';
   email = '';
-  tlf = '';
-  gate = '';
-  poststed = '';
-  postnummer = '';
-  nr = '';
+  tel = '';
+  street = '';
+  place = '';
+  postalCode = '';
+  streetNum = '';
 
   render() {
     return (
@@ -27,11 +27,11 @@ class UserInfo extends Component {
         <Card>
           <Row>
             <Column width={5}>
-              <b>Fornavn:</b> {this.fornavn}
+              <b>Fornavn:</b> {this.firstName}
             </Column>
 
             <Column width={5}>
-              <b>Etternavn:</b> {this.etternavn}
+              <b>Etternavn:</b> {this.surName}
             </Column>
           </Row>
 
@@ -41,23 +41,23 @@ class UserInfo extends Component {
             </Column>
 
             <Column width={5}>
-              <b>Telefonnummer:</b> {this.tlf}
+              <b>Telefonnummer:</b> {this.tel}
             </Column>
           </Row>
 
           <Row>
             <Column width={10}>
-              <b>Gateadresse:</b> {this.gate} {this.nr}
+              <b>Gateadresse:</b> {this.street} {this.streetNum}
             </Column>
           </Row>
 
           <Row>
             <Column width={5}>
-              <b>Poststed:</b> {this.poststed}
+              <b>Poststed:</b> {this.place}
             </Column>
 
             <Column width={5}>
-              <b>Postnummer:</b> {this.postnummer}
+              <b>Postnummer:</b> {this.postalCode}
             </Column>
           </Row>
 
@@ -71,29 +71,28 @@ class UserInfo extends Component {
   }
 
   mounted() {
-    console.log(employeeID);
-    rentalService.getAnsatt(employeeID, ansatt => {
-      this.fornavn = ansatt.firstName;
-      this.etternavn = ansatt.lastName;
-      this.email = ansatt.email;
-      this.tlf = ansatt.tlf;
-      this.nr = ansatt.streetNum;
-      this.gate = ansatt.streetAddress;
-      this.poststed = ansatt.place;
-      this.postnummer = ansatt.postalNum;
+    rentalService.getEmployee(employeeID, employee => {
+      this.firstName = employee.firstName;
+      this.surName = employee.lastName;
+      this.email = employee.email;
+      this.tel = employee.tlf;
+      this.streetNum = employee.streetNum;
+      this.street = employee.streetAddress;
+      this.place = employee.place;
+      this.postalCode = employee.postalNum;
     });
   }
 }
 
 class EditUserInfo extends Component {
-  fornavn = '';
-  etternavn = '';
+  firstName = '';
+  surName = '';
   email = '';
-  tlf = '';
-  gate = '';
-  poststed = '';
-  postnummer = '';
-  nr = '';
+  tel = '';
+  street = '';
+  place = '';
+  postalCode = '';
+  streetNum = '';
 
   render() {
     return (
@@ -104,15 +103,15 @@ class EditUserInfo extends Component {
           <Row>
             <Column width={5}>
               <Form.Label>Fornavn:</Form.Label>
-              <Form.Input type="text" value={this.fornavn} onChange={event => (this.fornavn = event.target.value)} />
+              <Form.Input type="text" value={this.firstName} onChange={event => (this.firstName = event.target.value)} />
             </Column>
 
             <Column width={5}>
               <Form.Label>Etternavn:</Form.Label>
               <Form.Input
                 type="text"
-                value={this.etternavn}
-                onChange={event => (this.etternavn = event.target.value)}
+                value={this.surName}
+                onChange={event => (this.surName = event.target.value)}
               />
             </Column>
           </Row>
@@ -125,34 +124,34 @@ class EditUserInfo extends Component {
 
             <Column width={5}>
               <Form.Label>Telefonnummer:</Form.Label>
-              <Form.Input type="text" value={this.tlf} onChange={event => (this.tlf = event.target.value)} />
+              <Form.Input type="text" value={this.tel} onChange={event => (this.tel = event.target.value)} />
             </Column>
           </Row>
 
           <Row>
             <Column width={8}>
               <Form.Label>Gateadresse:</Form.Label>
-              <Form.Input type="text" value={this.gate} onChange={event => (this.gate = event.target.value)} />
+              <Form.Input type="text" value={this.street} onChange={event => (this.street = event.target.value)} />
             </Column>
 
             <Column width={2}>
               <Form.Label>Nummer:</Form.Label>
-              <Form.Input type="text" value={this.nr} onChange={event => (this.nr = event.target.value)} />
+              <Form.Input type="text" value={this.streetNum} onChange={event => (this.streetNum = event.target.value)} />
             </Column>
           </Row>
 
           <Row>
             <Column width={5}>
               <Form.Label>Poststed:</Form.Label>
-              <Form.Input type="text" value={this.poststed} onChange={event => (this.poststed = event.target.value)} />
+              <Form.Input type="text" value={this.place} onChange={event => (this.place = event.target.value)} />
             </Column>
 
             <Column width={5}>
               <Form.Label>Postnummer:</Form.Label>
               <Form.Input
                 type="text"
-                value={this.postnummer}
-                onChange={event => (this.postnummer = event.target.value)}
+                value={this.postalCode}
+                onChange={event => (this.postalCode = event.target.value)}
               />
             </Column>
           </Row>
@@ -171,29 +170,29 @@ class EditUserInfo extends Component {
   }
 
   mounted() {
-    rentalService.getAnsatt(employeeID, ansatt => {
-      this.fornavn = ansatt.firstName;
-      this.etternavn = ansatt.lastName;
-      this.email = ansatt.email;
-      this.tlf = ansatt.tlf;
-      this.nr = ansatt.streetNum;
-      this.gate = ansatt.streetAddress;
-      this.poststed = ansatt.place;
-      this.postnummer = ansatt.postalNum;
+    rentalService.getEmployee(employeeID, employee => {
+      this.firstName = employee.firstName;
+      this.surName = employee.lastName;
+      this.email = employee.email;
+      this.tel = employee.tlf;
+      this.streetNum = employee.streetNum;
+      this.street = employee.streetAddress;
+      this.place = employee.place;
+      this.postalCode = employee.postalNum;
     });
   }
 
   save() {
-    rentalService.updateAnsatt(
+    rentalService.updateEmployee(
       employeeID,
-      this.fornavn,
-      this.etternavn,
+      this.firstName,
+      this.surName,
       this.email,
-      this.tlf,
-      this.gate,
-      this.poststed,
-      this.postnummer,
-      this.nr,
+      this.tel,
+      this.street,
+      this.place,
+      this.postalCode,
+      this.streetNum,
       () => {
         history.push('/information');
       }
@@ -201,7 +200,7 @@ class EditUserInfo extends Component {
   }
 }
 
-class MineSalg extends Component {
+class MySales extends Component {
   sales = [];
 
   render() {
@@ -210,14 +209,14 @@ class MineSalg extends Component {
       <H1>Mine salg</H1>
       <br/>
         <Card>
-          Dette er en liste over salgene du har gjort som selger.
+          Dette er en liste over dine salg som selger hos oss.
           <br />
           <br />
           <Row>
             <Column>
               <Table>
                 <Table.Thead>
-                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Ordre-ID</Table.Th>
                   <Table.Th>Kunde</Table.Th>
                   <Table.Th>Type</Table.Th>
                   <Table.Th>Bestillingsdato</Table.Th>
@@ -239,7 +238,7 @@ class MineSalg extends Component {
                       <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
                       <Table.Td>{sale.price} kr</Table.Td>
                       <Table.Td>
-                        <Button.Success type="button" onClick={() => history.push('/MineSalg/' + sale.id + '/edit')}>
+                        <Button.Success type="button" onClick={() => history.push('/MySales/' + sale.id + '/edit')}>
                           Se bestilling
                         </Button.Success>
                       </Table.Td>
@@ -262,17 +261,19 @@ class MineSalg extends Component {
   }
 }
 
-class Bestilling extends Component {
+class DetailedOrder extends Component {
   bikes = [];
   equipments = [];
   sales = [];
   orderDate = '';
+  fromDate = "";
+  toDate = "";
 
   render() {
-    let merknad;
+    let notice;
 
     if (this.equipments.length == 0) {
-      merknad = <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
+      notice = <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
     }
 
     return (
@@ -280,7 +281,7 @@ class Bestilling extends Component {
       <H1>Se på bestilling</H1>
       <br/>
         <Card>
-          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}.
+          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien varer fra {this.fromDate} til {this.toDate}.
           <br /> <br />
           <Row>
             <Column>
@@ -289,8 +290,6 @@ class Bestilling extends Component {
                   <Table.Th>ID</Table.Th>
                   <Table.Th>Sykkeltype</Table.Th>
                   <Table.Th>Merke</Table.Th>
-                  <Table.Th>Fra:</Table.Th>
-                  <Table.Th>Til:</Table.Th>
                   <Table.Th>Modell</Table.Th>
                   <Table.Th>År</Table.Th>
                   <Table.Th>Rammestr.</Table.Th>
@@ -307,8 +306,6 @@ class Bestilling extends Component {
                       <Table.Td>{bike.id}</Table.Td>
                       <Table.Td>{bike.typeName}</Table.Td>
                       <Table.Td>{bike.brand}</Table.Td>
-                      <Table.Td>sdfsdfsdf</Table.Td>
-                      <Table.Td>sdfsdf</Table.Td>
                       <Table.Td>{bike.model}</Table.Td>
                       <Table.Td>{bike.year}</Table.Td>
                       <Table.Td>{bike.frameSize}</Table.Td>
@@ -336,7 +333,7 @@ class Bestilling extends Component {
                   <Table.Th>Kommentar</Table.Th>
                   <Table.Th>Pris</Table.Th>
                 </Table.Thead>
-                <Table.Tbody>{merknad}
+                <Table.Tbody>{notice}
                   {this.equipments.map(equipment => (
                     <Table.Tr key={equipment.id}>
                       <Table.Td>{equipment.typeName}</Table.Td>
@@ -354,7 +351,7 @@ class Bestilling extends Component {
           <Column>
 
             <h4 align="right">Totalpris: {this.sales.price} kr</h4>
-            <Button.Success align="left" type="button" onClick={() => history.push('/MineSalg/')}>
+            <Button.Success align="left" type="button" onClick={() => history.push('/MySales/')}>
               Gå tilbake til salgsoversikten din
             </Button.Success>
           </Column>
@@ -371,15 +368,13 @@ class Bestilling extends Component {
     orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
       this.equipments = equipments;
 
-      if (equipments.length == 0) {
-
-      }
-
     });
 
     rentalService.getSales(employeeID, sales => {
       this.sales = sales[this.props.match.params.id - 1];
       this.orderDate = this.sales.dateOrdered.toString().substring(4, 24);
+      this.fromDate = this.sales.fromDateTime.toString().substring(4, 24);
+      this.toDate = this.sales.toDateTime.toString().substring(4, 24);
     });
   }
 }
@@ -387,6 +382,6 @@ class Bestilling extends Component {
 module.exports = {
   UserInfo,
   EditUserInfo,
-  MineSalg,
-  Bestilling
+  MySales,
+  DetailedOrder
 };
