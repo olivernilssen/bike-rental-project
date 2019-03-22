@@ -5,6 +5,7 @@ import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select }
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
+import { orderService } from './services/OrdersService';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -123,6 +124,254 @@ class Chart extends Component {
     });
   }
 }
+
+class SearchRentedBikes extends Component {
+
+  state = {
+    sales: [],
+    searchWord: '',
+    month: '%',
+  };
+
+  handleChangeSearch(event) {
+    this.setState( { state: (this.state.searchWord = event.target.value)}, this.searchSales());
+
+  }
+
+  handleChangeSelect(event) {
+    this.setState( { month: (this.state.month = event.target.value) }, this.searchSales());
+
+  }
+
+  searchSales() {
+    let searchWord = '%' + this.state.searchWord + '%';
+    let month = '%' + this.state.month + '%';
+
+rentalService.searchSales(searchWord, month, results => {
+    this.setState({ state: (this.state.sales = []) });
+    this.setState(state => {
+      const sales = state.sales.concat(results);
+      return{
+        sales,
+        results
+      };
+    });
+  });
+  }
+
+  render() {
+    return (
+      <div>
+      <br/>
+        <Card title="Alle ordre">
+
+        <Row>
+
+        <Column width = {3}>
+          <Form.Label>Velg måned</Form.Label>
+          <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
+            <Select.Option value="%">Alle måneder</Select.Option>
+            <Select.Option value="-01-">Januar</Select.Option>
+            <Select.Option value="-02-">Februar</Select.Option>
+            <Select.Option value="-03-">Mars</Select.Option>
+            <Select.Option value="-04-">April</Select.Option>
+            <Select.Option value="-05-">Mai</Select.Option>
+            <Select.Option value="-06-">Juni</Select.Option>
+            <Select.Option value="-07-">Juli</Select.Option>
+            <Select.Option value="-08-">August</Select.Option>
+            <Select.Option value="-09-">September</Select.Option>
+            <Select.Option value="-10-">Oktober</Select.Option>
+            <Select.Option value="-11-">November</Select.Option>
+            <Select.Option value="-12-">Desember</Select.Option>
+          </Select>
+        </Column>
+
+        </Row>
+
+        <br/>
+
+          <Row>
+
+          <Column>
+          <Form.Label>Søk på kunde, selger, datoer og pris ... Merk at datoer må skrives i tallform.</Form.Label>
+          <Form.Input onChange ={this.handleChangeSearch}>{this.state.searchWord}</Form.Input>
+          </Column>
+
+          </Row>
+
+          <br/>
+
+          <Row>
+
+            <Column>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Ordre</Table.Th>
+                  <Table.Th>Kunde</Table.Th>
+                  <Table.Th>Selger</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Bestillingsdato</Table.Th>
+                  <Table.Th>Start for utleie</Table.Th>
+                  <Table.Th>Slutt for utleie</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                  <Table.Th />
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.state.sales.map(sale => (
+                    <Table.Tr key={sale.id}>
+                      <Table.Td>{sale.id}</Table.Td>
+                      <Table.Td>
+                        {sale.lastName}
+                      </Table.Td>
+                      <Table.Td>{sale.firstName}</Table.Td>
+                      <Table.Td>{sale.typeName}</Table.Td>
+                      <Table.Td>{sale.dateOrdered.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{sale.fromDateTime.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{sale.price} kr</Table.Td>
+                      <Table.Td>
+                        <Button.Success type="button" onClick={() => history.push('/AllSales/' + sale.id + '/edit')}>
+                          Mer info
+                        </Button.Success>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+        </Card>
+        <br />
+      </div>
+    );
+  }
+
+  mounted() {
+    rentalService.getAllSales(results => {
+      this.setState({ sales: results});
+    });
+  }
+}
+
+class DetailedOrderAll extends Component {
+  bikes = [];
+  equipments = [];
+  sales = [];
+  orderDate = '';
+  fromDate = "";
+  toDate = "";
+
+  render() {
+    let notice;
+
+    if (this.equipments.length == 0) {
+      notice = <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
+    }
+
+    return (
+      <div>
+      <H1>Se på bestilling</H1>
+      <br/>
+        <Card>
+          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien varer fra {this.fromDate} til {this.toDate}.
+          <br /> <br />
+          <Row>
+            <Column>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Sykkeltype</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Modell</Table.Th>
+                  <Table.Th>År</Table.Th>
+                  <Table.Th>Rammestr.</Table.Th>
+                  <Table.Th>Hjulstr.</Table.Th>
+                  <Table.Th>Gir</Table.Th>
+                  <Table.Th>Bremsesystem</Table.Th>
+                  <Table.Th>Vekt</Table.Th>
+                  <Table.Th>Kjønn</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.bikes.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.typeName}</Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>{bike.model}</Table.Td>
+                      <Table.Td>{bike.year}</Table.Td>
+                      <Table.Td>{bike.frameSize}</Table.Td>
+                      <Table.Td>{bike.wheelSize}</Table.Td>
+                      <Table.Td>
+                        {bike.gearSystem} ({bike.gears})
+                      </Table.Td>
+                      <Table.Td>{bike.brakeSystem}</Table.Td>
+                      <Table.Td>{bike.weight_kg} kg</Table.Td>
+                      <Table.Td>{bike.suitedFor}</Table.Td>
+                      <Table.Td>{bike.price} kr</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+          <Row>
+            <Column width={8}>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Utstyrstype</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>År</Table.Th>
+                  <Table.Th>Kommentar</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>{notice}
+                  {this.equipments.map(equipment => (
+                    <Table.Tr key={equipment.id}>
+                      <Table.Td>{equipment.typeName}</Table.Td>
+                      <Table.Td>{equipment.brand}</Table.Td>
+                      <Table.Td>{equipment.year}</Table.Td>
+                      <Table.Td>{equipment.comment}</Table.Td>
+                      <Table.Td>{equipment.price}</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+
+          <Column>
+
+            <h4 align="right">Totalpris: {this.sales.price} kr</h4>
+            <Button.Success align="left" type="button" onClick={() => history.push('/Overview/')}>
+              Gå tilbake til forsiden
+            </Button.Success>
+          </Column>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    orderService.getBikesFromOrder(this.props.match.params.id, bikes => {
+      this.bikes = bikes;
+    });
+
+    orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
+      this.equipments = equipments;
+
+    });
+
+    rentalService.getAllSales(sales => {
+      this.sales = sales[this.props.match.params.id - 1];
+      this.orderDate = this.sales.dateOrdered.toString().substring(4, 24);
+      this.fromDate = this.sales.fromDateTime.toString().substring(4, 24);
+      this.toDate = this.sales.toDateTime.toString().substring(4, 24);
+    });
+  }
+}
+
+
 
 class RentedBikes extends Component {
   todaysDate = year + '-' + month + '-' + day + '%';
@@ -356,9 +605,10 @@ class Overview extends Component {
         </Card>
         <br />
         <RentedBikes />
+        <SearchRentedBikes />
       </div>
     );
   }
 }
 
-module.exports = { Overview, Selected };
+module.exports = { Overview, Selected, DetailedOrderAll };

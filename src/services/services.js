@@ -13,6 +13,19 @@ class RentalService {
     );
   }
 
+  searchSales(searchWord, month, success) {
+    connection.query(
+
+      'select distinct ot.typeName, w.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND ot.id = o.type_Id AND w.worker_id = o.soldBy_id and (o.dateOrdered like ? or o.fromDateTime like ? or o.toDateTime like ?)' +
+      'and (ot.typeName like ? or w.firstName like ? or w.lastName like ? or c.firstName like ? or c.lastName like ? or o.id like ? or o.dateOrdered like ? or o.fromDateTime like ? or o.toDateTime like ? or o.price like ?)',
+    [month, month, month, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord],
+      (error, results) => {
+        if (error) return console.error(error);
+        success(results);
+      }
+    );
+  }
+
   updateEmployee(employeeID, firstName, surName, email, tel, street, place, postalCode, streetNum, success) {
     connection.query(
       'update Workers w, Address a set w.firstName = ?, w.lastName = ?, w.email = ?, w.tlf = ?, a.streetAddress = ?, a.postalNum = ?, a.place = ?, a.streetNum = ? where w.worker_id = ? and w.address_id = a.id',
@@ -29,6 +42,17 @@ class RentalService {
     connection.query(
       'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND  w.worker_id = ? AND ot.id = o.type_Id AND  w.worker_id = o.soldBy_id',
       [employeeID],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
+  getAllSales(success) {
+    connection.query(
+      'select ot.typeName, w.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND ot.id = o.type_Id AND w.worker_id = o.soldBy_id',
       (error, results) => {
         if (error) return console.error(error);
 
