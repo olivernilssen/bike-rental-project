@@ -18,6 +18,52 @@ class EquipmentService {
     });
   }
 
+  getDistinctBikeType(eqName, success) {
+    connection.query('select distinct typeName from BikeType where typeName NOT IN (select bt.typeName from BikeType bt, Restrictions r, EquipmentType et where bt.id = r.bikeType_id and et.id = r.equipmentType_id and et.typeName = ?)', [eqName], (error, results) => {
+      if (error) console.error(error);
+console.log(results);
+      success(results);
+    });
+  }
+
+  getRestrictions(name, success) {
+    connection.query('select bt.typeName, bt.id from BikeType bt, Restrictions r, EquipmentType et where bt.id = r.bikeType_id and et.id = r.equipmentType_id and et.typeName = ?', [name],
+    (error, results) => {
+      if (error) return console.error(error);
+
+
+      success(results);
+    });
+
+  }
+
+  addRestriction(biketype, equipmenttype, success) {
+    connection.query("insert into Restrictions (bikeType_id, equipmentType_id) values (?, ?)", [biketype, equipmenttype],
+  (error, results) => {
+    if (error) return console.error(error);
+
+    success();
+  });
+  }
+
+  deleteRestriction(bikeid, equipmentid, success) {
+    connection.query('DELETE FROM Restrictions where bikeType_id = ? AND equipmentType_id = ?', [bikeid, equipmentid],
+    (error, results) => {
+      if (error) return console.error(error);
+
+      success();
+    });
+
+  }
+
+  getBikeIdByName(name, success) {
+    connection.query('select id from BikeType where typeName = ?', [name], (error, idResult) => {
+      if (error) return console.error(error);
+      success(idResult[0]);
+    });
+  }
+
+
   getTypeID(name, success) {
     connection.query('select id from EquipmentType where typeName = ?', [name], (error, idResult) => {
       if (error) return console.error(error);

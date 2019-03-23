@@ -21,7 +21,7 @@ import { Booking } from './booking.js';
 import { Basket } from './basket.js';
 import { Overview, Selected, DetailedOrderAll } from './overview.js';
 import { Orders } from './orders.js';
-import { EquipmentTypes, EquipTypeDetails, AddEquipment } from './equipment.js';
+import { EquipmentTypes, EquipTypeDetails, AddEquipment, EquipmentTypesMain, EquipmentTypesOtherMain } from './equipment.js';
 
 import {
   Card,
@@ -276,6 +276,8 @@ ReactDOM.render(
       <Route exact path="/addLocation/" component={AddLocation} />
 
       <Route path="/equipmentTypes/" component={EquipmentTypes} />
+      <Route path="/equipmentTypes/Skip/Main" component={EquipmentTypesMain} />
+      <Route path="/equipmentTypes/Skip/OtherMain" component={EquipmentTypesOtherMain} />
       <Route exact path="/equipmentTypes/:typeName/" component={EquipTypeDetails} />
       <Route exact path="/equipments/add" component={AddEquipment} />
       <Route exact path="/basket/" component={Basket} />

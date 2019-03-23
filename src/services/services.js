@@ -117,9 +117,6 @@ class RentalService {
       (error, results) => {
         if (error) return console.error(error);
         success(results);
-        console.log("Hmm");
-        console.log(startDate);
-        console.log(endDate);
       }
     );
   }

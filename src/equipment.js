@@ -19,7 +19,7 @@ class EquipmentTypes extends Component {
         <br />
         <Tab>
           {this.equipTypes.map(type => (
-            <Tab.Item key={type.typeName} to={'/equipmentTypes/' + type.typeName}>
+            <Tab.Item key={type.typeName} to={'/equipmentTypes/' + type.typeName} >
               {type.typeName}
             </Tab.Item>
           ))}
@@ -49,8 +49,59 @@ class EquipmentTypes extends Component {
   }
 }
 
+class EquipmentTypesOtherMain extends Component {
+
+
+  render() {
+    return(
+<div>
+<Card>
+<Row>
+<Column>
+Opprettelsen av begrensningen var vellykket. Du vil ikke lenger kunne leie de respektive leiegjenstandene i kombinasjon. <br/><br/>
+</Column>
+</Row>
+
+
+
+</Card>
+</div>
+    );
+  }
+
+
+}
+
+class EquipmentTypesMain extends Component {
+
+
+  render() {
+    return(
+<div>
+<Card>
+<Row>
+<Column>
+Slettingen av begrensningen var vellykket. Den vil ikke lenger hindre de respektive leiegjenstandene fra å leies ut sammen. <br/><br/>
+</Column>
+</Row>
+
+
+
+</Card>
+</div>
+    );
+  }
+
+
+}
+
 class EquipTypeDetails extends Component {
+  handler = "";
+  restrictions = [];
   equipType = null;
+  distinctEquipType = null;
+  lock = false;
+  selectStatus = "";
   showingEquipment = 0;
   state = {
     equipments: [],
@@ -58,10 +109,13 @@ class EquipTypeDetails extends Component {
     equipTypeDetails: []
   };
 
+
   showThisType(id) {
-    if (this.showingEquipment === id) {
+    if (this.showingEquipment === id && this.lock == true) {
+      this.lock = false;
       this.state.equipments = [];
       let temp = [];
+      console.log(this.state.equipments);
 
       for (let i = 0; i < this.state.typeIds.length; i++) {
         equipmentService.getEquipmentByTypeID(this.state.typeIds[i].id, results => {
@@ -75,6 +129,8 @@ class EquipTypeDetails extends Component {
 
       this.showingEquipment = 0;
     } else {
+      this.lock = true;
+      console.log(this.state.equipments);
       this.state.equipments = [];
       equipmentService.getEquipmentByTypeID(id, results => {
         this.showingEquipment = id;
@@ -86,15 +142,31 @@ class EquipTypeDetails extends Component {
     }
   }
 
+
   render() {
     if (!this.equipType) return null;
+    if (!this.distinctEquipType) return null;
+
+    let notice;
+
+    if (this.lock == true) {
+      notice = <p style={{ color: "red" }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer igjen.</p>;
+    }
+
+    let noRestr;
+
+    if (this.restrictions.length == 0) {
+      noRestr = <Table.Td>Det ble ikke funnet noen begrensninger.</Table.Td>
+    }
+
+    console.log(this.selectStatus);
 
     return (
       <div>
         <Card>
           <Row>
-            <Column>
-              <h6>Detaljert beskrivelse</h6>
+            <Column width={12}>
+              <h6>Velg en spesiell størrelse/type ved å trykke på den i tabellen:</h6>
               <Table>
                 <Table.Thead>
                   <Table.Th>Merke</Table.Th>
@@ -118,8 +190,17 @@ class EquipTypeDetails extends Component {
                   ))}
                 </Table.Tbody>
               </Table>
+              </Column>
+              </Row>
+              <Row>
+              <Column right>
+              {notice}
+              </Column>
+              </Row>
+              <Row>
+              <Column>
               <br />
-              <h6>Utstyr av denne typen:</h6>
+              <h6>Beholdning for valgte varer:</h6>
               <Table>
                 <Table.Thead>
                   <Table.Th>ID</Table.Th>
@@ -136,7 +217,54 @@ class EquipTypeDetails extends Component {
                   ))}
                 </Table.Tbody>
               </Table>
+              <br/>
+              </Column>
+              </Row>
+              <Row>
+              <Column width={4}>
+              <h6>Sykkeltyper utstyret IKKE passer til:</h6>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Navn</Table.Th>
+                  <Table.Th>Endre</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                {noRestr}
+                {this.restrictions.map(restrictions => (
+                  <Table.Tr key={restrictions.id}>
+                    <Table.Td>{restrictions.typeName}</Table.Td>
+                    <Table.Td><Button.Success onClick={() => this.delete(restrictions.id)}>Tillat</Button.Success></Table.Td>
+                  </Table.Tr>
+                ))}
+                </Table.Tbody>
+              </Table>
+              <br />
             </Column>
+
+            <Column width={1}>
+            </Column>
+
+
+            <Column>
+
+            <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
+            <Select name="typeSelect" value={this.selectStatus} onChange={event => (this.selectStatus = event.target.value)}>
+
+            <Select.Option value="">Du har ikke valgt noen sykkel ...</Select.Option>
+
+            {this.distinctEquipType.map(trestrictions => (
+              <Select.Option>{trestrictions.typeName} </Select.Option>
+            ))}
+
+            </Select>
+
+            <br/><br/>
+            <Button.Danger style={{ float: "right" }} onClick = { () => {this.add()} } >Legg til ny restriksjon</Button.Danger>
+
+
+            </Column>
+
+
           </Row>
         </Card>
         <br />
@@ -144,12 +272,58 @@ class EquipTypeDetails extends Component {
     );
   }
 
+add() {
+
+if (this.selectStatus != "") {
+
+  equipmentService.getBikeIdByName(this.selectStatus, idResult => {
+
+    equipmentService.addRestriction(JSON.stringify(idResult).substring(6).replace("}", ""), this.state.equipTypeDetails[0].id, () => {
+
+    history.push("/equipmentTypes/Skip/OtherMain");
+
+    })
+
+
+  })
+
+
+
+}
+
+}
+
+
+  delete(id) {
+
+    this.handler = id;
+
+    equipmentService.deleteRestriction(this.handler, this.state.equipTypeDetails[0].id, () => {
+      history.push("/equipmentTypes/Skip/Main");
+
+    });
+
+  }
+
   mounted() {
+
+
+
+    equipmentService.getRestrictions(this.props.match.params.typeName, results => {
+      this.restrictions = results;
+      this.lock = false;
+    });
+
+
     this.state.equipments = [];
     this.state.equipTypeDetails = [];
 
     equipmentService.getEquipmentTypes(type => {
       this.equipType = type;
+    });
+
+    equipmentService.getDistinctBikeType(this.props.match.params.typeName, distinctType => {
+      this.distinctEquipType = distinctType;
     });
 
     equipmentService.getTypeID(this.props.match.params.typeName, idResult => {
@@ -357,5 +531,7 @@ class NewEquipmentType extends Component {
 module.exports = {
   EquipmentTypes,
   EquipTypeDetails,
-  AddEquipment
+  AddEquipment,
+  EquipmentTypesMain,
+  EquipmentTypesOtherMain
 };
