@@ -12,6 +12,8 @@ let today = new Date();
 let day = today.getDate();
 let month = today.getMonth() + 1;
 let year = today.getFullYear();
+let time = today.getHours() + 1;
+let laterTime = today.getHours() + 2;
 let day2 = day + 2;
 
 if (day < 10) day = '0' + day;
@@ -21,11 +23,16 @@ if (month < 10) month = '0' + month;
 class Booking extends Component {
   todaysDate = year + '-' + month + '-' + day;
   nextDay = year + '-' + month + '-' + day2;
+  currentHour = time + ":00";
+  laterHour = time + ":00";
+  laterHourAlt = laterTime + ":00";
   dayRent = false;
+
   state = {
     startDate: this.todaysDate,
     endDate: this.nextDay,
-    hoursRenting: 0,
+    startHour: this.currentHour,
+    endHour: this.laterHour,
     typeSelect: '%',
     locationSelect: '%',
     allBikes: [],
@@ -38,20 +45,30 @@ class Booking extends Component {
   };
 
   handleCheckChange() {
-    if (this.dayRent == false) {
-      this.dayRent = true;
-    } else {
-      this.dayRent = false;
+      if (this.dayRent == false) {
+        this.dayRent = true;
+        this.state.endHour = this.laterHourAlt;
+        this.handleSubmit();
+      } else {
+        this.dayRent = false;
+        this.state.endHour = this.laterHour;
+        this.handleSubmit();
+      }
     }
 
-    this.findAvailBikes();
-  }
 
   handleChange(e) {
+
+
+
     this.setState({ [e.target.name]: e.target.value }, this.handleSubmit);
+
+
   }
 
   handleSubmit() {
+
+
     this.findAvailBikes();
   }
 
@@ -61,17 +78,9 @@ class Booking extends Component {
       basket.splice(0, 1);
     }
 
-    if (this.state.dayRent == true) {
       bike.startDate = this.state.startDate;
       bike.endDate = this.state.startDate;
-      bike.hoursRent = this.state.hoursRenting;
-      bike.dayRent = true;
-    } else {
-      bike.startDate = this.state.startDate;
-      bike.endDate = this.state.endDate;
-      bike.hoursRent = this.state.hoursRenting;
-      bike.dayRent = false;
-    }
+
 
     basket.push(bike);
     this.findAvailBikes();
@@ -85,6 +94,27 @@ class Booking extends Component {
     };
     const { btnStyle } = styles;
 
+    let notice;
+    let checker = this.state.startDate.toString() + " " + this.state.startHour.toString() + ":00";
+    let checker2 = this.state.endDate.toString() + " " + this.state.endHour.toString() + ":00";
+
+    if (this.dayRent == false && (this.state.startDate.toString() == this.state.endDate.toString())) {
+      notice = <p style={{ color: "red" }}>Pass på at "Til dato:" er minst én dag senere enn "Fra dato:" ved døgnutleie. Ønsker du å leie og levere samme dag, velg "Timeutleie".</p>;
+    }
+
+    if (this.dayRent == true && (this.state.startDate.toString() == this.state.endDate.toString()) && (checker.toString().substring(10,13) >= checker2.toString().substring(10,13))) {
+
+      notice = <p style={{ color: "red" }}>Ved leie og innlevering på samme dag må "Til klokkeslett" minst være én time etter "Fra klokkeslett".</p>;
+
+    }
+
+    if ((this.state.startDate.toString() > this.state.endDate.toString())) {
+
+      notice = <p style={{ color: "red" }}>Hvordan kan man låne noe en dag og levere tilbake før det? Vet du noe om universet vi ikke vet?</p>;
+
+    }
+
+
     return (
       <div>
         <H1>Booking</H1>
@@ -94,30 +124,31 @@ class Booking extends Component {
           <div className="container">
             <Row>
               <Column width={3}>
-                <Form.Label>Fra dato: </Form.Label>
+                <Form.Label>Fra dato:</Form.Label>
                 <Form.Input
                   type="date"
                   name="startDate"
-                  disabled={this.dayRent}
                   min={this.state.todaysDate}
                   value={this.state.startDate}
                   onChange={this.handleChange}
                 />
               </Column>
 
+
+
               <Column width={3}>
                 <Form.Label>Til dato:</Form.Label>
                 <Form.Input
                   type="date"
                   name="endDate"
-                  disabled={this.dayRent}
                   min={this.state.startDate}
                   value={this.state.endDate}
                   onChange={this.handleChange}
                 />
               </Column>
 
-              <Column width={3}>
+
+              <Column width={3}><br/><br/>
                 <div className="form-check">
                   <Form.Label>
                     <input
@@ -128,18 +159,17 @@ class Booking extends Component {
                       checked={this.dayRent}
                       onChange={this.handleCheckChange}
                     />
-                    <label className="form-check-label">Timesleie:</label>
+                    <label className="form-check-label">Ønsker du spesifisere klokkeslett? (timeutleie)</label>
                   </Form.Label>
                 </div>
 
-                <Form.Input
-                  type="number"
-                  name="hoursRenting"
-                  disabled={!this.dayRent}
-                  onChange={this.handleChange}
-                  value={this.hoursRenting}
-                />
-              </Column>
+                </Column>
+
+
+
+
+
+
             </Row>
             <br />
 
@@ -165,14 +195,43 @@ class Booking extends Component {
                   <Select.Option value="Barn">Barn</Select.Option>
                 </Select>
               </Column>
+
+              <Column width ={2}>
+              <Form.Label>Fra klokkeslett:</Form.Label>
+                <Form.Input
+                  type="time"
+                  name="startHour"
+                  disabled={!this.dayRent}
+                  value={this.state.startHour}
+                  onChange={this.handleChange}
+                />
+              </Column>
+
+              <Column width ={2}>
+                <Form.Label>Til klokkeslett:</Form.Label>
+                <Form.Input
+                  type="time"
+                  name="endHour"
+                  disabled={!this.dayRent}
+                  value={this.state.endHour}
+                  onChange={this.handleChange}
+                />
+              </Column>
+
             </Row>
             {/* submit button */}
             <br />
-            <div className="form-group">
+
+            <Row>
+            <Column width={1}>
               <Button.Success name="submit" onClick={this.handleSubmit}>
                 Søk
               </Button.Success>
-            </div>
+              </Column>
+              <Column right>
+              {notice}
+              </Column>
+              </Row>
           </div>
           <br />
           <Card header="LEDIGE SYKLER:">
@@ -217,17 +276,17 @@ class Booking extends Component {
   }
 
   mounted() {
+
     this.state.availableBikes = [];
     let empty = { id: 'Gjør et nytt søk' };
 
-    this.startDate = this.startDate + '%';
-    this.endDate = this.endDate + '%';
+
 
     rentalService.getBookingSearch(
       this.state.locationSelect,
       this.state.typeSelect,
-      this.state.startDate,
-      this.state.endDate,
+      this.state.startDate.toString() + " " + this.state.startHour.toString() + ":00",
+      this.state.endDate.toString() + " " + this.state.endHour.toString() + ":00",
       result => {
         for (let i = 0; i < result.length; i++) {
           {
@@ -267,14 +326,14 @@ class Booking extends Component {
     this.state.availableBikes = [];
     let empty = { id: 'Gjør et nytt søk' };
 
-    this.startDate = this.startDate + '%';
-    this.endDate = this.endDate + '%';
+
+
 
     rentalService.getBookingSearch(
       this.state.locationSelect,
       this.state.typeSelect,
-      this.state.startDate,
-      this.state.endDate,
+      this.state.startDate.toString() + " " + this.state.startHour.toString() + ":00",
+      this.state.endDate.toString() + " " + this.state.endHour.toString() + ":00",
       result => {
         for (let i = 0; i < result.length; i++) {
           {
