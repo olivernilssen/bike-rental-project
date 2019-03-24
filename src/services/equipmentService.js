@@ -21,7 +21,6 @@ class EquipmentService {
   getDistinctBikeType(eqName, success) {
     connection.query('select distinct typeName from BikeType where typeName NOT IN (select bt.typeName from BikeType bt, Restrictions r, EquipmentType et where bt.id = r.bikeType_id and et.id = r.equipmentType_id and et.typeName = ?)', [eqName], (error, results) => {
       if (error) console.error(error);
-console.log(results);
       success(results);
     });
   }

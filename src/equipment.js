@@ -99,7 +99,7 @@ class EquipTypeDetails extends Component {
   handler = "";
   restrictions = [];
   equipType = null;
-  distinctEquipType = null;
+  distinctBikeType = null;
   lock = false;
   selectStatus = "";
   showingEquipment = 0;
@@ -115,7 +115,6 @@ class EquipTypeDetails extends Component {
       this.lock = false;
       this.state.equipments = [];
       let temp = [];
-      console.log(this.state.equipments);
 
       for (let i = 0; i < this.state.typeIds.length; i++) {
         equipmentService.getEquipmentByTypeID(this.state.typeIds[i].id, results => {
@@ -130,7 +129,6 @@ class EquipTypeDetails extends Component {
       this.showingEquipment = 0;
     } else {
       this.lock = true;
-      console.log(this.state.equipments);
       this.state.equipments = [];
       equipmentService.getEquipmentByTypeID(id, results => {
         this.showingEquipment = id;
@@ -145,7 +143,7 @@ class EquipTypeDetails extends Component {
 
   render() {
     if (!this.equipType) return null;
-    if (!this.distinctEquipType) return null;
+    if (!this.distinctBikeType) return null;
 
     let notice;
 
@@ -159,7 +157,6 @@ class EquipTypeDetails extends Component {
       noRestr = <Table.Td>Det ble ikke funnet noen begrensninger.</Table.Td>
     }
 
-    console.log(this.selectStatus);
 
     return (
       <div>
@@ -252,7 +249,7 @@ class EquipTypeDetails extends Component {
 
             <Select.Option value="">Du har ikke valgt noen sykkel ...</Select.Option>
 
-            {this.distinctEquipType.map(trestrictions => (
+            {this.distinctBikeType.map(trestrictions => (
               <Select.Option>{trestrictions.typeName} </Select.Option>
             ))}
 
@@ -323,7 +320,7 @@ if (this.selectStatus != "") {
     });
 
     equipmentService.getDistinctBikeType(this.props.match.params.typeName, distinctType => {
-      this.distinctEquipType = distinctType;
+      this.distinctBikeType = distinctType;
     });
 
     equipmentService.getTypeID(this.props.match.params.typeName, idResult => {
@@ -365,13 +362,11 @@ class AddEquipment extends Component {
     this.setState({
       state: (this.state.selectedEquipTypeID = event.target.options[selectedIndex].getAttribute('data-key'))
     });
-    console.log(this.state.selectedEquipTypeID);
   }
 
   onChangeLocation(event) {
     const selectedIndex = event.target.options.selectedIndex;
     this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
-    console.log(this.state.curLocation);
   }
 
   render() {
