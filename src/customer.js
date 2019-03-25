@@ -96,16 +96,54 @@ class Customers extends Component {
 }
 
 class SelectedCustomer extends Component {
+  firstName = '';
+
   state = {
-    customer: this.props.activeCustomer
+    customer: this.props.activeCustomer,
   };
 
   componentWillReceiveProps(nextProps) {
     this.setState({ customer: nextProps.activeCustomer });
+    this.setState({ endre: false});
   }
 
   render() {
     if (!this.state.customer) return null;
+
+    if(this.state.endre) {
+
+      return (
+        <Card>
+          <Column>
+          <h5>Endre Kunde:</h5>
+          <br />
+          <Form.Label>Kunde id:</Form.Label>
+              <Form.Input type="text" value={this.state.customer.id} disabled onChange={event => (this.id = event.target.value)} />
+          <Form.Label>Fornavn:</Form.Label>
+              <Form.Input type="text" placeholder={this.state.customer.firstName} onChange={event => (this.firstName = event.target.value)} />
+          <Form.Label>Etternavn:</Form.Label>
+              <Form.Input type="text" placeholder={this.state.customer.lastName} onChange={event => (this.lastName = event.target.value)} />
+          <Form.Label>Epost:</Form.Label>
+              <Form.Input type="text" placeholder={this.state.customer.email} onChange={event => (this.email = event.target.value)} />
+          <Form.Label>Telefon:</Form.Label>
+              <Form.Input type="text" placeholder={this.state.customer.tlf} onChange={event => (this.etterNavn = event.target.value)} />
+          <Form.Label>Adresse:</Form.Label>
+              <Form.Input type="text" placeholder={this.state.customer.streetAddress} onChange={event => (this.etterNavn = event.target.value)} />
+          <Form.Label>Gatenummer:</Form.Label>
+              <Form.Input type="text" placeholder={this.state.customer.streetNum} onChange={event => (this.streetNum = event.target.value)} />
+          <Form.Label>Postnummer:</Form.Label>
+              <Form.Input type="text" placeholder={this.state.customer.postalNum} onChange={event => (this.postalNum = event.target.value)} />
+          <Form.Label>Sted:</Form.Label>
+              <Form.Input type="text" placeholder={this.state.customer.place} onChange={event => (this.place = event.target.value)} />
+          <br />
+          <Button.Success onClick={this.save}>Oppdatere informasjon</Button.Success>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <Button.Danger onClick={() => history.push('/customers/' + this.state.customer.id)}>Gå tilbake</Button.Danger>
+          </Column>
+        </Card>
+
+      )
+    } else {
 
     return (
       <Card>
@@ -151,16 +189,53 @@ class SelectedCustomer extends Component {
               </Table.Tr>
             </Table.Tbody>
           </Table>
+          <br />
+          <Button.Success onClick={this.endre}>Endre</Button.Success>
         </Column>
       </Card>
     );
+  }
+}
+
+
+  endre() {
+    this.setState({ endre: true});
   }
 
   mounted() {
     customerService.getCustomer('1', result => {
       this.setState({ state: (this.state.customer = result) });
     });
+
+    customerService.getCustomerForChange(this.state.id, results => {
+      this.firstName;
+      this.lastName;
+      this.email;
+      this.tlf;
+      this.streetAddress;
+      this.streetNum;
+      this.postalNum;
+      this.place;
+    });
   }
+
+  save() {
+    rentalService.updateEmployee(
+      employeeID,
+      this.firstName,
+      this.surName,
+      this.email,
+      this.tel,
+      this.street,
+      this.place,
+      this.postalCode,
+      this.streetNum,
+      () => {
+        history.push('/information');
+      }
+    );
+  }
+
 }
 
 class AddCustomer extends Component {
