@@ -47,12 +47,31 @@ if (month < 10) month = '0' + month;
 class EquipmentQuery extends Component {
   suitableEquipment = [];
   equipmentTypes = [];
-  selectStatus = "%";
-  sizeSelectStatus = "%";
   choiceLock = false;
   secondChoiceLock = false;
   sizes = [];
   location = "";
+
+  state = {
+
+    selectStatus: "%",
+    sizeSelectStatus: "%"
+
+  };
+
+  handleTypeChange(e) {
+
+  this.state.selectStatus = e.target.value;
+  this.specify();
+
+  }
+
+  handleSizeChange(e) {
+
+  this.state.sizeSelectStatus = e.target.value;
+  this.specify();
+
+  }
 
 
   render() {
@@ -105,7 +124,7 @@ class EquipmentQuery extends Component {
 
         <Column>
         <Form.Label>Utstyrstype</Form.Label>
-        <Select name = "equipment" value= "%" onChange={event => (this.selectStatus = event.target.value)}>
+        <Select onChange={this.handleTypeChange}>
 
         <Select.Option value="%">Velg en utstyrstype ...</Select.Option>
 
@@ -123,7 +142,7 @@ class EquipmentQuery extends Component {
 
 
         <Form.Label>Størrelse</Form.Label>
-        <Select onChange={event => (this.sizeSelectStatus = event.target.value)}>
+        <Select onChange={this.handleSizeChange}>
 
         <Select.Option value= "%">Velg en størrelse ...</Select.Option>
 
@@ -151,7 +170,125 @@ class EquipmentQuery extends Component {
     );
   }
 
+  mounted() {
 
+
+
+equipmentService.getLocationFromBikeId(this.props.match.params.id, location => {
+
+  this.location =  JSON.stringify(location).substring(7).replace('}]', "");
+
+})
+
+
+equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
+
+
+    equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
+      this.suitableEquipment = equipment;
+
+      if (this.secondChoiceLock == false) {
+
+      this.sizes = equipment;
+
+
+      var flags = [], output = [], l = this.sizes.length, i;
+      for( i=0; i<l; i++) {
+          if(flags[this.sizes[i].comment]) continue;
+          flags[this.sizes[i].comment] = true;
+          output.push(this.sizes[i].comment);
+      }
+
+
+      this.sizes = output;
+      this.secondChoiceLock = true;
+
+    }
+
+
+
+      if (this.choiceLock == false) {
+
+      this.equipmentTypes = equipment;
+
+
+      var flags = [], output = [], l = this.equipmentTypes.length, i;
+      for( i=0; i<l; i++) {
+          if(flags[this.equipmentTypes[i].typeName]) continue;
+          flags[this.equipmentTypes[i].typeName] = true;
+          output.push(this.equipmentTypes[i].typeName);
+      }
+
+
+      this.equipmentTypes = output;
+      this.choiceLock = true;
+
+    }
+
+
+    });
+
+})
+
+
+
+}
+
+specify() {
+
+
+  equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
+
+
+      equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
+        this.suitableEquipment = equipment;
+
+        if (this.secondChoiceLock == false) {
+
+        this.sizes = equipment;
+
+
+        var flags = [], output = [], l = this.sizes.length, i;
+        for( i=0; i<l; i++) {
+            if(flags[this.sizes[i].comment]) continue;
+            flags[this.sizes[i].comment] = true;
+            output.push(this.sizes[i].comment);
+        }
+
+
+        this.sizes = output;
+        this.secondChoiceLock = true;
+
+      }
+
+
+
+        if (this.choiceLock == false) {
+
+        this.equipmentTypes = equipment;
+
+
+        var flags = [], output = [], l = this.equipmentTypes.length, i;
+        for( i=0; i<l; i++) {
+            if(flags[this.equipmentTypes[i].typeName]) continue;
+            flags[this.equipmentTypes[i].typeName] = true;
+            output.push(this.equipmentTypes[i].typeName);
+        }
+
+
+        this.equipmentTypes = output;
+        this.choiceLock = true;
+
+      }
+
+
+      });
+
+  })
+
+
+
+}
 
 
 

@@ -33,7 +33,7 @@ class EquipmentService {
     "and et.typeName NOT IN (select et.typeName from Restrictions r, EquipmentType et, BikeType bt, Locations l " +
     "WHERE et.id = r.equipmentType_id and bt.id = r.bikeType_id and bt.typeName = ?) and " +
     "et.typeName IN (select et.typeName from EquipmentType et where et.typeName LIKE ?) and " +
-    "et.comment IN (select distinct et.id from EquipmentType et where et.comment LIKE ?) order by et.typeName", [location, bikeTypeName, equipmentType, size], (error, results) => {
+    "et.id IN (select distinct et.id from EquipmentType et where et.comment LIKE ?) order by et.typeName", [location, bikeTypeName, equipmentType, size], (error, results) => {
       if (error) console.error(error);
 
 
