@@ -72,6 +72,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
   BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
 */
 export let basket = [];
+export let equipmentBasket = [];
 export let employeeID = 1;
 export const activeCustomer = [{ id: null, lastName: '', firstName: '' }];
 

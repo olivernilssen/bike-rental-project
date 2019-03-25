@@ -4,7 +4,7 @@ import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, Select, H1 }
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { equipmentService } from "./services/equipmentService.js";
-import { basket } from './index.js';
+import { basket, equipmentBasket } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -55,7 +55,8 @@ class EquipmentQuery extends Component {
   state = {
 
     selectStatus: "%",
-    sizeSelectStatus: "%"
+    sizeSelectStatus: "%",
+    inEqBasket: equipmentBasket
 
   };
 
@@ -73,56 +74,51 @@ class EquipmentQuery extends Component {
 
   }
 
+  basketAdd(e) {
+
+    equipmentBasket.push(e);
+
+    this.specify();
+
+
+  }
+
+  basketRemove(e) {
+
+for (var i = 0; equipmentBasket.length > i; i++) {
+
+  if (equipmentBasket[i].id == e.id) {
+
+    equipmentBasket.splice(i, 1);
+
+  }
+
+}
+
+this.specify();
+
+
+  }
+
 
   render() {
+
+    let notice;
+
+    if (equipmentBasket.length == 0) {
+      notice = <Table.Tr><Table.Td>Handlekurven din er tom for utstyr.</Table.Td></Table.Tr>
+    }
+
 
 
     return (
       <div>
         <H1>Valg av sykkelutstyr</H1>
         <br />
-        <Card>
-        <Row>
-        <Column width = {9}>
-        Din valgte sykkel er lagt i handlekurven. Her kan du velge mellom utstyr som passer til den valgte sykkelen på dens lokasjon.
-        Hvis du senere skulle ombestemme deg kan du fortsatt velge nytt sykkelutstyr til sykkelen via handlekurven.
-        </Column>
-        <Column><Button.Danger onClick ={ () => history.push('/booking/') }>Gå tilbake til sykler</Button.Danger></Column>
-        </Row>
-        </Card>
 
         <Card>
         <Row>
-        <Column width={8}>
-          <Table>
-            <Table.Thead>
-              <Table.Th>ID</Table.Th>
-              <Table.Th>Type</Table.Th>
-              <Table.Th>Merke</Table.Th>
-              <Table.Th>År</Table.Th>
-              <Table.Th>Størrelse</Table.Th>
-              <Table.Th>Status</Table.Th>
-              <Table.Th>Pris</Table.Th>
-              <Table.Th></Table.Th>
-            </Table.Thead>
-            <Table.Tbody>
-            {this.suitableEquipment.map(equip => (
-              <Table.Tr key={equip.id}>
-                <Table.Td>{equip.id}</Table.Td>
-                <Table.Td>{equip.typeName}</Table.Td>
-                <Table.Td>{equip.brand}</Table.Td>
-                <Table.Td>{equip.year}</Table.Td>
-                <Table.Td>{equip.comment}</Table.Td>
-                <Table.Td>{equip.objectStatus}</Table.Td>
-                <Table.Td>{equip.price}</Table.Td>
-                <Table.Td><Button.Success>Velg</Button.Success></Table.Td>
-              </Table.Tr>
-            ))}
-            </Table.Tbody>
-          </Table>
-        </Column>
-
-        <Column>
+        <Column width={4}>
         <Form.Label>Utstyrstype</Form.Label>
         <Select onChange={this.handleTypeChange}>
 
@@ -156,8 +152,79 @@ class EquipmentQuery extends Component {
 
       }
 
-        </Select>
+        </Select><br/><br/><br/>
 
+
+
+        </Column>
+
+        <Column width = {5}><br/><br/>
+        Din valgte sykkel er lagt i handlekurven. Her kan du velge mellom utstyr som passer til den valgte sykkelen på dens lokasjon.
+        Hvis du senere skulle ombestemme deg kan du fortsatt velge nytt sykkelutstyr til sykkelen via handlekurven.
+        </Column>
+        <Column><br/><br/><br/><Button.Danger onClick ={ () => history.push('/booking/') }>Gå tilbake til sykler</Button.Danger></Column>
+        </Row>
+        <Row>
+        <Column width={7}>
+
+        <h6>Resultat fra søk i leieutstyr:</h6>
+          <Table>
+            <Table.Thead>
+              <Table.Th>ID</Table.Th>
+              <Table.Th>Type</Table.Th>
+              <Table.Th>Merke</Table.Th>
+              <Table.Th>År</Table.Th>
+              <Table.Th>Størrelse</Table.Th>
+              <Table.Th>Status</Table.Th>
+              <Table.Th>Pris</Table.Th>
+              <Table.Th></Table.Th>
+            </Table.Thead>
+            <Table.Tbody>
+            {this.suitableEquipment.map(equip => (
+              <Table.Tr key={equip.id}>
+                <Table.Td>{equip.id}</Table.Td>
+                <Table.Td>{equip.typeName}</Table.Td>
+                <Table.Td>{equip.brand}</Table.Td>
+                <Table.Td>{equip.year}</Table.Td>
+                <Table.Td>{equip.comment}</Table.Td>
+                <Table.Td>{equip.objectStatus}</Table.Td>
+                <Table.Td>{equip.price}</Table.Td>
+                <Table.Td><Button.Success onClick={() => this.basketAdd(equip)}>Velg</Button.Success></Table.Td>
+              </Table.Tr>
+            ))}
+            </Table.Tbody>
+          </Table>
+        </Column>
+
+
+
+
+
+        <Column width={5}>
+        <h6>Handlekurv for utstyr:</h6>
+          <Table>
+            <Table.Thead>
+              <Table.Th>ID</Table.Th>
+              <Table.Th>Type</Table.Th>
+              <Table.Th>Merke</Table.Th>
+              <Table.Th>Størrelse</Table.Th>
+              <Table.Th>Pris</Table.Th>
+              <Table.Th>Knapp</Table.Th>
+            </Table.Thead>
+            <Table.Tbody>
+            {notice}
+            {this.state.inEqBasket.map(equip => (
+              <Table.Tr key={equip.id}>
+                <Table.Td>{equip.id}</Table.Td>
+                <Table.Td>{equip.typeName}</Table.Td>
+                <Table.Td>{equip.brand}</Table.Td>
+                <Table.Td>{equip.comment}</Table.Td>
+                <Table.Td>{equip.price}</Table.Td>
+                <Table.Td><Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger></Table.Td>
+              </Table.Tr>
+            ))}
+            </Table.Tbody>
+          </Table>
         </Column>
 
 
@@ -184,8 +251,15 @@ equipmentService.getLocationFromBikeId(this.props.match.params.id, location => {
 equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
 
 
+
     equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
+
+
+      let k = this.props.match.params.id;
+      equipment.forEach(function(e) { e.bike_id = +k });
+
       this.suitableEquipment = equipment;
+
 
       if (this.secondChoiceLock == false) {
 
@@ -230,7 +304,7 @@ equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typ
 
 })
 
-
+this.specify();
 
 }
 
@@ -241,7 +315,32 @@ specify() {
 
 
       equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
+
+
+        let m = this.props.match.params.id;
+        equipment.forEach(function(e) { e.bike_id = +m });
+
         this.suitableEquipment = equipment;
+
+
+            for (var i = 0; this.suitableEquipment.length > i; i++) {
+
+for (var k = 0; equipmentBasket.length > k; k++) {
+              if (this.suitableEquipment[i].id == equipmentBasket[k].id) {
+
+              this.suitableEquipment.splice(i, 1);
+
+              }
+}
+            }
+
+
+
+
+
+
+
+
 
         if (this.secondChoiceLock == false) {
 
@@ -358,7 +457,6 @@ class Booking extends Component {
 
       bike.startDate = this.state.startDate;
       bike.endDate = this.state.startDate;
-
 
     basket.push(bike);
     this.findAvailBikes();

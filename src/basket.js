@@ -3,7 +3,10 @@ import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { customerService } from './services/customersService';
-import { basket, activeCustomer } from './index.js';
+import { basket, activeCustomer, equipmentBasket } from './index.js';
+
+import createHashHistory from 'history/createHashHistory';
+const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Basket extends Component {
   state = {
@@ -18,14 +21,37 @@ class Basket extends Component {
     clear: 'both'
   };
 
-  //REMOVE BIKE FROM BASKET
+
+
   removeBike(bike) {
+
+    //Removes all equipment belong to bike with it
+
+    for (var i = 0; equipmentBasket.length > i; i++) {
+
+      
+      if (equipmentBasket[i].bike_id == bike.id) {
+
+      equipmentBasket.splice(i, 1);
+
+      i--;
+
+    }
+    }
+
+
+    //Removes bike from basket
+
     for (let i of basket) {
       if (bike == i) {
         basket.splice(basket.indexOf(i), 1);
         this.updateBasket();
       }
     }
+
+
+
+
   }
 
   updateBasket() {
@@ -88,6 +114,23 @@ class Basket extends Component {
     this.findCustomers();
   }
 
+  basketRemove(e) {
+
+for (var i = 0; equipmentBasket.length > i; i++) {
+
+  if (equipmentBasket[i].id == e.id) {
+
+    equipmentBasket.splice(i, 1);
+
+  }
+
+}
+
+this.findCustomers();
+
+
+  }
+
   render() {
     if (this.state.activeC[0].id == null) this.state.displayCustomer = 'block';
     else this.state.displayCustomer = 'none';
@@ -100,16 +143,22 @@ class Basket extends Component {
     const { divStyle } = styles;
     const { btnStyle } = styles;
 
+    let notice;
+
+    if (equipmentBasket.length == 0) {
+      notice = <Table.Td>Handlekurven din er tom for utstyr.</Table.Td>
+    }
+
     return (
       <div>
         <H1>Handlekurv</H1>
         <br />
         <Card>
           <Row>
-            <Column>
+            <Column width={8}>
               <Form.Label>
                 <h4>
-                  Kunde: {this.state.activeC[0].id} {this.state.activeC[0].firstName} {this.state.activeC[0].lastName}
+                  Valgt kunde: {this.state.activeC[0].id} {this.state.activeC[0].firstName} {this.state.activeC[0].lastName}
                 </h4>
               </Form.Label>
               <br />
@@ -122,6 +171,10 @@ class Basket extends Component {
               </Button.Danger>
               <br />
               <br />
+
+
+
+<h6>Handlekurv for sykler:</h6>
               <Table>
                 <Table.Thead>
                   <Table.Th>ID</Table.Th>
@@ -130,7 +183,7 @@ class Basket extends Component {
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Hjul</Table.Th>
                   <Table.Th>Vekt</Table.Th>
-                  <Table.Th>Times Pris</Table.Th>
+                  <Table.Th>Pris</Table.Th>
                   <Table.Th>Fra Dato</Table.Th>
                   <Table.Th>Til Dato</Table.Th>
                   <Table.Th />
@@ -142,11 +195,10 @@ class Basket extends Component {
                       <Table.Td>{bike.typeName}</Table.Td>
                       <Table.Td>{bike.brand}</Table.Td>
                       <Table.Td>{bike.name}</Table.Td>
-                      <Table.Td>{bike.wheelSize}</Table.Td>
-                      <Table.Td>{bike.weight_kg}</Table.Td>
                       <Table.Td>{bike.price}</Table.Td>
                       <Table.Td>{bike.startDate}</Table.Td>
                       <Table.Td>{bike.endDate}</Table.Td>
+                      <Table.Td><Button.Success style={btnStyle} onClick={ () => history.push('/equipmentQuery/' + bike.id + '/edit')}>Velge utstyr</Button.Success></Table.Td>
                       <Table.Td>
                         <Button.Danger
                           style={btnStyle}
@@ -161,15 +213,45 @@ class Basket extends Component {
                   ))}
                 </Table.Tbody>
               </Table>
+              <br/><br/>
+
+              <h6>Handlekurv for utstyr:</h6>
+                <Table>
+                  <Table.Thead>
+                    <Table.Th>Tilhører</Table.Th>
+                    <Table.Th>Type</Table.Th>
+                    <Table.Th>Merke</Table.Th>
+                    <Table.Th>Størrelse</Table.Th>
+                    <Table.Th>Pris</Table.Th>
+                    <Table.Th>Knapp</Table.Th>
+                  </Table.Thead>
+                  <Table.Tbody>
+                  {notice}
+                  {equipmentBasket.map(equip => (
+                    <Table.Tr key={equip.id}>
+                      <Table.Td>{equip.bike_id}</Table.Td>
+                      <Table.Td>{equip.typeName}</Table.Td>
+                      <Table.Td>{equip.brand}</Table.Td>
+                      <Table.Td>{equip.comment}</Table.Td>
+                      <Table.Td>{equip.price}</Table.Td>
+                      <Table.Td><Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger></Table.Td>
+                    </Table.Tr>
+                  ))}
+                  </Table.Tbody>
+                </Table>
             </Column>
-            <Column style={divStyle}>
+
+            <Column width={0.5}>
+            </Column>
+
+            <Column style={divStyle} width={2}>
+            <Form.Label>Søk i kunder ...</Form.Label>
               <Form.Input value={this.state.phrase} onChange={this.handleChangePhrase} />
               <br /> <br />
               <Table>
                 <Table.Thead>
                   <Table.Th>Fornavn</Table.Th>
                   <Table.Th>Etternavn</Table.Th>
-                  <Table.Th>ID</Table.Th>
                   <Table.Th />
                 </Table.Thead>
                 <Table.Tbody>
@@ -177,7 +259,6 @@ class Basket extends Component {
                     <Table.Tr key={kunde.id}>
                       <Table.Td>{kunde.firstName}</Table.Td>
                       <Table.Td>{kunde.lastName}</Table.Td>
-                      <Table.Td>{kunde.id}</Table.Td>
                       <Table.Td>
                         <Button.Success
                           onClick={() => {
@@ -193,6 +274,12 @@ class Basket extends Component {
               </Table>
             </Column>
           </Row>
+
+
+
+
+
+
         </Card>
         <br />
       </div>
