@@ -3,6 +3,7 @@ import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, Select, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
+import { equipmentService } from "./services/equipmentService.js";
 import { basket } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
@@ -12,13 +13,149 @@ let today = new Date();
 let day = today.getDate();
 let month = today.getMonth() + 1;
 let year = today.getFullYear();
+//
 let time = today.getHours() + 1;
+
+if (time == 24) {
+  time = "00";
+}
+
+
+if (time.toString().length == 1) {
+
+  time = "0" + time;
+}
+
 let laterTime = today.getHours() + 2;
+
+if (laterTime == 24) {
+  laterTime = "00";
+}
+
+if (laterTime.toString().length == 1) {
+
+  time = "0" + time;
+}
+
+
 let day2 = day + 2;
 
 if (day < 10) day = '0' + day;
 if (day2 < 10) day2 = '0' + day2;
 if (month < 10) month = '0' + month;
+
+class EquipmentQuery extends Component {
+  suitableEquipment = [];
+  equipmentTypes = [];
+  selectStatus = "%";
+  sizeSelectStatus = "%";
+  choiceLock = false;
+  secondChoiceLock = false;
+  sizes = [];
+  location = "";
+
+
+  render() {
+
+
+    return (
+      <div>
+        <H1>Valg av sykkelutstyr</H1>
+        <br />
+        <Card>
+        <Row>
+        <Column width = {9}>
+        Din valgte sykkel er lagt i handlekurven. Her kan du velge mellom utstyr som passer til den valgte sykkelen på dens lokasjon.
+        Hvis du senere skulle ombestemme deg kan du fortsatt velge nytt sykkelutstyr til sykkelen via handlekurven.
+        </Column>
+        <Column><Button.Danger onClick ={ () => history.push('/booking/') }>Gå tilbake til sykler</Button.Danger></Column>
+        </Row>
+        </Card>
+
+        <Card>
+        <Row>
+        <Column width={8}>
+          <Table>
+            <Table.Thead>
+              <Table.Th>ID</Table.Th>
+              <Table.Th>Type</Table.Th>
+              <Table.Th>Merke</Table.Th>
+              <Table.Th>År</Table.Th>
+              <Table.Th>Størrelse</Table.Th>
+              <Table.Th>Status</Table.Th>
+              <Table.Th>Pris</Table.Th>
+              <Table.Th></Table.Th>
+            </Table.Thead>
+            <Table.Tbody>
+            {this.suitableEquipment.map(equip => (
+              <Table.Tr key={equip.id}>
+                <Table.Td>{equip.id}</Table.Td>
+                <Table.Td>{equip.typeName}</Table.Td>
+                <Table.Td>{equip.brand}</Table.Td>
+                <Table.Td>{equip.year}</Table.Td>
+                <Table.Td>{equip.comment}</Table.Td>
+                <Table.Td>{equip.objectStatus}</Table.Td>
+                <Table.Td>{equip.price}</Table.Td>
+                <Table.Td><Button.Success>Velg</Button.Success></Table.Td>
+              </Table.Tr>
+            ))}
+            </Table.Tbody>
+          </Table>
+        </Column>
+
+        <Column>
+        <Form.Label>Utstyrstype</Form.Label>
+        <Select name = "equipment" value= "%" onChange={event => (this.selectStatus = event.target.value)}>
+
+        <Select.Option value="%">Velg en utstyrstype ...</Select.Option>
+
+
+        {
+
+          this.equipmentTypes.map(type => (
+          <Select.Option value= {type.toString()}>{type.toString()}</Select.Option>
+        ))
+
+
+      }
+
+        </Select><br/>
+
+
+        <Form.Label>Størrelse</Form.Label>
+        <Select onChange={event => (this.sizeSelectStatus = event.target.value)}>
+
+        <Select.Option value= "%">Velg en størrelse ...</Select.Option>
+
+
+        {
+
+          this.sizes.map(type => (
+          <Select.Option value= {type.toString()}>{type.toString()}</Select.Option>
+        ))
+
+
+      }
+
+        </Select>
+
+        </Column>
+
+
+
+
+        </Row>
+        </Card>
+
+      </div>
+    );
+  }
+
+
+
+
+
+      }
 
 class Booking extends Component {
   todaysDate = year + '-' + month + '-' + day;
@@ -73,6 +210,10 @@ class Booking extends Component {
   }
 
   chooseBike(bike) {
+
+    history.push('/equipmentQuery/' + bike.id + '/edit');
+
+
     if (basket.length == 0) {
     } else if (basket[0].id == 'Handlekurven er tom') {
       basket.splice(0, 1);
@@ -84,6 +225,8 @@ class Booking extends Component {
 
     basket.push(bike);
     this.findAvailBikes();
+
+
   }
 
   render() {
@@ -372,4 +515,4 @@ class Booking extends Component {
   }
 }
 
-module.exports = { Booking };
+module.exports = { Booking, EquipmentQuery };

@@ -17,7 +17,7 @@ import {
 import { AreaList, AddArea, LocationInArea, AddLocation, BikesOnLocation } from './location';
 import { UserInfo, EditUserInfo, MySales, DetailedOrder } from './myPage';
 import { Customers, AddCustomer } from './customer.js';
-import { Booking } from './booking.js';
+import { Booking, EquipmentQuery } from './booking.js';
 import { Basket } from './basket.js';
 import { Overview, Selected, DetailedOrderAll } from './overview.js';
 import { Orders } from './orders.js';
@@ -255,6 +255,7 @@ ReactDOM.render(
       <Route exact path="/overview/" component={Overview} />
       <Route exact path="/selected/:id" component={Selected} />
       <Route path="/booking/" component={Booking} />
+      <Route exact path="/equipmentQuery/:id/edit" component = {EquipmentQuery} />
 
       <Route exact path="/allBikes/" component={AllBikes} />
       <Route path="/bikeTypes/" component={BikeTypes} />
