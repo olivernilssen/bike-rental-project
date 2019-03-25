@@ -162,7 +162,8 @@ this.specify();
         Din valgte sykkel er lagt i handlekurven. Her kan du velge mellom utstyr som passer til den valgte sykkelen på dens lokasjon.
         Hvis du senere skulle ombestemme deg kan du fortsatt velge nytt sykkelutstyr til sykkelen via handlekurven.
         </Column>
-        <Column><br/><br/><br/><Button.Danger onClick ={ () => history.push('/booking/') }>Gå tilbake til sykler</Button.Danger></Column>
+        <Column><br/><br/><Button.Danger onClick ={ () => history.push('/booking/') }>Gå tilbake til sykler</Button.Danger>
+        <br/><br/><Button.Danger onClick ={ () => history.push('/basket/') }>Gå til handlekurv</Button.Danger></Column>
         </Row>
         <Row>
         <Column width={7}>
