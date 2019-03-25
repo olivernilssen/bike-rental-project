@@ -230,7 +230,7 @@ class AddCustomer extends Component {
   add() {
     //Check if address already in database
     customerService.getAddressID(this.postalNum, this.postal, this.street, this.streetNum, result => {
-      console.log(result);
+      // console.log(result);
       if (result === undefined) {
         customerService.addAddress(this.postalNum, this.postal, this.street, this.streetNum);
 
@@ -242,7 +242,7 @@ class AddCustomer extends Component {
       }
     });
 
-    // history.push('/customers/');
+    history.push('/customers/');
   }
 }
 
