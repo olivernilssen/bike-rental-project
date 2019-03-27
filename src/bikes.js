@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ClickTable, H1, Select } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
@@ -434,43 +434,43 @@ class BikeTypeDetails extends Component {
           <Row>
             <Column>
               <h6>Detaljert beskrivelse</h6>
-              <Table>
-                <Table.Thead>
-                  <Table.Th>Merke</Table.Th>
-                  <Table.Th>Modell</Table.Th>
-                  <Table.Th>Årsmodell</Table.Th>
-                  <Table.Th>Rammestørrelse</Table.Th>
-                  <Table.Th>Hjulstørrelse</Table.Th>
-                  <Table.Th>Antall gir</Table.Th>
-                  <Table.Th>Girsystem</Table.Th>
-                  <Table.Th>Bremsesytem</Table.Th>
-                  <Table.Th>Vekt</Table.Th>
-                  <Table.Th>Beregnet for</Table.Th>
-                  <Table.Th>Timespris</Table.Th>
-                </Table.Thead>
-                <Table.Tbody>
+              <ClickTable>
+                <ClickTable.Thead>
+                  <ClickTable.Th>Merke</ClickTable.Th>
+                  <ClickTable.Th>Modell</ClickTable.Th>
+                  <ClickTable.Th>Årsmodell</ClickTable.Th>
+                  <ClickTable.Th>Rammestørrelse</ClickTable.Th>
+                  <ClickTable.Th>Hjulstørrelse</ClickTable.Th>
+                  <ClickTable.Th>Antall gir</ClickTable.Th>
+                  <ClickTable.Th>Girsystem</ClickTable.Th>
+                  <ClickTable.Th>Bremsesytem</ClickTable.Th>
+                  <ClickTable.Th>Vekt</ClickTable.Th>
+                  <ClickTable.Th>Beregnet for</ClickTable.Th>
+                  <ClickTable.Th>Timespris</ClickTable.Th>
+                </ClickTable.Thead>
+                <ClickTable.Tbody>
                   {this.state.bikeTypeDetails.map(type => (
-                    <Table.Tr
+                    <ClickTable.Tr
                       key={type.id}
                       onClick={() => {
                         this.showThisType(type.id);
                       }}
                     >
-                      <Table.Td>{type.brand}</Table.Td>
-                      <Table.Td>{type.model}</Table.Td>
-                      <Table.Td>{type.year}</Table.Td>
-                      <Table.Td>{type.frameSize}</Table.Td>
-                      <Table.Td>{type.wheelSize}</Table.Td>
-                      <Table.Td>{type.gears}</Table.Td>
-                      <Table.Td>{type.gearSystem}</Table.Td>
-                      <Table.Td>{type.brakeSystem}</Table.Td>
-                      <Table.Td>{type.weight_kg}</Table.Td>
-                      <Table.Td>{type.suitedFor}</Table.Td>
-                      <Table.Td>{type.price}</Table.Td>
-                    </Table.Tr>
+                      <ClickTable.Td>{type.brand}</ClickTable.Td>
+                      <ClickTable.Td>{type.model}</ClickTable.Td>
+                      <ClickTable.Td>{type.year}</ClickTable.Td>
+                      <ClickTable.Td>{type.frameSize}</ClickTable.Td>
+                      <ClickTable.Td>{type.wheelSize}</ClickTable.Td>
+                      <ClickTable.Td>{type.gears}</ClickTable.Td>
+                      <ClickTable.Td>{type.gearSystem}</ClickTable.Td>
+                      <ClickTable.Td>{type.brakeSystem}</ClickTable.Td>
+                      <ClickTable.Td>{type.weight_kg}</ClickTable.Td>
+                      <ClickTable.Td>{type.suitedFor}</ClickTable.Td>
+                      <ClickTable.Td>{type.price}</ClickTable.Td>
+                    </ClickTable.Tr>
                   ))}
-                </Table.Tbody>
-              </Table>
+                </ClickTable.Tbody>
+              </ClickTable>
               <br />
               <h6>Sykler av denne typen:</h6>
               <Table>

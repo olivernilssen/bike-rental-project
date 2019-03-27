@@ -312,7 +312,7 @@ class Td extends Component {
   }
 }
 
-export class Table extends Component {
+export class ClickTable extends Component {
   static Thead = Thead;
   static Tr = Tr;
   static Th = Th;
@@ -321,6 +321,18 @@ export class Table extends Component {
 
   render() {
     return <table className="table table-striped table-hover">{this.props.children}</table>;
+  }
+}
+
+export class Table extends Component {
+  static Thead = Thead;
+  static Tr = Tr;
+  static Th = Th;
+  static Td = Td;
+  static Tbody = Tbody;
+
+  render() {
+    return <table className="table table-striped">{this.props.children}</table>;
   }
 }
 

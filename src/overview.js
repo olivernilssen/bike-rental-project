@@ -124,85 +124,75 @@ class Chart extends Component {
     });
   }
 }
-
 class SearchRentedBikes extends Component {
-
   state = {
     sales: [],
     searchWord: '',
-    month: '%',
+    month: '%'
   };
 
   handleChangeSearch(event) {
-    this.setState( { state: (this.state.searchWord = event.target.value)}, this.searchSales());
-
+    this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchSales());
   }
 
   handleChangeSelect(event) {
-    this.setState( { month: (this.state.month = event.target.value) }, this.searchSales());
-
+    this.setState({ month: (this.state.month = event.target.value) }, this.searchSales());
   }
 
   searchSales() {
     let searchWord = '%' + this.state.searchWord + '%';
     let month = '%' + this.state.month + '%';
 
-rentalService.searchSales(searchWord, month, results => {
-    this.setState({ state: (this.state.sales = []) });
-    this.setState(state => {
-      const sales = state.sales.concat(results);
-      return{
-        sales,
-        results
-      };
+    rentalService.searchSales(searchWord, month, results => {
+      this.setState({ state: (this.state.sales = []) });
+      this.setState(state => {
+        const sales = state.sales.concat(results);
+        return {
+          sales,
+          results
+        };
+      });
     });
-  });
   }
 
   render() {
     return (
       <div>
-      <br/>
+        <br />
         <Card title="Alle ordre">
-
-        <Row>
-
-        <Column width = {3}>
-          <Form.Label>Velg måned</Form.Label>
-          <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
-            <Select.Option value="%">Alle måneder</Select.Option>
-            <Select.Option value="-01-">Januar</Select.Option>
-            <Select.Option value="-02-">Februar</Select.Option>
-            <Select.Option value="-03-">Mars</Select.Option>
-            <Select.Option value="-04-">April</Select.Option>
-            <Select.Option value="-05-">Mai</Select.Option>
-            <Select.Option value="-06-">Juni</Select.Option>
-            <Select.Option value="-07-">Juli</Select.Option>
-            <Select.Option value="-08-">August</Select.Option>
-            <Select.Option value="-09-">September</Select.Option>
-            <Select.Option value="-10-">Oktober</Select.Option>
-            <Select.Option value="-11-">November</Select.Option>
-            <Select.Option value="-12-">Desember</Select.Option>
-          </Select>
-        </Column>
-
-        </Row>
-
-        <br/>
-
           <Row>
-
-          <Column>
-          <Form.Label>Søk på kunde, selger, datoer og pris ... Merk at datoer må skrives i tallform.</Form.Label>
-          <Form.Input onChange ={this.handleChangeSearch}>{this.state.searchWord}</Form.Input>
-          </Column>
-
+            <Column width={3}>
+              <Form.Label>Velg måned</Form.Label>
+              <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
+                <Select.Option value="%">Alle måneder</Select.Option>
+                <Select.Option value="-01-">Januar</Select.Option>
+                <Select.Option value="-02-">Februar</Select.Option>
+                <Select.Option value="-03-">Mars</Select.Option>
+                <Select.Option value="-04-">April</Select.Option>
+                <Select.Option value="-05-">Mai</Select.Option>
+                <Select.Option value="-06-">Juni</Select.Option>
+                <Select.Option value="-07-">Juli</Select.Option>
+                <Select.Option value="-08-">August</Select.Option>
+                <Select.Option value="-09-">September</Select.Option>
+                <Select.Option value="-10-">Oktober</Select.Option>
+                <Select.Option value="-11-">November</Select.Option>
+                <Select.Option value="-12-">Desember</Select.Option>
+              </Select>
+            </Column>
           </Row>
 
-          <br/>
+          <br />
 
           <Row>
+            <Column>
+              <Form.Label>Søk på kunde, selger, datoer og pris ... Merk at datoer må skrives i tallform.</Form.Label>
+              <Form.Input onChange={this.handleChangeSearch}>{this.state.searchWord}</Form.Input>
+            </Column>
+          </Row>
 
+          <br />
+
+          <Row>
             <Column>
               <Table>
                 <Table.Thead>
@@ -220,9 +210,7 @@ rentalService.searchSales(searchWord, month, results => {
                   {this.state.sales.map(sale => (
                     <Table.Tr key={sale.id}>
                       <Table.Td>{sale.id}</Table.Td>
-                      <Table.Td>
-                        {sale.lastName}
-                      </Table.Td>
+                      <Table.Td>{sale.lastName}</Table.Td>
                       <Table.Td>{sale.firstName}</Table.Td>
                       <Table.Td>{sale.typeName}</Table.Td>
                       <Table.Td>{sale.dateOrdered.toString().substring(4, 24)}</Table.Td>
@@ -248,7 +236,7 @@ rentalService.searchSales(searchWord, month, results => {
 
   mounted() {
     rentalService.getAllSales(results => {
-      this.setState({ sales: results});
+      this.setState({ sales: results });
     });
   }
 }
@@ -258,22 +246,23 @@ class DetailedOrderAll extends Component {
   equipments = [];
   sales = [];
   orderDate = '';
-  fromDate = "";
-  toDate = "";
+  fromDate = '';
+  toDate = '';
 
   render() {
     let notice;
 
     if (this.equipments.length == 0) {
-      notice = <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
+      notice = <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>;
     }
 
     return (
       <div>
-      <H1>Se på bestilling</H1>
-      <br/>
+        <H1>Se på bestilling</H1>
+        <br />
         <Card>
-          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien varer fra {this.fromDate} til {this.toDate}.
+          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien
+          varer fra {this.fromDate} til {this.toDate}.
           <br /> <br />
           <Row>
             <Column>
@@ -325,7 +314,8 @@ class DetailedOrderAll extends Component {
                   <Table.Th>Kommentar</Table.Th>
                   <Table.Th>Pris</Table.Th>
                 </Table.Thead>
-                <Table.Tbody>{notice}
+                <Table.Tbody>
+                  {notice}
                   {this.equipments.map(equipment => (
                     <Table.Tr key={equipment.id}>
                       <Table.Td>{equipment.typeName}</Table.Td>
@@ -339,9 +329,7 @@ class DetailedOrderAll extends Component {
               </Table>
             </Column>
           </Row>
-
           <Column>
-
             <h4 align="right">Totalpris: {this.sales.price} kr</h4>
             <Button.Success align="left" type="button" onClick={() => history.push('/Overview/')}>
               Gå tilbake til forsiden
@@ -359,7 +347,6 @@ class DetailedOrderAll extends Component {
 
     orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
       this.equipments = equipments;
-
     });
 
     rentalService.getAllSales(sales => {
@@ -370,8 +357,6 @@ class DetailedOrderAll extends Component {
     });
   }
 }
-
-
 
 class RentedBikes extends Component {
   todaysDate = year + '-' + month + '-' + day + '%';
