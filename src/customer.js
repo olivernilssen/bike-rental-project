@@ -138,7 +138,7 @@ class SelectedCustomer extends Component {
           <Form.Label>Sted:</Form.Label>
               <Form.Input type="text" value={this.active.place} onChange={event => (this.active.place = event.target.value)} />
           <br />
-          <Button.Success onClick={this.save}>Oppdatere informasjon</Button.Success>
+          <Button.Success onClick={(e) => { if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save (e) }}>Oppdatere informasjon</Button.Success>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <Button.Danger onClick={this.cancel}>Gå tilbake</Button.Danger>
           </Column>
