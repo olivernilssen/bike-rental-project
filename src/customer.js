@@ -224,10 +224,11 @@ class SelectedCustomer extends Component {
         customerService.addAddress(this.active.postalNum, this.active.place, this.active.streetAddress, this.active.streetNum);
 
         customerService.getAddressID(this.active.postalNum, this.active.place, this.active.streetAddress, this.active.streetNum, newID => {
-          customerService.updateCustomer(this.active.firstName, this.active.lastName, this.active.email, this.active.tlf, newID, this.state.activeCustomer.id);
+          customerService.updateCustomer(this.active.firstName, this.active.lastName, this.active.email, this.active.tlf, newID.id, this.state.customer.id);
         });
       } else {
-        customerService.updateCustomer(this.active.firstName, this.active.lastName, this.active.email, this.active.tlf, result, this.state.activeCustomer.id);
+        console.log(result.id + " " + this.active.id);
+        customerService.updateCustomer(this.active.firstName, this.active.lastName, this.active.email, this.active.tlf, result.id, this.state.customer.id);
       }
     });
 
