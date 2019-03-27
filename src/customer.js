@@ -40,7 +40,9 @@ class Customers extends Component {
   render() {
     return (
       <div>
-        <H1>Kundeliste</H1>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Kundeliste</H1>
+        </NavBar>
 
         <Column right>
           <NavLink to={'/addCustomer/'}>
@@ -97,115 +99,153 @@ class Customers extends Component {
 
 class SelectedCustomer extends Component {
   state = {
-    customer: this.props.activeCustomer,
+    customer: this.props.activeCustomer
   };
 
   active = '';
 
-
   componentWillReceiveProps(nextProps) {
     this.setState({ customer: nextProps.activeCustomer });
     this.active = nextProps.activeCustomer;
-    this.setState({ change: false});
+    this.setState({ change: false });
   }
 
   render() {
     if (!this.state.customer) return null;
 
-    if(this.state.change) {
-
+    if (this.state.change) {
+      return (
+        <div>
+          <NavBar brand="CycleOn Rentals">
+            <H1>Kundeliste</H1>
+          </NavBar>
+          <Card>
+            <Column>
+              <h5>Endre Kunde:</h5>
+              <br />
+              <Form.Label>Kunde id:</Form.Label>
+              <Form.Input type="text" value={this.state.customer.id} disabled />
+              <Form.Label>Fornavn:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.firstName}
+                onChange={event => (this.active.firstName = event.target.value)}
+              />
+              <Form.Label>Etternavn:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.lastName}
+                onChange={event => (this.active.lastName = event.target.value)}
+              />
+              <Form.Label>Epost:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.email}
+                onChange={event => (this.active.email = event.target.value)}
+              />
+              <Form.Label>Telefon:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.tlf}
+                onChange={event => (this.active.tlf = event.target.value)}
+              />
+              <Form.Label>Adresse:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.streetAddress}
+                onChange={event => (this.active.streetAddress = event.target.value)}
+              />
+              <Form.Label>Gatenummer:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.streetNum}
+                onChange={event => (this.active.streetNum = event.target.value)}
+              />
+              <Form.Label>Postnummer:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.postalNum}
+                onChange={event => (this.active.postalNum = event.target.value)}
+              />
+              <Form.Label>Sted:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.place}
+                onChange={event => (this.active.place = event.target.value)}
+              />
+              <br />
+              <Button.Success
+                onClick={e => {
+                  if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save(e);
+                }}
+              >
+                Oppdatere informasjon
+              </Button.Success>
+              <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <Button.Danger onClick={this.cancel}>Gå tilbake</Button.Danger>
+            </Column>
+          </Card>
+        </div>
+      );
+    } else {
       return (
         <Card>
           <Column>
-          <h5>Endre Kunde:</h5>
-          <br />
-          <Form.Label>Kunde id:</Form.Label>
-              <Form.Input type="text" value={this.state.customer.id} disabled />
-          <Form.Label>Fornavn:</Form.Label>
-              <Form.Input type="text" value={this.active.firstName} onChange={event => (this.active.firstName = event.target.value)} />
-          <Form.Label>Etternavn:</Form.Label>
-              <Form.Input type="text" value={this.active.lastName} onChange={event => (this.active.lastName = event.target.value)} />
-          <Form.Label>Epost:</Form.Label>
-              <Form.Input type="text" value={this.active.email} onChange={event => (this.active.email = event.target.value)} />
-          <Form.Label>Telefon:</Form.Label>
-              <Form.Input type="text" value={this.active.tlf} onChange={event => (this.active.tlf = event.target.value)} />
-          <Form.Label>Adresse:</Form.Label>
-              <Form.Input type="text" value={this.active.streetAddress} onChange={event => (this.active.streetAddress = event.target.value)} />
-          <Form.Label>Gatenummer:</Form.Label>
-              <Form.Input type="text" value={this.active.streetNum} onChange={event => (this.active.streetNum = event.target.value)} />
-          <Form.Label>Postnummer:</Form.Label>
-              <Form.Input type="text" value={this.active.postalNum} onChange={event => (this.active.postalNum = event.target.value)} />
-          <Form.Label>Sted:</Form.Label>
-              <Form.Input type="text" value={this.active.place} onChange={event => (this.active.place = event.target.value)} />
-          <br />
-          <Button.Success onClick={(e) => { if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save (e) }}>Oppdatere informasjon</Button.Success>
-          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <Button.Danger onClick={this.cancel}>Gå tilbake</Button.Danger>
+            <h5>Valgt Kunde:</h5>
+            <br />
+            <h6>
+              {this.state.customer.firstName} {this.state.customer.lastName}
+            </h6>
+            <Table>
+              <Table.Tbody>
+                <Table.Tr>
+                  <Table.Td>Kunde id:</Table.Td>
+                  <Table.Td>{this.state.customer.id}</Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>Fornavn:</Table.Td>
+                  <Table.Td>{this.state.customer.firstName}</Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>Etternavn:</Table.Td>
+                  <Table.Td>{this.state.customer.lastName}</Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>Epost:</Table.Td>
+                  <Table.Td>{this.state.customer.email}</Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>Telefon:</Table.Td>
+                  <Table.Td>{this.state.customer.tlf}</Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>Adresse:</Table.Td>
+                  <Table.Td>
+                    {this.state.customer.streetAddress} {this.state.customer.streetNum}
+                  </Table.Td>
+                </Table.Tr>
+                <Table.Tr>
+                  <Table.Td>Poststed:</Table.Td>
+                  <Table.Td>
+                    {this.state.customer.postalNum} {this.state.customer.place}
+                  </Table.Td>
+                </Table.Tr>
+              </Table.Tbody>
+            </Table>
+            <br />
+            <Button.Success onClick={this.change}>Endre</Button.Success>
           </Column>
         </Card>
-      )
-
-    } else {
-
-    return (
-      <Card>
-        <Column>
-          <h5>Valgt Kunde:</h5>
-          <br />
-          <h6>
-            {this.state.customer.firstName} {this.state.customer.lastName}
-          </h6>
-          <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Kunde id:</Table.Td>
-                <Table.Td>{this.state.customer.id}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Fornavn:</Table.Td>
-                <Table.Td>{this.state.customer.firstName}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Etternavn:</Table.Td>
-                <Table.Td>{this.state.customer.lastName}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Epost:</Table.Td>
-                <Table.Td>{this.state.customer.email}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Telefon:</Table.Td>
-                <Table.Td>{this.state.customer.tlf}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Adresse:</Table.Td>
-                <Table.Td>
-                  {this.state.customer.streetAddress} {this.state.customer.streetNum}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Poststed:</Table.Td>
-                <Table.Td>
-                  {this.state.customer.postalNum} {this.state.customer.place}
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
-          </Table>
-          <br />
-          <Button.Success onClick={this.change}>Endre</Button.Success>
-        </Column>
-      </Card>
-    );
+      );
+    }
   }
-}
-
 
   change() {
-    this.setState({ change: true});
+    this.setState({ change: true });
   }
 
   cancel() {
-    this.setState({ change: false})
+    this.setState({ change: false });
   }
 
   mounted() {
@@ -213,28 +253,57 @@ class SelectedCustomer extends Component {
       this.setState({ state: (this.state.customer = result) });
       this.active = result;
     });
-
   }
 
   save() {
     //Check if address already in database
-    customerService.getAddressID(this.active.postalNum, this.active.place, this.active.streetAddress, this.active.streetNum, result => {
-      // console.log(result);
-      if (result === undefined) {
-        customerService.addAddress(this.active.postalNum, this.active.place, this.active.streetAddress, this.active.streetNum);
+    customerService.getAddressID(
+      this.active.postalNum,
+      this.active.place,
+      this.active.streetAddress,
+      this.active.streetNum,
+      result => {
+        // console.log(result);
+        if (result === undefined) {
+          customerService.addAddress(
+            this.active.postalNum,
+            this.active.place,
+            this.active.streetAddress,
+            this.active.streetNum
+          );
 
-        customerService.getAddressID(this.active.postalNum, this.active.place, this.active.streetAddress, this.active.streetNum, newID => {
-          customerService.updateCustomer(this.active.firstName, this.active.lastName, this.active.email, this.active.tlf, newID.id, this.state.customer.id);
-        });
-      } else {
-        console.log(result.id + " " + this.active.id);
-        customerService.updateCustomer(this.active.firstName, this.active.lastName, this.active.email, this.active.tlf, result.id, this.state.customer.id);
+          customerService.getAddressID(
+            this.active.postalNum,
+            this.active.place,
+            this.active.streetAddress,
+            this.active.streetNum,
+            newID => {
+              customerService.updateCustomer(
+                this.active.firstName,
+                this.active.lastName,
+                this.active.email,
+                this.active.tlf,
+                newID.id,
+                this.state.customer.id
+              );
+            }
+          );
+        } else {
+          console.log(result.id + ' ' + this.active.id);
+          customerService.updateCustomer(
+            this.active.firstName,
+            this.active.lastName,
+            this.active.email,
+            this.active.tlf,
+            result.id,
+            this.state.customer.id
+          );
+        }
       }
-    });
+    );
 
-    this.setState({ change: false});
+    this.setState({ change: false });
   }
-
 }
 
 class AddCustomer extends Component {
@@ -250,50 +319,61 @@ class AddCustomer extends Component {
 
   render() {
     return (
-      <Card>
-        <div className="container">
-          <h5>Ny kunde</h5>
-          <br />
-          <Row>
-            <Column>
-              <Form.Label>Fornavn:</Form.Label>
-              <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
-              <Form.Label>Email:</Form.Label>
-              <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
-              <br /> <br />
-              <Form.Label>Gateaddresse:</Form.Label>
-              <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
-              <Form.Label>Poststed:</Form.Label>
-              <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
-              <br /> <br />
-              <Row>
-                <Column>
-                  <Button.Success onClick={(e) => { if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e)}}>Add</Button.Success>
-                </Column>
-              </Row>
-            </Column>
-            <Column>
-              <Form.Label>Etternavn</Form.Label>
-              <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
-              <Form.Label>Telefon:</Form.Label>
-              <Form.Input type="text" required={true} onChange={event => (this.tlf = event.target.value)} />
-              <br /> <br />
-              <Form.Label>Gatenummer:</Form.Label>
-              <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
-              <Form.Label>Postnummer:</Form.Label>
-              <Form.Input type="text" required={true} onChange={event => (this.postalNum = event.target.value)} />
-              <br />
-              <br />
-              <Row>
-                <Column right>
-                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-                </Column>
-              </Row>
-            </Column>
+      <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Kundeliste</H1>
+        </NavBar>
+        <Card>
+          <div className="container">
+            <h5>Ny kunde</h5>
             <br />
-          </Row>
-        </div>
-      </Card>
+            <Row>
+              <Column>
+                <Form.Label>Fornavn:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
+                <Form.Label>Email:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
+                <br /> <br />
+                <Form.Label>Gateaddresse:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
+                <Form.Label>Poststed:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
+                <br /> <br />
+                <Row>
+                  <Column>
+                    <Button.Success
+                      onClick={e => {
+                        if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                      }}
+                    >
+                      Add
+                    </Button.Success>
+                  </Column>
+                </Row>
+              </Column>
+              <Column>
+                <Form.Label>Etternavn</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
+                <Form.Label>Telefon:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.tlf = event.target.value)} />
+                <br /> <br />
+                <Form.Label>Gatenummer:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
+                <Form.Label>Postnummer:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.postalNum = event.target.value)} />
+                <br />
+                <br />
+                <Row>
+                  <Column right>
+                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                  </Column>
+                </Row>
+              </Column>
+              <br />
+            </Row>
+          </div>
+        </Card>
+      </div>
     );
   }
 

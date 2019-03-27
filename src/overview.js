@@ -579,9 +579,10 @@ class Selected extends Component {
 class Overview extends Component {
   render() {
     return (
-      <div id="salg">
-        <H1>Oversikt</H1>
-        <br />
+      <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Oversikt</H1>
+        </NavBar>
         <Card>
           <Chart />
         </Card>

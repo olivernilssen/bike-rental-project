@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 export class Card extends Component {
   render() {
     return (
-      <div className="card" style={this.props.style}>
+      <div className="card" style={this.props.style} id={this.props.id}>
         <div className="card-header">{this.props.header}</div>
         <div className="card-body">
           <h5 className="card-title">{this.props.title}</h5>
@@ -179,7 +179,7 @@ class ButtonDanger extends Component {
       <button
         type="button"
         className="btn btn-danger"
-        id="dangerBtn"
+        id={this.props.id}
         onClick={this.props.onClick}
         style={this.props.style}
       >
@@ -274,14 +274,18 @@ export class Select extends Component {
 
 export class CenterContent extends Component {
   render() {
-    return <div className="d-flex justify-content-center">{this.props.children}</div>;
+    return (
+      <div className="d-flex justify-content-center" id={this.props.id}>
+        {this.props.children}
+      </div>
+    );
   }
 }
 
 class Thead extends Component {
   render() {
     return (
-      <thead className="thead-dark">
+      <thead>
         <tr>{this.props.children}</tr>
       </thead>
     );
@@ -290,7 +294,11 @@ class Thead extends Component {
 
 class Th extends Component {
   render() {
-    return <th scope="col">{this.props.children}</th>;
+    return (
+      <th className="table-success" scope="col">
+        {this.props.children}
+      </th>
+    );
   }
 }
 
@@ -320,7 +328,7 @@ export class ClickTable extends Component {
   static Tbody = Tbody;
 
   render() {
-    return <table className="table table-striped table-hover">{this.props.children}</table>;
+    return <table className="table table-hover">{this.props.children}</table>;
   }
 }
 

@@ -15,11 +15,12 @@ class EquipmentTypes extends Component {
   render() {
     return (
       <div>
-        <H1>Sykkelutstyr</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykkelutstyr</H1>
+        </NavBar>
         <Tab>
           {this.equipTypes.map(type => (
-            <Tab.Item key={type.typeName} to={'/equipmentTypes/' + type.typeName} >
+            <Tab.Item key={type.typeName} to={'/equipmentTypes/' + type.typeName}>
               {type.typeName}
             </Tab.Item>
           ))}
@@ -50,16 +51,18 @@ class EquipmentTypes extends Component {
 }
 
 class EquipmentTypesOtherMain extends Component {
-
   render() {
-    return(
+    return (
       <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykkelutstyr</H1>
+        </NavBar>
         <Card>
           <Row>
             <Column>
-              Opprettelsen av begrensningen var vellykket. 
-              Du vil ikke lenger kunne leie de respektive 
-              leiegjenstandene i kombinasjon. <br/><br/>
+              Opprettelsen av begrensningen var vellykket. Du vil ikke lenger kunne leie de respektive leiegjenstandene
+              i kombinasjon. <br />
+              <br />
             </Column>
           </Row>
         </Card>
@@ -70,32 +73,33 @@ class EquipmentTypesOtherMain extends Component {
 
 class EquipmentTypesMain extends Component {
   render() {
-    return(
+    return (
       <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykkelutstyr</H1>
+        </NavBar>
         <Card>
           <Row>
             <Column>
-              Slettingen av begrensningen var vellykket. 
-              Den vil ikke lenger hindre de respektive 
-              leiegjenstandene fra å leies ut sammen. 
-              <br/><br/>
+              Slettingen av begrensningen var vellykket. Den vil ikke lenger hindre de respektive leiegjenstandene fra å
+              leies ut sammen.
+              <br />
+              <br />
             </Column>
           </Row>
         </Card>
       </div>
-          );
-        }
-
-
+    );
+  }
 }
 
 class EquipTypeDetails extends Component {
-  handler = "";
+  handler = '';
   restrictions = [];
   equipType = null;
   distinctBikeType = null;
   lock = false;
-  selectStatus = "";
+  selectStatus = '';
   showingEquipment = 0;
 
   state = {
@@ -104,9 +108,7 @@ class EquipTypeDetails extends Component {
     equipTypeDetails: []
   };
 
-
   showThisType(id) {
-
     if (this.showingEquipment === id && this.lock == true) {
       this.lock = false;
       this.state.equipments = [];
@@ -120,11 +122,9 @@ class EquipTypeDetails extends Component {
         });
       }
 
-      
       this.showingEquipment = 0;
-
     } else {
-      console.log("hva skjer her elseee?");
+      console.log('hva skjer her elseee?');
       this.lock = true;
 
       equipmentService.getEquipmentByTypeID(id, results => {
@@ -138,7 +138,6 @@ class EquipTypeDetails extends Component {
     }
   }
 
-
   render() {
     if (!this.equipType) return null;
     if (!this.distinctBikeType) return null;
@@ -146,15 +145,16 @@ class EquipTypeDetails extends Component {
     let notice;
 
     if (this.lock == true) {
-      notice = <p style={{ color: "red" }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer</p>;
+      notice = (
+        <p style={{ color: 'red' }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer</p>
+      );
     }
 
     let noRestr;
 
     if (this.restrictions.length == 0) {
-      noRestr = <Table.Td>Det ble ikke funnet noen begrensninger.</Table.Td>
+      noRestr = <Table.Td>Det ble ikke funnet noen begrensninger.</Table.Td>;
     }
-
 
     return (
       <div>
@@ -185,15 +185,13 @@ class EquipTypeDetails extends Component {
                   ))}
                 </Table.Tbody>
               </Table>
-              </Column>
-              </Row>
-              <Row>
-              <Column right>
-              {notice}
-              </Column>
-              </Row>
-              <Row>
-              <Column>
+            </Column>
+          </Row>
+          <Row>
+            <Column right>{notice}</Column>
+          </Row>
+          <Row>
+            <Column>
               <br />
               <h6>Beholdning for valgte varer:</h6>
               <Table>
@@ -212,11 +210,11 @@ class EquipTypeDetails extends Component {
                   ))}
                 </Table.Tbody>
               </Table>
-              <br/>
-              </Column>
-              </Row>
-              <Row>
-              <Column width={4}>
+              <br />
+            </Column>
+          </Row>
+          <Row>
+            <Column width={4}>
               <h6>Sykkeltyper utstyret IKKE passer til:</h6>
               <Table>
                 <Table.Thead>
@@ -224,29 +222,42 @@ class EquipTypeDetails extends Component {
                   <Table.Th>Endre</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                <Table.Tr>{noRestr}</Table.Tr>
-                {this.restrictions.map(restrictions => (
-                  <Table.Tr key={restrictions.id}>
-                    <Table.Td>{restrictions.typeName}</Table.Td>
-                    <Table.Td><Button.Success onClick={() => this.delete(restrictions.id)}>Tillat</Button.Success></Table.Td>
-                  </Table.Tr>
-                ))}
+                  <Table.Tr>{noRestr}</Table.Tr>
+                  {this.restrictions.map(restrictions => (
+                    <Table.Tr key={restrictions.id}>
+                      <Table.Td>{restrictions.typeName}</Table.Td>
+                      <Table.Td>
+                        <Button.Success onClick={() => this.delete(restrictions.id)}>Tillat</Button.Success>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
                 </Table.Tbody>
               </Table>
               <br />
             </Column>
-            <Column width={1}>
-            </Column>
+            <Column width={1} />
             <Column>
-            <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
-            <Select name="typeSelect" value={this.selectStatus} onChange={event => (this.selectStatus = event.target.value)}>
-              <Select.Option value="">Du har ikke valgt noen sykkel..</Select.Option>
-              {this.distinctBikeType.map(trestrictions => (
-                <Select.Option key={trestrictions.id}>{trestrictions.typeName} </Select.Option>
-              ))}
-            </Select>
-            <br/><br/>
-            <Button.Danger style={{ float: "right" }} onClick = { () => {this.add()} }>Legg til ny restriksjon</Button.Danger>
+              <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
+              <Select
+                name="typeSelect"
+                value={this.selectStatus}
+                onChange={event => (this.selectStatus = event.target.value)}
+              >
+                <Select.Option value="">Du har ikke valgt noen sykkel..</Select.Option>
+                {this.distinctBikeType.map(trestrictions => (
+                  <Select.Option key={trestrictions.id}>{trestrictions.typeName} </Select.Option>
+                ))}
+              </Select>
+              <br />
+              <br />
+              <Button.Danger
+                style={{ float: 'right' }}
+                onClick={() => {
+                  this.add();
+                }}
+              >
+                Legg til ny restriksjon
+              </Button.Danger>
             </Column>
           </Row>
         </Card>
@@ -255,23 +266,27 @@ class EquipTypeDetails extends Component {
     );
   }
 
-add() {
-  if (this.selectStatus != "") {
-
-    equipmentService.getBikeIdByName(this.selectStatus, idResult => {
-      equipmentService.addRestriction(JSON.stringify(idResult).substring(6).replace("}", ""), this.state.equipTypeDetails[0].id, () => {
-        history.push("/equipmentTypes/Skip/OtherMain");
-      })
-    })
+  add() {
+    if (this.selectStatus != '') {
+      equipmentService.getBikeIdByName(this.selectStatus, idResult => {
+        equipmentService.addRestriction(
+          JSON.stringify(idResult)
+            .substring(6)
+            .replace('}', ''),
+          this.state.equipTypeDetails[0].id,
+          () => {
+            history.push('/equipmentTypes/Skip/OtherMain');
+          }
+        );
+      });
+    }
   }
-}
-
 
   delete(id) {
     this.handler = id;
 
     equipmentService.deleteRestriction(this.handler, this.state.equipTypeDetails[0].id, () => {
-      history.push("/equipmentTypes/Skip/Main");
+      history.push('/equipmentTypes/Skip/Main');
     });
   }
 
@@ -341,6 +356,9 @@ class AddEquipment extends Component {
   render() {
     return (
       <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykkelutstyr</H1>
+        </NavBar>
         <Card>
           <div className="container">
             <h5>Legg inn nytt sykkelutstyr</h5>
@@ -446,38 +464,43 @@ class NewEquipmentType extends Component {
 
   render() {
     return (
-      <Card>
-        <div className="container">
-          <h5>Ny utstyrstype</h5>
-          <Row>
-            <Column>
-              <Form.Label>Type:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
-              <Form.Label>Merke:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
-              <Form.Label>Årsmodell:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
-            </Column>
-            <Column>
-              <Form.Label>Størrelse:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.comment = event.target.value)} />
-              <Form.Label>Pris:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
-              <br />
-              <br />
-            </Column>
-          </Row>
-          <br />
-          <Row>
-            <Column>
-              <Button.Success onClick={this.add}>Add</Button.Success>
-            </Column>
-            <Column right>
-              <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-            </Column>
-          </Row>
-        </div>
-      </Card>
+      <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykkelutstyr</H1>
+        </NavBar>
+        <Card>
+          <div className="container">
+            <h5>Ny utstyrstype</h5>
+            <Row>
+              <Column>
+                <Form.Label>Type:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
+                <Form.Label>Merke:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
+                <Form.Label>Årsmodell:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
+              </Column>
+              <Column>
+                <Form.Label>Størrelse:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.comment = event.target.value)} />
+                <Form.Label>Pris:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
+                <br />
+                <br />
+              </Column>
+            </Row>
+            <br />
+            <Row>
+              <Column>
+                <Button.Success onClick={this.add}>Add</Button.Success>
+              </Column>
+              <Column right>
+                <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+              </Column>
+            </Row>
+          </div>
+        </Card>
+      </div>
     );
   }
 

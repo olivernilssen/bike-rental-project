@@ -22,8 +22,9 @@ class UserInfo extends Component {
   render() {
     return (
       <div>
-        <H1>Brukerinformasjon</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Min side</H1>
+        </NavBar>
         <Card>
           <Row>
             <Column width={5}>
@@ -97,8 +98,9 @@ class EditUserInfo extends Component {
   render() {
     return (
       <div>
-        <H1>Brukerinformasjon</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Min side</H1>
+        </NavBar>
         <Card>
           <Row>
             <Column width={5}>
@@ -215,8 +217,9 @@ class MySales extends Component {
   render() {
     return (
       <div>
-        <H1>Mine salg</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Mine salg</H1>
+        </NavBar>
         <Card>
           Dette er en liste over dine salg som selger hos oss.
           <br />
@@ -291,8 +294,9 @@ class DetailedOrder extends Component {
 
     return (
       <div>
-        <H1>Se på bestilling</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Mine salg</H1>
+        </NavBar>
         <Card>
           Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien
           varer fra {this.fromDate} til {this.toDate}.

@@ -131,93 +131,96 @@ class Menu extends Component {
       return (
         <div>
           <NavBar brand="CycleOn Rentals" />
-          <CenterContent>
-            <Card header="Logg inn">
-              <form onSubmit={this.login}>
-                <div className="input-group form-group">
-                  <Form.Input
-                    type="text"
-                    onChange={event => (this.state.username = event.target.value)}
-                    className="form-control"
-                    placeholder="Employee Username"
-                  />
-                </div>
-                <div className="input-group form-group">
-                  <Form.Input
-                    type="password"
-                    onChange={event => (this.state.password = event.target.value)}
-                    className="form-control"
-                    placeholder="Password"
-                  />
-                </div>
-                <div className="form-group">
-                  <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
-                </div>
-              </form>
-            </Card>
-          </CenterContent>
+          <div id="loggInBg">
+            <CenterContent>
+              <Card id="logg" header="Logg inn">
+                <form onSubmit={this.login}>
+                  <div className="input-group form-group">
+                    <Form.Input
+                      type="text"
+                      onChange={event => (this.state.username = event.target.value)}
+                      className="form-control"
+                      placeholder="Employee Username"
+                    />
+                  </div>
+                  <div className="input-group form-group">
+                    <Form.Input
+                      type="password"
+                      onChange={event => (this.state.password = event.target.value)}
+                      className="form-control"
+                      placeholder="Password"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
+                  </div>
+                </form>
+              </Card>
+            </CenterContent>
+          </div>
         </div>
       );
     } else {
       return (
         <div>
-          <NavBar brand="CycleOn Rentals">
-            <Button.Danger onClick={this.logout}>Logg ut</Button.Danger>
-          </NavBar>
-          <div>
-            <Row>
-              <SideNavBar>
-                <SideNavHeading>
-                  <span>MENY</span>
-                </SideNavHeading>
-                <SideNavBar.SideLink to="/overview/">
-                  <FontAwesomeIcon className="navIcon" icon="chart-pie" />
-                  Oversikt
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/booking/">
-                  <FontAwesomeIcon className="navIcon" icon="calendar" />
-                  Booking
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/area/1/1">
-                  <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
-                  Lokasjoner
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/allBikes/" onClick={this.toggleMenu}>
-                  <FontAwesomeIcon className="navIcon" icon="bicycle" />
-                  Sykler
-                </SideNavBar.SideLink>
+          <NavBar brand="CycleOn Rentals" />
+          <Row>
+            <SideNavBar>
+              <SideNavHeading>
+                <span>MENY</span>
+              </SideNavHeading>
+              <SideNavBar.SideLink to="/overview/">
+                <FontAwesomeIcon className="navIcon" icon="chart-pie" />
+                Oversikt
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink to="/booking/">
+                <FontAwesomeIcon className="navIcon" icon="calendar" />
+                Booking
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink to="/area/1/1">
+                <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
+                Lokasjoner
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink to="/allBikes/" onClick={this.toggleMenu}>
+                <FontAwesomeIcon className="navIcon" icon="bicycle" />
+                Sykler
+              </SideNavBar.SideLink>
 
-                <div className={'collapse navbar-collapse ' + show}>
-                  <div id="subLinks">
-                    <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="/area/1">- Etter lokasjon</SideNavBar.SideLink>
-                    <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
-                  </div>
+              <div className={'collapse navbar-collapse ' + show}>
+                <div id="subLinks">
+                  <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
+                  <SideNavBar.SideLink to="/area/1">- Etter lokasjon</SideNavBar.SideLink>
+                  <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                 </div>
-                <SideNavBar.SideLink to="/equipmentTypes/Helmet">
-                  <FontAwesomeIcon className="navIcon" icon="plus-circle" />
-                  Sykkelutstyr
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/orders/">
-                  <FontAwesomeIcon className="navIcon" icon="archive" />
-                  Ordrer
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/customers/">
-                  <FontAwesomeIcon className="navIcon" icon="users" />
-                  Kundeliste
-                </SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/basket/">
-                  <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
-                  Handlekurv <span style={spanstyle}>{basket.length}</span>
-                </SideNavBar.SideLink>
-                <SideNavHeading>
-                  <span>MIN SIDE</span>
-                </SideNavHeading>
-                <SideNavBar.SideLink to="/information/">Informasjon</SideNavBar.SideLink>
-                <SideNavBar.SideLink to="/MySales">Mine salg</SideNavBar.SideLink>
-              </SideNavBar>
-            </Row>
-          </div>
+              </div>
+              <SideNavBar.SideLink to="/equipmentTypes/Helmet">
+                <FontAwesomeIcon className="navIcon" icon="plus-circle" />
+                Sykkelutstyr
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink to="/orders/">
+                <FontAwesomeIcon className="navIcon" icon="archive" />
+                Ordrer
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink to="/customers/">
+                <FontAwesomeIcon className="navIcon" icon="users" />
+                Kundeliste
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink to="/basket/">
+                <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
+                Handlekurv <span style={spanstyle}>{basket.length}</span>
+              </SideNavBar.SideLink>
+              <SideNavHeading>
+                <span>MIN SIDE</span>
+              </SideNavHeading>
+              <SideNavBar.SideLink to="/information/">Informasjon</SideNavBar.SideLink>
+              <SideNavBar.SideLink to="/MySales">Mine salg</SideNavBar.SideLink>
+              <SideNavBar.SideLink>
+                <Button.Danger id="loggutKnapp" onClick={this.logout}>
+                  Logg ut
+                </Button.Danger>
+              </SideNavBar.SideLink>
+            </SideNavBar>
+          </Row>
         </div>
       );
     }

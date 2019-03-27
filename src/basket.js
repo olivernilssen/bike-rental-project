@@ -136,6 +136,9 @@ class Basket extends Component {
 
     return (
       <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Handlekurv</H1>
+        </NavBar>
         <Card>
           <Row>
             <Column>
@@ -146,12 +149,16 @@ class Basket extends Component {
                 </h4>
               </Form.Label>
               <br />
-              <Button.Danger 
+              <Button.Danger
                 style={btnStyle}
-                onClick={() => {this.removeCustomer();}}>
+                onClick={() => {
+                  this.removeCustomer();
+                }}
+              >
                 Fjern Kunde
               </Button.Danger>
-              <br /><br />
+              <br />
+              <br />
 
               <h6>Handlekurv for sykler:</h6>
               <Table>
@@ -228,7 +235,7 @@ class Basket extends Component {
                   ))}
                 </Table.Tbody>
               </Table>
-            </Column>            
+            </Column>
 
             <Column style={divStyle} width={4}>
               <Column right>
@@ -268,7 +275,7 @@ class Basket extends Component {
           <Row>
             <Column right>
               <Button.Success onClick={this.transaction}>
-                <FontAwesomeIcon className='navIcon' icon='store' />
+                <FontAwesomeIcon className="navIcon" icon="store" />
                 Til Betaling
               </Button.Success>
             </Column>

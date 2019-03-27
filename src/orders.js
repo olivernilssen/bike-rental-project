@@ -141,8 +141,9 @@ class Orders extends Component {
   render() {
     return (
       <div>
-        <H1>Alle ordre</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Ordrer</H1>
+        </NavBar>
         <Card>
           <Row>
             <Column width={3}>

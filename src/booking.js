@@ -393,12 +393,7 @@ class Booking extends Component {
     let checker2 = this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00';
 
     if (this.dayRent == false && this.state.startDate.toString() == this.state.endDate.toString()) {
-      notice = (
-        <p style={{ color: 'red' }}>
-          Pass på at "Til dato:" er minst én dag senere enn "Fra dato:" ved døgnutleie. Ønsker du å leie og levere samme
-          dag, velg "Timeutleie".
-        </p>
-      );
+      notice = <p style={{ color: 'red' }}>"Til dato" må være minst én dag senere enn "Fra dato" ved døgnutleie.</p>;
     }
 
     if (
@@ -407,24 +402,19 @@ class Booking extends Component {
       checker.toString().substring(10, 13) >= checker2.toString().substring(10, 13)
     ) {
       notice = (
-        <p style={{ color: 'red' }}>
-          Ved leie og innlevering på samme dag må "Til klokkeslett" minst være én time etter "Fra klokkeslett".
-        </p>
+        <p style={{ color: 'red' }}>Ved timeutleie må "Til klokkeslett" være minst én time etter "Fra klokkeslett".</p>
       );
     }
 
     if (this.state.startDate.toString() > this.state.endDate.toString()) {
-      notice = (
-        <p style={{ color: 'red' }}>
-          Hvordan kan man låne noe en dag og levere tilbake før det? Vet du noe om universet vi ikke vet?
-        </p>
-      );
+      notice = <p style={{ color: 'red' }}>"Til dato" må være senere enn "Fra dato".</p>;
     }
 
     return (
       <div>
-        <H1>Booking</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Booking</H1>
+        </NavBar>
         <Card>
           {/* Date entry */}
           <div className="container">

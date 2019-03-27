@@ -13,6 +13,9 @@ class AreaList extends Component {
   render() {
     return (
       <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Lokasjoner</H1>
+        </NavBar>
         <Tab>
           {this.area.map(area => (
             <Tab.Item key={area.area_id} to={'/area/' + area.area_id}>
@@ -41,27 +44,32 @@ class AddArea extends Component {
 
   render() {
     return (
-      <Card>
-        <div className="container">
-          <h5>Nytt område</h5>
-          <Row>
-            <Column>
-              <Form.Label>Navn:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
-              <br /> <br />
-              <Row>
-                <Column>
-                  <Button.Success onClick={this.add}>Add</Button.Success>
-                </Column>
-                <Column right>
-                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-                </Column>
-              </Row>
-            </Column>
-            <br />
-          </Row>
-        </div>
-      </Card>
+      <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Lokasjoner</H1>
+        </NavBar>
+        <Card>
+          <div className="container">
+            <h5>Nytt område</h5>
+            <Row>
+              <Column>
+                <Form.Label>Navn:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
+                <br /> <br />
+                <Row>
+                  <Column>
+                    <Button.Success onClick={this.add}>Add</Button.Success>
+                  </Column>
+                  <Column right>
+                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                  </Column>
+                </Row>
+              </Column>
+              <br />
+            </Row>
+          </div>
+        </Card>
+      </div>
     );
   }
 
@@ -86,11 +94,9 @@ class LocationInArea extends Component {
     return (
       <div>
         <Card>
-          <h1 className="display-4">Lokasjoner</h1>
-          <br />
           <Tab>
             {this.locations.map(location => (
-              <Tab.Item key={location.id} to={'/area/' + this.props.match.params.area_id + "/" + location.id}>
+              <Tab.Item key={location.id} to={'/area/' + this.props.match.params.area_id + '/' + location.id}>
                 {location.name}
               </Tab.Item>
             ))}
@@ -135,35 +141,40 @@ class AddLocation extends Component {
 
   render() {
     return (
-      <Card>
-        <div className="container">
-          <h5>Ny lokasjon</h5>
-          <Row>
-            <Column>
-              <Form.Label>Navn:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
-              <Form.Label>Område: </Form.Label>
-              <Select onChange={this.onChangeareaName}>
-                {this.areaNames.map(areaN => (
-                  <Select.Option key={areaN.id} dataKey={areaN.id}>
-                    {areaN.areaName}
-                  </Select.Option>
-                ))}
-              </Select>
-              <br /> <br />
-              <Row>
-                <Column>
-                  <Button.Success onClick={this.add}>Add</Button.Success>
-                </Column>
-                <Column right>
-                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-                </Column>
-              </Row>
-            </Column>
-            <br />
-          </Row>
-        </div>
-      </Card>
+      <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Lokasjoner</H1>
+        </NavBar>
+        <Card>
+          <div className="container">
+            <h5>Ny lokasjon</h5>
+            <Row>
+              <Column>
+                <Form.Label>Navn:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
+                <Form.Label>Område: </Form.Label>
+                <Select onChange={this.onChangeareaName}>
+                  {this.areaNames.map(areaN => (
+                    <Select.Option key={areaN.id} dataKey={areaN.id}>
+                      {areaN.areaName}
+                    </Select.Option>
+                  ))}
+                </Select>
+                <br /> <br />
+                <Row>
+                  <Column>
+                    <Button.Success onClick={this.add}>Add</Button.Success>
+                  </Column>
+                  <Column right>
+                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                  </Column>
+                </Row>
+              </Column>
+              <br />
+            </Row>
+          </div>
+        </Card>
+      </div>
     );
   }
 
@@ -248,7 +259,6 @@ class BikesOnLocation extends Component {
   }
 
   mounted() {
-
     rentalService.getArea(area => {
       this.area = area;
     });

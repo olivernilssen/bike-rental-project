@@ -36,7 +36,9 @@ class AllBikes extends Component {
   render() {
     return (
       <div>
-        <H1>Alle sykler</H1>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykler</H1>
+        </NavBar>
         <Column right>
           <NavLink to={'/addBikes/'}>
             <Button.Light>Legg inn ny sykkel</Button.Light>
@@ -122,6 +124,9 @@ class SelectedBike extends Component {
 
     return (
       <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykler</H1>
+        </NavBar>
         <Card title={'Sykkel med id: ' + this.props.match.params.id}>
           <img src="../pictures/bikeImage.png" width="30%" />
           <Table>
@@ -260,8 +265,9 @@ class BikeTypes extends Component {
   render() {
     return (
       <div>
-        <H1>Sykkeltyper</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykler</H1>
+        </NavBar>
         <Tab>
           {this.bikeTypes.map(bikeType => (
             <Tab.Item key={bikeType.typeName} to={'/bikeTypes/' + bikeType.typeName}>
@@ -320,43 +326,48 @@ class AddBikes extends Component {
 
   render() {
     return (
-      <Card>
-        <div className="container">
-          <h5>Ny sykkeltype</h5>
-          <Row>
-            <Column>
-              <Form.Label>Antall:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
-              <Form.Label>Type:</Form.Label>
-              <Select onChange={this.onChangeType}>
-                {this.bikeTypes.map(bikeType => (
-                  <Select.Option key={bikeType.id} dataKey={bikeType.id}>
-                    {bikeType.typeName} {bikeType.brand} {bikeType.model} {bikeType.year}
-                  </Select.Option>
-                ))}
-              </Select>
-              <Form.Label>Lokasjon: </Form.Label>
-              <Select onChange={this.onChangeLocation}>
-                {this.locations.map(lokasjon => (
-                  <Select.Option key={lokasjon.id} dataKey={lokasjon.id}>
-                    {lokasjon.name}
-                  </Select.Option>
-                ))}
-              </Select>
-              <br /> <br />
-              <Row>
-                <Column>
-                  <Button.Success onClick={this.add}>Add</Button.Success>
-                </Column>
-                <Column right>
-                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-                </Column>
-              </Row>
-            </Column>
-            <br />
-          </Row>
-        </div>
-      </Card>
+      <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykler</H1>
+        </NavBar>
+        <Card>
+          <div className="container">
+            <h5>Ny sykkeltype</h5>
+            <Row>
+              <Column>
+                <Form.Label>Antall:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
+                <Form.Label>Type:</Form.Label>
+                <Select onChange={this.onChangeType}>
+                  {this.bikeTypes.map(bikeType => (
+                    <Select.Option key={bikeType.id} dataKey={bikeType.id}>
+                      {bikeType.typeName} {bikeType.brand} {bikeType.model} {bikeType.year}
+                    </Select.Option>
+                  ))}
+                </Select>
+                <Form.Label>Lokasjon: </Form.Label>
+                <Select onChange={this.onChangeLocation}>
+                  {this.locations.map(lokasjon => (
+                    <Select.Option key={lokasjon.id} dataKey={lokasjon.id}>
+                      {lokasjon.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+                <br /> <br />
+                <Row>
+                  <Column>
+                    <Button.Success onClick={this.add}>Add</Button.Success>
+                  </Column>
+                  <Column right>
+                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                  </Column>
+                </Row>
+              </Column>
+              <br />
+            </Row>
+          </div>
+        </Card>
+      </div>
     );
   }
 
@@ -552,52 +563,57 @@ class NewBikeType extends Component {
 
   render() {
     return (
-      <Card>
-        <div className="container">
-          <h5>Ny sykkeltype</h5>
-          <Row>
-            <Column>
-              <Form.Label>Type:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
-              <Form.Label>Merke:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
-              <Form.Label>Modell:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.model = event.target.value)} />
-              <Form.Label>Årsmodell:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
-              <Form.Label>Rammestørrelse:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
-              <Form.Label>Hjulstørrelse:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
-              <Form.Label>Antall gir:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.gears = event.target.value)} />
-            </Column>
-            <Column>
-              <Form.Label>Girsystem:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
-              <Form.Label>Bremsesystem:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
-              <Form.Label>Vekt:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.weight_kg = event.target.value)} />
-              <Form.Label>Beregnet for:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
-              <Form.Label>Pris:</Form.Label>
-              <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
+      <div>
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykler</H1>
+        </NavBar>
+        <Card>
+          <div className="container">
+            <h5>Ny sykkeltype</h5>
+            <Row>
+              <Column>
+                <Form.Label>Type:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
+                <Form.Label>Merke:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
+                <Form.Label>Modell:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.model = event.target.value)} />
+                <Form.Label>Årsmodell:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
+                <Form.Label>Rammestørrelse:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
+                <Form.Label>Hjulstørrelse:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
+                <Form.Label>Antall gir:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.gears = event.target.value)} />
+              </Column>
+              <Column>
+                <Form.Label>Girsystem:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
+                <Form.Label>Bremsesystem:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
+                <Form.Label>Vekt:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.weight_kg = event.target.value)} />
+                <Form.Label>Beregnet for:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
+                <Form.Label>Pris:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
+                <br />
+                <br />
+                <Row>
+                  <Column>
+                    <Button.Success onClick={this.add}>Add</Button.Success>
+                  </Column>
+                  <Column right>
+                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                  </Column>
+                </Row>
+              </Column>
               <br />
-              <br />
-              <Row>
-                <Column>
-                  <Button.Success onClick={this.add}>Add</Button.Success>
-                </Column>
-                <Column right>
-                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-                </Column>
-              </Row>
-            </Column>
-            <br />
-          </Row>
-        </div>
-      </Card>
+            </Row>
+          </div>
+        </Card>
+      </div>
     );
   }
 
@@ -631,8 +647,9 @@ class BikeStatus extends Component {
   render() {
     return (
       <div>
-        <H1>Sykler etter status</H1>
-        <br />
+        <NavBar brand="CycleOn Rentals">
+          <H1>Sykler</H1>
+        </NavBar>
         <Tab>
           {this.bikeStatus.map(status => (
             <Tab.Item key={status.bikeStatus} to={'/bikeStatus/' + status.bikeStatus}>
