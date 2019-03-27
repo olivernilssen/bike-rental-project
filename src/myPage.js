@@ -97,22 +97,22 @@ class EditUserInfo extends Component {
   render() {
     return (
       <div>
-      <H1>Brukerinformasjon</H1>
-      <br/>
+        <H1>Brukerinformasjon</H1>
+        <br />
         <Card>
           <Row>
             <Column width={5}>
               <Form.Label>Fornavn:</Form.Label>
-              <Form.Input type="text" value={this.firstName} onChange={event => (this.firstName = event.target.value)} />
+              <Form.Input
+                type="text"
+                value={this.firstName}
+                onChange={event => (this.firstName = event.target.value)}
+              />
             </Column>
 
             <Column width={5}>
               <Form.Label>Etternavn:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.surName}
-                onChange={event => (this.surName = event.target.value)}
-              />
+              <Form.Input type="text" value={this.surName} onChange={event => (this.surName = event.target.value)} />
             </Column>
           </Row>
 
@@ -136,7 +136,11 @@ class EditUserInfo extends Component {
 
             <Column width={2}>
               <Form.Label>Nummer:</Form.Label>
-              <Form.Input type="text" value={this.streetNum} onChange={event => (this.streetNum = event.target.value)} />
+              <Form.Input
+                type="text"
+                value={this.streetNum}
+                onChange={event => (this.streetNum = event.target.value)}
+              />
             </Column>
           </Row>
 
@@ -157,7 +161,12 @@ class EditUserInfo extends Component {
           </Row>
 
           <br />
-          <Button.Success type="button" onClick={(e) => { if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save(e) }}>
+          <Button.Success
+            type="button"
+            onClick={e => {
+              if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save(e);
+            }}
+          >
             Oppdatere informasjon
           </Button.Success>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -206,8 +215,8 @@ class MySales extends Component {
   render() {
     return (
       <div>
-      <H1>Mine salg</H1>
-      <br/>
+        <H1>Mine salg</H1>
+        <br />
         <Card>
           Dette er en liste over dine salg som selger hos oss.
           <br />
@@ -266,22 +275,27 @@ class DetailedOrder extends Component {
   equipments = [];
   sales = [];
   orderDate = '';
-  fromDate = "";
-  toDate = "";
+  fromDate = '';
+  toDate = '';
 
   render() {
     let notice;
 
     if (this.equipments.length == 0) {
-      notice = <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
+      notice = (
+        <Table.Tr>
+          <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
+        </Table.Tr>
+      );
     }
 
     return (
       <div>
-      <H1>Se på bestilling</H1>
-      <br/>
+        <H1>Se på bestilling</H1>
+        <br />
         <Card>
-          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien varer fra {this.fromDate} til {this.toDate}.
+          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien
+          varer fra {this.fromDate} til {this.toDate}.
           <br /> <br />
           <Row>
             <Column>
@@ -333,7 +347,8 @@ class DetailedOrder extends Component {
                   <Table.Th>Kommentar</Table.Th>
                   <Table.Th>Pris</Table.Th>
                 </Table.Thead>
-                <Table.Tbody>{notice}
+                <Table.Tbody>
+                  {notice}
                   {this.equipments.map(equipment => (
                     <Table.Tr key={equipment.id}>
                       <Table.Td>{equipment.typeName}</Table.Td>
@@ -347,9 +362,7 @@ class DetailedOrder extends Component {
               </Table>
             </Column>
           </Row>
-
           <Column>
-
             <h4 align="right">Totalpris: {this.sales.price} kr</h4>
             <Button.Success align="left" type="button" onClick={() => history.push('/MySales/')}>
               Gå tilbake til salgsoversikten din
@@ -367,7 +380,6 @@ class DetailedOrder extends Component {
 
     orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
       this.equipments = equipments;
-
     });
 
     rentalService.getSales(employeeID, sales => {

@@ -36,11 +36,10 @@ body {
  * Sidebar
  */
 
-#salg {
-  /* height: 1200px; */
-  max-width: 800px;
+/* #salg {
+  max-width: 1000px;
   min-width: 500px;
-}
+} */
 
 .sidebar {
   position: fixed;

@@ -21,24 +21,16 @@ class Basket extends Component {
     clear: 'both'
   };
 
-
-
   removeBike(bike) {
-
     //Removes all equipment belong to bike with it
 
     for (var i = 0; equipmentBasket.length > i; i++) {
-
-      
       if (equipmentBasket[i].bike_id == bike.id) {
+        equipmentBasket.splice(i, 1);
 
-      equipmentBasket.splice(i, 1);
-
-      i--;
-
+        i--;
+      }
     }
-    }
-
 
     //Removes bike from basket
 
@@ -48,10 +40,6 @@ class Basket extends Component {
         this.updateBasket();
       }
     }
-
-
-
-
   }
 
   updateBasket() {
@@ -115,20 +103,13 @@ class Basket extends Component {
   }
 
   basketRemove(e) {
+    for (var i = 0; equipmentBasket.length > i; i++) {
+      if (equipmentBasket[i].id == e.id) {
+        equipmentBasket.splice(i, 1);
+      }
+    }
 
-for (var i = 0; equipmentBasket.length > i; i++) {
-
-  if (equipmentBasket[i].id == e.id) {
-
-    equipmentBasket.splice(i, 1);
-
-  }
-
-}
-
-this.findCustomers();
-
-
+    this.findCustomers();
   }
 
   render() {
@@ -146,7 +127,11 @@ this.findCustomers();
     let notice;
 
     if (equipmentBasket.length == 0) {
-      notice = <Table.Td>Handlekurven din er tom for utstyr.</Table.Td>
+      notice = (
+        <Table.Tr>
+          <Table.Td>Handlekurven din er tom for utstyr.</Table.Td>
+        </Table.Tr>
+      );
     }
 
     return (
@@ -158,7 +143,8 @@ this.findCustomers();
             <Column width={8}>
               <Form.Label>
                 <h4>
-                  Valgt kunde: {this.state.activeC[0].id} {this.state.activeC[0].firstName} {this.state.activeC[0].lastName}
+                  Valgt kunde: {this.state.activeC[0].id} {this.state.activeC[0].firstName}{' '}
+                  {this.state.activeC[0].lastName}
                 </h4>
               </Form.Label>
               <br />
@@ -172,9 +158,7 @@ this.findCustomers();
               <br />
               <br />
 
-
-
-<h6>Handlekurv for sykler:</h6>
+              <h6>Handlekurv for sykler:</h6>
               <Table>
                 <Table.Thead>
                   <Table.Th>ID</Table.Th>
@@ -198,7 +182,14 @@ this.findCustomers();
                       <Table.Td>{bike.price}</Table.Td>
                       <Table.Td>{bike.startDate}</Table.Td>
                       <Table.Td>{bike.endDate}</Table.Td>
-                      <Table.Td><Button.Success style={btnStyle} onClick={ () => history.push('/equipmentQuery/' + bike.id + '/edit')}>Velge utstyr</Button.Success></Table.Td>
+                      <Table.Td>
+                        <Button.Success
+                          style={btnStyle}
+                          onClick={() => history.push('/equipmentQuery/' + bike.id + '/edit')}
+                        >
+                          Velge utstyr
+                        </Button.Success>
+                      </Table.Td>
                       <Table.Td>
                         <Button.Danger
                           style={btnStyle}
@@ -213,19 +204,20 @@ this.findCustomers();
                   ))}
                 </Table.Tbody>
               </Table>
-              <br/><br/>
+              <br />
+              <br />
 
               <h6>Handlekurv for utstyr:</h6>
-                <Table>
-                  <Table.Thead>
-                    <Table.Th>Tilhører</Table.Th>
-                    <Table.Th>Type</Table.Th>
-                    <Table.Th>Merke</Table.Th>
-                    <Table.Th>Størrelse</Table.Th>
-                    <Table.Th>Pris</Table.Th>
-                    <Table.Th>Knapp</Table.Th>
-                  </Table.Thead>
-                  <Table.Tbody>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Tilhører</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Størrelse</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                  <Table.Th>Knapp</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
                   {notice}
                   {equipmentBasket.map(equip => (
                     <Table.Tr key={equip.id}>
@@ -234,20 +226,21 @@ this.findCustomers();
                       <Table.Td>{equip.brand}</Table.Td>
                       <Table.Td>{equip.comment}</Table.Td>
                       <Table.Td>{equip.price}</Table.Td>
-                      <Table.Td><Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger></Table.Td>
+                      <Table.Td>
+                        <Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger>
+                      </Table.Td>
                     </Table.Tr>
                   ))}
-                  </Table.Tbody>
-                </Table>
+                </Table.Tbody>
+              </Table>
             </Column>
 
-            <Column width={0.5}>
-            </Column>
+            <Column width={0.5} />
 
-            <Column style={divStyle} width={2}>
-            <Form.Label>Søk i kunder ...</Form.Label>
+            <Column style={divStyle}>
+              <Form.Label>Søk i kunder ...</Form.Label>
               <Form.Input value={this.state.phrase} onChange={this.handleChangePhrase} />
-              <br /> <br />
+              <br />
               <Table>
                 <Table.Thead>
                   <Table.Th>Fornavn</Table.Th>
@@ -274,12 +267,6 @@ this.findCustomers();
               </Table>
             </Column>
           </Row>
-
-
-
-
-
-
         </Card>
         <br />
       </div>

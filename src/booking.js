@@ -3,7 +3,7 @@ import { Component } from 'react-simplified';
 import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, Select, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
-import { equipmentService } from "./services/equipmentService.js";
+import { equipmentService } from './services/equipmentService.js';
 import { basket, equipmentBasket } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
@@ -17,26 +17,22 @@ let year = today.getFullYear();
 let time = today.getHours() + 1;
 
 if (time == 24) {
-  time = "00";
+  time = '00';
 }
 
-
 if (time.toString().length == 1) {
-
-  time = "0" + time;
+  time = '0' + time;
 }
 
 let laterTime = today.getHours() + 2;
 
 if (laterTime == 24) {
-  laterTime = "00";
+  laterTime = '00';
 }
 
 if (laterTime.toString().length == 1) {
-
-  time = "0" + time;
+  time = '0' + time;
 }
-
 
 let day2 = day + 2;
 
@@ -50,13 +46,12 @@ class EquipmentQuery extends Component {
   choiceLock = false;
   secondChoiceLock = false;
   sizes = [];
-  location = "";
+  location = '';
 
   state = {
-    selectStatus: "%",
-    sizeSelectStatus: "%",
+    selectStatus: '%',
+    sizeSelectStatus: '%',
     inEqBasket: equipmentBasket
-
   };
 
   handleTypeChange(e) {
@@ -72,97 +67,101 @@ class EquipmentQuery extends Component {
   basketAdd(e) {
     equipmentBasket.push(e);
     this.specify();
-
   }
 
   basketRemove(e) {
+    for (var i = 0; equipmentBasket.length > i; i++) {
+      if (equipmentBasket[i].id == e.id) {
+        equipmentBasket.splice(i, 1);
+      }
+    }
 
-for (var i = 0; equipmentBasket.length > i; i++) {
-
-  if (equipmentBasket[i].id == e.id) {
-    equipmentBasket.splice(i, 1);
+    this.specify();
   }
-}
-
-this.specify();
-
-  }
-
 
   render() {
     let notice;
 
     if (equipmentBasket.length == 0) {
-      notice = <Table.Tr><Table.Td>Handlekurven din er tom for utstyr.</Table.Td></Table.Tr>
+      notice = (
+        <Table.Tr>
+          <Table.Td>Ingen valgte utstyr</Table.Td>
+        </Table.Tr>
+      );
     }
 
     return (
       <div>
         <H1>Valg av sykkelutstyr</H1>
         <br />
-
+        <Row>
+          <Column>
+            <Button.Light onClick={() => history.push('/booking/')}>Bookingsøk</Button.Light>
+          </Column>
+          <Column right>
+            <Button.Light onClick={() => history.push('/basket/')}>Gå til handlekurv</Button.Light>
+          </Column>
+        </Row>
         <Card>
           <Row>
             <Column width={4}>
-              <Form.Label>Utstyrstype</Form.Label>
+              <Form.Label>Utstyrstype:</Form.Label>
               <Select onChange={this.handleTypeChange}>
                 <Select.Option value="%">Velg en utstyrstype ...</Select.Option>
                 {this.equipmentTypes.map(type => (
-                  <Select.Option value= {type.toString()}>{type.toString()}</Select.Option>
-                  ))
-                }
-              </Select><br/>
-              <Form.Label>Størrelse</Form.Label>
-                <Select onChange={this.handleSizeChange}>
-                    <Select.Option value= "%">Velg en størrelse ...</Select.Option>
-                      {this.sizes.map(type => (
-                        <Select.Option value= {type.toString()}>{type.toString()}</Select.Option>
-                        ))
-                      }
-                </Select><br/><br/><br/>
-              </Column>
-            <Column width = {5}><br/><br/>
-              Din valgte sykkel er lagt i handlekurven. Her kan du velge mellom utstyr som passer til den valgte sykkelen på dens lokasjon.
-              Hvis du senere skulle ombestemme deg kan du fortsatt velge nytt sykkelutstyr til sykkelen via handlekurven.
+                  <Select.Option value={type.toString()}>{type.toString()}</Select.Option>
+                ))}
+              </Select>
             </Column>
-            <Column><br/><br/>
-              <Button.Danger onClick ={ () => history.push('/booking/') }>Gå tilbake til sykler</Button.Danger><br/><br/>
-              <Button.Danger onClick ={ () => history.push('/basket/') }>Gå til handlekurv</Button.Danger>
+
+            <Column width={4}>
+              <Form.Label>Størrelse:</Form.Label>
+              <Select onChange={this.handleSizeChange}>
+                <Select.Option value="%">Velg en størrelse ...</Select.Option>
+                {this.sizes.map(type => (
+                  <Select.Option key={type.comment} value={type.toString()}>
+                    {type.toString()}
+                  </Select.Option>
+                ))}
+              </Select>
             </Column>
           </Row>
+          <br />
           <Row>
-          <Column width={7}>
-            <h6>Resultat fra søk i leieutstyr:</h6>
-            <Table>
-              <Table.Thead>
-                <Table.Th>ID</Table.Th>
-                <Table.Th>Type</Table.Th>
-                <Table.Th>Merke</Table.Th>
-                <Table.Th>År</Table.Th>
-                <Table.Th>Størrelse</Table.Th>
-                <Table.Th>Status</Table.Th>
-                <Table.Th>Pris</Table.Th>
-                <Table.Th></Table.Th>
-              </Table.Thead>
-              <Table.Tbody>
-              {this.suitableEquipment.map(equip => (
-                <Table.Tr key={equip.id}>
-                  <Table.Td>{equip.id}</Table.Td>
-                  <Table.Td>{equip.typeName}</Table.Td>
-                  <Table.Td>{equip.brand}</Table.Td>
-                  <Table.Td>{equip.year}</Table.Td>
-                  <Table.Td>{equip.comment}</Table.Td>
-                  <Table.Td>{equip.objectStatus}</Table.Td>
-                  <Table.Td>{equip.price}</Table.Td>
-                  <Table.Td><Button.Success onClick={() => this.basketAdd(equip)}>Velg</Button.Success></Table.Td>
-                </Table.Tr>
-              ))}
-              </Table.Tbody>
-            </Table>
-          </Column>
+            <Column>
+              <h6>Tilgjengelig utstyr:</h6>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>År</Table.Th>
+                  <Table.Th>Størrelse</Table.Th>
+                  <Table.Th>Status</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                  <Table.Th>-</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.suitableEquipment.map(equip => (
+                    <Table.Tr key={equip.id}>
+                      <Table.Td>{equip.id}</Table.Td>
+                      <Table.Td>{equip.typeName}</Table.Td>
+                      <Table.Td>{equip.brand}</Table.Td>
+                      <Table.Td>{equip.year}</Table.Td>
+                      <Table.Td>{equip.comment}</Table.Td>
+                      <Table.Td>{equip.objectStatus}</Table.Td>
+                      <Table.Td>{equip.price}</Table.Td>
+                      <Table.Td>
+                        <Button.Success onClick={() => this.basketAdd(equip)}>Velg</Button.Success>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
 
-          <Column width={5}>
-            <h6>Handlekurv for utstyr:</h6>
+            <Column>
+              <h6>Valgt utstyr:</h6>
               <Table>
                 <Table.Thead>
                   <Table.Th>ID</Table.Th>
@@ -170,135 +169,164 @@ this.specify();
                   <Table.Th>Merke</Table.Th>
                   <Table.Th>Størrelse</Table.Th>
                   <Table.Th>Pris</Table.Th>
-                  <Table.Th>Knapp</Table.Th>
+                  <Table.Th>-</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                {notice}
-                {this.state.inEqBasket.map(equip => (
-                  <Table.Tr key={equip.id}>
-                    <Table.Td>{equip.id}</Table.Td>
-                    <Table.Td>{equip.typeName}</Table.Td>
-                    <Table.Td>{equip.brand}</Table.Td>
-                    <Table.Td>{equip.comment}</Table.Td>
-                    <Table.Td>{equip.price}</Table.Td>
-                    <Table.Td><Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger></Table.Td>
-                  </Table.Tr>
-                ))}
+                  {notice}
+                  {this.state.inEqBasket.map(equip => (
+                    <Table.Tr key={equip.id}>
+                      <Table.Td>{equip.id}</Table.Td>
+                      <Table.Td>{equip.typeName}</Table.Td>
+                      <Table.Td>{equip.brand}</Table.Td>
+                      <Table.Td>{equip.comment}</Table.Td>
+                      <Table.Td>{equip.price}</Table.Td>
+                      <Table.Td>
+                        <Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
                 </Table.Tbody>
               </Table>
             </Column>
           </Row>
         </Card>
-
       </div>
     );
   }
 
   mounted() {
-      
     equipmentService.getLocationFromBikeId(this.props.match.params.id, location => {
-      this.location =  JSON.stringify(location).substring(7).replace('}]', "");
-    }); 
-
+      this.location = JSON.stringify(location)
+        .substring(7)
+        .replace('}]', '');
+    });
 
     equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
-      
-      equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
-        
-        let k = this.props.match.params.id;
-        equipment.forEach(function(e) { e.bike_id = +k });
+      equipmentService.getSuitableEquipment(
+        this.location,
+        this.state.selectStatus,
+        this.state.sizeSelectStatus,
+        JSON.stringify(typeName)
+          .substring(14)
+          .replace('"}]', ''),
+        equipment => {
+          let k = this.props.match.params.id;
+          equipment.forEach(function(e) {
+            e.bike_id = +k;
+          });
 
-        this.suitableEquipment = equipment;
+          this.suitableEquipment = equipment;
 
-        if (this.secondChoiceLock == false) {
-          this.sizes = equipment;
+          if (this.secondChoiceLock == false) {
+            this.sizes = equipment;
 
-          var flags = [], output = [], l = this.sizes.length, i;
-          for( i=0; i<l; i++) {
-              if(flags[this.sizes[i].comment]) continue;
+            var flags = [],
+              output = [],
+              l = this.sizes.length,
+              i;
+            for (i = 0; i < l; i++) {
+              if (flags[this.sizes[i].comment]) continue;
               flags[this.sizes[i].comment] = true;
               output.push(this.sizes[i].comment);
+            }
+
+            this.sizes = output;
+            this.secondChoiceLock = true;
           }
 
-          this.sizes = output;
-          this.secondChoiceLock = true;
-        }
+          if (this.choiceLock == false) {
+            this.equipmentTypes = equipment;
 
-        if (this.choiceLock == false) {
-
-          this.equipmentTypes = equipment;
-
-          var flags = [], output = [], l = this.equipmentTypes.length, i;
-          for( i=0; i<l; i++) {
-              if(flags[this.equipmentTypes[i].typeName]) continue;
+            var flags = [],
+              output = [],
+              l = this.equipmentTypes.length,
+              i;
+            for (i = 0; i < l; i++) {
+              if (flags[this.equipmentTypes[i].typeName]) continue;
               flags[this.equipmentTypes[i].typeName] = true;
               output.push(this.equipmentTypes[i].typeName);
-          }
+            }
 
-          this.equipmentTypes = output;
-          this.choiceLock = true;
+            this.equipmentTypes = output;
+            this.choiceLock = true;
+          }
         }
-      });
-    })
+      );
+    });
 
     this.specify();
   }
 
-specify() {
-  equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
-      equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
-        let m = this.props.match.params.id;
-        equipment.forEach(function(e) { e.bike_id = +m });
+  specify() {
+    equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
+      equipmentService.getSuitableEquipment(
+        this.location,
+        this.state.selectStatus,
+        this.state.sizeSelectStatus,
+        JSON.stringify(typeName)
+          .substring(14)
+          .replace('"}]', ''),
+        equipment => {
+          let m = this.props.match.params.id;
+          equipment.forEach(function(e) {
+            e.bike_id = +m;
+          });
 
-        this.suitableEquipment = equipment;
-        
-        for (var i = 0; this.suitableEquipment.length > i; i++) {
-          for (var k = 0; equipmentBasket.length > k; k++) {
+          this.suitableEquipment = equipment;
+
+          for (var i = 0; this.suitableEquipment.length > i; i++) {
+            for (var k = 0; equipmentBasket.length > k; k++) {
               if (this.suitableEquipment[i].id == equipmentBasket[k].id) {
                 this.suitableEquipment.splice(i, 1);
               }
             }
           }
 
-        if (this.secondChoiceLock == false) {
-          this.sizes = equipment;
-          var flags = [], output = [], l = this.sizes.length, i;
+          if (this.secondChoiceLock == false) {
+            this.sizes = equipment;
+            var flags = [],
+              output = [],
+              l = this.sizes.length,
+              i;
 
-          for( i=0; i<l; i++) {
-              if(flags[this.sizes[i].comment]) continue;
-                flags[this.sizes[i].comment] = true;
-                output.push(this.sizes[i].comment);
+            for (i = 0; i < l; i++) {
+              if (flags[this.sizes[i].comment]) continue;
+              flags[this.sizes[i].comment] = true;
+              output.push(this.sizes[i].comment);
+            }
+
+            this.sizes = output;
+            this.secondChoiceLock = true;
           }
 
-          this.sizes = output;
-          this.secondChoiceLock = true;
-        }
+          if (this.choiceLock == false) {
+            this.equipmentTypes = equipment;
+            var flags = [],
+              output = [],
+              l = this.equipmentTypes.length,
+              i;
 
-        if (this.choiceLock == false) {
-          this.equipmentTypes = equipment;
-          var flags = [], output = [], l = this.equipmentTypes.length, i;
+            for (i = 0; i < l; i++) {
+              if (flags[this.equipmentTypes[i].typeName]) continue;
+              flags[this.equipmentTypes[i].typeName] = true;
+              output.push(this.equipmentTypes[i].typeName);
+            }
 
-          for( i=0; i<l; i++) {
-              if(flags[this.equipmentTypes[i].typeName]) continue;
-                flags[this.equipmentTypes[i].typeName] = true;
-                output.push(this.equipmentTypes[i].typeName);
+            this.equipmentTypes = output;
+            this.choiceLock = true;
           }
-
-
-          this.equipmentTypes = output;
-          this.choiceLock = true;
         }
-      });
-    })  
+      );
+    });
   }
 }
 
 class Booking extends Component {
   todaysDate = year + '-' + month + '-' + day;
   nextDay = year + '-' + month + '-' + day2;
-  currentHour = time + ":00";
-  laterHour = time + ":00";
-  laterHourAlt = laterTime + ":00";
+  currentHour = time + ':00';
+  laterHour = time + ':00';
+  laterHourAlt = laterTime + ':00';
   dayRent = false;
 
   state = {
@@ -318,17 +346,16 @@ class Booking extends Component {
   };
 
   handleCheckChange() {
-      if (this.dayRent == false) {
-        this.dayRent = true;
-        this.state.endHour = this.laterHourAlt;
-        this.handleSubmit();
-      } else {
-        this.dayRent = false;
-        this.state.endHour = this.laterHour;
-        this.handleSubmit();
-      }
+    if (this.dayRent == false) {
+      this.dayRent = true;
+      this.state.endHour = this.laterHourAlt;
+      this.handleSubmit();
+    } else {
+      this.dayRent = false;
+      this.state.endHour = this.laterHour;
+      this.handleSubmit();
     }
-
+  }
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value }, this.handleSubmit);
@@ -339,16 +366,15 @@ class Booking extends Component {
   }
 
   chooseBike(bike) {
-    history.push('/equipmentQuery/' + bike.id + '/edit');
+    // history.push('/equipmentQuery/' + bike.id + '/edit');
 
-    if (basket.length == 0) 
-    { } 
-    else if (basket[0].id == 'Handlekurven er tom') {
+    if (basket.length == 0) {
+    } else if (basket[0].id == 'Handlekurven er tom') {
       basket.splice(0, 1);
     }
 
-      bike.startDate = this.state.startDate;
-      bike.endDate = this.state.startDate;
+    bike.startDate = this.state.startDate;
+    bike.endDate = this.state.startDate;
 
     basket.push(bike);
     this.findAvailBikes();
@@ -363,25 +389,36 @@ class Booking extends Component {
     const { btnStyle } = styles;
 
     let notice;
-    let checker = this.state.startDate.toString() + " " + this.state.startHour.toString() + ":00";
-    let checker2 = this.state.endDate.toString() + " " + this.state.endHour.toString() + ":00";
+    let checker = this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00';
+    let checker2 = this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00';
 
-    if (this.dayRent == false && (this.state.startDate.toString() == this.state.endDate.toString())) {
-      notice = <p style={{ color: "red" }}>Pass på at "Til dato:" er minst én dag 
-      senere enn "Fra dato:" ved døgnutleie. Ønsker du å leie og levere 
-      samme dag, velg "Timeutleie".</p>;
+    if (this.dayRent == false && this.state.startDate.toString() == this.state.endDate.toString()) {
+      notice = (
+        <p style={{ color: 'red' }}>
+          Pass på at "Til dato:" er minst én dag senere enn "Fra dato:" ved døgnutleie. Ønsker du å leie og levere samme
+          dag, velg "Timeutleie".
+        </p>
+      );
     }
 
-    if (this.dayRent == true && (this.state.startDate.toString() == this.state.endDate.toString()) 
-    && (checker.toString().substring(10,13) >= checker2.toString().substring(10,13))) {
-      notice = <p style={{ color: "red" }}>Ved leie og innlevering på samme 
-      dag må "Til klokkeslett" minst være én time etter "Fra klokkeslett".</p>;
+    if (
+      this.dayRent == true &&
+      this.state.startDate.toString() == this.state.endDate.toString() &&
+      checker.toString().substring(10, 13) >= checker2.toString().substring(10, 13)
+    ) {
+      notice = (
+        <p style={{ color: 'red' }}>
+          Ved leie og innlevering på samme dag må "Til klokkeslett" minst være én time etter "Fra klokkeslett".
+        </p>
+      );
     }
 
-    if ((this.state.startDate.toString() > this.state.endDate.toString())) {
-      notice = <p style={{ color: "red" }}>Hvordan kan man låne noe en dag 
-      og levere tilbake før det? Vet du noe om universet vi ikke vet?</p>;
-
+    if (this.state.startDate.toString() > this.state.endDate.toString()) {
+      notice = (
+        <p style={{ color: 'red' }}>
+          Hvordan kan man låne noe en dag og levere tilbake før det? Vet du noe om universet vi ikke vet?
+        </p>
+      );
     }
 
     return (
@@ -414,7 +451,9 @@ class Booking extends Component {
                 />
               </Column>
 
-              <Column width={3}><br/><br/>
+              <Column width={3}>
+                <br />
+                <br />
                 <div className="form-check">
                   <Form.Label>
                     <input
@@ -455,8 +494,8 @@ class Booking extends Component {
                 </Select>
               </Column>
 
-              <Column width ={2}>
-              <Form.Label>Fra klokkeslett:</Form.Label>
+              <Column width={2}>
+                <Form.Label>Fra klokkeslett:</Form.Label>
                 <Form.Input
                   type="time"
                   name="startHour"
@@ -466,7 +505,7 @@ class Booking extends Component {
                 />
               </Column>
 
-              <Column width ={2}>
+              <Column width={2}>
                 <Form.Label>Til klokkeslett:</Form.Label>
                 <Form.Input
                   type="time"
@@ -476,7 +515,6 @@ class Booking extends Component {
                   onChange={this.handleChange}
                 />
               </Column>
-
             </Row>
             {/* submit button */}
             <br />
@@ -485,10 +523,8 @@ class Booking extends Component {
                 <Button.Success name="submit" onClick={this.handleSubmit}>
                   Søk
                 </Button.Success>
-                </Column>
-                <Column right>
-                {notice}
               </Column>
+              <Column right>{notice}</Column>
             </Row>
           </div>
 
@@ -535,15 +571,14 @@ class Booking extends Component {
   }
 
   mounted() {
-
     this.state.availableBikes = [];
     let empty = { id: 'Gjør et nytt søk' };
 
     rentalService.getBookingSearch(
       this.state.locationSelect,
       this.state.typeSelect,
-      this.state.startDate.toString() + " " + this.state.startHour.toString() + ":00",
-      this.state.endDate.toString() + " " + this.state.endHour.toString() + ":00",
+      this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00',
+      this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00',
       result => {
         for (let i = 0; i < result.length; i++) {
           {
@@ -586,8 +621,8 @@ class Booking extends Component {
     rentalService.getBookingSearch(
       this.state.locationSelect,
       this.state.typeSelect,
-      this.state.startDate.toString() + " " + this.state.startHour.toString() + ":00",
-      this.state.endDate.toString() + " " + this.state.endHour.toString() + ":00",
+      this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00',
+      this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00',
       result => {
         for (let i = 0; i < result.length; i++) {
           {
