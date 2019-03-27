@@ -4,8 +4,10 @@ import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from '.
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { customerService } from './services/customersService';
 import { basket, activeCustomer, equipmentBasket } from './index.js';
+import { library } from '@fortawesome/fontawesome-svg-core';
 
 import createHashHistory from 'history/createHashHistory';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Basket extends Component {
@@ -23,7 +25,6 @@ class Basket extends Component {
 
   removeBike(bike) {
     //Removes all equipment belong to bike with it
-
     for (var i = 0; equipmentBasket.length > i; i++) {
       if (equipmentBasket[i].bike_id == bike.id) {
         equipmentBasket.splice(i, 1);
@@ -33,7 +34,6 @@ class Basket extends Component {
     }
 
     //Removes bike from basket
-
     for (let i of basket) {
       if (bike == i) {
         basket.splice(basket.indexOf(i), 1);
@@ -136,11 +136,9 @@ class Basket extends Component {
 
     return (
       <div>
-        <H1>Handlekurv</H1>
-        <br />
         <Card>
           <Row>
-            <Column width={8}>
+            <Column>
               <Form.Label>
                 <h4>
                   Valgt kunde: {this.state.activeC[0].id} {this.state.activeC[0].firstName}{' '}
@@ -148,15 +146,12 @@ class Basket extends Component {
                 </h4>
               </Form.Label>
               <br />
-              <Button.Danger
-                onClick={() => {
-                  this.removeCustomer();
-                }}
-              >
+              <Button.Danger 
+                style={btnStyle}
+                onClick={() => {this.removeCustomer();}}>
                 Fjern Kunde
               </Button.Danger>
-              <br />
-              <br />
+              <br /><br />
 
               <h6>Handlekurv for sykler:</h6>
               <Table>
@@ -233,12 +228,15 @@ class Basket extends Component {
                   ))}
                 </Table.Tbody>
               </Table>
-            </Column>
+            </Column>            
 
-            <Column width={0.5} />
-
-            <Column style={divStyle}>
-              <Form.Label>Søk i kunder ...</Form.Label>
+            <Column style={divStyle} width={4}>
+              <Column right>
+                <NavLink to={'/addCustomer/'}>
+                  <Button.Success>Legg til ny kunde</Button.Success>
+                </NavLink>
+              </Column>
+              <Form.Label>Søk i kunder..</Form.Label>
               <Form.Input value={this.state.phrase} onChange={this.handleChangePhrase} />
               <br />
               <Table>
@@ -267,6 +265,14 @@ class Basket extends Component {
               </Table>
             </Column>
           </Row>
+          <Row>
+            <Column right>
+              <Button.Success onClick={this.transaction}>
+                <FontAwesomeIcon className='navIcon' icon='store' />
+                Til Betaling
+              </Button.Success>
+            </Column>
+          </Row>
         </Card>
         <br />
       </div>
@@ -283,6 +289,12 @@ class Basket extends Component {
         };
       });
     });
+  }
+
+  transaction() {
+    //create new order
+    //Add items to to order with customer ID
+    //Remove items from current basket list
   }
 }
 

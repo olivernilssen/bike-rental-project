@@ -54,7 +54,8 @@ import {
   faMapMarkerAlt,
   faUsers,
   faArchive,
-  faPlusCircle
+  faPlusCircle,
+  faStore
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -66,7 +67,8 @@ library.add(
   faMapMarkerAlt,
   faUsers,
   faArchive,
-  faPlusCircle
+  faPlusCircle,
+  faStore
 );
 
 import createHashHistory from 'history/createHashHistory';
