@@ -141,8 +141,9 @@ class Orders extends Component {
   render() {
     return (
       <div>
+        <H1>Alle ordre</H1>
         <br />
-        <Card title="Alle ordre">
+        <Card>
           <Row>
             <Column width={3}>
               <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
