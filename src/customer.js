@@ -97,6 +97,15 @@ class Customers extends Component {
 
 class SelectedCustomer extends Component {
   firstName = '';
+  lastName = '';
+  email = '';
+  tlf = 0;
+  streetAddress = 0;
+  streetNum = 0;
+  postalNum = 0;
+  place = '';
+  address_id = null;
+
 
   state = {
     customer: this.props.activeCustomer,
@@ -120,15 +129,15 @@ class SelectedCustomer extends Component {
           <Form.Label>Kunde id:</Form.Label>
               <Form.Input type="text" value={this.state.customer.id} disabled onChange={event => (this.id = event.target.value)} />
           <Form.Label>Fornavn:</Form.Label>
-              <Form.Input type="text" value={this.state.customer.firstName} onChange={event => (this.state.customer.firstName = event.target.value)} />
+              <Form.Input type="text" value={this.state.customer.firstName} onChange={event => (this.firstName = event.target.value)} />
           <Form.Label>Etternavn:</Form.Label>
               <Form.Input type="text" placeholder={this.state.customer.lastName} onChange={event => (this.lastName = event.target.value)} />
           <Form.Label>Epost:</Form.Label>
               <Form.Input type="text" placeholder={this.state.customer.email} onChange={event => (this.email = event.target.value)} />
           <Form.Label>Telefon:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.tlf} onChange={event => (this.etterNavn = event.target.value)} />
+              <Form.Input type="text" placeholder={this.state.customer.tlf} onChange={event => (this.tlf = event.target.value)} />
           <Form.Label>Adresse:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.streetAddress} onChange={event => (this.etterNavn = event.target.value)} />
+              <Form.Input type="text" placeholder={this.state.customer.streetAddress} onChange={event => (this.streetAddress = event.target.value)} />
           <Form.Label>Gatenummer:</Form.Label>
               <Form.Input type="text" placeholder={this.state.customer.streetNum} onChange={event => (this.streetNum = event.target.value)} />
           <Form.Label>Postnummer:</Form.Label>
@@ -210,23 +219,25 @@ class SelectedCustomer extends Component {
     customerService.getCustomer('1', result => {
       this.setState({ state: (this.state.customer = result) });
     });
+
   }
 
   save() {
-    rentalService.updateEmployee(
-      employeeID,
-      this.firstName,
-      this.lastName,
-      this.email,
-      this.tlf,
-      this.streetAddress,
-      this.streetNum,
-      this.postalNum,
-      this.place,
-      () => {
-        history.push('/information');
+    //Check if address already in database
+    customerService.getAddressID(this.postalNum, this.postalNum, this.streetAddress, this.streetNum, result => {
+      // console.log(result);
+      if (result === undefined) {
+        customerService.updateAddress(this.postalNum, this.postalNum, this.streetAddress, this.streetNum);
+
+        customerService.getAddressID(this.postalNum, this.postalNum, this.streetAddress, this.streetNum, newID => {
+          customerService.updateCustomer(this.firstName, this.lastName, this.email, this.tlf, newID.id);
+        });
+      } else {
+        customerService.updateCustomer(this.firstName, this.lastName, this.email, this.tlf, result.id);
       }
-    );
+    });
+
+    history.push('/customers/');
   }
 
 }
