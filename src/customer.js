@@ -96,23 +96,16 @@ class Customers extends Component {
 }
 
 class SelectedCustomer extends Component {
-  firstName = '';
-  lastName = '';
-  email = '';
-  tlf = 0;
-  streetAddress = 0;
-  streetNum = 0;
-  postalNum = 0;
-  place = '';
-  address_id = null;
-
-
   state = {
     customer: this.props.activeCustomer,
   };
 
+  active = '';
+
+
   componentWillReceiveProps(nextProps) {
     this.setState({ customer: nextProps.activeCustomer });
+    this.active = nextProps.activeCustomer;
     this.setState({ change: false});
   }
 
@@ -127,23 +120,23 @@ class SelectedCustomer extends Component {
           <h5>Endre Kunde:</h5>
           <br />
           <Form.Label>Kunde id:</Form.Label>
-              <Form.Input type="text" value={this.state.customer.id} disabled onChange={event => (this.id = event.target.value)} />
+              <Form.Input type="text" value={this.state.customer.id} disabled />
           <Form.Label>Fornavn:</Form.Label>
-              <Form.Input type="text" value={this.state.customer.firstName} onChange={event => (this.firstName = event.target.value)} />
+              <Form.Input type="text" value={this.active.firstName} onChange={event => (this.active.firstName = event.target.value)} />
           <Form.Label>Etternavn:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.lastName} onChange={event => (this.lastName = event.target.value)} />
+              <Form.Input type="text" value={this.active.lastName} onChange={event => (this.active.lastName = event.target.value)} />
           <Form.Label>Epost:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.email} onChange={event => (this.email = event.target.value)} />
+              <Form.Input type="text" value={this.active.email} onChange={event => (this.active.email = event.target.value)} />
           <Form.Label>Telefon:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.tlf} onChange={event => (this.tlf = event.target.value)} />
+              <Form.Input type="text" value={this.active.tlf} onChange={event => (this.active.tlf = event.target.value)} />
           <Form.Label>Adresse:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.streetAddress} onChange={event => (this.streetAddress = event.target.value)} />
+              <Form.Input type="text" value={this.active.streetAddress} onChange={event => (this.active.streetAddress = event.target.value)} />
           <Form.Label>Gatenummer:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.streetNum} onChange={event => (this.streetNum = event.target.value)} />
+              <Form.Input type="text" value={this.active.streetNum} onChange={event => (this.active.streetNum = event.target.value)} />
           <Form.Label>Postnummer:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.postalNum} onChange={event => (this.postalNum = event.target.value)} />
+              <Form.Input type="text" value={this.active.postalNum} onChange={event => (this.active.postalNum = event.target.value)} />
           <Form.Label>Sted:</Form.Label>
-              <Form.Input type="text" placeholder={this.state.customer.place} onChange={event => (this.place = event.target.value)} />
+              <Form.Input type="text" value={this.active.place} onChange={event => (this.active.place = event.target.value)} />
           <br />
           <Button.Success onClick={this.save}>Oppdatere informasjon</Button.Success>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -218,26 +211,27 @@ class SelectedCustomer extends Component {
   mounted() {
     customerService.getCustomer('1', result => {
       this.setState({ state: (this.state.customer = result) });
+      this.active = result;
     });
 
   }
 
   save() {
     //Check if address already in database
-    customerService.getAddressID(this.postalNum, this.postalNum, this.streetAddress, this.streetNum, result => {
+    customerService.getAddressID(this.active.postalNum, this.active.place, this.active.streetAddress, this.active.streetNum, result => {
       // console.log(result);
       if (result === undefined) {
-        customerService.updateAddress(this.postalNum, this.postalNum, this.streetAddress, this.streetNum);
+        customerService.addAddress(this.active.postalNum, this.active.place, this.active.streetAddress, this.active.streetNum);
 
-        customerService.getAddressID(this.postalNum, this.postalNum, this.streetAddress, this.streetNum, newID => {
-          customerService.updateCustomer(this.firstName, this.lastName, this.email, this.tlf, newID.id);
+        customerService.getAddressID(this.active.postalNum, this.active.place, this.active.streetAddress, this.active.streetNum, newID => {
+          customerService.updateCustomer(this.active.firstName, this.active.lastName, this.active.email, this.active.tlf, newID, this.state.activeCustomer.id);
         });
       } else {
-        customerService.updateCustomer(this.firstName, this.lastName, this.email, this.tlf, result.id);
+        customerService.updateCustomer(this.active.firstName, this.active.lastName, this.active.email, this.active.tlf, result, this.state.activeCustomer.id);
       }
     });
 
-    history.push('/customers/');
+    this.setState({ change: false});
   }
 
 }

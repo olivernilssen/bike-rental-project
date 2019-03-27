@@ -53,11 +53,11 @@ class CustomerService {
     )
   }
 
-  updateCustomer(firstName, lastName, email, tlf, address_id, success){
-    connection.query('update Customers set firstName=?, lastName=?, email=?, tlf=? where address_id=?', [firstName, lastName, email, tlf, address_id], (error, results) => {
+  updateCustomer(firstName, lastName, email, tlf, addr_id, id){
+    connection.query('update Customers set firstName=?, lastName=?, email=?, tlf=?, address_id=? where id=?', 
+    [firstName, lastName, email, tlf, addr_id, id], 
+    (error) => {
       if (error) return console.error(error);
-
-      success(console.log('oppdatert kunde'));
     });
   }
 
@@ -69,11 +69,11 @@ class CustomerService {
     });
   }
 
-  updateAddress(streetAddress, streetNum, postalNum, place, id, success) {
-    connection.query("update Address a, Customers c set a.streetAddress=?, a.streetNum=?, a.postalNum=?, a.place=? where a.id=c.address_id and a.id=?", [streetAddress, streetNum, postalNum, place, id], (error, results) => {
+  updateAddress(streetAddress, streetNum, postalNum, place, id) {
+    connection.query("update Address a, Customers c set (a.streetAddress=?, a.streetNum=?, a.postalNum=?, a.place=?) where a.id=c.address_id and a.id=?", 
+    [streetAddress, streetNum, postalNum, place, id], 
+    (error) => {
       if (error) return console.error(error);
-
-      success(results[0]);
     });
   }
 }
