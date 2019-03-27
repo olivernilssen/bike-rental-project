@@ -268,7 +268,7 @@ class AddCustomer extends Component {
               <br /> <br />
               <Row>
                 <Column>
-                  <Button.Success onClick={this.add}>Add</Button.Success>
+                  <Button.Success onClick={(e) => { if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e)}}>Add</Button.Success>
                 </Column>
               </Row>
             </Column>

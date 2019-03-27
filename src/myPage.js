@@ -157,7 +157,7 @@ class EditUserInfo extends Component {
           </Row>
 
           <br />
-          <Button.Success type="button" onClick={this.save}>
+          <Button.Success type="button" onClick={(e) => { if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save(e) }}>
             Oppdatere informasjon
           </Button.Success>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
