@@ -53,7 +53,6 @@ class EquipmentQuery extends Component {
   location = "";
 
   state = {
-
     selectStatus: "%",
     sizeSelectStatus: "%",
     inEqBasket: equipmentBasket
@@ -61,25 +60,18 @@ class EquipmentQuery extends Component {
   };
 
   handleTypeChange(e) {
-
-  this.state.selectStatus = e.target.value;
-  this.specify();
-
+    this.state.selectStatus = e.target.value;
+    this.specify();
   }
 
   handleSizeChange(e) {
-
-  this.state.sizeSelectStatus = e.target.value;
-  this.specify();
-
+    this.state.sizeSelectStatus = e.target.value;
+    this.specify();
   }
 
   basketAdd(e) {
-
     equipmentBasket.push(e);
-
     this.specify();
-
 
   }
 
@@ -88,28 +80,21 @@ class EquipmentQuery extends Component {
 for (var i = 0; equipmentBasket.length > i; i++) {
 
   if (equipmentBasket[i].id == e.id) {
-
     equipmentBasket.splice(i, 1);
-
   }
-
 }
 
 this.specify();
-
 
   }
 
 
   render() {
-
     let notice;
 
     if (equipmentBasket.length == 0) {
       notice = <Table.Tr><Table.Td>Handlekurven din er tom for utstyr.</Table.Td></Table.Tr>
     }
-
-
 
     return (
       <div>
@@ -117,121 +102,92 @@ this.specify();
         <br />
 
         <Card>
-        <Row>
-        <Column width={4}>
-        <Form.Label>Utstyrstype</Form.Label>
-        <Select onChange={this.handleTypeChange}>
+          <Row>
+            <Column width={4}>
+              <Form.Label>Utstyrstype</Form.Label>
+              <Select onChange={this.handleTypeChange}>
+                <Select.Option value="%">Velg en utstyrstype ...</Select.Option>
+                {this.equipmentTypes.map(type => (
+                  <Select.Option value= {type.toString()}>{type.toString()}</Select.Option>
+                  ))
+                }
+              </Select><br/>
+              <Form.Label>Størrelse</Form.Label>
+                <Select onChange={this.handleSizeChange}>
+                    <Select.Option value= "%">Velg en størrelse ...</Select.Option>
+                      {this.sizes.map(type => (
+                        <Select.Option value= {type.toString()}>{type.toString()}</Select.Option>
+                        ))
+                      }
+                </Select><br/><br/><br/>
+              </Column>
+            <Column width = {5}><br/><br/>
+              Din valgte sykkel er lagt i handlekurven. Her kan du velge mellom utstyr som passer til den valgte sykkelen på dens lokasjon.
+              Hvis du senere skulle ombestemme deg kan du fortsatt velge nytt sykkelutstyr til sykkelen via handlekurven.
+            </Column>
+            <Column><br/><br/>
+              <Button.Danger onClick ={ () => history.push('/booking/') }>Gå tilbake til sykler</Button.Danger><br/><br/>
+              <Button.Danger onClick ={ () => history.push('/basket/') }>Gå til handlekurv</Button.Danger>
+            </Column>
+          </Row>
+          <Row>
+          <Column width={7}>
+            <h6>Resultat fra søk i leieutstyr:</h6>
+            <Table>
+              <Table.Thead>
+                <Table.Th>ID</Table.Th>
+                <Table.Th>Type</Table.Th>
+                <Table.Th>Merke</Table.Th>
+                <Table.Th>År</Table.Th>
+                <Table.Th>Størrelse</Table.Th>
+                <Table.Th>Status</Table.Th>
+                <Table.Th>Pris</Table.Th>
+                <Table.Th></Table.Th>
+              </Table.Thead>
+              <Table.Tbody>
+              {this.suitableEquipment.map(equip => (
+                <Table.Tr key={equip.id}>
+                  <Table.Td>{equip.id}</Table.Td>
+                  <Table.Td>{equip.typeName}</Table.Td>
+                  <Table.Td>{equip.brand}</Table.Td>
+                  <Table.Td>{equip.year}</Table.Td>
+                  <Table.Td>{equip.comment}</Table.Td>
+                  <Table.Td>{equip.objectStatus}</Table.Td>
+                  <Table.Td>{equip.price}</Table.Td>
+                  <Table.Td><Button.Success onClick={() => this.basketAdd(equip)}>Velg</Button.Success></Table.Td>
+                </Table.Tr>
+              ))}
+              </Table.Tbody>
+            </Table>
+          </Column>
 
-        <Select.Option value="%">Velg en utstyrstype ...</Select.Option>
-
-
-        {
-
-          this.equipmentTypes.map(type => (
-          <Select.Option value= {type.toString()}>{type.toString()}</Select.Option>
-        ))
-
-
-      }
-
-        </Select><br/>
-
-
-        <Form.Label>Størrelse</Form.Label>
-        <Select onChange={this.handleSizeChange}>
-
-        <Select.Option value= "%">Velg en størrelse ...</Select.Option>
-
-
-        {
-
-          this.sizes.map(type => (
-          <Select.Option value= {type.toString()}>{type.toString()}</Select.Option>
-        ))
-
-
-      }
-
-        </Select><br/><br/><br/>
-
-
-
-        </Column>
-
-        <Column width = {5}><br/><br/>
-        Din valgte sykkel er lagt i handlekurven. Her kan du velge mellom utstyr som passer til den valgte sykkelen på dens lokasjon.
-        Hvis du senere skulle ombestemme deg kan du fortsatt velge nytt sykkelutstyr til sykkelen via handlekurven.
-        </Column>
-        <Column><br/><br/><Button.Danger onClick ={ () => history.push('/booking/') }>Gå tilbake til sykler</Button.Danger>
-        <br/><br/><Button.Danger onClick ={ () => history.push('/basket/') }>Gå til handlekurv</Button.Danger></Column>
-        </Row>
-        <Row>
-        <Column width={7}>
-
-        <h6>Resultat fra søk i leieutstyr:</h6>
-          <Table>
-            <Table.Thead>
-              <Table.Th>ID</Table.Th>
-              <Table.Th>Type</Table.Th>
-              <Table.Th>Merke</Table.Th>
-              <Table.Th>År</Table.Th>
-              <Table.Th>Størrelse</Table.Th>
-              <Table.Th>Status</Table.Th>
-              <Table.Th>Pris</Table.Th>
-              <Table.Th></Table.Th>
-            </Table.Thead>
-            <Table.Tbody>
-            {this.suitableEquipment.map(equip => (
-              <Table.Tr key={equip.id}>
-                <Table.Td>{equip.id}</Table.Td>
-                <Table.Td>{equip.typeName}</Table.Td>
-                <Table.Td>{equip.brand}</Table.Td>
-                <Table.Td>{equip.year}</Table.Td>
-                <Table.Td>{equip.comment}</Table.Td>
-                <Table.Td>{equip.objectStatus}</Table.Td>
-                <Table.Td>{equip.price}</Table.Td>
-                <Table.Td><Button.Success onClick={() => this.basketAdd(equip)}>Velg</Button.Success></Table.Td>
-              </Table.Tr>
-            ))}
-            </Table.Tbody>
-          </Table>
-        </Column>
-
-
-
-
-
-        <Column width={5}>
-        <h6>Handlekurv for utstyr:</h6>
-          <Table>
-            <Table.Thead>
-              <Table.Th>ID</Table.Th>
-              <Table.Th>Type</Table.Th>
-              <Table.Th>Merke</Table.Th>
-              <Table.Th>Størrelse</Table.Th>
-              <Table.Th>Pris</Table.Th>
-              <Table.Th>Knapp</Table.Th>
-            </Table.Thead>
-            <Table.Tbody>
-            {notice}
-            {this.state.inEqBasket.map(equip => (
-              <Table.Tr key={equip.id}>
-                <Table.Td>{equip.id}</Table.Td>
-                <Table.Td>{equip.typeName}</Table.Td>
-                <Table.Td>{equip.brand}</Table.Td>
-                <Table.Td>{equip.comment}</Table.Td>
-                <Table.Td>{equip.price}</Table.Td>
-                <Table.Td><Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger></Table.Td>
-              </Table.Tr>
-            ))}
-            </Table.Tbody>
-          </Table>
-        </Column>
-
-
-
-
-        </Row>
+          <Column width={5}>
+            <h6>Handlekurv for utstyr:</h6>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Størrelse</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                  <Table.Th>Knapp</Table.Th>
+                </Table.Thead>
+                <Table.Tbody>
+                {notice}
+                {this.state.inEqBasket.map(equip => (
+                  <Table.Tr key={equip.id}>
+                    <Table.Td>{equip.id}</Table.Td>
+                    <Table.Td>{equip.typeName}</Table.Td>
+                    <Table.Td>{equip.brand}</Table.Td>
+                    <Table.Td>{equip.comment}</Table.Td>
+                    <Table.Td>{equip.price}</Table.Td>
+                    <Table.Td><Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger></Table.Td>
+                  </Table.Tr>
+                ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
         </Card>
 
       </div>
@@ -239,160 +195,103 @@ this.specify();
   }
 
   mounted() {
+      
+    equipmentService.getLocationFromBikeId(this.props.match.params.id, location => {
+      this.location =  JSON.stringify(location).substring(7).replace('}]', "");
+    }); 
 
 
+    equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
+      
+      equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
+        
+        let k = this.props.match.params.id;
+        equipment.forEach(function(e) { e.bike_id = +k });
 
-equipmentService.getLocationFromBikeId(this.props.match.params.id, location => {
+        this.suitableEquipment = equipment;
 
-  this.location =  JSON.stringify(location).substring(7).replace('}]', "");
+        if (this.secondChoiceLock == false) {
+          this.sizes = equipment;
 
-})
+          var flags = [], output = [], l = this.sizes.length, i;
+          for( i=0; i<l; i++) {
+              if(flags[this.sizes[i].comment]) continue;
+              flags[this.sizes[i].comment] = true;
+              output.push(this.sizes[i].comment);
+          }
 
+          this.sizes = output;
+          this.secondChoiceLock = true;
+        }
 
-equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
+        if (this.choiceLock == false) {
 
+          this.equipmentTypes = equipment;
 
+          var flags = [], output = [], l = this.equipmentTypes.length, i;
+          for( i=0; i<l; i++) {
+              if(flags[this.equipmentTypes[i].typeName]) continue;
+              flags[this.equipmentTypes[i].typeName] = true;
+              output.push(this.equipmentTypes[i].typeName);
+          }
 
-    equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
+          this.equipmentTypes = output;
+          this.choiceLock = true;
+        }
+      });
+    })
 
-
-      let k = this.props.match.params.id;
-      equipment.forEach(function(e) { e.bike_id = +k });
-
-      this.suitableEquipment = equipment;
-
-
-      if (this.secondChoiceLock == false) {
-
-      this.sizes = equipment;
-
-
-      var flags = [], output = [], l = this.sizes.length, i;
-      for( i=0; i<l; i++) {
-          if(flags[this.sizes[i].comment]) continue;
-          flags[this.sizes[i].comment] = true;
-          output.push(this.sizes[i].comment);
-      }
-
-
-      this.sizes = output;
-      this.secondChoiceLock = true;
-
-    }
-
-
-
-      if (this.choiceLock == false) {
-
-      this.equipmentTypes = equipment;
-
-
-      var flags = [], output = [], l = this.equipmentTypes.length, i;
-      for( i=0; i<l; i++) {
-          if(flags[this.equipmentTypes[i].typeName]) continue;
-          flags[this.equipmentTypes[i].typeName] = true;
-          output.push(this.equipmentTypes[i].typeName);
-      }
-
-
-      this.equipmentTypes = output;
-      this.choiceLock = true;
-
-    }
-
-
-    });
-
-})
-
-this.specify();
-
-}
+    this.specify();
+  }
 
 specify() {
-
-
   equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
-
-
       equipmentService.getSuitableEquipment(this.location, this.state.selectStatus, this.state.sizeSelectStatus, JSON.stringify(typeName).substring(14).replace('"}]', ""), equipment => {
-
-
         let m = this.props.match.params.id;
         equipment.forEach(function(e) { e.bike_id = +m });
 
         this.suitableEquipment = equipment;
-
-
-            for (var i = 0; this.suitableEquipment.length > i; i++) {
-
-for (var k = 0; equipmentBasket.length > k; k++) {
+        
+        for (var i = 0; this.suitableEquipment.length > i; i++) {
+          for (var k = 0; equipmentBasket.length > k; k++) {
               if (this.suitableEquipment[i].id == equipmentBasket[k].id) {
-
-              this.suitableEquipment.splice(i, 1);
-
+                this.suitableEquipment.splice(i, 1);
               }
-}
             }
-
-
-
-
-
-
-
-
+          }
 
         if (this.secondChoiceLock == false) {
+          this.sizes = equipment;
+          var flags = [], output = [], l = this.sizes.length, i;
 
-        this.sizes = equipment;
+          for( i=0; i<l; i++) {
+              if(flags[this.sizes[i].comment]) continue;
+                flags[this.sizes[i].comment] = true;
+                output.push(this.sizes[i].comment);
+          }
 
-
-        var flags = [], output = [], l = this.sizes.length, i;
-        for( i=0; i<l; i++) {
-            if(flags[this.sizes[i].comment]) continue;
-            flags[this.sizes[i].comment] = true;
-            output.push(this.sizes[i].comment);
+          this.sizes = output;
+          this.secondChoiceLock = true;
         }
-
-
-        this.sizes = output;
-        this.secondChoiceLock = true;
-
-      }
-
-
 
         if (this.choiceLock == false) {
+          this.equipmentTypes = equipment;
+          var flags = [], output = [], l = this.equipmentTypes.length, i;
 
-        this.equipmentTypes = equipment;
+          for( i=0; i<l; i++) {
+              if(flags[this.equipmentTypes[i].typeName]) continue;
+                flags[this.equipmentTypes[i].typeName] = true;
+                output.push(this.equipmentTypes[i].typeName);
+          }
 
 
-        var flags = [], output = [], l = this.equipmentTypes.length, i;
-        for( i=0; i<l; i++) {
-            if(flags[this.equipmentTypes[i].typeName]) continue;
-            flags[this.equipmentTypes[i].typeName] = true;
-            output.push(this.equipmentTypes[i].typeName);
+          this.equipmentTypes = output;
+          this.choiceLock = true;
         }
-
-
-        this.equipmentTypes = output;
-        this.choiceLock = true;
-
-      }
-
-
       });
-
-  })
-
-
-
+    })  
+  }
 }
-
-
-
-      }
 
 class Booking extends Component {
   todaysDate = year + '-' + month + '-' + day;
@@ -432,27 +331,19 @@ class Booking extends Component {
 
 
   handleChange(e) {
-
-
-
     this.setState({ [e.target.name]: e.target.value }, this.handleSubmit);
-
-
   }
 
   handleSubmit() {
-
-
     this.findAvailBikes();
   }
 
   chooseBike(bike) {
-
     history.push('/equipmentQuery/' + bike.id + '/edit');
 
-
-    if (basket.length == 0) {
-    } else if (basket[0].id == 'Handlekurven er tom') {
+    if (basket.length == 0) 
+    { } 
+    else if (basket[0].id == 'Handlekurven er tom') {
       basket.splice(0, 1);
     }
 
@@ -461,8 +352,6 @@ class Booking extends Component {
 
     basket.push(bike);
     this.findAvailBikes();
-
-
   }
 
   render() {
@@ -478,21 +367,22 @@ class Booking extends Component {
     let checker2 = this.state.endDate.toString() + " " + this.state.endHour.toString() + ":00";
 
     if (this.dayRent == false && (this.state.startDate.toString() == this.state.endDate.toString())) {
-      notice = <p style={{ color: "red" }}>Pass på at "Til dato:" er minst én dag senere enn "Fra dato:" ved døgnutleie. Ønsker du å leie og levere samme dag, velg "Timeutleie".</p>;
+      notice = <p style={{ color: "red" }}>Pass på at "Til dato:" er minst én dag 
+      senere enn "Fra dato:" ved døgnutleie. Ønsker du å leie og levere 
+      samme dag, velg "Timeutleie".</p>;
     }
 
-    if (this.dayRent == true && (this.state.startDate.toString() == this.state.endDate.toString()) && (checker.toString().substring(10,13) >= checker2.toString().substring(10,13))) {
-
-      notice = <p style={{ color: "red" }}>Ved leie og innlevering på samme dag må "Til klokkeslett" minst være én time etter "Fra klokkeslett".</p>;
-
+    if (this.dayRent == true && (this.state.startDate.toString() == this.state.endDate.toString()) 
+    && (checker.toString().substring(10,13) >= checker2.toString().substring(10,13))) {
+      notice = <p style={{ color: "red" }}>Ved leie og innlevering på samme 
+      dag må "Til klokkeslett" minst være én time etter "Fra klokkeslett".</p>;
     }
 
     if ((this.state.startDate.toString() > this.state.endDate.toString())) {
-
-      notice = <p style={{ color: "red" }}>Hvordan kan man låne noe en dag og levere tilbake før det? Vet du noe om universet vi ikke vet?</p>;
+      notice = <p style={{ color: "red" }}>Hvordan kan man låne noe en dag 
+      og levere tilbake før det? Vet du noe om universet vi ikke vet?</p>;
 
     }
-
 
     return (
       <div>
@@ -513,8 +403,6 @@ class Booking extends Component {
                 />
               </Column>
 
-
-
               <Column width={3}>
                 <Form.Label>Til dato:</Form.Label>
                 <Form.Input
@@ -525,7 +413,6 @@ class Booking extends Component {
                   onChange={this.handleChange}
                 />
               </Column>
-
 
               <Column width={3}><br/><br/>
                 <div className="form-check">
@@ -541,14 +428,7 @@ class Booking extends Component {
                     <label className="form-check-label">Ønsker du spesifisere klokkeslett? (timeutleie)</label>
                   </Form.Label>
                 </div>
-
-                </Column>
-
-
-
-
-
-
+              </Column>
             </Row>
             <br />
 
@@ -600,18 +480,18 @@ class Booking extends Component {
             </Row>
             {/* submit button */}
             <br />
-
             <Row>
-            <Column width={1}>
-              <Button.Success name="submit" onClick={this.handleSubmit}>
-                Søk
-              </Button.Success>
+              <Column width={1}>
+                <Button.Success name="submit" onClick={this.handleSubmit}>
+                  Søk
+                </Button.Success>
+                </Column>
+                <Column right>
+                {notice}
               </Column>
-              <Column right>
-              {notice}
-              </Column>
-              </Row>
+            </Row>
           </div>
+
           <br />
           <Card header="LEDIGE SYKLER:">
             <Table>
@@ -659,8 +539,6 @@ class Booking extends Component {
     this.state.availableBikes = [];
     let empty = { id: 'Gjør et nytt søk' };
 
-
-
     rentalService.getBookingSearch(
       this.state.locationSelect,
       this.state.typeSelect,
@@ -704,9 +582,6 @@ class Booking extends Component {
   findAvailBikes() {
     this.state.availableBikes = [];
     let empty = { id: 'Gjør et nytt søk' };
-
-
-
 
     rentalService.getBookingSearch(
       this.state.locationSelect,

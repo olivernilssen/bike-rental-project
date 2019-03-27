@@ -51,46 +51,40 @@ class EquipmentTypes extends Component {
 
 class EquipmentTypesOtherMain extends Component {
 
-
   render() {
     return(
-<div>
-<Card>
-<Row>
-<Column>
-Opprettelsen av begrensningen var vellykket. Du vil ikke lenger kunne leie de respektive leiegjenstandene i kombinasjon. <br/><br/>
-</Column>
-</Row>
-
-
-
-</Card>
-</div>
+      <div>
+        <Card>
+          <Row>
+            <Column>
+              Opprettelsen av begrensningen var vellykket. 
+              Du vil ikke lenger kunne leie de respektive 
+              leiegjenstandene i kombinasjon. <br/><br/>
+            </Column>
+          </Row>
+        </Card>
+      </div>
     );
   }
-
-
 }
 
 class EquipmentTypesMain extends Component {
-
-
   render() {
     return(
-<div>
-<Card>
-<Row>
-<Column>
-Slettingen av begrensningen var vellykket. Den vil ikke lenger hindre de respektive leiegjenstandene fra å leies ut sammen. <br/><br/>
-</Column>
-</Row>
-
-
-
-</Card>
-</div>
-    );
-  }
+      <div>
+        <Card>
+          <Row>
+            <Column>
+              Slettingen av begrensningen var vellykket. 
+              Den vil ikke lenger hindre de respektive 
+              leiegjenstandene fra å leies ut sammen. 
+              <br/><br/>
+            </Column>
+          </Row>
+        </Card>
+      </div>
+          );
+        }
 
 
 }
@@ -103,6 +97,7 @@ class EquipTypeDetails extends Component {
   lock = false;
   selectStatus = "";
   showingEquipment = 0;
+
   state = {
     equipments: [],
     typeIds: [],
@@ -111,14 +106,13 @@ class EquipTypeDetails extends Component {
 
 
   showThisType(id) {
+
     if (this.showingEquipment === id && this.lock == true) {
       this.lock = false;
       this.state.equipments = [];
-      let temp = [];
 
       for (let i = 0; i < this.state.typeIds.length; i++) {
         equipmentService.getEquipmentByTypeID(this.state.typeIds[i].id, results => {
-          this.showingEquipment = id;
           this.setState(state => {
             const equipments = state.equipments.concat(results);
             return { equipments, results };
@@ -126,13 +120,17 @@ class EquipTypeDetails extends Component {
         });
       }
 
+      
       this.showingEquipment = 0;
+
     } else {
+      console.log("hva skjer her elseee?");
       this.lock = true;
-      this.state.equipments = [];
+
       equipmentService.getEquipmentByTypeID(id, results => {
         this.showingEquipment = id;
         this.setState(state => {
+          this.state.equipments = [];
           const equipments = state.equipments.concat(results);
           return { equipments, results };
         });
@@ -148,7 +146,7 @@ class EquipTypeDetails extends Component {
     let notice;
 
     if (this.lock == true) {
-      notice = <p style={{ color: "red" }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer igjen.</p>;
+      notice = <p style={{ color: "red" }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer</p>;
     }
 
     let noRestr;
@@ -226,7 +224,7 @@ class EquipTypeDetails extends Component {
                   <Table.Th>Endre</Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
-                {noRestr}
+                <Table.Tr>{noRestr}</Table.Tr>
                 {this.restrictions.map(restrictions => (
                   <Table.Tr key={restrictions.id}>
                     <Table.Td>{restrictions.typeName}</Table.Td>
@@ -237,31 +235,19 @@ class EquipTypeDetails extends Component {
               </Table>
               <br />
             </Column>
-
             <Column width={1}>
             </Column>
-
-
             <Column>
-
             <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
             <Select name="typeSelect" value={this.selectStatus} onChange={event => (this.selectStatus = event.target.value)}>
-
-            <Select.Option value="">Du har ikke valgt noen sykkel ...</Select.Option>
-
-            {this.distinctBikeType.map(trestrictions => (
-              <Select.Option>{trestrictions.typeName} </Select.Option>
-            ))}
-
+              <Select.Option value="">Du har ikke valgt noen sykkel..</Select.Option>
+              {this.distinctBikeType.map(trestrictions => (
+                <Select.Option key={trestrictions.id}>{trestrictions.typeName} </Select.Option>
+              ))}
             </Select>
-
             <br/><br/>
-            <Button.Danger style={{ float: "right" }} onClick = { () => {this.add()} } >Legg til ny restriksjon</Button.Danger>
-
-
+            <Button.Danger style={{ float: "right" }} onClick = { () => {this.add()} }>Legg til ny restriksjon</Button.Danger>
             </Column>
-
-
           </Row>
         </Card>
         <br />
@@ -270,47 +256,30 @@ class EquipTypeDetails extends Component {
   }
 
 add() {
+  if (this.selectStatus != "") {
 
-if (this.selectStatus != "") {
-
-  equipmentService.getBikeIdByName(this.selectStatus, idResult => {
-
-    equipmentService.addRestriction(JSON.stringify(idResult).substring(6).replace("}", ""), this.state.equipTypeDetails[0].id, () => {
-
-    history.push("/equipmentTypes/Skip/OtherMain");
-
+    equipmentService.getBikeIdByName(this.selectStatus, idResult => {
+      equipmentService.addRestriction(JSON.stringify(idResult).substring(6).replace("}", ""), this.state.equipTypeDetails[0].id, () => {
+        history.push("/equipmentTypes/Skip/OtherMain");
+      })
     })
-
-
-  })
-
-
-
-}
-
+  }
 }
 
 
   delete(id) {
-
     this.handler = id;
 
     equipmentService.deleteRestriction(this.handler, this.state.equipTypeDetails[0].id, () => {
       history.push("/equipmentTypes/Skip/Main");
-
     });
-
   }
 
   mounted() {
-
-
-
     equipmentService.getRestrictions(this.props.match.params.typeName, results => {
       this.restrictions = results;
       this.lock = false;
     });
-
 
     this.state.equipments = [];
     this.state.equipTypeDetails = [];
