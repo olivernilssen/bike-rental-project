@@ -34,7 +34,7 @@ class BikeService {
   }
 
   getBikesbyTypeID(id, success) {
-    connection.query('select id, location_id, bikeStatus from Bikes where type_id = ?', [id], (error, results) => {
+    connection.query('select b.id, l.name, b.bikeStatus from Bikes b, Locations l where b.location_id=l.id and type_id = ?', [id], (error, results) => {
       if (error) return console.error(error);
       success(results);
     });

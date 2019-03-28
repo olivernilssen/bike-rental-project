@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ClickTable, H1, Select } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ClickTable, H1, Select, CenterContent } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
@@ -494,7 +494,7 @@ class BikeTypeDetails extends Component {
               <h6>Sykler av denne typen:</h6>
               <Table>
                 <Table.Thead>
-                  <Table.Th>ID</Table.Th>
+                  <Table.Th style={{padding: 'right'}}>ID</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Status</Table.Th>
                   <Table.Th />
@@ -503,11 +503,11 @@ class BikeTypeDetails extends Component {
                   {this.state.bikes.map(bike => (
                     <Table.Tr key={bike.id}>
                       <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.location_id}</Table.Td>
+                      <Table.Td>{bike.name}</Table.Td>
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selectedBike/' + bike.id}>
-                          <Button.Success>Endre</Button.Success>
+                          <Button.Success style={{float: 'right'}}>Endre</Button.Success>
                         </NavLink>
                       </Table.Td>
                     </Table.Tr>
