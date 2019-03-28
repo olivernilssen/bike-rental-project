@@ -585,7 +585,7 @@ class Overview extends Component {
             <h1>Oversikt</h1>
           </NavBar.Link>
         </NavBar>
-        <Card>
+        <Card style={{ minWidth: '400px' }}>
           <Chart />
         </Card>
         <br />

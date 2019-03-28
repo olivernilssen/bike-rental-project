@@ -69,6 +69,10 @@ body {
   box-shadow: 0 10px 6px -6px #777;
 }
 
+#locations {
+  margin-left: 15em;
+}
+
 /*
  * Sidebar
  */
@@ -97,9 +101,16 @@ body {
   max-width: 180px;
 }
 
-#subLinks .nav-link {
+.subLinks .nav-link {
   font-style: italic;
-  padding-left: 3em;
+  padding-left: 2em;
+}
+
+#dropdownBike {
+  margin-left: 4.7em;
+  margin-top: -6px;
+  height: auto;
+  width: 15px;
 }
 
 .nav-tabs .nav-link {

@@ -1,6 +1,20 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ClickTable, H1, Select, CenterContent } from './widgets';
+import {
+  Card,
+  Tab,
+  List,
+  Row,
+  Column,
+  NavBar,
+  Button,
+  Form,
+  Table,
+  ClickTable,
+  H1,
+  Select,
+  CenterContent
+} from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
@@ -281,7 +295,7 @@ class BikeTypes extends Component {
             </Tab.Item>
           ))}
           <Column right>
-            <NavLink to={'/bikeTypes/add/'}>
+            <NavLink to={'/addBikeType/'}>
               <Button.Light>Legg inn ny sykkeltype</Button.Light>
             </NavLink>
           </Column>
@@ -340,7 +354,7 @@ class AddBikes extends Component {
         </NavBar>
         <Card>
           <div className="container">
-            <h5>Ny sykkeltype</h5>
+            <h5>Ny sykkel</h5>
             <Row>
               <Column>
                 <Form.Label>Antall:</Form.Label>
@@ -494,7 +508,7 @@ class BikeTypeDetails extends Component {
               <h6>Sykler av denne typen:</h6>
               <Table>
                 <Table.Thead>
-                  <Table.Th style={{padding: 'right'}}>ID</Table.Th>
+                  <Table.Th style={{ padding: 'right' }}>ID</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Status</Table.Th>
                   <Table.Th />
@@ -507,7 +521,7 @@ class BikeTypeDetails extends Component {
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selectedBike/' + bike.id}>
-                          <Button.Success style={{float: 'right'}}>Endre</Button.Success>
+                          <Button.Success style={{ float: 'right' }}>Endre</Button.Success>
                         </NavLink>
                       </Table.Td>
                     </Table.Tr>
@@ -643,11 +657,11 @@ class NewBikeType extends Component {
       this.price
     );
 
-    history.push('/bikeTypes/');
+    history.push('/bikeTypes/Terreng');
   }
 
   cancel() {
-    history.push('/bikeTypes/' + this.props.match.params.typeName);
+    history.push('/bikeTypes/Terreng');
   }
 }
 

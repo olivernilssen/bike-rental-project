@@ -56,7 +56,11 @@ export class Tab extends Component {
   static Item = TabItem;
 
   render() {
-    return <ul className="nav nav-tabs">{this.props.children}</ul>;
+    return (
+      <ul className="nav nav-tabs" id={this.props.id}>
+        {this.props.children}
+      </ul>
+    );
   }
 }
 
