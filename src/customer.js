@@ -103,11 +103,17 @@ class SelectedCustomer extends Component {
   };
 
   active = '';
+  ordersByCustomer = [];
+
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ customer: nextProps.activeCustomer });
+    this.setState({
+      customer: nextProps.activeCustomer,
+      change: false,
+      allOrders: false
+      });
+
     this.active = nextProps.activeCustomer;
-    this.setState({ change: false });
   }
 
   render() {
@@ -187,6 +193,43 @@ class SelectedCustomer extends Component {
           </Card>
         </div>
       );
+    } else if (this.state.allOrders) {
+      return(
+        <Card>
+        <br />
+        <br />
+        <Row>
+          <Column>
+            <Table>
+              <Table.Thead>
+                <Table.Th>Ordre-ID</Table.Th>
+                <Table.Th>Ordretype</Table.Th>
+                <Table.Th>Bestillingsdato</Table.Th>
+                <Table.Th>Start for utleie</Table.Th>
+                <Table.Th>Slutt for utleie</Table.Th>
+                <Table.Th>Pris</Table.Th>
+                <Table.Th />
+              </Table.Thead>
+              <Table.Tbody>
+                {this.ordersByCustomer.map(orders => (
+                  <Table.Tr key={orders.id}>
+                    <Table.Td>{orders.id}</Table.Td>
+                    <Table.Td>{orders.typeName}</Table.Td>
+                    <Table.Td>{orders.dateOrdered.toString().substring(4, 24)}</Table.Td>
+                    <Table.Td>{orders.fromDateTime.toString().substring(4, 24)}</Table.Td>
+                    <Table.Td>{orders.toDateTime.toString().substring(4, 24)}</Table.Td>
+                    <Table.Td>{orders.price} kr</Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Column>
+        </Row>
+        <Button.Danger type="button" onClick={this.cancel}>
+          Gå tilbake
+        </Button.Danger>
+        </Card>
+      )
     } else {
       return (
         <Card>
@@ -234,6 +277,8 @@ class SelectedCustomer extends Component {
             </Table>
             <br />
             <Button.Success onClick={this.change}>Endre</Button.Success>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <Button.Light onClick={this.allOrders}>Se tidligere ordre</Button.Light>
           </Column>
         </Card>
       );
@@ -244,8 +289,16 @@ class SelectedCustomer extends Component {
     this.setState({ change: true });
   }
 
+  allOrders() {
+    this.setState({ allOrders: true });
+
+    customerService.getCustomerOrders(this.state.customer.id, ordersByCustomer  => {
+      this.ordersByCustomer = ordersByCustomer;
+    });
+  }
+
   cancel() {
-    this.setState({ change: false });
+    this.setState({ change: false, allOrders: false });
   }
 
   mounted() {
@@ -253,6 +306,7 @@ class SelectedCustomer extends Component {
       this.setState({ state: (this.state.customer = result) });
       this.active = result;
     });
+
   }
 
   save() {
