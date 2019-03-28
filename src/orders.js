@@ -142,7 +142,9 @@ class Orders extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Ordrer</H1>
+          <NavBar.Link to="#">
+            <h1>Ordrer</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <Row>

@@ -37,7 +37,9 @@ class AllBikes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykler</H1>
+          <NavBar.Link to="#">
+            <h1>Sykler</h1>
+          </NavBar.Link>
         </NavBar>
         <Column right>
           <NavLink to={'/addBikes/'}>
@@ -125,7 +127,9 @@ class SelectedBike extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykler</H1>
+          <NavBar.Link to="#">
+            <h1>Sykler</h1>
+          </NavBar.Link>
         </NavBar>
         <Card title={'Sykkel med id: ' + this.props.match.params.id}>
           <img src="../pictures/bikeImage.png" width="30%" />
@@ -266,7 +270,9 @@ class BikeTypes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykler</H1>
+          <NavBar.Link to="#">
+            <h1>Sykler</h1>
+          </NavBar.Link>
         </NavBar>
         <Tab>
           {this.bikeTypes.map(bikeType => (
@@ -328,7 +334,9 @@ class AddBikes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykler</H1>
+          <NavBar.Link to="#">
+            <h1>Sykler</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <div className="container">
@@ -565,7 +573,9 @@ class NewBikeType extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykler</H1>
+          <NavBar.Link to="#">
+            <h1>Sykler</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <div className="container">
@@ -648,7 +658,9 @@ class BikeStatus extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykler</H1>
+          <NavBar.Link to="#">
+            <h1>Sykler</h1>
+          </NavBar.Link>
         </NavBar>
         <Tab>
           {this.bikeStatus.map(status => (

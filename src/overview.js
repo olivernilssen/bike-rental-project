@@ -581,7 +581,9 @@ class Overview extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Oversikt</H1>
+          <NavBar.Link to="#">
+            <h1>Oversikt</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <Chart />

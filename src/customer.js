@@ -41,7 +41,9 @@ class Customers extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Kundeliste</H1>
+          <NavBar.Link to="#">
+            <h1>Kundeliste</h1>
+          </NavBar.Link>
         </NavBar>
 
         <Column right>
@@ -105,13 +107,12 @@ class SelectedCustomer extends Component {
   active = '';
   ordersByCustomer = [];
 
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       customer: nextProps.activeCustomer,
       change: false,
       allOrders: false
-      });
+    });
 
     this.active = nextProps.activeCustomer;
   }
@@ -123,7 +124,9 @@ class SelectedCustomer extends Component {
       return (
         <div>
           <NavBar brand="CycleOn Rentals">
-            <H1>Kundeliste</H1>
+            <NavBar.Link to="#">
+              <h1>Kundeliste</h1>
+            </NavBar.Link>
           </NavBar>
           <Card>
             <Column>
@@ -194,42 +197,42 @@ class SelectedCustomer extends Component {
         </div>
       );
     } else if (this.state.allOrders) {
-      return(
+      return (
         <Card>
-        <br />
-        <br />
-        <Row>
-          <Column>
-            <Table>
-              <Table.Thead>
-                <Table.Th>Ordre-ID</Table.Th>
-                <Table.Th>Ordretype</Table.Th>
-                <Table.Th>Bestillingsdato</Table.Th>
-                <Table.Th>Start for utleie</Table.Th>
-                <Table.Th>Slutt for utleie</Table.Th>
-                <Table.Th>Pris</Table.Th>
-                <Table.Th />
-              </Table.Thead>
-              <Table.Tbody>
-                {this.ordersByCustomer.map(orders => (
-                  <Table.Tr key={orders.id}>
-                    <Table.Td>{orders.id}</Table.Td>
-                    <Table.Td>{orders.typeName}</Table.Td>
-                    <Table.Td>{orders.dateOrdered.toString().substring(4, 24)}</Table.Td>
-                    <Table.Td>{orders.fromDateTime.toString().substring(4, 24)}</Table.Td>
-                    <Table.Td>{orders.toDateTime.toString().substring(4, 24)}</Table.Td>
-                    <Table.Td>{orders.price} kr</Table.Td>
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Column>
-        </Row>
-        <Button.Danger type="button" onClick={this.cancel}>
-          Gå tilbake
-        </Button.Danger>
+          <br />
+          <br />
+          <Row>
+            <Column>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>Ordre-ID</Table.Th>
+                  <Table.Th>Ordretype</Table.Th>
+                  <Table.Th>Bestillingsdato</Table.Th>
+                  <Table.Th>Start for utleie</Table.Th>
+                  <Table.Th>Slutt for utleie</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                  <Table.Th />
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.ordersByCustomer.map(orders => (
+                    <Table.Tr key={orders.id}>
+                      <Table.Td>{orders.id}</Table.Td>
+                      <Table.Td>{orders.typeName}</Table.Td>
+                      <Table.Td>{orders.dateOrdered.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{orders.fromDateTime.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{orders.toDateTime.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{orders.price} kr</Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Column>
+          </Row>
+          <Button.Danger type="button" onClick={this.cancel}>
+            Gå tilbake
+          </Button.Danger>
         </Card>
-      )
+      );
     } else {
       return (
         <Card>
@@ -292,7 +295,7 @@ class SelectedCustomer extends Component {
   allOrders() {
     this.setState({ allOrders: true });
 
-    customerService.getCustomerOrders(this.state.customer.id, ordersByCustomer  => {
+    customerService.getCustomerOrders(this.state.customer.id, ordersByCustomer => {
       this.ordersByCustomer = ordersByCustomer;
     });
   }
@@ -306,7 +309,6 @@ class SelectedCustomer extends Component {
       this.setState({ state: (this.state.customer = result) });
       this.active = result;
     });
-
   }
 
   save() {
@@ -375,7 +377,9 @@ class AddCustomer extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Kundeliste</H1>
+          <NavBar.Link to="#">
+            <h1>Kundeliste</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <div className="container">

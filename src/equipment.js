@@ -16,7 +16,9 @@ class EquipmentTypes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykkelutstyr</H1>
+          <NavBar.Link to="#">
+            <h1>Sykkelutstyr</h1>
+          </NavBar.Link>
         </NavBar>
         <Tab>
           {this.equipTypes.map(type => (
@@ -55,7 +57,9 @@ class EquipmentTypesOtherMain extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykkelutstyr</H1>
+          <NavBar.Link to="#">
+            <h1>Sykkelutstyr</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <Row>
@@ -76,7 +80,9 @@ class EquipmentTypesMain extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykkelutstyr</H1>
+          <NavBar.Link to="#">
+            <h1>Sykkelutstyr</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <Row>
@@ -357,7 +363,9 @@ class AddEquipment extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykkelutstyr</H1>
+          <NavBar.Link to="#">
+            <h1>Sykkelutstyr</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <div className="container">
@@ -466,7 +474,9 @@ class NewEquipmentType extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Sykkelutstyr</H1>
+          <NavBar.Link to="#">
+            <h1>Sykkelutstyr</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <div className="container">

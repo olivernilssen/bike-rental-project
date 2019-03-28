@@ -1,16 +1,3 @@
-/* body {
-  width: 100%;
-}
-
-a {
-  color: black;
-} */
-.feather {
-  width: 16px;
-  height: 16px;
-  vertical-align: text-bottom;
-}
-
 #root {
   margin-top: 7em;
   margin-right: 2em;
@@ -31,11 +18,11 @@ body {
   margin-left: 1em;
 }
 
-.feather {
+/* .feather {
   width: 16px;
   height: 16px;
   vertical-align: text-bottom;
-}
+} */
 
 #loggInBg {
   margin-top: 6em;
@@ -81,14 +68,10 @@ body {
   -moz-box-shadow: 0 10px 6px -6px #777;
   box-shadow: 0 10px 6px -6px #777;
 }
+
 /*
  * Sidebar
  */
-
-/* #salg {
-  max-width: 1000px;
-  min-width: 500px;
-} */
 
 .sidebar {
   position: fixed;
@@ -120,13 +103,13 @@ body {
 }
 
 .nav-tabs .nav-link {
-  background-color: white !important;
+  background-color: #c3e6cb !important;
   margin-right: 2px;
   color: black;
   font-size: 1.1em;
 }
 .nav-tabs .nav-link.active {
-  background-color: #e5e5e5 !important;
+  background-color: #f7f7f7 !important;
   font-weight: bold;
 }
 .nav-tabs .nav-link:hover {
@@ -149,9 +132,6 @@ body {
   }
   #root {
     margin-top: 8em;
-  }
-  .navbar #dangerBtn {
-    margin-bottom: 5px;
   }
 }
 
@@ -194,15 +174,15 @@ body {
  * Content
  */
 
-[role='main'] {
-  padding-top: 50px; /* Space for fixed navbar */
-}
+/*[role='main'] {
+  padding-top: 50px;
+}*/
 
-@media (max-width: 575px) {
+/*@media (max-width: 575px) {
   [role='main'] {
     padding-top: 80px;
   }
-}
+}*/
 
 /* @media (min-width: 768px) {
   [role='main'] {
@@ -214,12 +194,23 @@ body {
  * Navbar
  */
 
+#top-navbar {
+  background-color: #494e53 !important;
+}
+
+#top-navbar h1 {
+  font-weight: normal;
+  color: #f7f7f7;
+}
+
 .navbar-brand {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding-top: 1.4rem;
+  padding-bottom: 1.4rem;
+  padding-left: 1em;
+  width: 180px !important;
   font-size: 1rem;
-  /* background-color: rgba(0, 0, 0, 0.25);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25); */
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
 }
 
 .navbar .form-control {

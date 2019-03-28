@@ -103,9 +103,12 @@ export class NavBar extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+      <nav
+        id="top-navbar"
+        className="navbar navbar-dark fixed-top bg-dark d-flex justify-content-start flex-md-nowrap p-0 shadow"
+      >
         {
-          <NavLink className="navbar-brand col-sm-3 col-md-2 mr-0" activeClassName="active" exact to="/">
+          <NavLink className="navbar-brand" activeClassName="active" exact to="/">
             {this.props.brand}
           </NavLink>
         }
@@ -285,7 +288,7 @@ export class CenterContent extends Component {
 class Thead extends Component {
   render() {
     return (
-      <thead>
+      <thead className="thead-light">
         <tr>{this.props.children}</tr>
       </thead>
     );
@@ -294,11 +297,7 @@ class Thead extends Component {
 
 class Th extends Component {
   render() {
-    return (
-      <th className="table-success" scope="col">
-        {this.props.children}
-      </th>
-    );
+    return <th scope="col">{this.props.children}</th>;
   }
 }
 
@@ -328,7 +327,11 @@ export class ClickTable extends Component {
   static Tbody = Tbody;
 
   render() {
-    return <table className="table table-hover">{this.props.children}</table>;
+    return (
+      <div className="table-responsive">
+        <table className="table table-hover">{this.props.children}</table>
+      </div>
+    );
   }
 }
 
@@ -340,7 +343,11 @@ export class Table extends Component {
   static Tbody = Tbody;
 
   render() {
-    return <table className="table table-striped">{this.props.children}</table>;
+    return (
+      <div className="table-responsive">
+        <table className="table">{this.props.children}</table>
+      </div>
+    );
   }
 }
 

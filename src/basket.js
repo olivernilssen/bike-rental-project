@@ -137,7 +137,9 @@ class Basket extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <H1>Handlekurv</H1>
+          <NavBar.Link to="#">
+            <h1>Handlekurv</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <Row>
