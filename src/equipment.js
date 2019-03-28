@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ClickTable, H1, Select } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { equipmentService } from './services/equipmentService';
@@ -64,8 +64,8 @@ class EquipmentTypesOtherMain extends Component {
         <Card>
           <Row>
             <Column>
-              Opprettelsen av begrensningen var vellykket. Du vil ikke lenger kunne leie de respektive leiegjenstandene
-              i kombinasjon. <br />
+              Opprettelsen av begrensningen var vellykket.
+              <br />
               <br />
             </Column>
           </Row>
@@ -87,8 +87,7 @@ class EquipmentTypesMain extends Component {
         <Card>
           <Row>
             <Column>
-              Slettingen av begrensningen var vellykket. Den vil ikke lenger hindre de respektive leiegjenstandene fra å
-              leies ut sammen.
+              Slettingen av begrensningen var vellykket.
               <br />
               <br />
             </Column>
@@ -127,10 +126,8 @@ class EquipTypeDetails extends Component {
           });
         });
       }
-
       this.showingEquipment = 0;
     } else {
-      console.log('hva skjer her elseee?');
       this.lock = true;
 
       equipmentService.getEquipmentByTypeID(id, results => {
@@ -168,37 +165,37 @@ class EquipTypeDetails extends Component {
           <Row>
             <Column width={12}>
               <h6>Velg en spesiell størrelse/type ved å trykke på den i tabellen:</h6>
-              <Table>
-                <Table.Thead>
-                  <Table.Th>Merke</Table.Th>
-                  <Table.Th>Årsmodell</Table.Th>
-                  <Table.Th>Størrelse</Table.Th>
-                  <Table.Th>Pris</Table.Th>
-                </Table.Thead>
-                <Table.Tbody>
+              <ClickTable>
+                <ClickTable.Thead>
+                  <ClickTable.Th>Merke</ClickTable.Th>
+                  <ClickTable.Th>Årsmodell</ClickTable.Th>
+                  <ClickTable.Th>Størrelse</ClickTable.Th>
+                  <ClickTable.Th>Pris</ClickTable.Th>
+                </ClickTable.Thead>
+                <ClickTable.Tbody>
                   {this.state.equipTypeDetails.map(type => (
-                    <Table.Tr
+                    <ClickTable.Tr
                       key={type.id}
                       onClick={() => {
                         this.showThisType(type.id);
                       }}
                     >
-                      <Table.Td>{type.brand}</Table.Td>
-                      <Table.Td>{type.year}</Table.Td>
-                      <Table.Td>{type.comment}</Table.Td>
-                      <Table.Td>{type.price}</Table.Td>
-                    </Table.Tr>
+                      <ClickTable.Td>{type.brand}</ClickTable.Td>
+                      <ClickTable.Td>{type.year}</ClickTable.Td>
+                      <ClickTable.Td>{type.comment}</ClickTable.Td>
+                      <ClickTable.Td>{type.price}</ClickTable.Td>
+                    </ClickTable.Tr>
                   ))}
-                </Table.Tbody>
-              </Table>
+                </ClickTable.Tbody>
+              </ClickTable>
             </Column>
           </Row>
           <Row>
             <Column right>{notice}</Column>
           </Row>
+          <br />
           <Row>
             <Column>
-              <br />
               <h6>Beholdning for valgte varer:</h6>
               <Table>
                 <Table.Thead>
@@ -216,57 +213,66 @@ class EquipTypeDetails extends Component {
                   ))}
                 </Table.Tbody>
               </Table>
-              <br />
             </Column>
-          </Row>
-          <Row>
-            <Column width={4}>
-              <h6>Sykkeltyper utstyret IKKE passer til:</h6>
-              <Table>
-                <Table.Thead>
-                  <Table.Th>Navn</Table.Th>
-                  <Table.Th>Endre</Table.Th>
-                </Table.Thead>
-                <Table.Tbody>
-                  <Table.Tr>{noRestr}</Table.Tr>
-                  {this.restrictions.map(restrictions => (
-                    <Table.Tr key={restrictions.id}>
-                      <Table.Td>{restrictions.typeName}</Table.Td>
-                      <Table.Td>
-                        <Button.Success onClick={() => this.delete(restrictions.id)}>Tillat</Button.Success>
-                      </Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-              <br />
-            </Column>
-            <Column width={1} />
+
             <Column>
-              <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
-              <Select
-                name="typeSelect"
-                value={this.selectStatus}
-                onChange={event => (this.selectStatus = event.target.value)}
-              >
-                <Select.Option value="">Du har ikke valgt noen sykkel..</Select.Option>
-                {this.distinctBikeType.map(trestrictions => (
-                  <Select.Option key={trestrictions.id}>{trestrictions.typeName} </Select.Option>
-                ))}
-              </Select>
               <br />
-              <br />
-              <Button.Danger
-                style={{ float: 'right' }}
-                onClick={() => {
-                  this.add();
-                }}
-              >
-                Legg til ny restriksjon
-              </Button.Danger>
+              <Card>
+                <Row>
+                  <Column>
+                    <h6>Sykkeltyper utstyret IKKE passer til:</h6>
+                    <br />
+                    <Table>
+                      <Table.Thead>
+                        <Table.Th>Navn</Table.Th>
+                        <Table.Th>Endre</Table.Th>
+                      </Table.Thead>
+                      <Table.Tbody>
+                        <Table.Tr>{noRestr}</Table.Tr>
+                        {this.restrictions.map(restrictions => (
+                          <Table.Tr key={restrictions.id}>
+                            <Table.Td>{restrictions.typeName}</Table.Td>
+                            <Table.Td>
+                              <Button.Success onClick={() => this.delete(restrictions.id)}>Tillat</Button.Success>
+                            </Table.Td>
+                          </Table.Tr>
+                        ))}
+                      </Table.Tbody>
+                    </Table>
+                  </Column>
+                </Row>
+
+                <Row>
+                  <Column>
+                    <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
+                    <Select
+                      name="typeSelect"
+                      value={this.selectStatus}
+                      onChange={event => (this.selectStatus = event.target.value)}
+                    >
+                      <Select.Option value="">Du har ikke valgt noen sykkel..</Select.Option>
+                      {this.distinctBikeType.map(trestrictions => (
+                        <Select.Option key={trestrictions.id}>{trestrictions.typeName} </Select.Option>
+                      ))}
+                    </Select>
+                    <br />
+                    <br />
+                    <Button.Danger
+                      style={{ float: 'right' }}
+                      onClick={() => {
+                        this.add();
+                      }}
+                    >
+                      Legg til ny restriksjon
+                    </Button.Danger>
+                  </Column>
+                </Row>
+              </Card>
             </Column>
           </Row>
         </Card>
+        <br />
+
         <br />
       </div>
     );
