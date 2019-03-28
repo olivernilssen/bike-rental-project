@@ -328,15 +328,10 @@ class Booking extends Component {
       this.dayRent = false;
       this.state.endHour = this.laterHour;
     }
-    this.handleSubmit();
   }
 
   handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value }, this.handleSubmit);
-  }
-
-  handleSubmit() {
-    this.findAvailBikes();
+    this.setState({ [e.target.name]: e.target.value }, this.findAvailBikes);
   }
 
   chooseBike(bike) {
@@ -346,8 +341,15 @@ class Booking extends Component {
       basket.splice(0, 1);
     }
 
-    bike.startDate = this.state.startDate;
-    bike.endDate = this.state.startDate;
+    if(this.dayRent == true){
+      bike.endDate =  this.state.startDate.toString() + ' ' + this.state.endHour.toString() + ':00';;
+    }
+    else {
+      bike.endDate = this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00';
+    }
+
+    bike.startDate = this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00';
+    bike.dayRent = this.dayRent;
 
     basket.push(bike);
     this.findAvailBikes();
@@ -399,6 +401,7 @@ class Booking extends Component {
                 <Form.Input
                   type="date"
                   name="startDate"
+                  disabled={this.dayRent}
                   min={this.state.todaysDate}
                   value={this.state.startDate}
                   onChange={this.handleChange}
@@ -410,6 +413,7 @@ class Booking extends Component {
                 <Form.Input
                   type="date"
                   name="endDate"
+                  disabled={this.dayRent}
                   min={this.state.startDate}
                   value={this.state.endDate}
                   onChange={this.handleChange}
@@ -424,12 +428,12 @@ class Booking extends Component {
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      value="Timesleie?"
+                      value={false}
                       name="dayRent"
                       checked={this.dayRent}
                       onChange={this.handleCheckChange}
                     />
-                    <label className="form-check-label">Ønsker du spesifisere klokkeslett? (timeutleie)</label>
+                    <label className="form-check-label">Timesutleie?</label>
                   </Form.Label>
                 </div>
               </Column>
@@ -482,7 +486,7 @@ class Booking extends Component {
             <br />
             <Row>
               <Column width={1}>
-                <Button.Success name="submit" onClick={this.handleSubmit}>
+                <Button.Success name="submit" onClick={this.findAvailBikes}>
                   Søk
                 </Button.Success>
               </Column>
@@ -555,8 +559,8 @@ class Booking extends Component {
     rentalService.getBookingSearch(
       this.state.locationSelect,
       this.state.typeSelect,
-      this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00',
-      this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00',
+      this.state.startDate,
+      this.state.endDate,
       result => {
         for (let i = 0; i < result.length; i++) {
           {
@@ -599,8 +603,8 @@ class Booking extends Component {
     rentalService.getBookingSearch(
       this.state.locationSelect,
       this.state.typeSelect,
-      this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00',
-      this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00',
+      this.state.startDate,
+      this.state.endDate,
       result => {
         for (let i = 0; i < result.length; i++) {
           {

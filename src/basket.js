@@ -8,6 +8,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 import createHashHistory from 'history/createHashHistory';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connection } from './services/mysql_connection';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Basket extends Component {
@@ -172,6 +173,7 @@ class Basket extends Component {
                   <Table.Th>Fra Dato</Table.Th>
                   <Table.Th>Til Dato</Table.Th>
                   <Table.Th>Pris</Table.Th>
+                  <Table.Th>Timesleie?</Table.Th>
                   <Table.Th></Table.Th>
                   <Table.Th></Table.Th>
                   <Table.Th />
@@ -186,6 +188,7 @@ class Basket extends Component {
                       <Table.Td>{bike.startDate}</Table.Td>
                       <Table.Td>{bike.endDate}</Table.Td>
                       <Table.Td>{bike.price}</Table.Td>
+                      <Table.Td>{bike.dayRent ? "Ja" : "Nei"}</Table.Td>
                       <Table.Td>
                         <Button.Success
                           style={btnStyle}
