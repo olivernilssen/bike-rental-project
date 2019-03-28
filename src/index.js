@@ -55,7 +55,8 @@ import {
   faUsers,
   faArchive,
   faPlusCircle,
-  faStore
+  faStore,
+  faSortDown
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -68,7 +69,8 @@ library.add(
   faUsers,
   faArchive,
   faPlusCircle,
-  faStore
+  faStore,
+  faSortDown
 );
 
 import createHashHistory from 'history/createHashHistory';
@@ -97,15 +99,19 @@ class Menu extends Component {
   state = {
     basket: basket,
     isLoggedIn: true,
-    menu: false,
+    bikeMenu: false,
     username: '',
     password: '',
     userinfo: null
   };
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
 
+  toggleBikeMenu() {
+    this.setState({ bikeMenu: !this.state.bikeMenu });
+  }
+
   toggleMenu() {
-    this.setState({ menu: !this.state.menu });
+    this.setState({ bikeMenu: false });
   }
 
   render() {
@@ -124,7 +130,7 @@ class Menu extends Component {
     }
 
     const isLoggedIn = this.state.isLoggedIn;
-    const show = this.state.menu ? 'show' : '';
+    const showBike = this.state.bikeMenu ? 'show' : '';
 
     if (isLoggedIn == false) {
       history.push('/login/');
@@ -169,51 +175,57 @@ class Menu extends Component {
               <SideNavHeading>
                 <span>MENY</span>
               </SideNavHeading>
-              <SideNavBar.SideLink to="/overview/">
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/overview/">
                 <FontAwesomeIcon className="navIcon" icon="chart-pie" />
                 Oversikt
               </SideNavBar.SideLink>
-              <SideNavBar.SideLink to="/booking/">
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/booking/">
                 <FontAwesomeIcon className="navIcon" icon="calendar" />
                 Booking
               </SideNavBar.SideLink>
-              <SideNavBar.SideLink to="/area/1/1">
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/area/1/1">
                 <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
                 Lokasjoner
               </SideNavBar.SideLink>
-              <SideNavBar.SideLink to="/allBikes/" onClick={this.toggleMenu}>
+              <SideNavBar.SideLink to="/allBikes/" onClick={this.toggleBikeMenu}>
                 <FontAwesomeIcon className="navIcon" icon="bicycle" />
                 Sykler
+                <FontAwesomeIcon id="dropdownBike" icon="sort-down" />
               </SideNavBar.SideLink>
 
-              <div className={'collapse navbar-collapse ' + show}>
-                <div id="subLinks">
+              <div className={'collapse navbar-collapse ' + showBike}>
+                <div className="subLinks">
+                  <SideNavBar.SideLink to="/allBikes/">- Alle sykler</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/area/1">- Etter lokasjon</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                 </div>
               </div>
-              <SideNavBar.SideLink to="/equipmentTypes/Helmet">
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/equipmentTypes/Helmet">
                 <FontAwesomeIcon className="navIcon" icon="plus-circle" />
                 Sykkelutstyr
               </SideNavBar.SideLink>
-              <SideNavBar.SideLink to="/orders/">
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/orders/">
                 <FontAwesomeIcon className="navIcon" icon="archive" />
                 Ordrer
               </SideNavBar.SideLink>
-              <SideNavBar.SideLink to="/customers/">
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/customers/">
                 <FontAwesomeIcon className="navIcon" icon="users" />
                 Kundeliste
               </SideNavBar.SideLink>
-              <SideNavBar.SideLink to="/basket/">
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/basket/">
                 <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
                 Handlekurv <span style={spanstyle}>{basket.length}</span>
               </SideNavBar.SideLink>
               <SideNavHeading>
                 <span>MIN SIDE</span>
               </SideNavHeading>
-              <SideNavBar.SideLink to="/information/">Informasjon</SideNavBar.SideLink>
-              <SideNavBar.SideLink to="/MySales">Mine salg</SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/information/">
+                Informasjon
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/MySales">
+                Mine salg
+              </SideNavBar.SideLink>
               <SideNavBar.SideLink>
                 <Button.Danger id="loggutKnapp" onClick={this.logout}>
                   Logg ut
@@ -224,6 +236,12 @@ class Menu extends Component {
         </div>
       );
     }
+  }
+
+  mounted() {
+    rentalService.getArea(area => {
+      this.area = area;
+    });
   }
 
   //DENNE TRENGES MER ARBEID MED, foreløbig virkning med ukryptert passord
@@ -271,7 +289,7 @@ ReactDOM.render(
 
       <Route exact path="/allBikes/" component={AllBikes} />
       <Route path="/bikeTypes/" component={BikeTypes} />
-      <Route exact path="/bikeTypes/add/" component={NewBikeType} />
+      <Route exact path="/addBikeType/" component={NewBikeType} />
       <Route exact path="/bikeTypes/:typeName/" component={BikeTypeDetails} />
       <Route exact path="/addBikes/" component={AddBikes} />
       <Route exact path="/selectedBike/:id" component={SelectedBike} />
@@ -281,7 +299,6 @@ ReactDOM.render(
       <Route path="/orders/" component={Orders} />
       <Route path="/customers/" component={Customers} />
       <Route exact path="/addCustomer/" component={AddCustomer} />
-
       <Route path="/area/" component={AreaList} />
       <Route exact path="/addArea" component={AddArea} />
       <Route path="/area/:area_id" component={LocationInArea} />

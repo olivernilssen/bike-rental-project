@@ -7,6 +7,7 @@ import { bikeService } from './services/bikesService';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
+
 class AreaList extends Component {
   area = [];
 
@@ -84,7 +85,7 @@ class AddArea extends Component {
   }
 
   cancel() {
-    history.push('/area/1');
+    history.push('/area/1/1');
   }
 }
 
@@ -97,6 +98,11 @@ class LocationInArea extends Component {
     // console.log("returnerer den");
     return (
       <div>
+        <NavBar brand="CycleOn Rentals">
+          <NavBar.Link to="#">
+            <h1>Lokasjoner</h1>
+          </NavBar.Link>
+        </NavBar>
         <Card>
           <Tab>
             {this.locations.map(location => (
@@ -159,15 +165,15 @@ class AddLocation extends Component {
             <Row>
               <Column>
                 <Form.Label>Navn:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.name= event.target.value)} />
+                <Form.Input type="text" onChange={event => (this.name = event.target.value)} />
                 <Form.Label>Gateadresse:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.streetAddress= event.target.value)} />
+                <Form.Input type="text" onChange={event => (this.streetAddress = event.target.value)} />
                 <Form.Label>Gatenummer:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.streetNum= event.target.value)} />
+                <Form.Input type="text" onChange={event => (this.streetNum = event.target.value)} />
                 <Form.Label>Postnummer:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.postalNum= event.target.value)} />
+                <Form.Input type="text" onChange={event => (this.postalNum = event.target.value)} />
                 <Form.Label>Poststed:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.place= event.target.value)} />
+                <Form.Input type="text" onChange={event => (this.place = event.target.value)} />
                 <Form.Label>Område: </Form.Label>
                 <Select value={this.curArea} onChange={event => (this.curArea = event.target.value)}>
                   {this.areaNames.map(areaN => (
@@ -206,12 +212,12 @@ class AddLocation extends Component {
         this.place,
         this.curAreaID
       );
-    })
-    history.push('/area/1');
+    });
+    history.push('/area/1/1');
   }
 
   cancel() {
-    history.push('/area/1');
+    history.push('/area/1/1');
   }
 
   mounted() {
@@ -293,8 +299,8 @@ class BikesOnLocation extends Component {
 }
 
 module.exports = {
-  AreaList,
   AddArea,
+  AreaList,
   LocationInArea,
   AddLocation,
   BikesOnLocation
