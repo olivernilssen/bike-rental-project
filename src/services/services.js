@@ -76,14 +76,12 @@ class RentalService {
     });
   }
 
-  addLocation(id, name, postalNum, place, streetAddress, streetNum, area_id, success) {
+  addLocation(name, streetAddress, streetNum, postalNum, place, area_id) {
     connection.query(
-      'insert into Locations (name, postalNum, place, streetAddress, streetNum, area_id) value (null, ?, ?,?,?,?)',
-      [id, name, postalNum, place, streetAddress, streetNum, area_id],
-      (error, results) => {
+      'insert into Locations (id, name, streetAddress, streetNum, postalNum, place, area_id) value ( null, ?, ?, ?, ?, ?, ?)',
+      [name, streetAddress, streetNum, postalNum, place, area_id],
+      error => {
         if (error) return console.error(error);
-
-        success(results);
       }
     );
   }
@@ -94,6 +92,14 @@ class RentalService {
 
       success(results);
     });
+  }
+
+  getAreaID(area, success) {
+    connection.query('select id from Area where areaName = ?', [area], (error, result) => {
+      if (error) return console.error(error);
+
+      success(result[0]);
+    } )
   }
 
   addArea(id, areaName, success) {

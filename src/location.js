@@ -128,12 +128,14 @@ class LocationInArea extends Component {
 
 class AddLocation extends Component {
   areaNames = [];
+  locationNames = [];
   name = '';
   postalNum = 0;
   place = '';
   streetAddress = '';
   streetNum = 0;
-  state = { curArea: '' };
+  curArea = '';
+  curAreaID = '';
 
   onChangeType(event) {
     const selectedIndex = event.target.options.selectedIndex;
@@ -157,9 +159,17 @@ class AddLocation extends Component {
             <Row>
               <Column>
                 <Form.Label>Navn:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
+                <Form.Input type="text" onChange={event => (this.name= event.target.value)} />
+                <Form.Label>Gateadresse:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.streetAddress= event.target.value)} />
+                <Form.Label>Gatenummer:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.streetNum= event.target.value)} />
+                <Form.Label>Postnummer:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.postalNum= event.target.value)} />
+                <Form.Label>Poststed:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.place= event.target.value)} />
                 <Form.Label>Område: </Form.Label>
-                <Select onChange={this.onChangeareaName}>
+                <Select value={this.curArea} onChange={event => (this.curArea = event.target.value)}>
                   {this.areaNames.map(areaN => (
                     <Select.Option key={areaN.id} dataKey={areaN.id}>
                       {areaN.areaName}
@@ -185,15 +195,18 @@ class AddLocation extends Component {
   }
 
   add() {
-    rentalService.addLocation(
-      this.Name,
-      this.postalNum,
-      this.place,
-      this.streetAddress,
-      this.streetNum,
-      this.state.curArea
-    );
+    rentalService.getAreaID(this.curArea, result => {
+      this.curAreaID = result.id;
 
+      rentalService.addLocation(
+        this.name,
+        this.streetAddress,
+        this.streetNum,
+        this.postalNum,
+        this.place,
+        this.curAreaID
+      );
+    })
     history.push('/area/1');
   }
 
@@ -203,7 +216,7 @@ class AddLocation extends Component {
 
   mounted() {
     rentalService.getArea(areaNames => {
-      this.state.curArea = areaNames[0].a_id;
+      this.curArea = areaNames[0].areaName;
       this.areaNames = areaNames;
     });
   }
