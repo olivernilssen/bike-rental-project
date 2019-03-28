@@ -7,34 +7,21 @@ import { equipmentService } from './services/equipmentService.js';
 import { basket, equipmentBasket } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
+import { bikeService } from './services/bikesService';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 let today = new Date();
 let day = today.getDate();
+let day2 = day + 2;
 let month = today.getMonth() + 1;
 let year = today.getFullYear();
-//
 let time = today.getHours() + 1;
-
-if (time == 24) {
-  time = '00';
-}
-
-if (time.toString().length == 1) {
-  time = '0' + time;
-}
-
 let laterTime = today.getHours() + 2;
 
-if (laterTime == 24) {
-  laterTime = '00';
-}
-
-if (laterTime.toString().length == 1) {
-  time = '0' + time;
-}
-
-let day2 = day + 2;
+if (time == 24) time = '00';
+if (time.toString().length == 1) time = '0' + time;
+if (laterTime == 24) laterTime = '00';
+if (laterTime.toString().length == 1) time = '0' + time;
 
 if (day < 10) day = '0' + day;
 if (day2 < 10) day2 = '0' + day2;
@@ -54,13 +41,8 @@ class EquipmentQuery extends Component {
     inEqBasket: equipmentBasket
   };
 
-  handleTypeChange(e) {
-    this.state.selectStatus = e.target.value;
-    this.specify();
-  }
-
-  handleSizeChange(e) {
-    this.state.sizeSelectStatus = e.target.value;
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
     this.specify();
   }
 
@@ -80,6 +62,7 @@ class EquipmentQuery extends Component {
   }
 
   render() {
+    if(!this.sizes) return null;
     let notice;
 
     if (equipmentBasket.length == 0) {
@@ -106,20 +89,20 @@ class EquipmentQuery extends Component {
           <Row>
             <Column width={4}>
               <Form.Label>Utstyrstype:</Form.Label>
-              <Select onChange={this.handleTypeChange}>
+              <Select name={"selectStatus"} onChange={this.handleChange}>
                 <Select.Option value="%">Velg en utstyrstype ...</Select.Option>
-                {this.equipmentTypes.map(type => (
-                  <Select.Option value={type.toString()}>{type.toString()}</Select.Option>
-                ))}
+                  {this.equipmentTypes.map(type => (
+                    <Select.Option key={type.id} value={type.toString()}>{type.toString()}</Select.Option>
+                  ))}
               </Select>
             </Column>
 
             <Column width={4}>
               <Form.Label>Størrelse:</Form.Label>
-              <Select onChange={this.handleSizeChange}>
-                <Select.Option value="%">Velg en størrelse ...</Select.Option>
+              <Select name={"sizeSelectStatus"} onChange={this.handleChange}>
+                <Select.Option key={'x'} value="%">Velg en størrelse ...</Select.Option>
                 {this.sizes.map(type => (
-                  <Select.Option key={type.comment} value={type.toString()}>
+                  <Select.Option key={type.id} value={type.toString()}>
                     {type.toString()}
                   </Select.Option>
                 ))}
@@ -139,7 +122,7 @@ class EquipmentQuery extends Component {
                   <Table.Th>Størrelse</Table.Th>
                   <Table.Th>Status</Table.Th>
                   <Table.Th>Pris</Table.Th>
-                  <Table.Th>-</Table.Th>
+                  <Table.Th></Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
                   {this.suitableEquipment.map(equip => (
@@ -169,7 +152,7 @@ class EquipmentQuery extends Component {
                   <Table.Th>Merke</Table.Th>
                   <Table.Th>Størrelse</Table.Th>
                   <Table.Th>Pris</Table.Th>
-                  <Table.Th>-</Table.Th>
+                  <Table.Th></Table.Th>
                 </Table.Thead>
                 <Table.Tbody>
                   {notice}
@@ -196,9 +179,7 @@ class EquipmentQuery extends Component {
 
   mounted() {
     equipmentService.getLocationFromBikeId(this.props.match.params.id, location => {
-      this.location = JSON.stringify(location)
-        .substring(7)
-        .replace('}]', '');
+      this.location = location[0].id;
     });
 
     equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
@@ -206,21 +187,18 @@ class EquipmentQuery extends Component {
         this.location,
         this.state.selectStatus,
         this.state.sizeSelectStatus,
-        JSON.stringify(typeName)
-          .substring(14)
-          .replace('"}]', ''),
+        typeName[0].typeName,
         equipment => {
+
           let k = this.props.match.params.id;
-          equipment.forEach(function(e) {
-            e.bike_id = +k;
-          });
+          equipment.forEach(function(e) { e.bike_id = +k });
 
           this.suitableEquipment = equipment;
 
           if (this.secondChoiceLock == false) {
             this.sizes = equipment;
-
-            var flags = [],
+            
+            let flags = [],
               output = [],
               l = this.sizes.length,
               i;
@@ -239,9 +217,8 @@ class EquipmentQuery extends Component {
 
             var flags = [],
               output = [],
-              l = this.equipmentTypes.length,
-              i;
-            for (i = 0; i < l; i++) {
+              l = this.equipmentTypes.length;
+            for (let i = 0; i < l; i++) {
               if (flags[this.equipmentTypes[i].typeName]) continue;
               flags[this.equipmentTypes[i].typeName] = true;
               output.push(this.equipmentTypes[i].typeName);
@@ -253,8 +230,6 @@ class EquipmentQuery extends Component {
         }
       );
     });
-
-    this.specify();
   }
 
   specify() {
@@ -263,13 +238,11 @@ class EquipmentQuery extends Component {
         this.location,
         this.state.selectStatus,
         this.state.sizeSelectStatus,
-        JSON.stringify(typeName)
-          .substring(14)
-          .replace('"}]', ''),
+        typeName[0].typeName,
         equipment => {
           let m = this.props.match.params.id;
           equipment.forEach(function(e) {
-            e.bike_id = +m;
+            e.bike_id += m;
           });
 
           this.suitableEquipment = equipment;
@@ -328,6 +301,8 @@ class Booking extends Component {
   laterHour = time + ':00';
   laterHourAlt = laterTime + ':00';
   dayRent = false;
+  locations = [];
+  bikeTypes = [];
 
   state = {
     startDate: this.todaysDate,
@@ -349,12 +324,11 @@ class Booking extends Component {
     if (this.dayRent == false) {
       this.dayRent = true;
       this.state.endHour = this.laterHourAlt;
-      this.handleSubmit();
     } else {
       this.dayRent = false;
       this.state.endHour = this.laterHour;
-      this.handleSubmit();
     }
+    this.handleSubmit();
   }
 
   handleChange(e) {
@@ -367,7 +341,6 @@ class Booking extends Component {
 
   chooseBike(bike) {
     // history.push('/equipmentQuery/' + bike.id + '/edit');
-
     if (basket.length == 0) {
     } else if (basket[0].id == 'Handlekurven er tom') {
       basket.splice(0, 1);
@@ -396,15 +369,15 @@ class Booking extends Component {
       notice = <p style={{ color: 'red' }}>"Til dato" må være minst én dag senere enn "Fra dato" ved døgnutleie.</p>;
     }
 
-    if (
+    if(
       this.dayRent == true &&
       this.state.startDate.toString() == this.state.endDate.toString() &&
       checker.toString().substring(10, 13) >= checker2.toString().substring(10, 13)
-    ) {
-      notice = (
-        <p style={{ color: 'red' }}>Ved timeutleie må "Til klokkeslett" være minst én time etter "Fra klokkeslett".</p>
-      );
-    }
+      ) {
+        notice = (
+          <p style={{ color: 'red' }}>Ved timeutleie må "Til klokkeslett" være minst én time etter "Fra klokkeslett".</p>
+        );
+      }
 
     if (this.state.startDate.toString() > this.state.endDate.toString()) {
       notice = <p style={{ color: 'red' }}>"Til dato" må være senere enn "Fra dato".</p>;
@@ -467,22 +440,19 @@ class Booking extends Component {
               <Column width={3}>
                 <Form.Label>Lokasjon:</Form.Label>
                 <Select name="locationSelect" value={this.state.locationSelect} onChange={this.handleChange}>
-                  <Select.Option value="%">Any Location</Select.Option>
-                  <Select.Option value="Finse">Finse</Select.Option>
-                  <Select.Option value="Flåm">Flåm</Select.Option>
-                  <Select.Option value="Haugastøl">Haugastøl</Select.Option>
-                  <Select.Option value="Voss">Voss</Select.Option>
-                  <Select.Option value="Myrdal">Myrdal</Select.Option>
+                  <Select.Option value="%" >Any Location</Select.Option>
+                  {this.locations.map(loc => (
+                    <Select.Option>{loc.name}</Select.Option>
+                  ))}
                 </Select>
               </Column>
               <Column width={3}>
                 <Form.Label>Sykkeltype:</Form.Label>
                 <Select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
                   <Select.Option value="%">Any Type of bike</Select.Option>
-                  <Select.Option value="Terreng">Terreng</Select.Option>
-                  <Select.Option value="Downhill">Downhill</Select.Option>
-                  <Select.Option value="Landevei">Landevei</Select.Option>
-                  <Select.Option value="Barn">Barn</Select.Option>
+                  {this.bikeTypes.map(type => (
+                    <Select.Option key={type.id}>{type.typeName}</Select.Option>
+                  ))}
                 </Select>
               </Column>
 
@@ -565,6 +535,22 @@ class Booking extends Component {
   mounted() {
     this.state.availableBikes = [];
     let empty = { id: 'Gjør et nytt søk' };
+
+    bikeService.getBikeTypes(result => {
+      for (let j = 0; j < result.length; j++){
+        for(let i = 0; i < result.length; i++){
+          if(i == j) continue;
+          else if(result[i].typeName == result[j].typeName){
+            result.splice(i, 1);
+          }
+        }
+      }
+      this.bikeTypes = result;
+    })
+
+    rentalService.getLocations(results => {
+      this.locations = results;
+    })
 
     rentalService.getBookingSearch(
       this.state.locationSelect,

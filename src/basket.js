@@ -169,11 +169,11 @@ class Basket extends Component {
                   <Table.Th>Type</Table.Th>
                   <Table.Th>Merke</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
-                  <Table.Th>Hjul</Table.Th>
-                  <Table.Th>Vekt</Table.Th>
-                  <Table.Th>Pris</Table.Th>
                   <Table.Th>Fra Dato</Table.Th>
                   <Table.Th>Til Dato</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                  <Table.Th></Table.Th>
+                  <Table.Th></Table.Th>
                   <Table.Th />
                 </Table.Thead>
                 <Table.Tbody>
@@ -183,9 +183,9 @@ class Basket extends Component {
                       <Table.Td>{bike.typeName}</Table.Td>
                       <Table.Td>{bike.brand}</Table.Td>
                       <Table.Td>{bike.name}</Table.Td>
-                      <Table.Td>{bike.price}</Table.Td>
                       <Table.Td>{bike.startDate}</Table.Td>
                       <Table.Td>{bike.endDate}</Table.Td>
+                      <Table.Td>{bike.price}</Table.Td>
                       <Table.Td>
                         <Button.Success
                           style={btnStyle}

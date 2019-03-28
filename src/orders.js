@@ -379,7 +379,7 @@ class SelectedOrder extends Component {
   mounted() {
     orderService.getOrder('1', result => {
       this.setState({ state: (this.state.order = result) });
-      console.log(this.state.order);
+      // console.log(this.state.order);
     });
 
     orderService.getBikesFromOrder(this.state.order.id, bikes => {
