@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ClickTable, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { customerService } from './services/customersService';
 import { basket, employeeID } from './index.js';
@@ -56,27 +56,27 @@ class Customers extends Component {
             <Column>
               <Form.Input id="testSearch" type="search" onChange={this.onChangeHandle} placeholder="Søk etter kunde" />
               <br />
-              <Table>
-                <Table.Thead>
-                  <Table.Th>KundeID</Table.Th>
-                  <Table.Th>Fornavn</Table.Th>
-                  <Table.Th>Etternavn</Table.Th>
-                </Table.Thead>
-                <Table.Tbody>
+              <ClickTable>
+                <ClickTable.Thead>
+                  <ClickTable.Th>KundeID</ClickTable.Th>
+                  <ClickTable.Th>Fornavn</ClickTable.Th>
+                  <ClickTable.Th>Etternavn</ClickTable.Th>
+                </ClickTable.Thead>
+                <ClickTable.Tbody>
                   {this.state.customers.map(customer => (
-                    <Table.Tr
+                    <ClickTable.Tr
                       key={customer.id}
                       onClick={() => {
                         this.chooseActive(customer);
                       }}
                     >
-                      <Table.Td>{customer.id}</Table.Td>
-                      <Table.Td>{customer.firstName}</Table.Td>
-                      <Table.Td>{customer.lastName}</Table.Td>
-                    </Table.Tr>
+                      <ClickTable.Td>{customer.id}</ClickTable.Td>
+                      <ClickTable.Td>{customer.firstName}</ClickTable.Td>
+                      <ClickTable.Td>{customer.lastName}</ClickTable.Td>
+                    </ClickTable.Tr>
                   ))}
-                </Table.Tbody>
-              </Table>
+                </ClickTable.Tbody>
+              </ClickTable>
             </Column>
             <Column>
               <SelectedCustomer activeCustomer={this.state.activeCustomer} />

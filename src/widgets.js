@@ -112,7 +112,7 @@ export class NavBar extends Component {
         className="navbar navbar-dark fixed-top bg-dark d-flex justify-content-start flex-md-nowrap p-0 shadow"
       >
         {
-          <NavLink className="navbar-brand" activeClassName="active" exact to="/">
+          <NavLink className="navbar-brand" activeClassName="active" to="/overview/">
             {this.props.brand}
           </NavLink>
         }

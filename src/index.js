@@ -17,8 +17,8 @@ import {
 import { AreaList, AddArea, LocationInArea, AddLocation, BikesOnLocation } from './location';
 import { UserInfo, EditUserInfo, MySales, DetailedOrder } from './myPage';
 import { Customers, AddCustomer } from './customer.js';
-import { Booking, EquipmentQuery } from './booking.js';
-import { Basket } from './basket.js';
+import { Booking } from './booking.js';
+import { Basket, EquipmentQuery } from './basket.js';
 import { Overview, Selected, DetailedOrderAll } from './overview.js';
 import { Orders } from './orders.js';
 import {
@@ -56,7 +56,8 @@ import {
   faArchive,
   faPlusCircle,
   faStore,
-  faSortDown
+  faSortDown,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -70,7 +71,8 @@ library.add(
   faArchive,
   faPlusCircle,
   faStore,
-  faSortDown
+  faSortDown,
+  faPlus
 );
 
 import createHashHistory from 'history/createHashHistory';
@@ -169,7 +171,7 @@ class Menu extends Component {
     } else {
       return (
         <div>
-          <NavBar brand="CycleOn Rentals" />
+          <NavBar brand="CycleOn Rentals" to="/overview/" />
           <Row>
             <SideNavBar>
               <SideNavHeading>
