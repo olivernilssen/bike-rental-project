@@ -201,7 +201,13 @@ class ButtonDanger extends Component {
 class ButtonLight extends Component {
   render() {
     return (
-      <button type="button" className="btn btn-light" onClick={this.props.onClick}>
+      <button
+        type="button"
+        className="btn btn-light"
+        onClick={this.props.onClick}
+        data-toggle={this.props.dataToggle}
+        data-target={this.props.dataTarget}
+      >
         {this.props.children}
       </button>
     );
@@ -213,6 +219,93 @@ export class Button {
   static Success = ButtonSuccess;
   static Danger = ButtonDanger;
   static Light = ButtonLight;
+}
+
+class ButtonSuccessOutline extends Component {
+  render() {
+    return (
+      <button type="button" className="btn btn-outline-success" onClick={this.props.onClick} style={this.props.style}>
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
+// Renders a danger button using Bootstrap styles
+// Attributes: onClick
+class ButtonDangerOutline extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-outline-danger"
+        id={this.props.id}
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
+class ButtonInfoOutline extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-outline-info"
+        id={this.props.id}
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
+class ButtonPrimaryOutline extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-outline-primary"
+        id={this.props.id}
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
+class ButtonSecondaryOutline extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-outline-secondary"
+        id={this.props.id}
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
+// Renders a light button using Bootstrap styles
+// Attributes: onClick
+
+export class ButtonOutline {
+  static Success = ButtonSuccessOutline;
+  static Danger = ButtonDangerOutline;
+  static Info = ButtonInfoOutline;
+  static Primary = ButtonPrimaryOutline;
+  static Secondary = ButtonSecondaryOutline;
 }
 
 // Renders a form label using Bootstrap styles

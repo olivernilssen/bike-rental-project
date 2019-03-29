@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, Select, H1 } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, Select, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { rentalService } from './services/services';
@@ -28,12 +28,11 @@ if (day < 10) day = '0' + day;
 if (day2 < 10) day2 = '0' + day2;
 if (month < 10) month = '0' + month;
 
-
 class Booking extends Component {
   todaysDate = year + '-' + month + '-' + day;
   nextDay = year + '-' + month + '-' + day2;
   currentHour = time + ':00';
-  laterHour = (time + 1) + ':00';
+  laterHour = time + 1 + ':00';
   laterHourAlt = laterTime + ':00';
   dayRent = false;
   locations = [];
@@ -78,10 +77,10 @@ class Booking extends Component {
 
     if (this.dayRent == true) {
       bike.endDate = new Date(this.state.startDate.toString() + ' ' + this.state.endHour.toString() + ':00');
-      bike.endDateString = this.state.startDate.toString() + ' ' + this.state.endHour.toString()
+      bike.endDateString = this.state.startDate.toString() + ' ' + this.state.endHour.toString();
     } else {
       bike.endDate = new Date(this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00');
-      bike.endDateString = this.state.endDate.toString() + ' ' + this.state.endHour.toString()
+      bike.endDateString = this.state.endDate.toString() + ' ' + this.state.endHour.toString();
     }
 
     bike.startDate = new Date(this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00');
@@ -223,9 +222,9 @@ class Booking extends Component {
             <br />
             <Row>
               <Column width={1}>
-                <Button.Success name="submit" onClick={this.findAvailBikes}>
+                <ButtonOutline.Primary name="submit" onClick={this.findAvailBikes}>
                   Søk
-                </Button.Success>
+                </ButtonOutline.Primary>
               </Column>
               <Column right>{notice}</Column>
             </Row>
