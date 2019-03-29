@@ -10,9 +10,11 @@ import createHashHistory from 'history/createHashHistory';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connection } from './services/mysql_connection';
 import { equipmentService } from './services/equipmentService.js';
+import { cpus } from 'os';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Basket extends Component {
+  totalPrice = 0;
   state = {
     inBasket: basket,
     kunder: [],
@@ -116,7 +118,7 @@ class Basket extends Component {
 
   render() {
     if (this.state.activeC[0].id == null) this.state.displayCustomer = 'block';
-    else this.state.displayCustomer = 'none';
+    else this.state.displayCustomer = 'none'
 
     const styles = {
       btnStyle: { display: this.styleState.display },
@@ -125,7 +127,6 @@ class Basket extends Component {
 
     const { divStyle } = styles;
     const { btnStyle } = styles;
-
     let notice;
 
     if (equipmentBasket.length == 0) {
@@ -139,9 +140,7 @@ class Basket extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Handlekurv</h1>
-          </NavBar.Link>
+          <h1>Handlekurv</h1>
         </NavBar>
 
         <Card>
@@ -156,15 +155,10 @@ class Basket extends Component {
               <br />
               <Button.Danger
                 style={btnStyle}
-                onClick={() => {
-                  this.removeCustomer();
-                }}
-              >
+                onClick={() => {this.removeCustomer();}}>
                 Fjern Kunde
               </Button.Danger>
-              <br />
-              <br />
-
+              <br /><br />
               <h6>Handlekurv for sykler:</h6>
               <div className="basket">
                 <Column>
@@ -188,9 +182,9 @@ class Basket extends Component {
                           <Table.Td>{bike.typeName}</Table.Td>
                           <Table.Td>{bike.brand}</Table.Td>
                           <Table.Td>{bike.name}</Table.Td>
-                          <Table.Td>{bike.startDate}</Table.Td>
-                          <Table.Td>{bike.endDate}</Table.Td>
-                          <Table.Td>{bike.price}</Table.Td>
+                          <Table.Td>{bike.startDateString}</Table.Td>
+                          <Table.Td>{bike.endDateString}</Table.Td>
+                          <Table.Td>{bike.displayPrice}</Table.Td>
                           <Table.Td>{bike.dayRent ? 'Ja' : 'Nei'}</Table.Td>
                           <Table.Td>
                             <Button.Success
@@ -249,11 +243,25 @@ class Basket extends Component {
               </div>
               <br />
               <Row>
+                <Column right>
+                  <Column style={{width: 120 + "px", float: 'right'}}>
+                    <Form.Input type="text" placeholder={'prosent'}>WTF</Form.Input>
+                  </Column>
+                  <Column>
+                    <Form.Label>Rabatt: </Form.Label>
+                  </Column>
+                </Column>
+              </Row>
+              <br/>
+              <Row>
                 <Column>
                   <Button.Success onClick={this.transaction}>
                     <FontAwesomeIcon className="navIcon" icon="store" />
                     Til Betaling
                   </Button.Success>
+                </Column>
+                <Column right>
+                    <h4>Total Pris: {this.totalPrice}</h4>
                 </Column>
               </Row>
             </Column>
@@ -303,6 +311,36 @@ class Basket extends Component {
   }
 
   mounted() {
+    if(this.state.inBasket == null || this.state.inBasket.length == 0) { }
+    else if(this.state.inBasket[0].id != "TOMT HER"){
+      for(let i = 0; i < this.state.inBasket.length; i++){
+        if(this.state.inBasket[i].dayRent == false){
+          let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
+          let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          if(timeDiff > 1){
+            this.state.inBasket[i].displayPrice = this.state.inBasket[i].price + (this.state.inBasket[i].price * 0.5) * diffDays;
+          }
+          this.totalPrice += this.state.inBasket[i].displayPrice;
+          console.log(diffDays + " Antall dager");
+        } 
+        else {
+          let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
+          let diffHours = Math.ceil(timeDiff / (1000 * 3600));
+          this.state.inBasket[i].displayPrice = (this.state.inBasket[i].price / 4) * diffHours;
+          this.totalPrice += this.state.inBasket[i].displayPrice;
+          console.log(diffHours + " Antall timer");
+        }
+      }
+    }
+
+    if(equipmentBasket != 0) {
+      for(let i = 0; i < equipmentBasket.length; i++)
+      {
+        this.totalPrice += equipmentBasket[i].price;
+      }
+    }
+  
+    
     customerService.getCustomerSearch('%', results => {
       this.setState(state => {
         const kunder = state.kunder.concat(results);
@@ -315,9 +353,7 @@ class Basket extends Component {
   }
 
   transaction() {
-    //create new order
-    //Add items to to order with customer ID
-    //Remove items from current basket list
+
   }
 }
 

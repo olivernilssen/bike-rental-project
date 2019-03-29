@@ -76,12 +76,15 @@ class Booking extends Component {
     }
 
     if (this.dayRent == true) {
-      bike.endDate = this.state.startDate.toString() + ' ' + this.state.endHour.toString() + ':00';
+      bike.endDate = new Date(this.state.startDate.toString() + ' ' + this.state.endHour.toString() + ':00');
+      bike.endDateString = this.state.startDate.toString() + ' ' + this.state.endHour.toString()
     } else {
-      bike.endDate = this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00';
+      bike.endDate = new Date(this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00');
+      bike.endDateString = this.state.endDate.toString() + ' ' + this.state.endHour.toString()
     }
 
-    bike.startDate = this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00';
+    bike.startDate = new Date(this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00');
+    bike.startDateString = this.state.startDate.toString() + ' ' + this.state.startHour.toString()
     bike.dayRent = this.dayRent;
 
     basket.push(bike);

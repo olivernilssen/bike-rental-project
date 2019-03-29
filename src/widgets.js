@@ -243,6 +243,8 @@ class FormInput extends Component {
         pattern={this.props.pattern}
         placeholder={this.props.placeholder}
         checked={this.props.checked}
+        width={this.props.width}
+        style={this.props.style}
       />
     );
   }
