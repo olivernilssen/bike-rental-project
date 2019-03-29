@@ -425,6 +425,7 @@ class AddBikes extends Component {
 class BikeTypeDetails extends Component {
   bikeType = null;
   showingBikes = 0;
+  lock = false;
   state = {
     bikes: [],
     typeIds: [],
@@ -432,7 +433,8 @@ class BikeTypeDetails extends Component {
   };
 
   showThisType(id) {
-    if (this.showingBikes === id) {
+    if (this.showingBikes === id && this.lock == true) {
+      this.lock = false;
       this.state.bikes = [];
       let temp = [];
       for (let i = 0; i < this.state.typeIds.length; i++) {
@@ -447,6 +449,8 @@ class BikeTypeDetails extends Component {
 
       this.showingBikes = 0;
     } else {
+      this.lock = true;
+
       this.state.bikes = [];
       bikeService.getBikesbyTypeID(id, results => {
         this.showingBikes = id;
@@ -460,6 +464,14 @@ class BikeTypeDetails extends Component {
 
   render() {
     if (!this.bikeType) return null;
+
+    let notice;
+
+    if (this.lock == true) {
+      notice = (
+        <p style={{ color: 'red' }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer</p>
+      );
+    }
 
     return (
       <div>
@@ -479,7 +491,7 @@ class BikeTypeDetails extends Component {
                   <ClickTable.Th>Bremsesytem</ClickTable.Th>
                   <ClickTable.Th>Vekt</ClickTable.Th>
                   <ClickTable.Th>Beregnet for</ClickTable.Th>
-                  <ClickTable.Th>Timespris</ClickTable.Th>
+                  <ClickTable.Th>Dagspris</ClickTable.Th>
                 </ClickTable.Thead>
                 <ClickTable.Tbody>
                   {this.state.bikeTypeDetails.map(type => (
@@ -504,7 +516,14 @@ class BikeTypeDetails extends Component {
                   ))}
                 </ClickTable.Tbody>
               </ClickTable>
-              <br />
+            </Column>
+          </Row>
+          <Row>
+            <Column right>{notice}</Column>
+          </Row>
+          <br />
+          <Row>
+            <Column>
               <h6>Sykler av denne typen:</h6>
               <Table>
                 <Table.Thead>
