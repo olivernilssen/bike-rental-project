@@ -1,6 +1,20 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, Select, H1 } from './widgets';
+import {
+  Card,
+  Tab,
+  List,
+  Row,
+  Column,
+  NavBar,
+  Button,
+  ButtonOutline,
+  Form,
+  Table,
+  Select,
+  H1,
+  CenterContent
+} from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { rentalService } from './services/services';
@@ -94,7 +108,8 @@ class Booking extends Component {
   render() {
     const styles = {
       btnStyle: {
-        display: this.styleState.display
+        display: this.styleState.display,
+        float: 'right'
       }
     };
     const { btnStyle } = styles;
@@ -169,7 +184,7 @@ class Booking extends Component {
                       checked={this.dayRent}
                       onChange={this.handleCheckChange}
                     />
-                    <label className="form-check-label">Timesutleie?</label>
+                    <label className="form-check-label">Huk av for timeutleie</label>
                   </Form.Label>
                 </div>
               </Column>
@@ -222,50 +237,54 @@ class Booking extends Component {
             <br />
             <Row>
               <Column width={1}>
-                <ButtonOutline.Primary name="submit" onClick={this.findAvailBikes}>
+                <ButtonOutline.Secondary name="submit" onClick={this.findAvailBikes}>
                   Søk
-                </ButtonOutline.Primary>
+                </ButtonOutline.Secondary>
               </Column>
               <Column right>{notice}</Column>
             </Row>
           </div>
 
           <br />
-          <Card header="LEDIGE SYKLER:">
-            <Table>
-              <Table.Thead>
-                <Table.Th>ID</Table.Th>
-                <Table.Th>Type</Table.Th>
-                <Table.Th>Merke</Table.Th>
-                <Table.Th>Lokasjon</Table.Th>
-                <Table.Th>Hjul</Table.Th>
-                <Table.Th>Pris</Table.Th>
-                <Table.Th />
-              </Table.Thead>
-              <Table.Tbody>
-                {this.state.availableBikes.map(bike => (
-                  <Table.Tr key={bike.id}>
-                    <Table.Td>{bike.id}</Table.Td>
-                    <Table.Td>{bike.typeName}</Table.Td>
-                    <Table.Td>{bike.brand}</Table.Td>
-                    <Table.Td>{bike.name}</Table.Td>
-                    <Table.Td>{bike.wheelSize}</Table.Td>
-                    <Table.Td>{bike.price}</Table.Td>
-                    <Table.Td width={1}>
-                      <Button.Success
-                        style={btnStyle}
-                        onClick={() => {
-                          this.chooseBike(bike);
-                        }}
-                      >
-                        <FontAwesomeIcon className="" icon="plus" />
-                      </Button.Success>
-                    </Table.Td>
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </Card>
+
+          <CenterContent>
+            <div style={{ width: 800 + 'px' }}>
+              <h4>Ledige sykler</h4>
+              <Table>
+                <Table.Thead>
+                  <Table.Th>ID</Table.Th>
+                  <Table.Th>Type</Table.Th>
+                  <Table.Th>Merke</Table.Th>
+                  <Table.Th>Lokasjon</Table.Th>
+                  <Table.Th>Hjul</Table.Th>
+                  <Table.Th>Pris</Table.Th>
+                  <Table.Th />
+                </Table.Thead>
+                <Table.Tbody>
+                  {this.state.availableBikes.map(bike => (
+                    <Table.Tr key={bike.id}>
+                      <Table.Td>{bike.id}</Table.Td>
+                      <Table.Td>{bike.typeName}</Table.Td>
+                      <Table.Td>{bike.brand}</Table.Td>
+                      <Table.Td>{bike.name}</Table.Td>
+                      <Table.Td>{bike.wheelSize}</Table.Td>
+                      <Table.Td>{bike.price}</Table.Td>
+                      <Table.Td width={1}>
+                        <Button.Info
+                          style={btnStyle}
+                          onClick={() => {
+                            this.chooseBike(bike);
+                          }}
+                        >
+                          <FontAwesomeIcon className="" icon="plus" />
+                        </Button.Info>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </div>
+          </CenterContent>
         </Card>
         <br />
       </div>

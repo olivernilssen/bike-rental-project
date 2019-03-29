@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, H1, Select } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
@@ -63,10 +63,10 @@ class AddArea extends Component {
                 <br /> <br />
                 <Row>
                   <Column>
-                    <Button.Success onClick={this.add}>Add</Button.Success>
+                    <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
                   </Column>
                   <Column right>
-                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
                   </Column>
                 </Row>
               </Column>
@@ -185,10 +185,10 @@ class AddLocation extends Component {
                 <br /> <br />
                 <Row>
                   <Column>
-                    <Button.Success onClick={this.add}>Add</Button.Success>
+                    <ButtonOutline.Success onClick={this.add}>Add</ButtonOutline.Success>
                   </Column>
                   <Column right>
-                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
                   </Column>
                 </Row>
               </Column>

@@ -171,7 +171,13 @@ export class SideNavBar extends Component {
 class ButtonSuccess extends Component {
   render() {
     return (
-      <button type="button" className="btn btn-success" onClick={this.props.onClick} style={this.props.style}>
+      <button
+        type="button"
+        className="btn btn-success"
+        id={this.props.id}
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
         {this.props.children}
       </button>
     );
@@ -207,6 +213,41 @@ class ButtonLight extends Component {
         onClick={this.props.onClick}
         data-toggle={this.props.dataToggle}
         data-target={this.props.dataTarget}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
+class ButtonPrimary extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={this.props.onClick}
+        data-toggle={this.props.dataToggle}
+        data-target={this.props.dataTarget}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
+class ButtonInfo extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-info"
+        onClick={this.props.onClick}
+        data-toggle={this.props.dataToggle}
+        data-target={this.props.dataTarget}
+        style={this.props.style}
       >
         {this.props.children}
       </button>
@@ -219,6 +260,8 @@ export class Button {
   static Success = ButtonSuccess;
   static Danger = ButtonDanger;
   static Light = ButtonLight;
+  static Primary = ButtonPrimary;
+  static Info = ButtonInfo;
 }
 
 class ButtonSuccessOutline extends Component {
@@ -443,8 +486,10 @@ export class Table extends Component {
 
   render() {
     return (
-      <div className="table-responsive">
-        <table className="table">{this.props.children}</table>
+      <div className="table-responsive box-shadow--3dp">
+        <table className="table" style={this.props.style}>
+          {this.props.children}
+        </table>
       </div>
     );
   }

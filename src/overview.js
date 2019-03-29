@@ -1,7 +1,21 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Bar, Line, Pie } from 'react-chartjs-2';
-import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, H1, Select } from './widgets';
+import {
+  Card,
+  Tab,
+  List,
+  Row,
+  Column,
+  NavBar,
+  Button,
+  ButtonOutline,
+  Form,
+  Table,
+  H1,
+  Select,
+  CenterContent
+} from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
@@ -374,7 +388,8 @@ class RentedBikes extends Component {
       <div>
         <Row>
           <Column>
-            <Card title="Registrere innlevering:">
+            <Card title="Utleide sykler:">
+              <br />
               <Table>
                 <Table.Thead>
                   <Table.Th>SykkelID</Table.Th>
@@ -392,7 +407,7 @@ class RentedBikes extends Component {
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selected/' + bike.id}>
-                          <ButtonOutline.Primary style={{ float: 'right' }}>Innlevering</ButtonOutline.Primary>
+                          <ButtonOutline.Info style={{ float: 'right' }}>Innlevering</ButtonOutline.Info>
                         </NavLink>
                       </Table.Td>
                     </Table.Tr>
@@ -404,7 +419,8 @@ class RentedBikes extends Component {
           </Column>
 
           <Column>
-            <Card title="Registrere utlevering">
+            <Card title="Bestilte sykler:">
+              <br />
               <Table>
                 <Table.Thead>
                   <Table.Th>OrderID</Table.Th>
@@ -428,7 +444,7 @@ class RentedBikes extends Component {
                       <Table.Td>{bike.fromDateTime.toString().substring(4, 16)}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selected/' + bike.id}>
-                          <Button.Danger>Utlevering</Button.Danger>
+                          <ButtonOutline.Info style={{ float: 'right' }}>Utlevering</ButtonOutline.Info>
                         </NavLink>
                       </Table.Td>
                     </Table.Tr>
@@ -472,7 +488,7 @@ class Selected extends Component {
     return (
       <div>
         <Card title={'Sykkel med id: ' + this.props.match.params.id}>
-          <img src="../pictures/bikeImage.png" width="30%" />
+          <img src="../pictures/bike.svg" width="30%" />
           <Table>
             <Table.Thead>
               <Table.Th>Sykkel id</Table.Th>
@@ -513,19 +529,30 @@ class Selected extends Component {
             </Table.Tbody>
           </Table>
           <br />
+          <br />
+          <CenterContent>
+            <div className="form-group">
+              <label for="comment">
+                <b>Skriv inn en kommentar om sykkelen:</b>
+              </label>
+              <textarea
+                className="form-control"
+                id="comment"
+                row="200"
+                cols="100"
+                value={this.note}
+                onChange={event => (this.note = event.target.value)}
+              />
+            </div>
+          </CenterContent>
 
-          <Form.Label>Skriv inn en kommentar om sykkelen:</Form.Label>
-          <br />
-          <textarea row="200" cols="100" value={this.note} onChange={event => (this.note = event.target.value)} />
-          <br />
-          <br />
           <Row>
             <Column>
-              <Button.Success onClick={this.change}>Endre</Button.Success>
+              <ButtonOutline.Success onClick={this.change}>Lagre</ButtonOutline.Success>
             </Column>
 
             <Column right>
-              <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+              <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
             </Column>
           </Row>
         </Card>

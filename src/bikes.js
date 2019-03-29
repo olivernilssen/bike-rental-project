@@ -147,7 +147,41 @@ class SelectedBike extends Component {
           </NavBar.Link>
         </NavBar>
         <Card title={'Sykkel med id: ' + this.props.match.params.id}>
-          <img src="../pictures/bikeImage.png" width="30%" />
+          <img src="../pictures/bike.svg" width="20%" />
+          <Table>
+            <Table.Thead>
+              <Table.Th>Type id:</Table.Th>
+              <Table.Th>Merke</Table.Th>
+              <Table.Th>Model</Table.Th>
+              <Table.Th>År</Table.Th>
+              <Table.Th>Ramme</Table.Th>
+              <Table.Th>Girsystem</Table.Th>
+              <Table.Th>Bremser</Table.Th>
+              <Table.Th>Vekt</Table.Th>
+              <Table.Th>For</Table.Th>
+              <Table.Th>Pris</Table.Th>
+            </Table.Thead>
+
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td>{this.bike.type_id}</Table.Td>
+                <Table.Td>{this.bike.brand}</Table.Td>
+                <Table.Td>{this.bike.model}</Table.Td>
+                <Table.Td>{this.bike.year}</Table.Td>
+                <Table.Td>{this.bike.frameSize}"</Table.Td>
+                <Table.Td>
+                  {this.bike.gearSystem}/{this.bike.gears}
+                </Table.Td>
+                <Table.Td>{this.bike.brakeSystem}</Table.Td>
+                <Table.Td>{this.bike.weight_kg}kg</Table.Td>
+                <Table.Td>{this.bike.suitedFor}</Table.Td>
+                <Table.Td>{this.bike.price}</Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+
+          <br />
+          <br />
           <Table>
             <Table.Thead>
               <Table.Th>Sykkel id</Table.Th>
@@ -184,50 +218,29 @@ class SelectedBike extends Component {
             </Table.Tbody>
           </Table>
           <br />
-          <br />
-          <Table>
-            <Table.Thead>
-              <Table.Th>Type id:</Table.Th>
-              <Table.Th>Merke</Table.Th>
-              <Table.Th>Model</Table.Th>
-              <Table.Th>År</Table.Th>
-              <Table.Th>Ramme</Table.Th>
-              <Table.Th>Girsystem</Table.Th>
-              <Table.Th>Bremser</Table.Th>
-              <Table.Th>Vekt</Table.Th>
-              <Table.Th>For</Table.Th>
-              <Table.Th>Pris</Table.Th>
-            </Table.Thead>
+          <CenterContent>
+            <div className="form-group">
+              <label for="comment">
+                <b>Skriv inn en kommentar om sykkelen:</b>
+              </label>
+              <textarea
+                className="form-control"
+                id="comment"
+                row="200"
+                cols="100"
+                value={this.note}
+                onChange={event => (this.note = event.target.value)}
+              />
+            </div>
+          </CenterContent>
 
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>{this.bike.type_id}</Table.Td>
-                <Table.Td>{this.bike.brand}</Table.Td>
-                <Table.Td>{this.bike.model}</Table.Td>
-                <Table.Td>{this.bike.year}</Table.Td>
-                <Table.Td>{this.bike.frameSize}"</Table.Td>
-                <Table.Td>
-                  {this.bike.gearSystem}/{this.bike.gears}
-                </Table.Td>
-                <Table.Td>{this.bike.brakeSystem}</Table.Td>
-                <Table.Td>{this.bike.weight_kg}kg</Table.Td>
-                <Table.Td>{this.bike.suitedFor}</Table.Td>
-                <Table.Td>{this.bike.price}</Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
-          </Table>
-          <Form.Label>Skriv inn en kommentar om sykkelen:</Form.Label>
-          <br />
-          <textarea row="200" cols="100" value={this.note} onChange={event => (this.note = event.target.value)} />
-          <br />
-          <br />
           <Row>
             <Column>
-              <Button.Success onClick={this.change}>Endre</Button.Success>
+              <ButtonOutline.Success onClick={this.change}>Lagre</ButtonOutline.Success>
             </Column>
 
             <Column right>
-              <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+              <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
             </Column>
           </Row>
         </Card>
