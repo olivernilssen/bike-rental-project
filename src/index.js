@@ -57,7 +57,8 @@ import {
   faPlusCircle,
   faStore,
   faSortDown,
-  faPlus
+  faPlus,
+  faPercent
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -72,7 +73,8 @@ library.add(
   faPlusCircle,
   faStore,
   faSortDown,
-  faPlus
+  faPlus,
+  faPercent
 );
 
 import createHashHistory from 'history/createHashHistory';
@@ -107,6 +109,7 @@ class Menu extends Component {
     userinfo: null
   };
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
+  
 
   toggleBikeMenu() {
     this.setState({ bikeMenu: !this.state.bikeMenu });

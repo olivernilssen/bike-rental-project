@@ -16,7 +16,7 @@ let day = today.getDate();
 let day2 = day + 2;
 let month = today.getMonth() + 1;
 let year = today.getFullYear();
-let time = today.getHours() + 1;
+let time = today.getHours();
 let laterTime = today.getHours() + 2;
 
 if (time == 24) time = '00';
@@ -28,11 +28,12 @@ if (day < 10) day = '0' + day;
 if (day2 < 10) day2 = '0' + day2;
 if (month < 10) month = '0' + month;
 
+
 class Booking extends Component {
   todaysDate = year + '-' + month + '-' + day;
   nextDay = year + '-' + month + '-' + day2;
   currentHour = time + ':00';
-  laterHour = time + ':00';
+  laterHour = (time + 1) + ':00';
   laterHourAlt = laterTime + ':00';
   dayRent = false;
   locations = [];
@@ -84,7 +85,7 @@ class Booking extends Component {
     }
 
     bike.startDate = new Date(this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00');
-    bike.startDateString = this.state.startDate.toString() + ' ' + this.state.startHour.toString()
+    bike.startDateString = this.state.startDate.toString() + ' ' + this.state.startHour.toString();
     bike.dayRent = this.dayRent;
 
     basket.push(bike);
@@ -103,7 +104,7 @@ class Booking extends Component {
     let checker = this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00';
     let checker2 = this.state.endDate.toString() + ' ' + this.state.endHour.toString() + ':00';
 
-    if (this.dayRent == false && this.state.startDate.toString() == this.state.endDate.toString()) {
+    if (this.dayRent == false && this.state.startDate == this.state.endDate) {
       notice = <p style={{ color: 'red' }}>"Til dato" må være minst én dag senere enn "Fra dato" ved døgnutleie.</p>;
     }
 
@@ -117,7 +118,7 @@ class Booking extends Component {
       );
     }
 
-    if (this.state.startDate.toString() > this.state.endDate.toString()) {
+    if (this.state.startDate > this.state.endDate) {
       notice = <p style={{ color: 'red' }}>"Til dato" må være senere enn "Fra dato".</p>;
     }
 
@@ -251,14 +252,14 @@ class Booking extends Component {
                     <Table.Td>{bike.name}</Table.Td>
                     <Table.Td>{bike.wheelSize}</Table.Td>
                     <Table.Td>{bike.price}</Table.Td>
-                    <Table.Td>
+                    <Table.Td width={1}>
                       <Button.Success
                         style={btnStyle}
                         onClick={() => {
                           this.chooseBike(bike);
                         }}
                       >
-                        <FontAwesomeIcon className="navIcon" icon="plus" />
+                        <FontAwesomeIcon className="" icon="plus" />
                       </Button.Success>
                     </Table.Td>
                   </Table.Tr>

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select, CenterContent } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { customerService } from './services/customersService';
-import { basket, activeCustomer, equipmentBasket } from './index.js';
+import { orderService } from './services/ordersService';
+import { basket, activeCustomer, equipmentBasket, employeeID } from './index.js';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { todaysDate } from './booking'
 
 import createHashHistory from 'history/createHashHistory';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +17,8 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
 class Basket extends Component {
   totalPrice = 0;
+  discPrice = 0;
+  discount = 0;
   state = {
     inBasket: basket,
     kunder: [],
@@ -32,7 +36,7 @@ class Basket extends Component {
     for (var i = 0; equipmentBasket.length > i; i++) {
       if (equipmentBasket[i].bike_id == bike.id) {
         equipmentBasket.splice(i, 1);
-
+        this.totalPrice -= equipmentBasket[i].displayPrice;
         i--;
       }
     }
@@ -40,8 +44,10 @@ class Basket extends Component {
     //Removes bike from basket
     for (let i of basket) {
       if (bike == i) {
+        this.totalPrice -= basket[basket.indexOf(i)].displayPrice;
         basket.splice(basket.indexOf(i), 1);
         this.updateBasket();
+        this.calcDiscount();
       }
     }
   }
@@ -116,6 +122,12 @@ class Basket extends Component {
     this.findCustomers();
   }
 
+  calcDiscount() {
+    if(this.discount != 0 || this.discount != null){
+      this.discPrice = (1 - (this.discount / 100)) * this.totalPrice;
+    }
+  }
+
   render() {
     if (this.state.activeC[0].id == null) this.state.displayCustomer = 'block';
     else this.state.displayCustomer = 'none'
@@ -160,7 +172,6 @@ class Basket extends Component {
               </Button.Danger>
               <br /><br />
               <h6>Handlekurv for sykler:</h6>
-              <div className="basket">
                 <Column>
                   <Table>
                     <Table.Thead>
@@ -240,28 +251,34 @@ class Basket extends Component {
                     </Table.Tbody>
                   </Table>
                 </Column>
-              </div>
-              <br />
-              <Row>
-                <Column right>
-                  <Column style={{width: 120 + "px", float: 'right'}}>
-                    <Form.Input type="text" placeholder={'prosent'}>WTF</Form.Input>
+                <Row>
+                  <CenterContent>
+                    <Column right>
+                      <Column>
+                        <Button.Success onClick={this.calcDiscount} style={{float: 'right'}}>
+                          <FontAwesomeIcon className='' icon="percent" />
+                        </Button.Success>
+                        <Form.Input type="number" 
+                          placeholder={'Rabatt'} 
+                          onChange={event => (this.discount = event.target.value)}
+                          style={{width: 100, float: 'right', border: '1 solid #F7F7F7'}}
+                          />
+                      </Column>
                   </Column>
-                  <Column>
-                    <Form.Label>Rabatt: </Form.Label>
-                  </Column>
-                </Column>
+                </CenterContent>
               </Row>
               <br/>
               <Row>
-                <Column>
-                  <Button.Success onClick={this.transaction}>
-                    <FontAwesomeIcon className="navIcon" icon="store" />
-                    Til Betaling
-                  </Button.Success>
-                </Column>
                 <Column right>
-                    <h4>Total Pris: {this.totalPrice}</h4>
+                  <Column>
+                      <h4>Total Pris: {this.discPrice}</h4>
+                  </Column>
+                  <Column>
+                    <Button.Success onClick={this.transaction}>
+                      <FontAwesomeIcon className="navIcon" icon="store" />
+                      Til Betaling
+                    </Button.Success>
+                  </Column>
                 </Column>
               </Row>
             </Column>
@@ -290,10 +307,8 @@ class Basket extends Component {
                         <Table.Td>
                           <Button.Success
                             onClick={() => {
-                              this.chooseCustomer(kunde);
-                            }}
-                          >
-                            <FontAwesomeIcon className="navIcon" icon="plus" />
+                              this.chooseCustomer(kunde);}}>
+                            <FontAwesomeIcon className="" icon="plus" />
                           </Button.Success>
                         </Table.Td>
                       </Table.Tr>
@@ -304,8 +319,6 @@ class Basket extends Component {
             </Column>
           </Row>
         </Card>
-
-        <br />
       </div>
     );
   }
@@ -340,6 +353,7 @@ class Basket extends Component {
       }
     }
   
+    this.discPrice = this.totalPrice;
     
     customerService.getCustomerSearch('%', results => {
       this.setState(state => {
@@ -353,7 +367,47 @@ class Basket extends Component {
   }
 
   transaction() {
+    let today = new Date();
+    let day = today.getDate();
+    let month = today.getMonth() + 1;
+    let year = today.getFullYear();
+    let time = today.getHours();
+    let minutes = today.getMinutes();
+    if (day < 10) day = '0' + day;
+    if (month < 10) month = '0' + month;
+        
+    let orderType = 1;
+ 
+    let todaysDate = year + '-' + month + '-' + day + " " + time + ":" + minutes + ":00";
+    console.log(todaysDate);
 
+    if(this.state.inBasket[0].dayRent == true) {
+      orderType = 2;
+    }
+
+    orderService.makeOrder(this.state.activeC[0].id, orderType, todaysDate, 
+    this.state.inBasket[0].startDate, 
+    this.state.inBasket[0].endDate, 
+    this.discPrice, employeeID)
+
+    for(let i = 0; i < this.state.inBasket.length; i++){
+      orderService.makeBikeOrder(this.state.activeC[0].id, todaysDate, this.state.inBasket[i].id);
+    }
+
+    if(equipmentBasket.length > 0){
+      for(let i = 0; i < equipmentBasket.length; i++){
+        orderService.makeEquipOrder(this.state.activeC[0].id, todaysDate, equipmentBasket[i].id);
+        console.log('equipment');
+      }
+    }
+
+    
+
+    basket.length = 0;
+    equipmentBasket.length = 0;
+    this.totalPrice = 0;
+    this.discPrice = 0;
+    this.updateBasket();
   }
 }
 

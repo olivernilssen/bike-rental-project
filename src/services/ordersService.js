@@ -56,6 +56,31 @@ class OrderService {
       }
     );
   }
+
+  //QUERIES FOR ADDING A NEW ORDER TO THE DATABASE
+  makeOrder(cID, typeID, today, fromDate, toDate, price, employee){
+    connection.query('insert into Orders (id, customer_id, type_id, dateOrdered, fromDateTime, toDateTime, price, soldBy_id) values(null, ?, ?, ?, ?, ?, ?, ?)',
+    [cID, typeID, today, fromDate, toDate, price, employee],
+    (error) => {
+      if(error) return console.error(error);
+    })
+  }
+
+  makeBikeOrder(cID, today, bikeID) {
+    connection.query('insert into OrderedBike (order_id, bike_id) values ((select id from Orders where customer_id = ? and dateOrdered = ?), ?)',
+    [cID, today, bikeID], 
+    (error) => {
+      if(error) console.error(error);
+    })
+  }
+
+  makeEquipOrder(cID, today, equipID){
+    connection.query('insert into OrderedEquipment (order_id, equip_id) values ((select id from Orders where customer_id = ? and dateOrdered = ?), ?)', 
+    [cID, today, equipID], 
+    (error) => {
+      if(error) return console.error(error);
+    })
+  }
 }
 
 export let orderService = new OrderService();
