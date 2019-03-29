@@ -77,7 +77,7 @@ class Chart extends Component {
           <Bar
             data={chartData}
             height={30}
-            width={150}
+            width={140}
             options={
               ({
                 maintainAspectRatio: false
@@ -92,6 +92,10 @@ class Chart extends Component {
                       }
                     }
                   ]
+                }, 
+                animation: {
+                  duration: 1000,
+                  animateScale: true
                 }
               })
             }
@@ -139,123 +143,7 @@ class Chart extends Component {
   }
 }
 
-// class SearchRentedBikes extends Component {
-//   state = {
-//     sales: [],
-//     searchWord: '',
-//     month: '%'
-//   };
-//
-//   handleChangeSearch(event) {
-//     this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchSales());
-//   }
-//
-//   handleChangeSelect(event) {
-//     this.setState({ month: (this.state.month = event.target.value) }, this.searchSales());
-//   }
-//
-//   searchSales() {
-//     let searchWord = '%' + this.state.searchWord + '%';
-//     let month = '%' + this.state.month + '%';
-//
-//     rentalService.searchSales(searchWord, month, results => {
-//       this.setState({ state: (this.state.sales = []) });
-//       this.setState(state => {
-//         const sales = state.sales.concat(results);
-//         return {
-//           sales,
-//           results
-//         };
-//       });
-//     });
-//   }
-//
-//   render() {
-//     return (
-//       <div>
-//         <br />
-//         <Card title="Alle ordre">
-//           <Row>
-//             <Column width={3}>
-//               <Form.Label>Velg måned</Form.Label>
-//               <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
-//                 <Select.Option value="%">Alle måneder</Select.Option>
-//                 <Select.Option value="-01-">Januar</Select.Option>
-//                 <Select.Option value="-02-">Februar</Select.Option>
-//                 <Select.Option value="-03-">Mars</Select.Option>
-//                 <Select.Option value="-04-">April</Select.Option>
-//                 <Select.Option value="-05-">Mai</Select.Option>
-//                 <Select.Option value="-06-">Juni</Select.Option>
-//                 <Select.Option value="-07-">Juli</Select.Option>
-//                 <Select.Option value="-08-">August</Select.Option>
-//                 <Select.Option value="-09-">September</Select.Option>
-//                 <Select.Option value="-10-">Oktober</Select.Option>
-//                 <Select.Option value="-11-">November</Select.Option>
-//                 <Select.Option value="-12-">Desember</Select.Option>
-//               </Select>
-//             </Column>
-//           </Row>
-//
-//           <br />
-//
-//           <Row>
-//             <Column>
-//               <Form.Label>Søk på kunde, selger, datoer og pris ... Merk at datoer må skrives i tallform.</Form.Label>
-//               <Form.Input onChange={this.handleChangeSearch}>{this.state.searchWord}</Form.Input>
-//             </Column>
-//           </Row>
-//
-//           <br />
-//
-//           <Row>
-//             <Column>
-//               <Table>
-//                 <Table.Thead>
-//                   <Table.Th>Ordre</Table.Th>
-//                   <Table.Th>Kunde</Table.Th>
-//                   <Table.Th>Selger</Table.Th>
-//                   <Table.Th>Type</Table.Th>
-//                   <Table.Th>Bestillingsdato</Table.Th>
-//                   <Table.Th>Start for utleie</Table.Th>
-//                   <Table.Th>Slutt for utleie</Table.Th>
-//                   <Table.Th>Pris</Table.Th>
-//                   <Table.Th />
-//                 </Table.Thead>
-//                 <Table.Tbody>
-//                   {this.state.sales.map(sale => (
-//                     <Table.Tr key={sale.id}>
-//                       <Table.Td>{sale.id}</Table.Td>
-//                       <Table.Td>{sale.lastName}</Table.Td>
-//                       <Table.Td>{sale.firstName}</Table.Td>
-//                       <Table.Td>{sale.typeName}</Table.Td>
-//                       <Table.Td>{sale.dateOrdered.toString().substring(4, 24)}</Table.Td>
-//                       <Table.Td>{sale.fromDateTime.toString().substring(4, 24)}</Table.Td>
-//                       <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
-//                       <Table.Td>{sale.price} kr</Table.Td>
-//                       <Table.Td>
-//                         <Button.Success onClick={() => history.push('/AllSales/' + sale.id + '/edit')}>
-//                           Mer info
-//                         </Button.Success>
-//                       </Table.Td>
-//                     </Table.Tr>
-//                   ))}
-//                 </Table.Tbody>
-//               </Table>
-//             </Column>
-//           </Row>
-//         </Card>
-//         <br />
-//       </div>
-//     );
-//   }
-//
-//   mounted() {
-//     rentalService.getAllSales(results => {
-//       this.setState({ sales: results });
-//     });
-//   }
-// }
-//
+
 class DetailedOrderAll extends Component {
   bikes = [];
   equipments = [];
