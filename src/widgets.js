@@ -255,6 +255,23 @@ class ButtonInfo extends Component {
   }
 }
 
+class ButtonSecondary extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-secondary"
+        onClick={this.props.onClick}
+        data-toggle={this.props.dataToggle}
+        data-target={this.props.dataTarget}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
 // Renders a button using Bootstrap styles
 export class Button {
   static Success = ButtonSuccess;
@@ -262,6 +279,7 @@ export class Button {
   static Light = ButtonLight;
   static Primary = ButtonPrimary;
   static Info = ButtonInfo;
+  static Secondary = ButtonSecondary;
 }
 
 class ButtonSuccessOutline extends Component {

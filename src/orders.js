@@ -160,69 +160,65 @@ class Orders extends Component {
             <h1>Ordrer</h1>
           </NavBar.Link>
         </NavBar>
+        <Card>
+          <Row>
+            <Column width={5}>
+              <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
+                <Select.Option value="%">Alle måneder</Select.Option>
+                <Select.Option value="-01-">Januar</Select.Option>
+                <Select.Option value="-02-">Februar</Select.Option>
+                <Select.Option value="-03-">Mars</Select.Option>
+                <Select.Option value="-04-">April</Select.Option>
+                <Select.Option value="-05-">Mai</Select.Option>
+                <Select.Option value="-06-">Juni</Select.Option>
+                <Select.Option value="-07-">Juli</Select.Option>
+                <Select.Option value="-08-">August</Select.Option>
+                <Select.Option value="-09-">September</Select.Option>
+                <Select.Option value="-10-">Oktober</Select.Option>
+                <Select.Option value="-11-">November</Select.Option>
+                <Select.Option value="-12-">Desember</Select.Option>
+              </Select>
+              <br />
+              <br />
+              <Form.Input
+                type="search"
+                placeholder="Søk på kunde, selger, datoer og pris."
+                onChange={this.onChangeHandle}
+              >
+                {this.state.searchWord}
+              </Form.Input>
 
-        <Column width={4}>
-          <Card>
-            <Row>
-              <Column>
-                <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
-                  <Select.Option value="%">Alle måneder</Select.Option>
-                  <Select.Option value="-01-">Januar</Select.Option>
-                  <Select.Option value="-02-">Februar</Select.Option>
-                  <Select.Option value="-03-">Mars</Select.Option>
-                  <Select.Option value="-04-">April</Select.Option>
-                  <Select.Option value="-05-">Mai</Select.Option>
-                  <Select.Option value="-06-">Juni</Select.Option>
-                  <Select.Option value="-07-">Juli</Select.Option>
-                  <Select.Option value="-08-">August</Select.Option>
-                  <Select.Option value="-09-">September</Select.Option>
-                  <Select.Option value="-10-">Oktober</Select.Option>
-                  <Select.Option value="-11-">November</Select.Option>
-                  <Select.Option value="-12-">Desember</Select.Option>
-                </Select>
-              </Column>
-            </Row>
+              <ClickTable>
+                <ClickTable.Thead>
+                  <ClickTable.Th>Ordredato</ClickTable.Th>
+                  <ClickTable.Th>Ordre ID</ClickTable.Th>
+                  <ClickTable.Th>Kunde ID</ClickTable.Th>
+                </ClickTable.Thead>
+                <ClickTable.Tbody>
+                  {this.state.sales.map(sale => (
+                    <ClickTable.Tr
+                      key={sale.id}
+                      onClick={() => {
+                        this.chooseActive(sale);
+                      }}
+                    >
+                      <ClickTable.Td>{sale.dateOrdered.toString().substring(4, 16)}</ClickTable.Td>
+                      <ClickTable.Td>{sale.id}</ClickTable.Td>
+                      <ClickTable.Td>{sale.customer_id}</ClickTable.Td>
+                    </ClickTable.Tr>
+                  ))}
+                </ClickTable.Tbody>
+              </ClickTable>
+            </Column>
 
-            <br />
+            <Column>
+              <SelectedOrder activeOrder={this.state.activeOrder} />
+            </Column>
+          </Row>
 
-            <Row>
-              <Column>
-                <Form.Input
-                  type="search"
-                  placeholder="Søk på kunde, selger, datoer og pris."
-                  onChange={this.onChangeHandle}
-                >
-                  {this.state.searchWord}
-                </Form.Input>
-                <br />
-                <ClickTable>
-                  <ClickTable.Thead>
-                    <ClickTable.Th>Ordredato</ClickTable.Th>
-                    <ClickTable.Th>Ordre ID</ClickTable.Th>
-                    <ClickTable.Th>Kunde ID</ClickTable.Th>
-                  </ClickTable.Thead>
-                  <ClickTable.Tbody>
-                    {this.state.sales.map(sale => (
-                      <ClickTable.Tr
-                        key={sale.id}
-                        onClick={() => {
-                          this.chooseActive(sale);
-                        }}
-                      >
-                        <ClickTable.Td>{sale.dateOrdered.toString().substring(4, 16)}</ClickTable.Td>
-                        <ClickTable.Td>{sale.id}</ClickTable.Td>
-                        <ClickTable.Td>{sale.customer_id}</ClickTable.Td>
-                      </ClickTable.Tr>
-                    ))}
-                  </ClickTable.Tbody>
-                </ClickTable>
-              </Column>
-            </Row>
-          </Card>
-        </Column>
-        <Column width={6}>
-          <SelectedOrder activeOrder={this.state.activeOrder} />
-        </Column>
+          <br />
+        </Card>
+        <br />
       </div>
     );
   }
@@ -230,6 +226,7 @@ class Orders extends Component {
   mounted() {
     rentalService.getAllSales(results => {
       this.setState({ sales: results });
+      this.state.activeOrder = results[0];
     });
   }
 }
@@ -258,8 +255,8 @@ class SelectedOrder extends Component {
     if (!this.state.order) return null;
 
     return (
-      <div>
-        <Card>
+      <Card>
+        <div className="container">
           <h5>Valgt ordre: {this.state.order.id}</h5>
           <br />
           <Row>
@@ -384,8 +381,8 @@ class SelectedOrder extends Component {
               </Table>
             </Column>
           </Row>
-        </Card>
-      </div>
+        </div>
+      </Card>
     );
   }
 

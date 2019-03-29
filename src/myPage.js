@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1 } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { orderService } from './services/ordersService';
@@ -65,9 +65,9 @@ class UserInfo extends Component {
           </Row>
 
           <br />
-          <Button.Success type="button" onClick={() => history.push('/EditUserInfo')}>
+          <ButtonOutline.Success type="button" onClick={() => history.push('/EditUserInfo')}>
             Endre informasjon
-          </Button.Success>
+          </ButtonOutline.Success>
         </Card>
       </div>
     );
@@ -167,18 +167,18 @@ class EditUserInfo extends Component {
           </Row>
 
           <br />
-          <Button.Success
+          <ButtonOutline.Success
             type="button"
             onClick={e => {
               if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save(e);
             }}
           >
             Oppdatere informasjon
-          </Button.Success>
+          </ButtonOutline.Success>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <Button.Danger type="button" onClick={() => history.push('/information')}>
+          <ButtonOutline.Secondary type="button" onClick={() => history.push('/information')}>
             Gå tilbake
-          </Button.Danger>
+          </ButtonOutline.Secondary>
         </Card>
       </div>
     );
@@ -256,9 +256,9 @@ class MySales extends Component {
                       <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
                       <Table.Td>{sale.price} kr</Table.Td>
                       <Table.Td>
-                        <Button.Success type="button" onClick={() => history.push('/MySales/' + sale.id + '/edit')}>
+                        <ButtonOutline.Info type="button" onClick={() => history.push('/MySales/' + sale.id + '/edit')}>
                           Se bestilling
-                        </Button.Success>
+                        </ButtonOutline.Info>
                       </Table.Td>
                     </Table.Tr>
                   ))}

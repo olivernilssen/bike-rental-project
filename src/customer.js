@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ClickTable, H1 } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, ClickTable, H1 } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { customerService } from './services/customersService';
 import { basket, employeeID } from './index.js';
@@ -48,12 +48,12 @@ class Customers extends Component {
 
         <Column right>
           <NavLink to={'/addCustomer/'}>
-            <Button.Light>Legg til ny kunde</Button.Light>
+            <ButtonOutline.Light>Legg til ny kunde</ButtonOutline.Light>
           </NavLink>
         </Column>
         <Card>
           <Row>
-            <Column>
+            <Column width={5}>
               <Form.Input id="testSearch" type="search" onChange={this.onChangeHandle} placeholder="Søk etter kunde" />
               <br />
               <ClickTable>
@@ -183,15 +183,15 @@ class SelectedCustomer extends Component {
                 onChange={event => (this.active.place = event.target.value)}
               />
               <br />
-              <Button.Success
+              <ButtonOutline.Success
                 onClick={e => {
                   if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save(e);
                 }}
               >
-                Oppdatere informasjon
-              </Button.Success>
+                Lagre
+              </ButtonOutline.Success>
               <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <Button.Danger onClick={this.cancel}>Gå tilbake</Button.Danger>
+              <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
             </Column>
           </Card>
         </div>
@@ -199,7 +199,7 @@ class SelectedCustomer extends Component {
     } else if (this.state.allOrders) {
       return (
         <Card>
-          <br />
+          <h5>Tidligere ordre</h5>
           <br />
           <Row>
             <Column>
@@ -228,9 +228,10 @@ class SelectedCustomer extends Component {
               </Table>
             </Column>
           </Row>
-          <Button.Danger type="button" onClick={this.cancel}>
+          <br />
+          <ButtonOutline.Secondary type="button" onClick={this.cancel}>
             Gå tilbake
-          </Button.Danger>
+          </ButtonOutline.Secondary>
         </Card>
       );
     } else {
@@ -279,9 +280,9 @@ class SelectedCustomer extends Component {
               </Table.Tbody>
             </Table>
             <br />
-            <Button.Success onClick={this.change}>Endre</Button.Success>
+            <ButtonOutline.Success onClick={this.change}>Endre</ButtonOutline.Success>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <Button.Light onClick={this.allOrders}>Se tidligere ordre</Button.Light>
+            <ButtonOutline.Info onClick={this.allOrders}>Se tidligere ordre</ButtonOutline.Info>
           </Column>
         </Card>
       );

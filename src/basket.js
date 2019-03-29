@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Row, Column, NavBar, Button, Form, Table, H1, Select, CenterContent } from './widgets';
+import { Card, Row, Column, NavBar, Button, ButtonOutline, Form, Table, H1, Select, CenterContent } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { customerService } from './services/customersService';
 import { orderService } from './services/ordersService';
 import { basket, activeCustomer, equipmentBasket, employeeID } from './index.js';
 import { Modal } from 'react-bootstrap';
-require("react-bootstrap/ModalHeader");
-require("react-bootstrap/Modal")
+require('react-bootstrap/ModalHeader');
+require('react-bootstrap/Modal');
 
 import createHashHistory from 'history/createHashHistory';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,7 +20,7 @@ class Basket extends Component {
   discount = 0;
   state = {
     showConfirm: false,
-    showError: false, 
+    showError: false,
     inBasket: basket,
     kunder: [],
     phrase: '',
@@ -33,23 +33,22 @@ class Basket extends Component {
   };
 
   handleClose() {
-    this.setState({showError: false});
-    this.setState({showConfirm: false});
+    this.setState({ showError: false });
+    this.setState({ showConfirm: false });
   }
 
   handleShow() {
-    if(this.state.activeC[0].id == null || this.state.inBasket == null || this.state.inBasket.length == 0){
-      this.setState({showError: true});
-    }
-    else {
-      this.setState({showError: false});
-      this.setState({showConfirm: true});
+    if (this.state.activeC[0].id == null || this.state.inBasket == null || this.state.inBasket.length == 0) {
+      this.setState({ showError: true });
+    } else {
+      this.setState({ showError: false });
+      this.setState({ showConfirm: true });
     }
   }
 
   /**Bike Remove
-   * Removes the clicked bike from our list and basket. 
-   * Also removes from global list, so that it can be found again in booking 
+   * Removes the clicked bike from our list and basket.
+   * Also removes from global list, so that it can be found again in booking
    * @bike - item that we click eg. a bike in our list
    */
   removeBike(bike) {
@@ -75,8 +74,8 @@ class Basket extends Component {
 
   /**Update Basket
    * Updates the basket, whenever an item has been removed
-   * checks that local list is equal to global list 
-   * and removed the ones that aren't available anymore. 
+   * checks that local list is equal to global list
+   * and removed the ones that aren't available anymore.
    */
   updateBasket() {
     this.state.inBasket = [];
@@ -91,8 +90,8 @@ class Basket extends Component {
   }
 
   /**Handle change phrase
-   * This checks to see if there has been a change in the input 
-   * for the search menu. If there is, change the value shown and 
+   * This checks to see if there has been a change in the input
+   * for the search menu. If there is, change the value shown and
    * search the database using findcustomers();
    * @event - event that happens (eg. keypress)
    */
@@ -102,9 +101,9 @@ class Basket extends Component {
 
   /**Find all customers
    * Does a query for all customers that is in the database
-   * Allows the user to search throught the database by using 
+   * Allows the user to search throught the database by using
    * the search field at the top.
-   * Will call this function as the user types. 
+   * Will call this function as the user types.
    */
   findCustomers() {
     let queryPhrase = '';
@@ -131,9 +130,9 @@ class Basket extends Component {
 
   /**Choose Remove
    * Chooses the selected customer
-   * And then removes the list of customers from 
-   * the users view, and adds a name at the top of the screen that 
-   * says which customer that is chosen. 
+   * And then removes the list of customers from
+   * the users view, and adds a name at the top of the screen that
+   * says which customer that is chosen.
    * @customer - clicked item from table (eg. customer)
    */
   chooseCustomer(customer) {
@@ -146,8 +145,8 @@ class Basket extends Component {
   /**Remove Customer
    * Function to remove current selected customer
    * Sets current selected active ID to null, so that program can stil render
-   * as it looks for customer ID otherwise. 
-   * Also shows the list of customers again. 
+   * as it looks for customer ID otherwise.
+   * Also shows the list of customers again.
    */
   removeCustomer() {
     this.state.displayCustomer = 'block';
@@ -172,23 +171,23 @@ class Basket extends Component {
   }
 
   /**Calculate Discount
-   * This function is to give our price a discount if there 
-   * is one to be given. If dicount = 0, then the discPrice is 
-   * equal to the totalPrice. 
+   * This function is to give our price a discount if there
+   * is one to be given. If dicount = 0, then the discPrice is
+   * equal to the totalPrice.
    */
   calcDiscount() {
-    if(this.discount != 0 || this.discount != null){
-      this.discPrice = (1 - (this.discount / 100)) * this.totalPrice;
+    if (this.discount != 0 || this.discount != null) {
+      this.discPrice = (1 - this.discount / 100) * this.totalPrice;
     }
   }
 
   /**Rendered
-   * We render whats in the baskets for bikes AND equipments 
-   * We add puttons and return statements 
+   * We render whats in the baskets for bikes AND equipments
+   * We add puttons and return statements
    */
   render() {
     if (this.state.activeC[0].id == null) this.state.displayCustomer = 'block';
-    else this.state.displayCustomer = 'none'
+    else this.state.displayCustomer = 'none';
 
     const styles = {
       btnStyle: { display: this.styleState.display },
@@ -223,118 +222,123 @@ class Basket extends Component {
                 </h4>
               </Form.Label>
               <br />
-              <Button.Danger
-                onClick={() => {this.removeCustomer();}}>
+              <ButtonOutline.Danger
+                onClick={() => {
+                  this.removeCustomer();
+                }}
+              >
                 Fjern Kunde
-              </Button.Danger>
-              <br /><br />
+              </ButtonOutline.Danger>
+              <br />
+              <br />
               <h6>Handlekurv for sykler:</h6>
-                <Column>
-                  <Table>
-                    <Table.Thead>
-                      <Table.Th>ID</Table.Th>
-                      <Table.Th>Type</Table.Th>
-                      <Table.Th>Merke</Table.Th>
-                      <Table.Th>Lokasjon</Table.Th>
-                      <Table.Th>Fra Dato</Table.Th>
-                      <Table.Th>Til Dato</Table.Th>
-                      <Table.Th>Pris</Table.Th>
-                      <Table.Th>Timesleie</Table.Th>
-                      <Table.Th />
-                      <Table.Th />
-                    </Table.Thead>
-                    <Table.Tbody>
-                      {this.state.inBasket.map(bike => (
-                        <Table.Tr key={bike.id}>
-                          <Table.Td>{bike.id}</Table.Td>
-                          <Table.Td>{bike.typeName}</Table.Td>
-                          <Table.Td>{bike.brand}</Table.Td>
-                          <Table.Td>{bike.name}</Table.Td>
-                          <Table.Td>{bike.startDateString}</Table.Td>
-                          <Table.Td>{bike.endDateString}</Table.Td>
-                          <Table.Td>{bike.displayPrice}</Table.Td>
-                          <Table.Td>{bike.dayRent ? 'Ja' : 'Nei'}</Table.Td>
-                          <Table.Td>
-                            <Button.Success
-                              style={btnStyle}
-                              onClick={() => history.push('/equipmentQuery/' + bike.id + '/edit')}
-                            >
-                              Velg utstyr
-                            </Button.Success>
-                          </Table.Td>
-                          <Table.Td>
-                            <Button.Danger
-                              style={btnStyle}
-                              onClick={() => {
-                                this.removeBike(bike);
-                              }}
-                            >
-                              Slett
-                            </Button.Danger>
-                          </Table.Td>
-                        </Table.Tr>
-                      ))}
-                    </Table.Tbody>
-                  </Table>
-                </Column>
-                <br />
-                <br />
+              <Column>
+                <Table>
+                  <Table.Thead>
+                    <Table.Th>ID</Table.Th>
+                    <Table.Th>Type</Table.Th>
+                    <Table.Th>Merke</Table.Th>
+                    <Table.Th>Lokasjon</Table.Th>
+                    <Table.Th>Fra Dato</Table.Th>
+                    <Table.Th>Til Dato</Table.Th>
+                    <Table.Th>Pris</Table.Th>
+                    <Table.Th>Timesleie</Table.Th>
+                    <Table.Th />
+                    <Table.Th />
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {this.state.inBasket.map(bike => (
+                      <Table.Tr key={bike.id}>
+                        <Table.Td>{bike.id}</Table.Td>
+                        <Table.Td>{bike.typeName}</Table.Td>
+                        <Table.Td>{bike.brand}</Table.Td>
+                        <Table.Td>{bike.name}</Table.Td>
+                        <Table.Td>{bike.startDateString}</Table.Td>
+                        <Table.Td>{bike.endDateString}</Table.Td>
+                        <Table.Td>{bike.displayPrice}</Table.Td>
+                        <Table.Td>{bike.dayRent ? 'Ja' : 'Nei'}</Table.Td>
+                        <Table.Td>
+                          <ButtonOutline.Success
+                            style={btnStyle}
+                            onClick={() => history.push('/equipmentQuery/' + bike.id + '/edit')}
+                          >
+                            Velg utstyr
+                          </ButtonOutline.Success>
+                        </Table.Td>
+                        <Table.Td>
+                          <ButtonOutline.Danger
+                            style={btnStyle}
+                            onClick={() => {
+                              this.removeBike(bike);
+                            }}
+                          >
+                            Slett
+                          </ButtonOutline.Danger>
+                        </Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </Column>
+              <br />
+              <br />
 
-                <h6>Handlekurv for utstyr:</h6>
-                <Column>
-                  <Table>
-                    <Table.Thead>
-                      <Table.Th>Tilhører</Table.Th>
-                      <Table.Th>Type</Table.Th>
-                      <Table.Th>Merke</Table.Th>
-                      <Table.Th>Størrelse</Table.Th>
-                      <Table.Th>Pris</Table.Th>
-                      <Table.Th />
-                    </Table.Thead>
-                    <Table.Tbody>
-                      {notice}
-                      {equipmentBasket.map(equip => (
-                        <Table.Tr key={equip.id}>
-                          <Table.Td>{equip.bike_id}</Table.Td>
-                          <Table.Td>{equip.typeName}</Table.Td>
-                          <Table.Td>{equip.brand}</Table.Td>
-                          <Table.Td>{equip.comment}</Table.Td>
-                          <Table.Td>{equip.price}</Table.Td>
-                          <Table.Td>
-                            <Button.Danger onClick={() => this.basketRemove(equip)}>Slett</Button.Danger>
-                          </Table.Td>
-                        </Table.Tr>
-                      ))}
-                    </Table.Tbody>
-                  </Table>
-                </Column>
-                <Row>
-                  <CenterContent>
-                    <Column right>
-                      <Column>
-                        <Button.Success onClick={this.calcDiscount} style={{float: 'right'}}>
-                          <FontAwesomeIcon className='' icon="percent" />
-                        </Button.Success>
-                        <Form.Input type="number" 
-                          placeholder={'Rabatt'} 
-                          onChange={event => (this.discount = event.target.value)}
-                          style={{width: 100, float: 'right', border: '1 solid #F7F7F7'}}
-                          />
-                      </Column>
+              <h6>Handlekurv for utstyr:</h6>
+              <Column>
+                <Table>
+                  <Table.Thead>
+                    <Table.Th>Tilhører</Table.Th>
+                    <Table.Th>Type</Table.Th>
+                    <Table.Th>Merke</Table.Th>
+                    <Table.Th>Størrelse</Table.Th>
+                    <Table.Th>Pris</Table.Th>
+                    <Table.Th />
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {notice}
+                    {equipmentBasket.map(equip => (
+                      <Table.Tr key={equip.id}>
+                        <Table.Td>{equip.bike_id}</Table.Td>
+                        <Table.Td>{equip.typeName}</Table.Td>
+                        <Table.Td>{equip.brand}</Table.Td>
+                        <Table.Td>{equip.comment}</Table.Td>
+                        <Table.Td>{equip.price}</Table.Td>
+                        <Table.Td>
+                          <ButtonOutline.Danger onClick={() => this.basketRemove(equip)}>Slett</ButtonOutline.Danger>
+                        </Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </Column>
+              <Row>
+                <CenterContent>
+                  <Column right>
+                    <Column>
+                      <ButtonOutline.Info onClick={this.calcDiscount} style={{ float: 'right' }}>
+                        <FontAwesomeIcon className="" icon="percent" />
+                      </ButtonOutline.Info>
+                      <Form.Input
+                        type="number"
+                        placeholder={'Rabatt'}
+                        onChange={event => (this.discount = event.target.value)}
+                        style={{ width: 100, float: 'right', border: '1 solid #F7F7F7' }}
+                      />
+                    </Column>
                   </Column>
                 </CenterContent>
               </Row>
-              <br/>
+              <br />
               <Row>
                 <Column right>
                   <Column>
-                      <h4>Total Pris: {this.discPrice}</h4>
+                    <h4>Total Pris: {this.discPrice}</h4>
                   </Column>
                   <Column>
-                    <Button.Success onClick={this.handleShow}>
+                    <Button.Info onClick={this.handleShow}>
                       <FontAwesomeIcon className="navIcon" icon="store" />
                       Til Betaling
-                    </Button.Success>
+                    </Button.Info>
                   </Column>
                 </Column>
               </Row>
@@ -344,7 +348,7 @@ class Basket extends Component {
               <Card>
                 <Column right>
                   <NavLink to={'/addCustomer/'}>
-                    <Button.Success>Legg til ny kunde</Button.Success>
+                    <ButtonOutline.Success>Legg til ny kunde</ButtonOutline.Success>
                   </NavLink>
                 </Column>
                 <Form.Label>Søk i kunder..</Form.Label>
@@ -362,11 +366,13 @@ class Basket extends Component {
                         <Table.Td>{kunde.firstName}</Table.Td>
                         <Table.Td>{kunde.lastName}</Table.Td>
                         <Table.Td>
-                          <Button.Success
+                          <ButtonOutline.Info
                             onClick={() => {
-                              this.chooseCustomer(kunde);}}>
+                              this.chooseCustomer(kunde);
+                            }}
+                          >
                             <FontAwesomeIcon className="" icon="plus" />
-                          </Button.Success>
+                          </ButtonOutline.Info>
                         </Table.Td>
                       </Table.Tr>
                     ))}
@@ -383,20 +389,20 @@ class Basket extends Component {
           </Modal.Header>
           <Modal.Body>
             <p>Er du sikker på at du vil legge inn en order for kunde: </p>
-            <p>{this.state.activeC[0].firstName} {this.state.activeC[0].lastName}</p>
-            <p>Antall sykler: {this.state.inBasket.length} og antall utstyr: {equipmentBasket.length}</p>
+            <p>
+              {this.state.activeC[0].firstName} {this.state.activeC[0].lastName}
+            </p>
+            <p>
+              Antall sykler: {this.state.inBasket.length} og antall utstyr: {equipmentBasket.length}
+            </p>
             <p>Pris: {this.discPrice} </p>
             <p>Ansatt med ID: {employeeID}</p>
-            <br/>
+            <br />
             <p>Trykk Utfør for å legge inn bestilling</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button.Success  onClick={this.handleClose}>
-              Avbryt
-            </Button.Success>
-            <Button.Success  onClick={this.transaction}>
-              Utfør
-            </Button.Success>
+            <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
+            <Button.Success onClick={this.transaction}>Utfør</Button.Success>
           </Modal.Footer>
         </Modal>
 
@@ -405,13 +411,10 @@ class Basket extends Component {
             <Modal.Title>Noe gikk galt</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Sjekk at all informasjonen er riktig 
-            og at du har lagt til kunde og elementer i handlekurven
+            Sjekk at all informasjonen er riktig og at du har lagt til kunde og elementer i handlekurven
           </Modal.Body>
           <Modal.Footer>
-            <Button.Success  onClick={this.handleClose}>
-              Avbryt
-            </Button.Success>
+            <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
           </Modal.Footer>
         </Modal>
       </div>
@@ -420,41 +423,41 @@ class Basket extends Component {
 
   /** Mounted
    * We first update price
-   * Then we put all our items from global list basket into our 
-   * local array. As well as getting the global customer and 
-   * gives our local variabel for customer a value. 
+   * Then we put all our items from global list basket into our
+   * local array. As well as getting the global customer and
+   * gives our local variabel for customer a value.
    */
   mounted() {
-    if(this.state.inBasket == null || this.state.inBasket.length == 0) { }
-    else {
-      for(let i = 0; i < this.state.inBasket.length; i++){
-        if(this.state.inBasket[i].dayRent == false){
+    if (this.state.inBasket == null || this.state.inBasket.length == 0) {
+    } else {
+      for (let i = 0; i < this.state.inBasket.length; i++) {
+        if (this.state.inBasket[i].dayRent == false) {
           let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
           let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-          if(timeDiff > 1){
-            this.state.inBasket[i].displayPrice = this.state.inBasket[i].price + (this.state.inBasket[i].price * 0.5) * diffDays;
+          if (timeDiff > 1) {
+            this.state.inBasket[i].displayPrice =
+              this.state.inBasket[i].price + this.state.inBasket[i].price * 0.5 * diffDays;
           }
           this.totalPrice += this.state.inBasket[i].displayPrice;
-          console.log(diffDays + " Antall dager");
-        } 
-        else {
+          console.log(diffDays + ' Antall dager');
+        } else {
           let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
           let diffHours = Math.ceil(timeDiff / (1000 * 3600));
           this.state.inBasket[i].displayPrice = (this.state.inBasket[i].price / 4) * diffHours;
           this.totalPrice += this.state.inBasket[i].displayPrice;
-          console.log(diffHours + " Antall timer");
+          console.log(diffHours + ' Antall timer');
         }
       }
     }
 
-    if(equipmentBasket != 0) {
-      for(let i = 0; i < equipmentBasket.length; i++) {
+    if (equipmentBasket != 0) {
+      for (let i = 0; i < equipmentBasket.length; i++) {
         this.totalPrice += equipmentBasket[i].price;
       }
     }
-  
+
     this.discPrice = this.totalPrice;
-    
+
     customerService.getCustomerSearch('%', results => {
       this.setState(state => {
         const kunder = state.kunder.concat(results);
@@ -481,27 +484,32 @@ class Basket extends Component {
     let minutes = today.getMinutes();
     if (day < 10) day = '0' + day;
     if (month < 10) month = '0' + month;
-        
+
     let orderType = 1;
- 
-    let todaysDate = year + '-' + month + '-' + day + " " + time + ":" + minutes + ":00";
+
+    let todaysDate = year + '-' + month + '-' + day + ' ' + time + ':' + minutes + ':00';
     console.log(todaysDate);
 
-    if(this.state.inBasket[0].dayRent == true) {
+    if (this.state.inBasket[0].dayRent == true) {
       orderType = 2;
     }
 
-    orderService.makeOrder(this.state.activeC[0].id, orderType, todaysDate, 
-    this.state.inBasket[0].startDate, 
-    this.state.inBasket[0].endDate, 
-    this.discPrice, employeeID)
+    orderService.makeOrder(
+      this.state.activeC[0].id,
+      orderType,
+      todaysDate,
+      this.state.inBasket[0].startDate,
+      this.state.inBasket[0].endDate,
+      this.discPrice,
+      employeeID
+    );
 
-    for(let i = 0; i < this.state.inBasket.length; i++){
+    for (let i = 0; i < this.state.inBasket.length; i++) {
       orderService.makeBikeOrder(this.state.activeC[0].id, todaysDate, this.state.inBasket[i].id);
     }
 
-    if(equipmentBasket.length > 0){
-      for(let i = 0; i < equipmentBasket.length; i++){
+    if (equipmentBasket.length > 0) {
+      for (let i = 0; i < equipmentBasket.length; i++) {
         orderService.makeEquipOrder(this.state.activeC[0].id, todaysDate, equipmentBasket[i].id);
         console.log('equipment');
       }
