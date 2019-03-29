@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Bar, Line, Pie } from 'react-chartjs-2';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select } from './widgets';
+import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, H1, Select } from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
@@ -58,7 +58,7 @@ class Chart extends Component {
 
     return (
       <div>
-        <Button.Light onClick={this.updateChart}>Oppdater</Button.Light>
+        <ButtonOutline.Secondary onClick={this.updateChart}>Oppdater</ButtonOutline.Secondary>
         <div className="chart">
           <Bar
             data={chartData}
@@ -392,7 +392,7 @@ class RentedBikes extends Component {
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selected/' + bike.id}>
-                          <Button.Success>Innlevering</Button.Success>
+                          <ButtonOutline.Primary style={{ float: 'right' }}>Innlevering</ButtonOutline.Primary>
                         </NavLink>
                       </Table.Td>
                     </Table.Tr>

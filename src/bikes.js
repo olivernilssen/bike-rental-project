@@ -8,6 +8,7 @@ import {
   Column,
   NavBar,
   Button,
+  ButtonOutline,
   Form,
   Table,
   ClickTable,
@@ -80,7 +81,7 @@ class AllBikes extends Component {
                   <Table.Th>Modell</Table.Th>
                   <Table.Th>Årsmodell</Table.Th>
                   <Table.Th>Beregnet for</Table.Th>
-                  <Table.Th>Timespris</Table.Th>
+                  <Table.Th>Dagspris</Table.Th>
                   <Table.Th>Lokasjon</Table.Th>
                   <Table.Th>Status</Table.Th>
                   <Table.Th />
@@ -484,11 +485,10 @@ class BikeTypeDetails extends Component {
                   <ClickTable.Th>Merke</ClickTable.Th>
                   <ClickTable.Th>Modell</ClickTable.Th>
                   <ClickTable.Th>Årsmodell</ClickTable.Th>
-                  <ClickTable.Th>Rammestørrelse</ClickTable.Th>
-                  <ClickTable.Th>Hjulstørrelse</ClickTable.Th>
-                  <ClickTable.Th>Antall gir</ClickTable.Th>
+                  <ClickTable.Th>Ramme</ClickTable.Th>
+                  <ClickTable.Th>Hjul</ClickTable.Th>
                   <ClickTable.Th>Girsystem</ClickTable.Th>
-                  <ClickTable.Th>Bremsesytem</ClickTable.Th>
+                  <ClickTable.Th>Bremsesystem</ClickTable.Th>
                   <ClickTable.Th>Vekt</ClickTable.Th>
                   <ClickTable.Th>Beregnet for</ClickTable.Th>
                   <ClickTable.Th>Dagspris</ClickTable.Th>
@@ -504,12 +504,13 @@ class BikeTypeDetails extends Component {
                       <ClickTable.Td>{type.brand}</ClickTable.Td>
                       <ClickTable.Td>{type.model}</ClickTable.Td>
                       <ClickTable.Td>{type.year}</ClickTable.Td>
-                      <ClickTable.Td>{type.frameSize}</ClickTable.Td>
-                      <ClickTable.Td>{type.wheelSize}</ClickTable.Td>
-                      <ClickTable.Td>{type.gears}</ClickTable.Td>
-                      <ClickTable.Td>{type.gearSystem}</ClickTable.Td>
+                      <ClickTable.Td>{type.frameSize}"</ClickTable.Td>
+                      <ClickTable.Td>{type.wheelSize}"</ClickTable.Td>
+                      <ClickTable.Td>
+                        {type.gearSystem} {type.gears}
+                      </ClickTable.Td>
                       <ClickTable.Td>{type.brakeSystem}</ClickTable.Td>
-                      <ClickTable.Td>{type.weight_kg}</ClickTable.Td>
+                      <ClickTable.Td>{type.weight_kg}kg</ClickTable.Td>
                       <ClickTable.Td>{type.suitedFor}</ClickTable.Td>
                       <ClickTable.Td>{type.price}</ClickTable.Td>
                     </ClickTable.Tr>
@@ -540,7 +541,7 @@ class BikeTypeDetails extends Component {
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selectedBike/' + bike.id}>
-                          <Button.Success style={{ float: 'right' }}>Endre</Button.Success>
+                          <ButtonOutline.Info style={{ float: 'right' }}>Endre</ButtonOutline.Info>
                         </NavLink>
                       </Table.Td>
                     </Table.Tr>

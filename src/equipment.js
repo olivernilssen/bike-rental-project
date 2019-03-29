@@ -1,6 +1,20 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, ClickTable, H1, Select } from './widgets';
+import {
+  Card,
+  Tab,
+  List,
+  Row,
+  Column,
+  NavBar,
+  Button,
+  ButtonOutline,
+  Form,
+  Table,
+  ClickTable,
+  H1,
+  Select
+} from './widgets';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { equipmentService } from './services/equipmentService';
@@ -233,7 +247,9 @@ class EquipTypeDetails extends Component {
                           <Table.Tr key={restrictions.id}>
                             <Table.Td>{restrictions.typeName}</Table.Td>
                             <Table.Td>
-                              <Button.Success onClick={() => this.delete(restrictions.id)}>Tillat</Button.Success>
+                              <ButtonOutline.Success onClick={() => this.delete(restrictions.id)}>
+                                Tillat
+                              </ButtonOutline.Success>
                             </Table.Td>
                           </Table.Tr>
                         ))}
@@ -257,14 +273,14 @@ class EquipTypeDetails extends Component {
                     </Select>
                     <br />
                     <br />
-                    <Button.Danger
+                    <ButtonOutline.Danger
                       style={{ float: 'right' }}
                       onClick={() => {
                         this.add();
                       }}
                     >
                       Legg til ny restriksjon
-                    </Button.Danger>
+                    </ButtonOutline.Danger>
                   </Column>
                 </Row>
               </Card>
