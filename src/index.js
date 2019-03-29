@@ -3,6 +3,7 @@ import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
+import { Modal } from 'react-bootstrap/Modal';
 import {
   BikeTypes,
   BikeTypeDetails,
@@ -109,7 +110,7 @@ class Menu extends Component {
     userinfo: null
   };
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
-  
+
 
   toggleBikeMenu() {
     this.setState({ bikeMenu: !this.state.bikeMenu });

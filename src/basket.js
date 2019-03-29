@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, Form, Table, H1, Select, CenterContent } from './widgets';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { Card, Row, Column, NavBar, Button, Form, Table, H1, Select, CenterContent } from './widgets';
+import { NavLink } from 'react-router-dom';
 import { customerService } from './services/customersService';
 import { orderService } from './services/ordersService';
 import { basket, activeCustomer, equipmentBasket, employeeID } from './index.js';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { todaysDate } from './booking'
+import { Modal } from 'react-bootstrap';
+require("react-bootstrap/ModalHeader");
+require("react-bootstrap/Modal")
 
 import createHashHistory from 'history/createHashHistory';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connection } from './services/mysql_connection';
 import { equipmentService } from './services/equipmentService.js';
-import { cpus } from 'os';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 class Basket extends Component {
@@ -20,6 +19,8 @@ class Basket extends Component {
   discPrice = 0;
   discount = 0;
   state = {
+    showConfirm: false,
+    showError: false, 
     inBasket: basket,
     kunder: [],
     phrase: '',
@@ -31,6 +32,26 @@ class Basket extends Component {
     clear: 'both'
   };
 
+  handleClose() {
+    this.setState({showError: false});
+    this.setState({showConfirm: false});
+  }
+
+  handleShow() {
+    if(this.state.activeC[0].id == null || this.state.inBasket == null || this.state.inBasket.length == 0){
+      this.setState({showError: true});
+    }
+    else {
+      this.setState({showError: false});
+      this.setState({showConfirm: true});
+    }
+  }
+
+  /**Bike Remove
+   * Removes the clicked bike from our list and basket. 
+   * Also removes from global list, so that it can be found again in booking 
+   * @bike - item that we click eg. a bike in our list
+   */
   removeBike(bike) {
     //Removes all equipment belong to bike with it
     for (var i = 0; equipmentBasket.length > i; i++) {
@@ -52,29 +73,39 @@ class Basket extends Component {
     }
   }
 
+  /**Update Basket
+   * Updates the basket, whenever an item has been removed
+   * checks that local list is equal to global list 
+   * and removed the ones that aren't available anymore. 
+   */
   updateBasket() {
     this.state.inBasket = [];
 
     if (basket.length == 0) this.styleState.display = 'none';
     else this.styleState.display = 'block';
 
-    if (basket.length == 0) {
-      this.setState(state => {
-        const inBasket = state.inBasket.concat({ id: 'TOMT HER' });
-        return { inBasket };
-      });
-    } else {
-      this.setState(state => {
-        const inBasket = state.inBasket.concat(basket);
-        return { inBasket, basket };
-      });
-    }
+    this.setState(state => {
+      const inBasket = state.inBasket.concat(basket);
+      return { inBasket, basket };
+    });
   }
 
+  /**Handle change phrase
+   * This checks to see if there has been a change in the input 
+   * for the search menu. If there is, change the value shown and 
+   * search the database using findcustomers();
+   * @event - event that happens (eg. keypress)
+   */
   handleChangePhrase(event) {
     this.setState({ state: (this.state.phrase = event.target.value) }, this.findCustomers());
   }
 
+  /**Find all customers
+   * Does a query for all customers that is in the database
+   * Allows the user to search throught the database by using 
+   * the search field at the top.
+   * Will call this function as the user types. 
+   */
   findCustomers() {
     let queryPhrase = '';
 
@@ -98,6 +129,13 @@ class Basket extends Component {
     });
   }
 
+  /**Choose Remove
+   * Chooses the selected customer
+   * And then removes the list of customers from 
+   * the users view, and adds a name at the top of the screen that 
+   * says which customer that is chosen. 
+   * @customer - clicked item from table (eg. customer)
+   */
   chooseCustomer(customer) {
     this.state.displayCustomer = 'none';
     activeCustomer.splice(0, 1);
@@ -105,6 +143,12 @@ class Basket extends Component {
     this.setState({ state: (this.state.activeC[0] = customer) });
   }
 
+  /**Remove Customer
+   * Function to remove current selected customer
+   * Sets current selected active ID to null, so that program can stil render
+   * as it looks for customer ID otherwise. 
+   * Also shows the list of customers again. 
+   */
   removeCustomer() {
     this.state.displayCustomer = 'block';
     this.setState({ state: (this.state.activeC[0] = [{ id: null }]) });
@@ -112,9 +156,14 @@ class Basket extends Component {
     this.findCustomers();
   }
 
-  basketRemove(e) {
+  /**Basket Remove
+   * This is to remove equipment from our global and local equipment basket
+   * By checking the clicked item against basked and splicing it.
+   * @equipment - item that we click eg. an equipment in our list
+   */
+  basketRemove(equipment) {
     for (var i = 0; equipmentBasket.length > i; i++) {
-      if (equipmentBasket[i].id == e.id) {
+      if (equipmentBasket[i].id == equipment.id) {
         equipmentBasket.splice(i, 1);
       }
     }
@@ -122,12 +171,21 @@ class Basket extends Component {
     this.findCustomers();
   }
 
+  /**Calculate Discount
+   * This function is to give our price a discount if there 
+   * is one to be given. If dicount = 0, then the discPrice is 
+   * equal to the totalPrice. 
+   */
   calcDiscount() {
     if(this.discount != 0 || this.discount != null){
       this.discPrice = (1 - (this.discount / 100)) * this.totalPrice;
     }
   }
 
+  /**Rendered
+   * We render whats in the baskets for bikes AND equipments 
+   * We add puttons and return statements 
+   */
   render() {
     if (this.state.activeC[0].id == null) this.state.displayCustomer = 'block';
     else this.state.displayCustomer = 'none'
@@ -166,7 +224,6 @@ class Basket extends Component {
               </Form.Label>
               <br />
               <Button.Danger
-                style={btnStyle}
                 onClick={() => {this.removeCustomer();}}>
                 Fjern Kunde
               </Button.Danger>
@@ -274,7 +331,7 @@ class Basket extends Component {
                       <h4>Total Pris: {this.discPrice}</h4>
                   </Column>
                   <Column>
-                    <Button.Success onClick={this.transaction}>
+                    <Button.Success onClick={this.handleShow}>
                       <FontAwesomeIcon className="navIcon" icon="store" />
                       Til Betaling
                     </Button.Success>
@@ -319,13 +376,57 @@ class Basket extends Component {
             </Column>
           </Row>
         </Card>
+
+        <Modal show={this.state.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at du vil legge inn en order for kunde: </p>
+            <p>{this.state.activeC[0].firstName} {this.state.activeC[0].lastName}</p>
+            <p>Antall sykler: {this.state.inBasket.length} og antall utstyr: {equipmentBasket.length}</p>
+            <p>Pris: {this.discPrice} </p>
+            <p>Ansatt med ID: {employeeID}</p>
+            <br/>
+            <p>Trykk Utfør for å legge inn bestilling</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Success  onClick={this.handleClose}>
+              Avbryt
+            </Button.Success>
+            <Button.Success  onClick={this.transaction}>
+              Utfør
+            </Button.Success>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={this.state.showError} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Noe gikk galt</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Sjekk at all informasjonen er riktig 
+            og at du har lagt til kunde og elementer i handlekurven
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Success  onClick={this.handleClose}>
+              Avbryt
+            </Button.Success>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
 
+  /** Mounted
+   * We first update price
+   * Then we put all our items from global list basket into our 
+   * local array. As well as getting the global customer and 
+   * gives our local variabel for customer a value. 
+   */
   mounted() {
     if(this.state.inBasket == null || this.state.inBasket.length == 0) { }
-    else if(this.state.inBasket[0].id != "TOMT HER"){
+    else {
       for(let i = 0; i < this.state.inBasket.length; i++){
         if(this.state.inBasket[i].dayRent == false){
           let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
@@ -347,8 +448,7 @@ class Basket extends Component {
     }
 
     if(equipmentBasket != 0) {
-      for(let i = 0; i < equipmentBasket.length; i++)
-      {
+      for(let i = 0; i < equipmentBasket.length; i++) {
         this.totalPrice += equipmentBasket[i].price;
       }
     }
@@ -366,6 +466,12 @@ class Basket extends Component {
     });
   }
 
+  /**
+   * Transation
+   * This class is to add items from basket into an order
+   * in the database. It has to get todays date for when the order was made.
+   * @Basket
+   */
   transaction() {
     let today = new Date();
     let day = today.getDate();
@@ -400,8 +506,6 @@ class Basket extends Component {
         console.log('equipment');
       }
     }
-
-    
 
     basket.length = 0;
     equipmentBasket.length = 0;
