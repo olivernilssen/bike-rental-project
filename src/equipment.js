@@ -42,7 +42,7 @@ class EquipmentTypes extends Component {
           ))}
           <Column right>
             <NavLink to={'/equipments/add/'}>
-              <Button.Light>Legg inn nytt utstyr</Button.Light>
+              <ButtonOutline.Light>Legg inn nytt utstyr</ButtonOutline.Light>
             </NavLink>
           </Column>
         </Tab>
@@ -230,60 +230,56 @@ class EquipTypeDetails extends Component {
             </Column>
 
             <Column>
-              <br />
-              <Card>
-                <Row>
-                  <Column>
-                    <h6>Sykkeltyper utstyret IKKE passer til:</h6>
-                    <br />
-                    <Table>
-                      <Table.Thead>
-                        <Table.Th>Navn</Table.Th>
-                        <Table.Th>Endre</Table.Th>
-                      </Table.Thead>
-                      <Table.Tbody>
-                        <Table.Tr>{noRestr}</Table.Tr>
-                        {this.restrictions.map(restrictions => (
-                          <Table.Tr key={restrictions.id}>
-                            <Table.Td>{restrictions.typeName}</Table.Td>
-                            <Table.Td>
-                              <ButtonOutline.Success onClick={() => this.delete(restrictions.id)}>
-                                Tillat
-                              </ButtonOutline.Success>
-                            </Table.Td>
-                          </Table.Tr>
-                        ))}
-                      </Table.Tbody>
-                    </Table>
-                  </Column>
-                </Row>
-
-                <Row>
-                  <Column>
-                    <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
-                    <Select
-                      name="typeSelect"
-                      value={this.selectStatus}
-                      onChange={event => (this.selectStatus = event.target.value)}
-                    >
-                      <Select.Option value="">Du har ikke valgt noen sykkel..</Select.Option>
-                      {this.distinctBikeType.map(trestrictions => (
-                        <Select.Option key={trestrictions.id}>{trestrictions.typeName} </Select.Option>
+              <Row>
+                <Column>
+                  <h6>Sykkeltyper utstyret IKKE passer til:</h6>
+                  <Table>
+                    <Table.Thead>
+                      <Table.Th>Navn</Table.Th>
+                      <Table.Th>Endre</Table.Th>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      <Table.Tr>{noRestr}</Table.Tr>
+                      {this.restrictions.map(restrictions => (
+                        <Table.Tr key={restrictions.id}>
+                          <Table.Td>{restrictions.typeName}</Table.Td>
+                          <Table.Td>
+                            <ButtonOutline.Success onClick={() => this.delete(restrictions.id)}>
+                              Tillat
+                            </ButtonOutline.Success>
+                          </Table.Td>
+                        </Table.Tr>
                       ))}
-                    </Select>
-                    <br />
-                    <br />
-                    <ButtonOutline.Danger
-                      style={{ float: 'right' }}
-                      onClick={() => {
-                        this.add();
-                      }}
-                    >
-                      Legg til ny restriksjon
-                    </ButtonOutline.Danger>
-                  </Column>
-                </Row>
-              </Card>
+                    </Table.Tbody>
+                  </Table>
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
+                  <Select
+                    name="typeSelect"
+                    value={this.selectStatus}
+                    onChange={event => (this.selectStatus = event.target.value)}
+                  >
+                    <Select.Option value="">Du har ikke valgt noen sykkel..</Select.Option>
+                    {this.distinctBikeType.map(trestrictions => (
+                      <Select.Option key={trestrictions.id}>{trestrictions.typeName} </Select.Option>
+                    ))}
+                  </Select>
+                  <br />
+                  <br />
+                  <ButtonOutline.Danger
+                    style={{ float: 'right' }}
+                    onClick={() => {
+                      this.add();
+                    }}
+                  >
+                    Legg til ny restriksjon
+                  </ButtonOutline.Danger>
+                </Column>
+              </Row>
             </Column>
           </Row>
         </Card>
@@ -431,17 +427,17 @@ class AddEquipment extends Component {
                     <Form.Label>Antall:</Form.Label>
                   </Row>
                   <Row>
-                    <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
+                    <Form.Input type="number" onChange={event => (this.antall = event.target.value)} />
                   </Row>
                 </Column>
               </Row>
               <br />
               <Row>
                 <Column>
-                  <Button.Success onClick={this.add}>Add</Button.Success>
+                  <ButtonOutline.Success onClick={this.add}>Add</ButtonOutline.Success>
                 </Column>
                 <Column right>
-                  <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
                 </Column>
               </Row>
             </div>
@@ -524,10 +520,10 @@ class NewEquipmentType extends Component {
             <br />
             <Row>
               <Column>
-                <Button.Success onClick={this.add}>Add</Button.Success>
+                <ButtonOutline.Success onClick={this.add}>Add</ButtonOutline.Success>
               </Column>
               <Column right>
-                <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
               </Column>
             </Row>
           </div>

@@ -27,7 +27,7 @@ class AreaList extends Component {
           ))}
           <Column right>
             <NavLink to={'/addArea'}>
-              <Button.Light>Legg til nytt område</Button.Light>
+              <ButtonOutline.Light>Legg til nytt område</ButtonOutline.Light>
             </NavLink>
           </Column>
         </Tab>
@@ -112,7 +112,7 @@ class LocationInArea extends Component {
             ))}
             <Column right>
               <NavLink to={'/addLocation/'}>
-                <Button.Light>Legg til ny lokasjon</Button.Light>
+                <ButtonOutline.Dark>Legg til ny lokasjon</ButtonOutline.Dark>
               </NavLink>
             </Column>
           </Tab>

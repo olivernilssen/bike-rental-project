@@ -58,7 +58,7 @@ class AllBikes extends Component {
         </NavBar>
         <Column right>
           <NavLink to={'/addBikes/'}>
-            <Button.Light>Legg inn ny sykkel</Button.Light>
+            <ButtonOutline.Light>Legg inn ny sykkel</ButtonOutline.Light>
           </NavLink>
         </Column>
         <Card>
@@ -100,7 +100,7 @@ class AllBikes extends Component {
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selectedBike/' + bike.id}>
-                          <Button.Success>Endre</Button.Success>
+                          <ButtonOutline.Info>Endre</ButtonOutline.Info>
                         </NavLink>
                       </Table.Td>
                     </Table.Tr>
@@ -310,7 +310,7 @@ class BikeTypes extends Component {
           ))}
           <Column right>
             <NavLink to={'/addBikeType/'}>
-              <Button.Light>Legg inn ny sykkeltype</Button.Light>
+              <ButtonOutline.Light>Legg inn ny sykkeltype</ButtonOutline.Light>
             </NavLink>
           </Column>
         </Tab>
@@ -392,10 +392,10 @@ class AddBikes extends Component {
                 <br /> <br />
                 <Row>
                   <Column>
-                    <Button.Success onClick={this.add}>Add</Button.Success>
+                    <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
                   </Column>
                   <Column right>
-                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
                   </Column>
                 </Row>
               </Column>

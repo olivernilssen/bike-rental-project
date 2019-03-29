@@ -340,6 +340,38 @@ class ButtonSecondaryOutline extends Component {
   }
 }
 
+class ButtonLightOutline extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-outline-light"
+        id={this.props.id}
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
+class ButtonDarkOutline extends Component {
+  render() {
+    return (
+      <button
+        type="button"
+        className="btn btn-outline-dark"
+        id={this.props.id}
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
 // Renders a light button using Bootstrap styles
 // Attributes: onClick
 
@@ -349,6 +381,8 @@ export class ButtonOutline {
   static Info = ButtonInfoOutline;
   static Primary = ButtonPrimaryOutline;
   static Secondary = ButtonSecondaryOutline;
+  static Light = ButtonLightOutline;
+  static Dark = ButtonDarkOutline;
 }
 
 // Renders a form label using Bootstrap styles
