@@ -32,6 +32,14 @@ class Customers extends Component {
   }
 
   chooseActive(customer) {
+    let index = this.state.customers.map(function(e) {return e.id;}).indexOf(customer.id);
+
+    for(let i = 0; i < this.state.customers.length; i++){
+      this.state.customers[i].selectedCust = false;
+    }
+
+    this.state.customers[index].selectedCust = true;
+
     customerService.getCustomer(customer.id, result => {
       this.setState({ state: (this.state.activeCustomer = result) });
     });
@@ -65,6 +73,7 @@ class Customers extends Component {
                 <ClickTable.Tbody>
                   {this.state.customers.map(customer => (
                     <ClickTable.Tr
+                      style= {customer.selectedCust ? {backgroundColor: 'lightgrey'} : {backgroundColor: ''}}
                       key={customer.id}
                       onClick={() => {
                         this.chooseActive(customer);
@@ -90,6 +99,9 @@ class Customers extends Component {
 
   mounted() {
     customerService.getCustomerSearch('%', results => {
+      for(let i = 0; i < results.length; i++){
+        results[i].selectedCust = false;
+      }
       this.state.customers = results;
     });
 

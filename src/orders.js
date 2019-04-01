@@ -147,6 +147,14 @@ class Orders extends Component {
   }
 
   chooseActive(order) {
+    let index = this.state.sales.map(function(e) {return e.id;}).indexOf(order.id);
+
+    for(let i = 0; i < this.state.sales.length; i++){
+      this.state.sales[i].selectedSale = false;
+    }
+
+    this.state.sales[index].selectedSale = true;
+
     orderService.getOrder(order.id, result => {
       this.setState({ state: (this.state.activeOrder = result) });
     });
@@ -197,6 +205,7 @@ class Orders extends Component {
                 <ClickTable.Tbody>
                   {this.state.sales.map(sale => (
                     <ClickTable.Tr
+                      style={sale.selectedSale ? {backgroundColor: "lightgrey"} : {backgroundColor: ""}}
                       key={sale.id}
                       onClick={() => {
                         this.chooseActive(sale);
@@ -225,6 +234,9 @@ class Orders extends Component {
 
   mounted() {
     rentalService.getAllSales(results => {
+      for(let i = 0; i < results.length; i++){
+        results[i].selectedSale = false;
+      }
       this.setState({ sales: results });
       this.state.activeOrder = results[0];
     });

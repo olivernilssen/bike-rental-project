@@ -53,9 +53,7 @@ class AllBikes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
             <h1>Sykler</h1>
-          </NavBar.Link>
         </NavBar>
         <Column right>
           <NavLink to={'/addBikes/'}>
@@ -143,9 +141,7 @@ class SelectedBike extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
             <h1>Sykler</h1>
-          </NavBar.Link>
         </NavBar>
         <Card title={'Sykkel med id: ' + this.props.match.params.id}>
           <img src="../pictures/bike.svg" width="20%" />
@@ -299,9 +295,7 @@ class BikeTypes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
             <h1>Sykler</h1>
-          </NavBar.Link>
         </NavBar>
         <Tab>
           {this.bikeTypes.map(bikeType => (
@@ -363,9 +357,7 @@ class AddBikes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
             <h1>Sykler</h1>
-          </NavBar.Link>
         </NavBar>
         <Card>
           <div className="container">
@@ -438,46 +430,47 @@ class AddBikes extends Component {
 }
 
 class BikeTypeDetails extends Component {
-  bikeType = null;
   showingBikes = 0;
   lock = false;
-
-  showChangePrice = false;
+  
   changePrice = false;
+  typeIds = [];
 
   state = {
     priceBike: '',
     bikes: [],
-    typeIds: [],
-    bikeTypeDetails: []
+    bikeTypeDetails: null
   };
 
-  showThisType(id) {
-    if (this.showingBikes === id && this.lock == true) {
+  showThisType(type) {
+    this.temp = [];
+    let index = this.state.bikeTypeDetails.map(function(e) {return e.id;}).indexOf(type.id);
+
+    for(let i = 0; i < this.state.bikeTypeDetails.length; i++){
+      this.state.bikeTypeDetails[i].selectedType = false;
+    }
+
+    if (this.showingBikes === type.id && this.lock == true) {
       this.lock = false;
       this.state.bikes = [];
-      let temp = [];
-      for (let i = 0; i < this.state.typeIds.length; i++) {
-        bikeService.getBikesbyTypeID(this.state.typeIds[i].id, results => {
-          this.showingBikes = id;
-          this.setState(state => {
-            const bikes = state.bikes.concat(results);
-            return { bikes, results };
-          });
+
+      for (let i = 0; i < this.typeIds.length; i++) {
+        bikeService.getBikesbyTypeID(this.typeIds[i].id, results => {
+          this.setState({bikes: this.state.bikes.concat(results)});
         });
       }
 
       this.showingBikes = 0;
+
     } else {
       this.lock = true;
-
+      this.state.bikeTypeDetails[index].selectedType = true;
       this.state.bikes = [];
-      bikeService.getBikesbyTypeID(id, results => {
-        this.showingBikes = id;
-        this.setState(state => {
-          const bikes = state.bikes.concat(results);
-          return { bikes, results };
-        });
+
+      bikeService.getBikesbyTypeID(type.id, results => {
+        this.showingBikes = type.id;
+        this.state.bikes = [];
+        this.setState({bikes: results})
       });
     }
   }
@@ -487,7 +480,7 @@ class BikeTypeDetails extends Component {
   }
 
   render() {
-    if (!this.bikeType) return null;
+    if (!this.state.bikeTypeDetails) return null;
 
     let notice;
 
@@ -496,26 +489,6 @@ class BikeTypeDetails extends Component {
         <p style={{ color: 'red' }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer</p>
       );
     }
-
-    // let changePrice;
-    //
-    // if (priceButton) {
-    //   changePrice = (
-    //     <ButtonOutline.Info onClick={this.change} style={{ float: 'right' }}>Endre</ButtonOutline.Info>
-    //   );
-    //   price = (
-    //     {type.price}
-    //   )
-    // } else {
-    //   changePrice = (
-    //     <ButtonOutline.Success onClick={this.save} style={{ float: 'right' }}>Lagre</ButtonOutline.Success>
-    //   );
-    //   price = (
-    //     <Form.Input
-    //       type="text"
-    //     />
-    //   );
-    // }
 
     return (
       <div>
@@ -540,9 +513,10 @@ class BikeTypeDetails extends Component {
                 <ClickTable.Tbody>
                   {this.state.bikeTypeDetails.map(type => (
                     <ClickTable.Tr
+                      style= {type.selectedType ? {backgroundColor: 'lightgrey'} : {backgroundColor: ''}}
                       key={type.id}
                       onClick={() => {
-                        this.showThisType(type.id);
+                        this.showThisType(type);
                       }}
                     >
                       <ClickTable.Td>{type.brand}</ClickTable.Td>
@@ -656,12 +630,8 @@ class BikeTypeDetails extends Component {
     this.state.bikes = [];
     this.state.bikeTypeDetails = [];
 
-    bikeService.getBikeTypes(bikeType => {
-      this.bikeType = bikeType;
-    });
-
     bikeService.getTypeID(this.props.match.params.typeName, idResult => {
-      this.state.typeIds = idResult;
+      this.typeIds = idResult;
 
       for (let i = 0; i < idResult.length; i++) {
         bikeService.getBikesbyTypeID(idResult[i].id, results => {
@@ -673,6 +643,7 @@ class BikeTypeDetails extends Component {
 
         bikeService.getBikeTypesWhere(idResult[i].id, typeResult => {
           for (let i = 0; i < typeResult.length; i++) {
+            typeResult[i].selectedType = false;
             typeResult[i].changePrice = false;
           }
           this.setState(state => {
@@ -706,9 +677,7 @@ class NewBikeType extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
             <h1>Sykler</h1>
-          </NavBar.Link>
         </NavBar>
         <Card>
           <div className="container">
@@ -791,9 +760,7 @@ class BikeStatus extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
             <h1>Sykler</h1>
-          </NavBar.Link>
         </NavBar>
         <Tab>
           {this.bikeStatus.map(status => (
