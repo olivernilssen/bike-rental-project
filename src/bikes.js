@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
+import { connection } from './services/mysql_connection';
 import {
   Card,
   Tab,
@@ -440,12 +441,12 @@ class BikeTypeDetails extends Component {
   bikeType = null;
   showingBikes = 0;
   lock = false;
+
   showChangePrice = false;
-  styleState = {
-    display: 'block',
-    clear: 'both'
-  };
+  changePrice = false;
+
   state = {
+    priceBike: '',
     bikes: [],
     typeIds: [],
     bikeTypeDetails: []
@@ -481,6 +482,10 @@ class BikeTypeDetails extends Component {
     }
   }
 
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
   render() {
     if (!this.bikeType) return null;
 
@@ -491,12 +496,6 @@ class BikeTypeDetails extends Component {
         <p style={{ color: 'red' }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer</p>
       );
     }
-
-    const styles = {
-      priceBtn: { display: this.styleState.display }
-    };
-
-    const { priceBtn } = styles;
 
     // let changePrice;
     //
@@ -557,8 +556,17 @@ class BikeTypeDetails extends Component {
                       <ClickTable.Td>{type.brakeSystem}</ClickTable.Td>
                       <ClickTable.Td>{type.weight_kg}kg</ClickTable.Td>
                       <ClickTable.Td>{type.suitedFor}</ClickTable.Td>
-                      <ClickTable.Td>{/*{price}*/}</ClickTable.Td>
-                      <ClickTable.Td>{/*{changePrice}*/}</ClickTable.Td>
+                      <ClickTable.Td>
+                        {type.changePrice ? 
+                        <input name='priceBike' value={this.state.priceBike} onChange={this.handleChange}></input> : 
+                        type.price}
+                      </ClickTable.Td>
+                      <ClickTable.Td>
+                        <ButtonOutline.Success
+                          onClick={ () => {type.changePrice ? this.save(type) : this.change(type)}}>
+                          {type.changePrice ? "Lagre" : "Endre"}
+                        </ButtonOutline.Success>
+                      </ClickTable.Td>
                     </ClickTable.Tr>
                   ))}
                 </ClickTable.Tbody>
@@ -602,12 +610,22 @@ class BikeTypeDetails extends Component {
     );
   }
 
-  change() {
-    priceButton = false;
+  change(type) {
+    console.log("change " + type.id);
+    let index = this.state.bikeTypeDetails.map(function(e) { return e.id; }).indexOf(type.id);
+    this.setState({priceBike: type.price});
+    this.state.bikeTypeDetails[index].changePrice = true;
   }
 
-  save() {
-    priceButton = true;
+  save(type) {
+    console.log("save");
+    connection.query('update BikeType set price = ? where id = ?', [this.state.priceBike, type.id], 
+    (error) => { if(error) console.error(error); } );
+
+    let index = this.state.bikeTypeDetails.map(function(e) { return e.id; }).indexOf(type.id);
+    this.state.bikeTypeDetails[index].price = this.state.priceBike;
+    this.state.bikeTypeDetails[index].changePrice = false;
+    
   }
 
   mounted() {
@@ -630,6 +648,9 @@ class BikeTypeDetails extends Component {
         });
 
         bikeService.getBikeTypesWhere(idResult[i].id, typeResult => {
+          for(let i = 0; i < typeResult.length; i++){
+            typeResult[i].changePrice = false;
+          }
           this.setState(state => {
             const bikeTypeDetails = state.bikeTypeDetails.concat(typeResult);
             return {
