@@ -148,7 +148,6 @@ class AddLocation extends Component {
     this.setState({
       state: (this.state.curArea = event.target.options[selectedIndex].getAttribute('data-key'))
     });
-    console.log(this.state.curArea);
   }
 
   render() {
@@ -160,19 +159,14 @@ class AddLocation extends Component {
         <Card>
           <div className="container">
             <h5>Ny lokasjon</h5>
+            <br />
             <Row>
-              <Column>
+              <Column width={5}>
                 <Form.Label>Navn:</Form.Label>
                 <Form.Input type="text" onChange={event => (this.name = event.target.value)} />
-                <Form.Label>Gateadresse:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.streetAddress = event.target.value)} />
-                <Form.Label>Gatenummer:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.streetNum = event.target.value)} />
-                <Form.Label>Postnummer:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.postalNum = event.target.value)} />
-                <Form.Label>Poststed:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.place = event.target.value)} />
-                <Form.Label>Område: </Form.Label>
+              </Column>
+              <Column width={5}>
+                <Form.Label>Område:</Form.Label>
                 <Select value={this.curArea} onChange={event => (this.curArea = event.target.value)}>
                   {this.areaNames.map(areaN => (
                     <Select.Option key={areaN.id} value={areaN.areaName} id={areaN.id}>
@@ -180,26 +174,46 @@ class AddLocation extends Component {
                     </Select.Option>
                   ))}
                 </Select>
-                <br /> <br />
-                <Row>
-                  <Column>
-                    <ButtonOutline.Success
-                      onClick={e => {
-                        if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                      }}
-                    >
-                      Add
-                    </ButtonOutline.Success>
-                  </Column>
-                  <Column right>
-                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-                  </Column>
-                </Row>
               </Column>
-              <br />
+            </Row>
+            <Row>
+              <Column width={8}>
+                <Form.Label>Gateadresse:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.streetAddress = event.target.value)} />
+              </Column>
+              <Column width={2}>
+                <Form.Label>Gatenummer:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.streetNum = event.target.value)} />
+              </Column>
+            </Row>
+            <Row>
+              <Column width={5}>
+                <Form.Label>Postnummer:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.postalNum = event.target.value)} />
+              </Column>
+              <Column width={5}>
+                <Form.Label>Poststed:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.place = event.target.value)} />
+              </Column>
+            </Row>
+            <br />
+            <Row>
+              <Column>
+                <ButtonOutline.Success
+                  onClick={e => {
+                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                  }}
+                >
+                  Legg til
+                </ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+              </Column>
             </Row>
           </div>
         </Card>
+        <br />
       </div>
     );
   }

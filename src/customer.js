@@ -173,64 +173,67 @@ class SelectedCustomer extends Component {
             <h1>Kundeliste</h1>
           </NavBar>
           <Card>
-            <Column>
-              <h5>Endre Kunde:</h5>
-              <br />
-              <Form.Label>Kunde id:</Form.Label>
-              <Form.Input type="text" value={this.state.customer.id} disabled />
-              <Form.Label>Fornavn:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.active.firstName}
-                onChange={event => (this.active.firstName = event.target.value)}
-              />
-              <Form.Label>Etternavn:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.active.lastName}
-                onChange={event => (this.active.lastName = event.target.value)}
-              />
-              <Form.Label>Epost:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.active.email}
-                onChange={event => (this.active.email = event.target.value)}
-              />
-              <Form.Label>Telefon:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.active.tlf}
-                onChange={event => (this.active.tlf = event.target.value)}
-              />
-              <Form.Label>Adresse:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.active.streetAddress}
-                onChange={event => (this.active.streetAddress = event.target.value)}
-              />
-              <Form.Label>Gatenummer:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.active.streetNum}
-                onChange={event => (this.active.streetNum = event.target.value)}
-              />
-              <Form.Label>Postnummer:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.active.postalNum}
-                onChange={event => (this.active.postalNum = event.target.value)}
-              />
-              <Form.Label>Sted:</Form.Label>
-              <Form.Input
-                type="text"
-                value={this.active.place}
-                onChange={event => (this.active.place = event.target.value)}
-              />
-              <br />
-              <ButtonOutline.Success onClick={this.handleShow}>Lagre</ButtonOutline.Success>
-              <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-            </Column>
+            <h5>Endre Kunde:</h5>
+            <br />
+            <Form.Label>Kunde id:</Form.Label>
+            <Form.Input type="text" value={this.state.customer.id} disabled />
+            <Form.Label>Fornavn:</Form.Label>
+            <Form.Input
+              type="text"
+              value={this.active.firstName}
+              onChange={event => (this.active.firstName = event.target.value)}
+            />
+            <Form.Label>Etternavn:</Form.Label>
+            <Form.Input
+              type="text"
+              value={this.active.lastName}
+              onChange={event => (this.active.lastName = event.target.value)}
+            />
+            <Form.Label>Epost:</Form.Label>
+            <Form.Input
+              type="text"
+              value={this.active.email}
+              onChange={event => (this.active.email = event.target.value)}
+            />
+            <Form.Label>Telefon:</Form.Label>
+            <Form.Input
+              type="text"
+              value={this.active.tlf}
+              onChange={event => (this.active.tlf = event.target.value)}
+            />
+            <Form.Label>Adresse:</Form.Label>
+            <Form.Input
+              type="text"
+              value={this.active.streetAddress}
+              onChange={event => (this.active.streetAddress = event.target.value)}
+            />
+            <Form.Label>Gatenummer:</Form.Label>
+            <Form.Input
+              type="text"
+              value={this.active.streetNum}
+              onChange={event => (this.active.streetNum = event.target.value)}
+            />
+            <Form.Label>Postnummer:</Form.Label>
+            <Form.Input
+              type="text"
+              value={this.active.postalNum}
+              onChange={event => (this.active.postalNum = event.target.value)}
+            />
+            <Form.Label>Sted:</Form.Label>
+            <Form.Input
+              type="text"
+              value={this.active.place}
+              onChange={event => (this.active.place = event.target.value)}
+            />
+            <br />
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.handleShow}>Lagre</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+              </Column>
+            </Row>
           </Card>
 
           <Modal show={this.state.showConfirm} onHide={this.handleClose}>
@@ -243,8 +246,14 @@ class SelectedCustomer extends Component {
               <p>Trykk Utfør for å godta endringene</p>
             </Modal.Body>
             <Modal.Footer>
-              <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
-              <Button.Success onClick={this.save}>Utfør</Button.Success>
+              <Row>
+                <Column>
+                  <ButtonOutline.Success onClick={this.save}>Utfør</ButtonOutline.Success>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+                </Column>
+              </Row>
             </Modal.Footer>
           </Modal>
 
@@ -254,7 +263,7 @@ class SelectedCustomer extends Component {
             </Modal.Header>
             <Modal.Body>Sjekk at alle felt er utfylt korrekt, og prøv igjen.</Modal.Body>
             <Modal.Footer>
-              <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
+              <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
             </Modal.Footer>
           </Modal>
         </div>
@@ -300,53 +309,56 @@ class SelectedCustomer extends Component {
     } else {
       return (
         <Card>
-          <Column>
-            <h5>Valgt Kunde:</h5>
-            <br />
-            <h6>
-              {this.state.customer.firstName} {this.state.customer.lastName}
-            </h6>
-            <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>Kunde id:</Table.Td>
-                  <Table.Td>{this.state.customer.id}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Fornavn:</Table.Td>
-                  <Table.Td>{this.state.customer.firstName}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Etternavn:</Table.Td>
-                  <Table.Td>{this.state.customer.lastName}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Epost:</Table.Td>
-                  <Table.Td>{this.state.customer.email}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Telefon:</Table.Td>
-                  <Table.Td>{this.state.customer.tlf}</Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Adresse:</Table.Td>
-                  <Table.Td>
-                    {this.state.customer.streetAddress} {this.state.customer.streetNum}
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Poststed:</Table.Td>
-                  <Table.Td>
-                    {this.state.customer.postalNum} {this.state.customer.place}
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
-            <br />
-            <ButtonOutline.Success onClick={this.change}>Endre</ButtonOutline.Success>
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <ButtonOutline.Info onClick={this.allOrders}>Se tidligere ordre</ButtonOutline.Info>
-          </Column>
+          <h5>Valgt Kunde:</h5>
+          <br />
+          <h6>
+            {this.state.customer.firstName} {this.state.customer.lastName}
+          </h6>
+          <Table>
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td>Kunde id:</Table.Td>
+                <Table.Td>{this.state.customer.id}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Fornavn:</Table.Td>
+                <Table.Td>{this.state.customer.firstName}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Etternavn:</Table.Td>
+                <Table.Td>{this.state.customer.lastName}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Epost:</Table.Td>
+                <Table.Td>{this.state.customer.email}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Telefon:</Table.Td>
+                <Table.Td>{this.state.customer.tlf}</Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Adresse:</Table.Td>
+                <Table.Td>
+                  {this.state.customer.streetAddress} {this.state.customer.streetNum}
+                </Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Poststed:</Table.Td>
+                <Table.Td>
+                  {this.state.customer.postalNum} {this.state.customer.place}
+                </Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+          <br />
+          <Row>
+            <Column width={2}>
+              <ButtonOutline.Success onClick={this.change}>Endre</ButtonOutline.Success>
+            </Column>
+            <Column>
+              <ButtonOutline.Info onClick={this.allOrders}>Se tidligere ordre</ButtonOutline.Info>
+            </Column>
+          </Row>
         </Card>
       );
     }
@@ -409,7 +421,6 @@ class SelectedCustomer extends Component {
             }
           );
         } else {
-          console.log(result.id + ' ' + this.active.id);
           customerService.updateCustomer(
             this.active.firstName,
             this.active.lastName,
