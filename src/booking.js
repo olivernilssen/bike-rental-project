@@ -139,9 +139,7 @@ class Booking extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Booking</h1>
-          </NavBar.Link>
+          <h1>Booking</h1>
         </NavBar>
         <Card>
           {/* Date entry */}

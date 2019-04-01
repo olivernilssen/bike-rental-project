@@ -32,9 +32,13 @@ class Customers extends Component {
   }
 
   chooseActive(customer) {
-    let index = this.state.customers.map(function(e) {return e.id;}).indexOf(customer.id);
+    let index = this.state.customers
+      .map(function(e) {
+        return e.id;
+      })
+      .indexOf(customer.id);
 
-    for(let i = 0; i < this.state.customers.length; i++){
+    for (let i = 0; i < this.state.customers.length; i++) {
       this.state.customers[i].selectedCust = false;
     }
 
@@ -53,9 +57,7 @@ class Customers extends Component {
         </NavBar>
 
         <Column right>
-          <NavLink to={'/addCustomer/'}>
-            <Button.Light>Legg til ny kunde</Button.Light>
-          </NavLink>
+          <Button.Light>Legg til ny kunde</Button.Light>
         </Column>
         <Card>
           <Row>
@@ -71,7 +73,7 @@ class Customers extends Component {
                 <ClickTable.Tbody>
                   {this.state.customers.map(customer => (
                     <ClickTable.Tr
-                      style= {customer.selectedCust ? {backgroundColor: 'lightgrey'} : {backgroundColor: ''}}
+                      style={customer.selectedCust ? { backgroundColor: '#c5e0e4' } : { backgroundColor: '' }}
                       key={customer.id}
                       onClick={() => {
                         this.chooseActive(customer);
@@ -97,7 +99,7 @@ class Customers extends Component {
 
   mounted() {
     customerService.getCustomerSearch('%', results => {
-      for(let i = 0; i < results.length; i++){
+      for (let i = 0; i < results.length; i++) {
         results[i].selectedCust = false;
       }
       this.state.customers = results;

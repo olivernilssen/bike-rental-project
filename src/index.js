@@ -288,7 +288,6 @@ ReactDOM.render(
       <Menu isLoggedIn={true} />
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
-      <Route exact path="/selected/:id" component={Selected} />
       <Route path="/booking/" component={Booking} />
       <Route exact path="/equipmentQuery/:id/edit" component={EquipmentQuery} />
 

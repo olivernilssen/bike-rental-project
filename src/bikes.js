@@ -53,7 +53,7 @@ class AllBikes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-            <h1>Sykler</h1>
+          <h1>Sykler</h1>
         </NavBar>
         <Column right>
           <NavLink to={'/addBikes/'}>
@@ -141,7 +141,7 @@ class SelectedBike extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-            <h1>Sykler</h1>
+          <h1>Sykler</h1>
         </NavBar>
         <Card title={'Sykkel med id: ' + this.props.match.params.id}>
           <img src="../pictures/bike.svg" width="20%" />
@@ -295,7 +295,7 @@ class BikeTypes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-            <h1>Sykler</h1>
+          <h1>Sykler</h1>
         </NavBar>
         <Tab>
           {this.bikeTypes.map(bikeType => (
@@ -357,7 +357,7 @@ class AddBikes extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-            <h1>Sykler</h1>
+          <h1>Sykler</h1>
         </NavBar>
         <Card>
           <div className="container">
@@ -432,7 +432,7 @@ class AddBikes extends Component {
 class BikeTypeDetails extends Component {
   showingBikes = 0;
   lock = false;
-  
+
   changePrice = false;
   typeIds = [];
 
@@ -444,9 +444,13 @@ class BikeTypeDetails extends Component {
 
   showThisType(type) {
     this.temp = [];
-    let index = this.state.bikeTypeDetails.map(function(e) {return e.id;}).indexOf(type.id);
+    let index = this.state.bikeTypeDetails
+      .map(function(e) {
+        return e.id;
+      })
+      .indexOf(type.id);
 
-    for(let i = 0; i < this.state.bikeTypeDetails.length; i++){
+    for (let i = 0; i < this.state.bikeTypeDetails.length; i++) {
       this.state.bikeTypeDetails[i].selectedType = false;
     }
 
@@ -456,12 +460,11 @@ class BikeTypeDetails extends Component {
 
       for (let i = 0; i < this.typeIds.length; i++) {
         bikeService.getBikesbyTypeID(this.typeIds[i].id, results => {
-          this.setState({bikes: this.state.bikes.concat(results)});
+          this.setState({ bikes: this.state.bikes.concat(results) });
         });
       }
 
       this.showingBikes = 0;
-
     } else {
       this.lock = true;
       this.state.bikeTypeDetails[index].selectedType = true;
@@ -470,7 +473,7 @@ class BikeTypeDetails extends Component {
       bikeService.getBikesbyTypeID(type.id, results => {
         this.showingBikes = type.id;
         this.state.bikes = [];
-        this.setState({bikes: results})
+        this.setState({ bikes: results });
       });
     }
   }
@@ -513,7 +516,7 @@ class BikeTypeDetails extends Component {
                 <ClickTable.Tbody>
                   {this.state.bikeTypeDetails.map(type => (
                     <ClickTable.Tr
-                      style= {type.selectedType ? {backgroundColor: 'lightgrey'} : {backgroundColor: ''}}
+                      style={type.selectedType ? { backgroundColor: '#c5e0e4' } : { backgroundColor: '' }}
                       key={type.id}
                       onClick={() => {
                         this.showThisType(type);
@@ -553,13 +556,13 @@ class BikeTypeDetails extends Component {
                             {type.changePrice ? 'Lagre' : 'Endre'}
                           </ButtonOutline.Success>
                         ) : (
-                          <ButtonOutline.Info
+                          <ButtonOutline.Secondary
                             onClick={() => {
                               this.change(type);
                             }}
                           >
                             {type.changePrice ? 'Lagre' : 'Endre'}
-                          </ButtonOutline.Info>
+                          </ButtonOutline.Secondary>
                         )}
                       </ClickTable.Td>
                     </ClickTable.Tr>
@@ -677,7 +680,7 @@ class NewBikeType extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-            <h1>Sykler</h1>
+          <h1>Sykler</h1>
         </NavBar>
         <Card>
           <div className="container">
@@ -760,7 +763,7 @@ class BikeStatus extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-            <h1>Sykler</h1>
+          <h1>Sykler</h1>
         </NavBar>
         <Tab>
           {this.bikeStatus.map(status => (

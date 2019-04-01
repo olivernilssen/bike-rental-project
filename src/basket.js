@@ -570,9 +570,7 @@ class EquipmentQuery extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Handlekurv</h1>
-          </NavBar.Link>
+          <h1>Handlekurv</h1>
         </NavBar>
         <br />
         <Row>

@@ -122,9 +122,13 @@ class EquipTypeDetails extends Component {
   };
 
   showThisType(type) {
-    let index = this.state.equipTypeDetails.map(function(e) {return e.id;}).indexOf(type.id);
+    let index = this.state.equipTypeDetails
+      .map(function(e) {
+        return e.id;
+      })
+      .indexOf(type.id);
 
-    for(let i = 0; i < this.state.equipTypeDetails.length; i++){
+    for (let i = 0; i < this.state.equipTypeDetails.length; i++) {
       this.state.equipTypeDetails[i].selectedEquip = false;
     }
 
@@ -152,7 +156,7 @@ class EquipTypeDetails extends Component {
           return { equipments, results };
         });
       });
-      
+
       this.state.equipTypeDetails[index].selectedEquip = true;
     }
   }
@@ -191,7 +195,7 @@ class EquipTypeDetails extends Component {
                 <ClickTable.Tbody>
                   {this.state.equipTypeDetails.map(type => (
                     <ClickTable.Tr
-                      style = {type.selectedEquip ? {backgroundColor: "lightgrey"} : {backgroundColor: ""}}
+                      style={type.selectedEquip ? { backgroundColor: '#c5e0e4' } : { backgroundColor: '' }}
                       key={type.id}
                       onClick={() => {
                         this.showThisType(type);
@@ -346,7 +350,7 @@ class EquipTypeDetails extends Component {
         });
 
         equipmentService.getEquipmentTypesWhere(idResult[i].id, typeResult => {
-          for(let i = 0; i < typeResult.length; i++){
+          for (let i = 0; i < typeResult.length; i++) {
             typeResult[i].selectedEquip = false;
           }
           this.setState(state => {
