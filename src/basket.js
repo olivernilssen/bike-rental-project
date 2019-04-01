@@ -52,14 +52,7 @@ class Basket extends Component {
    * @bike - item that we click eg. a bike in our list
    */
   removeBike(bike) {
-    //Removes all equipment belong to bike with it
-    for (var i = 0; equipmentBasket.length > i; i++) {
-      if (equipmentBasket[i].bike_id == bike.id) {
-        equipmentBasket.splice(i, 1);
-        this.totalPrice -= equipmentBasket[i].displayPrice;
-        i--;
-      }
-    }
+
 
     //Removes bike from basket
     for (let i of basket) {
@@ -70,6 +63,17 @@ class Basket extends Component {
         this.calcDiscount();
       }
     }
+
+    //Removes all equipment belong to bike with it
+    for (var i = 0; equipmentBasket.length > i; i++) {
+      if (equipmentBasket[i].bike_id == bike.id) {
+        equipmentBasket.splice(i, 1);
+        this.totalPrice -= equipmentBasket[i].displayPrice;
+        i--;
+      }
+    }
+
+
   }
 
   /**Update Basket
@@ -166,6 +170,7 @@ class Basket extends Component {
         equipmentBasket.splice(i, 1);
       }
     }
+
 
     this.findCustomers();
   }
@@ -449,6 +454,8 @@ class Basket extends Component {
       }
     }
 
+
+
     if (equipmentBasket != 0) {
       for (let i = 0; i < equipmentBasket.length; i++) {
         this.totalPrice += equipmentBasket[i].price;
@@ -510,7 +517,7 @@ class Basket extends Component {
     if (equipmentBasket.length > 0) {
       for (let i = 0; i < equipmentBasket.length; i++) {
         orderService.makeEquipOrder(this.state.activeC[0].id, todaysDate, equipmentBasket[i].id);
-        console.log('equipment');
+
       }
     }
 
@@ -693,7 +700,8 @@ class EquipmentQuery extends Component {
         equipment => {
           let k = this.props.match.params.id;
           equipment.forEach(function(e) {
-            e.bike_id = +k;
+            e.bike_id = k;
+
           });
 
           this.suitableEquipment = equipment;
@@ -745,7 +753,7 @@ class EquipmentQuery extends Component {
         equipment => {
           let m = this.props.match.params.id;
           equipment.forEach(function(e) {
-            e.bike_id += m;
+            e.bike_id = m;
           });
 
           this.suitableEquipment = equipment;
