@@ -15,9 +15,7 @@ class AreaList extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Lokasjoner</h1>
-          </NavBar.Link>
+          <h1>Lokasjoner</h1>
         </NavBar>
         <Tab>
           {this.area.map(area => (
@@ -49,9 +47,7 @@ class AddArea extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Lokasjoner</h1>
-          </NavBar.Link>
+          <h1>Lokasjoner</h1>
         </NavBar>
         <Card>
           <div className="container">
@@ -105,9 +101,7 @@ class LocationInArea extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Lokasjoner</h1>
-          </NavBar.Link>
+          <h1>Lokasjoner</h1>
         </NavBar>
         <Card>
           <Tab>
@@ -161,9 +155,7 @@ class AddLocation extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Lokasjoner</h1>
-          </NavBar.Link>
+          <h1>Lokasjoner</h1>
         </NavBar>
         <Card>
           <div className="container">

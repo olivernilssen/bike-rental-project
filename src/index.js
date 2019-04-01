@@ -20,7 +20,7 @@ import { UserInfo, EditUserInfo, MySales, DetailedOrder } from './myPage';
 import { Customers, AddCustomer } from './customer.js';
 import { Booking } from './booking.js';
 import { Basket, EquipmentQuery } from './basket.js';
-import { Overview, DetailedOrderAll } from './overview.js';
+import { Overview } from './overview.js';
 import { Orders } from './orders.js';
 import {
   EquipmentTypes,
@@ -320,8 +320,6 @@ ReactDOM.render(
       <Route exact path="/EditUserInfo" component={EditUserInfo} />
       <Route exact path="/MySales/" component={MySales} />
       <Route path="/MySales/:id/edit" component={DetailedOrder} />
-
-      <Route path="/AllSales/:id/edit" component={DetailedOrderAll} />
     </div>
   </HashRouter>,
   document.getElementById('root')

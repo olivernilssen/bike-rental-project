@@ -143,126 +143,126 @@ class Chart extends Component {
   }
 }
 
-class DetailedOrderAll extends Component {
-  bikes = [];
-  equipments = [];
-  sales = [];
-  orderDate = '';
-  fromDate = '';
-  toDate = '';
-
-  render() {
-    let notice;
-
-    if (this.equipments.length == 0) {
-      notice = (
-        <Table.Tr>
-          <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
-        </Table.Tr>
-      );
-    }
-
-    return (
-      <div>
-        <H1>Se på bestilling</H1>
-        <br />
-        <Card>
-          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien
-          varer fra {this.fromDate} til {this.toDate}.
-          <br /> <br />
-          <Row>
-            <Column>
-              <Table>
-                <Table.Thead>
-                  <Table.Th>ID</Table.Th>
-                  <Table.Th>Sykkeltype</Table.Th>
-                  <Table.Th>Merke</Table.Th>
-                  <Table.Th>Modell</Table.Th>
-                  <Table.Th>År</Table.Th>
-                  <Table.Th>Rammestr.</Table.Th>
-                  <Table.Th>Hjulstr.</Table.Th>
-                  <Table.Th>Gir</Table.Th>
-                  <Table.Th>Bremsesystem</Table.Th>
-                  <Table.Th>Vekt</Table.Th>
-                  <Table.Th>Kjønn</Table.Th>
-                  <Table.Th>Pris</Table.Th>
-                </Table.Thead>
-                <Table.Tbody>
-                  {this.bikes.map(bike => (
-                    <Table.Tr key={bike.id}>
-                      <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.typeName}</Table.Td>
-                      <Table.Td>{bike.brand}</Table.Td>
-                      <Table.Td>{bike.model}</Table.Td>
-                      <Table.Td>{bike.year}</Table.Td>
-                      <Table.Td>{bike.frameSize}</Table.Td>
-                      <Table.Td>{bike.wheelSize}</Table.Td>
-                      <Table.Td>
-                        {bike.gearSystem} ({bike.gears})
-                      </Table.Td>
-                      <Table.Td>{bike.brakeSystem}</Table.Td>
-                      <Table.Td>{bike.weight_kg} kg</Table.Td>
-                      <Table.Td>{bike.suitedFor}</Table.Td>
-                      <Table.Td>{bike.price} kr</Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-            </Column>
-          </Row>
-          <Row>
-            <Column width={8}>
-              <Table>
-                <Table.Thead>
-                  <Table.Th>Utstyrstype</Table.Th>
-                  <Table.Th>Merke</Table.Th>
-                  <Table.Th>År</Table.Th>
-                  <Table.Th>Kommentar</Table.Th>
-                  <Table.Th>Pris</Table.Th>
-                </Table.Thead>
-                <Table.Tbody>
-                  {notice}
-                  {this.equipments.map(equipment => (
-                    <Table.Tr key={equipment.id}>
-                      <Table.Td>{equipment.typeName}</Table.Td>
-                      <Table.Td>{equipment.brand}</Table.Td>
-                      <Table.Td>{equipment.year}</Table.Td>
-                      <Table.Td>{equipment.comment}</Table.Td>
-                      <Table.Td>{equipment.price}</Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-            </Column>
-          </Row>
-          <Column>
-            <h4 align="right">Totalpris: {this.sales.price} kr</h4>
-            <Button.Success align="left" type="button" onClick={() => history.push('/Overview/')}>
-              Gå tilbake til forsiden
-            </Button.Success>
-          </Column>
-        </Card>
-      </div>
-    );
-  }
-
-  mounted() {
-    orderService.getBikesFromOrder(this.props.match.params.id, bikes => {
-      this.bikes = bikes;
-    });
-
-    orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
-      this.equipments = equipments;
-    });
-
-    rentalService.getAllSales(sales => {
-      this.sales = sales[this.props.match.params.id - 1];
-      this.orderDate = this.sales.dateOrdered.toString().substring(4, 24);
-      this.fromDate = this.sales.fromDateTime.toString().substring(4, 24);
-      this.toDate = this.sales.toDateTime.toString().substring(4, 24);
-    });
-  }
-}
+// class DetailedOrderAll extends Component {
+//   bikes = [];
+//   equipments = [];
+//   sales = [];
+//   orderDate = '';
+//   fromDate = '';
+//   toDate = '';
+//
+//   render() {
+//     let notice;
+//
+//     if (this.equipments.length == 0) {
+//       notice = (
+//         <Table.Tr>
+//           <Table.Td>Det ble ikke funnet noe utstyr knyttet til denne bestillingen.</Table.Td>
+//         </Table.Tr>
+//       );
+//     }
+//
+//     return (
+//       <div>
+//         <H1>Se på bestilling</H1>
+//         <br />
+//         <Card>
+//           Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien
+//           varer fra {this.fromDate} til {this.toDate}.
+//           <br /> <br />
+//           <Row>
+//             <Column>
+//               <Table>
+//                 <Table.Thead>
+//                   <Table.Th>ID</Table.Th>
+//                   <Table.Th>Sykkeltype</Table.Th>
+//                   <Table.Th>Merke</Table.Th>
+//                   <Table.Th>Modell</Table.Th>
+//                   <Table.Th>År</Table.Th>
+//                   <Table.Th>Rammestr.</Table.Th>
+//                   <Table.Th>Hjulstr.</Table.Th>
+//                   <Table.Th>Gir</Table.Th>
+//                   <Table.Th>Bremsesystem</Table.Th>
+//                   <Table.Th>Vekt</Table.Th>
+//                   <Table.Th>Kjønn</Table.Th>
+//                   <Table.Th>Pris</Table.Th>
+//                 </Table.Thead>
+//                 <Table.Tbody>
+//                   {this.bikes.map(bike => (
+//                     <Table.Tr key={bike.id}>
+//                       <Table.Td>{bike.id}</Table.Td>
+//                       <Table.Td>{bike.typeName}</Table.Td>
+//                       <Table.Td>{bike.brand}</Table.Td>
+//                       <Table.Td>{bike.model}</Table.Td>
+//                       <Table.Td>{bike.year}</Table.Td>
+//                       <Table.Td>{bike.frameSize}</Table.Td>
+//                       <Table.Td>{bike.wheelSize}</Table.Td>
+//                       <Table.Td>
+//                         {bike.gearSystem} ({bike.gears})
+//                       </Table.Td>
+//                       <Table.Td>{bike.brakeSystem}</Table.Td>
+//                       <Table.Td>{bike.weight_kg} kg</Table.Td>
+//                       <Table.Td>{bike.suitedFor}</Table.Td>
+//                       <Table.Td>{bike.price} kr</Table.Td>
+//                     </Table.Tr>
+//                   ))}
+//                 </Table.Tbody>
+//               </Table>
+//             </Column>
+//           </Row>
+//           <Row>
+//             <Column width={8}>
+//               <Table>
+//                 <Table.Thead>
+//                   <Table.Th>Utstyrstype</Table.Th>
+//                   <Table.Th>Merke</Table.Th>
+//                   <Table.Th>År</Table.Th>
+//                   <Table.Th>Kommentar</Table.Th>
+//                   <Table.Th>Pris</Table.Th>
+//                 </Table.Thead>
+//                 <Table.Tbody>
+//                   {notice}
+//                   {this.equipments.map(equipment => (
+//                     <Table.Tr key={equipment.id}>
+//                       <Table.Td>{equipment.typeName}</Table.Td>
+//                       <Table.Td>{equipment.brand}</Table.Td>
+//                       <Table.Td>{equipment.year}</Table.Td>
+//                       <Table.Td>{equipment.comment}</Table.Td>
+//                       <Table.Td>{equipment.price}</Table.Td>
+//                     </Table.Tr>
+//                   ))}
+//                 </Table.Tbody>
+//               </Table>
+//             </Column>
+//           </Row>
+//           <Column>
+//             <h4 align="right">Totalpris: {this.sales.price} kr</h4>
+//             <Button.Success align="left" type="button" onClick={() => history.push('/Overview/')}>
+//               Gå tilbake til forsiden
+//             </Button.Success>
+//           </Column>
+//         </Card>
+//       </div>
+//     );
+//   }
+//
+//   mounted() {
+//     orderService.getBikesFromOrder(this.props.match.params.id, bikes => {
+//       this.bikes = bikes;
+//     });
+//
+//     orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
+//       this.equipments = equipments;
+//     });
+//
+//     rentalService.getAllSales(sales => {
+//       this.sales = sales[this.props.match.params.id - 1];
+//       this.orderDate = this.sales.dateOrdered.toString().substring(4, 24);
+//       this.fromDate = this.sales.fromDateTime.toString().substring(4, 24);
+//       this.toDate = this.sales.toDateTime.toString().substring(4, 24);
+//     });
+//   }
+// }
 
 class RentedBikes extends Component {
   todaysDate = year + '-' + month + '-' + day + '%';
@@ -362,9 +362,7 @@ class Overview extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Oversikt</h1>
-          </NavBar.Link>
+          <h1>Oversikt</h1>
         </NavBar>
         <Card style={{ minWidth: '400px' }}>
           <Chart />
@@ -376,4 +374,4 @@ class Overview extends Component {
   }
 }
 
-module.exports = { Overview, DetailedOrderAll };
+module.exports = { Overview };
