@@ -41,9 +41,7 @@ class Customers extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Kundeliste</h1>
-          </NavBar.Link>
+          <h1>Kundeliste</h1>
         </NavBar>
 
         <Column right>
@@ -124,9 +122,7 @@ class SelectedCustomer extends Component {
       return (
         <div>
           <NavBar brand="CycleOn Rentals">
-            <NavBar.Link to="#">
-              <h1>Kundeliste</h1>
-            </NavBar.Link>
+            <h1>Kundeliste</h1>
           </NavBar>
           <Card>
             <Column>
@@ -378,9 +374,7 @@ class AddCustomer extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Kundeliste</h1>
-          </NavBar.Link>
+          <h1>Kundeliste</h1>
         </NavBar>
         <Card>
           <div className="container">
