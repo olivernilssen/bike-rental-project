@@ -503,11 +503,13 @@ class Overview extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Oversikt</h1>
         </NavBar>
-        <Card style={{ minWidth: '400px' }}>
-          <Chart />
-        </Card>
-        <br />
-        <RentedBikes />
+        <div role="main">
+          <Card style={{ minWidth: '400px' }}>
+            <Chart />
+          </Card>
+          <br />
+          <RentedBikes />
+        </div>
       </div>
     );
   }
