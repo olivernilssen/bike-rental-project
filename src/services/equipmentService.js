@@ -1,5 +1,4 @@
 import { connection } from './mysql_connection';
-import { start } from 'repl';
 
 class EquipmentService {
   getEquipmentTypes(success) {
@@ -61,7 +60,7 @@ class EquipmentService {
 
   addRestriction(biketype, equipmenttype, success) {
     connection.query("insert into Restrictions (bikeType_id, equipmentType_id) values (?, ?)", [biketype, equipmenttype],
-  (error, results) => {
+  (error) => {
     if (error) return console.error(error);
 
     success();

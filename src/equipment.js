@@ -116,6 +116,7 @@ class EquipTypeDetails extends Component {
   showingEquipment = 0;
 
   state = {
+    priceEquip: 0,
     equipments: [],
     typeIds: [],
     equipTypeDetails: []
@@ -161,6 +162,10 @@ class EquipTypeDetails extends Component {
     }
   }
 
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
   render() {
     if (!this.equipType) return null;
     if (!this.distinctBikeType) return null;
@@ -191,6 +196,7 @@ class EquipTypeDetails extends Component {
                   <ClickTable.Th>Årsmodell</ClickTable.Th>
                   <ClickTable.Th>Størrelse</ClickTable.Th>
                   <ClickTable.Th>Pris</ClickTable.Th>
+                  <ClickTable.Th></ClickTable.Th>
                 </ClickTable.Thead>
                 <ClickTable.Tbody>
                   {this.state.equipTypeDetails.map(type => (
@@ -204,7 +210,38 @@ class EquipTypeDetails extends Component {
                       <ClickTable.Td>{type.brand}</ClickTable.Td>
                       <ClickTable.Td>{type.year}</ClickTable.Td>
                       <ClickTable.Td>{type.comment}</ClickTable.Td>
-                      <ClickTable.Td>{type.price}</ClickTable.Td>
+                      <ClickTable.Td>
+                        {type.changePrice ? (
+                          <Form.Input
+                            style={{ width: 70 + 'px' }}
+                            name="priceEquip"
+                            value={this.state.priceEquip}
+                            onChange={this.handleChange}
+                          />
+                        ) : (
+                          type.price
+                        )}
+                      </ClickTable.Td>
+                      <ClickTable.Td>
+                        {type.changePrice ? (
+                          <ButtonOutline.Success
+                            onClick={() => {
+                              this.save(type);
+                            }}
+                          >
+                            {' '}
+                            {type.changePrice ? 'Lagre' : 'Endre'}
+                          </ButtonOutline.Success>
+                        ) : (
+                          <ButtonOutline.Info
+                            onClick={() => {
+                              this.change(type);
+                            }}
+                          >
+                            {type.changePrice ? 'Lagre' : 'Endre'}
+                          </ButtonOutline.Info>
+                        )}
+                      </ClickTable.Td>
                     </ClickTable.Tr>
                   ))}
                 </ClickTable.Tbody>
@@ -297,13 +334,36 @@ class EquipTypeDetails extends Component {
     );
   }
 
+  change(type) {
+    for(let i = 0; i < this.state.equipTypeDetails.length; i++){
+      this.state.equipTypeDetails[i].changePrice = false;
+    }
+
+    let index = this.state.equipTypeDetails
+      .map(function(e) {
+        return e.id;
+      })
+      .indexOf(type.id);
+    this.setState({ priceEquip: type.price });
+    this.state.equipTypeDetails[index].changePrice = true;
+  }
+
+  save(type) {
+    connection.query('update EquipmentType set price = ? where id = ?', [this.state.priceEquip, type.id], error => {
+      if (error) console.error(error);
+    });
+
+    let index = this.state.equipTypeDetails
+      .map(function(e) {return e.id;}).indexOf(type.id);
+    this.state.equipTypeDetails[index].price = this.state.priceEquip;
+    this.state.equipTypeDetails[index].changePrice = false;
+  }
+
   add() {
     if (this.selectStatus != '') {
       equipmentService.getBikeIdByName(this.selectStatus, idResult => {
         equipmentService.addRestriction(
-          JSON.stringify(idResult)
-            .substring(6)
-            .replace('}', ''),
+          idResult[0].id,
           this.state.equipTypeDetails[0].id,
           () => {
             history.push('/equipmentTypes/Skip/OtherMain');
@@ -352,6 +412,7 @@ class EquipTypeDetails extends Component {
         equipmentService.getEquipmentTypesWhere(idResult[i].id, typeResult => {
           for (let i = 0; i < typeResult.length; i++) {
             typeResult[i].selectedEquip = false;
+            typeResult[i].changePrice = false;
           }
           this.setState(state => {
             const equipTypeDetails = state.equipTypeDetails.concat(typeResult);
