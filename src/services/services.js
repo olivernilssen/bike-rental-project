@@ -53,12 +53,24 @@ class RentalService {
 
   getSales(employeeID, success) {
     connection.query(
-      'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price, w.worker_id from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND w.worker_id = ? AND ot.id = o.type_Id AND  w.worker_id = o.soldBy_id',
+      'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price, w.worker_id from OrderType ot, Customers c, Orders o, Workers w where c.id = o.customer_id and ot.id = o.type_id and  w.worker_id = o.soldBy_id and w.worker_id = ?',
       [employeeID],
       (error, results) => {
         if (error) return console.error(error);
 
         success(results);
+      }
+    );
+  }
+
+  getSale(id, success) {
+    connection.query(
+      'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price, w.worker_id from OrderType ot, Customers c, Orders o, Workers w where c.id = o.customer_id and ot.id = o.type_id and w.worker_id = o.soldBy_id and o.id = ?',
+      [id],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results[0]);
       }
     );
   }

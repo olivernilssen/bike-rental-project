@@ -251,9 +251,9 @@ class MySales extends Component {
                         {sale.firstName} {sale.lastName}
                       </Table.Td>
                       <Table.Td>{sale.typeName}</Table.Td>
-                      <Table.Td>{sale.dateOrdered.toString().substring(4, 24)}</Table.Td>
-                      <Table.Td>{sale.fromDateTime.toString().substring(4, 24)}</Table.Td>
-                      <Table.Td>{sale.toDateTime.toString().substring(4, 24)}</Table.Td>
+                      <Table.Td>{sale.dateOrdered.toString().substring(4, 21)}</Table.Td>
+                      <Table.Td>{sale.fromDateTime.toString().substring(4, 21)}</Table.Td>
+                      <Table.Td>{sale.toDateTime.toString().substring(4, 21)}</Table.Td>
                       <Table.Td>{sale.price} kr</Table.Td>
                       <Table.Td>
                         <ButtonOutline.Info type="button" onClick={() => history.push('/MySales/' + sale.id + '/edit')}>
@@ -282,12 +282,18 @@ class MySales extends Component {
 class DetailedOrder extends Component {
   bikes = [];
   equipments = [];
-  sales = [];
-  dateOrdered = '';
-  fromDateTime = '';
-  toDateTime = '';
+  // sales = [];
+  // dateOrdered = '';
+  // fromDateTime = '';
+  // toDateTime = '';
+  // firstName = '';
+  // lastName = '';
+  // price = '';
+  sale = null;
 
   render() {
+    if (!this.sale) return null;
+
     let notice;
 
     if (this.equipments.length == 0) {
@@ -306,8 +312,9 @@ class DetailedOrder extends Component {
           </NavBar.Link>
         </NavBar>
         <Card>
-          Ordren er registrert på {this.firstName} {this.lastName} på tid/dato {this.dateOrdered}. Utleien varer fra{' '}
-          {this.fromDateTime} til {this.toDateTime}.
+          Ordren er registrert på {this.sale.firstName} {this.sale.lastName} på tid/dato{' '}
+          {this.sale.dateOrdered.toString().substring(4, 21)}. Utleien varer fra{' '}
+          {this.sale.fromDateTime.toString().substring(4, 21)} til {this.sale.toDateTime.toString().substring(4, 21)}.
           <br /> <br />
           <Row>
             <Column>
@@ -376,7 +383,7 @@ class DetailedOrder extends Component {
             </Column>
           </Row>
           <Column>
-            <h4 align="right">Totalpris: {this.price} kr</h4>
+            <h4 align="right">Totalpris: {this.sale.price} kr</h4>
             <ButtonOutline.Info align="left" type="button" onClick={() => history.push('/MySales/')}>
               Gå tilbake til salgsoversikten din
             </ButtonOutline.Info>
@@ -395,14 +402,15 @@ class DetailedOrder extends Component {
       this.equipments = equipments;
     });
 
-    rentalService.getSales(employeeID, sales => {
-      this.sales = sales[this.props.match.params.id - 1];
-      this.dateOrdered = this.sales.dateOrdered.toString().substring(4, 24);
-      this.fromDateTime = this.sales.fromDateTime.toString().substring(4, 24);
-      this.toDateTime = this.sales.toDateTime.toString().substring(4, 24);
-      this.firstName = this.sales.firstName;
-      this.lastName = this.sales.lastName;
-      this.price = this.sales.price;
+    rentalService.getSale(this.props.match.params.id, sale => {
+      console.log(sale);
+      this.sale = sale;
+      // this.dateOrdered = sales.dateOrdered.toString().substring(4, 24);
+      // this.fromDateTime = sales.fromDateTime.toString().substring(4, 24);
+      // this.toDateTime = sales.toDateTime.toString().substring(4, 24);
+      // this.firstName = this.sales.firstName;
+      // this.lastName = this.sales.lastName;
+      // this.price = this.sales.price;
     });
   }
 }
