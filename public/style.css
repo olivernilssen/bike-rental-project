@@ -18,6 +18,13 @@ body {
   margin-left: 1em;
 }
 
+.btn-outline-info {
+  color: #157685;
+}
+
+.btn-outline-success {
+  color: #2b833f;
+}
 /* .feather {
   width: 16px;
   height: 16px;

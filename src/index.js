@@ -202,7 +202,7 @@ class Menu extends Component {
                 <div className="subLinks">
                   <SideNavBar.SideLink to="/allBikes/">- Alle sykler</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
-                  <SideNavBar.SideLink to="/area/1">- Etter lokasjon</SideNavBar.SideLink>
+                  <SideNavBar.SideLink to="/area/1/1">- Etter lokasjon</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                 </div>
               </div>

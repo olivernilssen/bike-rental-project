@@ -279,12 +279,12 @@ class SelectedBike extends Component {
     } else {
       bikeService.updateBikes(this.props.match.params.id, this.bikeStatus, this.state.location_id, this.note);
       console.log(this.bikeLoc, this.bikeType, this.bikeStatus, this.note);
-      history.push('/allBikes/');
+      this.props.history.goBack();
     }
   }
 
   cancel() {
-    history.push('/allBikes/');
+    this.props.history.goBack();
   }
 }
 
