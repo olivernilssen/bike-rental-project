@@ -23,9 +23,7 @@ class UserInfo extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Min side</h1>
-          </NavBar.Link>
+          <h1>Min side</h1>
         </NavBar>
         <Card>
           <Row>
@@ -101,9 +99,7 @@ class EditUserInfo extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Min side</h1>
-          </NavBar.Link>
+          <h1>Min side</h1>
         </NavBar>
         <Card>
           <Row>
@@ -222,9 +218,7 @@ class MySales extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Mine salg</h1>
-          </NavBar.Link>
+          <h1>Mine salg</h1>
         </NavBar>
         <Card>
           Dette er en liste over dine salg som selger hos oss.
@@ -282,13 +276,6 @@ class MySales extends Component {
 class DetailedOrder extends Component {
   bikes = [];
   equipments = [];
-  // sales = [];
-  // dateOrdered = '';
-  // fromDateTime = '';
-  // toDateTime = '';
-  // firstName = '';
-  // lastName = '';
-  // price = '';
   sale = null;
 
   render() {
@@ -307,9 +294,7 @@ class DetailedOrder extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <NavBar.Link to="#">
-            <h1>Mine salg</h1>
-          </NavBar.Link>
+          <h1>Mine salg</h1>
         </NavBar>
         <Card>
           Ordren er registrert på {this.sale.firstName} {this.sale.lastName} på tid/dato{' '}
@@ -403,14 +388,7 @@ class DetailedOrder extends Component {
     });
 
     rentalService.getSale(this.props.match.params.id, sale => {
-      console.log(sale);
       this.sale = sale;
-      // this.dateOrdered = sales.dateOrdered.toString().substring(4, 24);
-      // this.fromDateTime = sales.fromDateTime.toString().substring(4, 24);
-      // this.toDateTime = sales.toDateTime.toString().substring(4, 24);
-      // this.firstName = this.sales.firstName;
-      // this.lastName = this.sales.lastName;
-      // this.price = this.sales.price;
     });
   }
 }

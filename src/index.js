@@ -20,7 +20,7 @@ import { UserInfo, EditUserInfo, MySales, DetailedOrder } from './myPage';
 import { Customers, AddCustomer } from './customer.js';
 import { Booking } from './booking.js';
 import { Basket, EquipmentQuery } from './basket.js';
-import { Overview, Selected, DetailedOrderAll } from './overview.js';
+import { Overview } from './overview.js';
 import { Orders } from './orders.js';
 import {
   EquipmentTypes,
@@ -202,7 +202,7 @@ class Menu extends Component {
                 <div className="subLinks">
                   <SideNavBar.SideLink to="/allBikes/">- Alle sykler</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
-                  <SideNavBar.SideLink to="/area/1">- Etter lokasjon</SideNavBar.SideLink>
+                  <SideNavBar.SideLink to="/area/1/1">- Etter lokasjon</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                 </div>
               </div>
@@ -288,7 +288,6 @@ ReactDOM.render(
       <Menu isLoggedIn={true} />
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
-      <Route exact path="/selected/:id" component={Selected} />
       <Route path="/booking/" component={Booking} />
       <Route exact path="/equipmentQuery/:id/edit" component={EquipmentQuery} />
 
@@ -321,8 +320,6 @@ ReactDOM.render(
       <Route exact path="/EditUserInfo" component={EditUserInfo} />
       <Route exact path="/MySales/" component={MySales} />
       <Route path="/MySales/:id/edit" component={DetailedOrder} />
-
-      <Route path="/AllSales/:id/edit" component={DetailedOrderAll} />
     </div>
   </HashRouter>,
   document.getElementById('root')
