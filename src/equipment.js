@@ -309,9 +309,13 @@ class EquipTypeDetails extends Component {
                     value={this.selectStatus}
                     onChange={event => (this.selectStatus = event.target.value)}
                   >
-                    <Select.Option value="">Du har ikke valgt noen sykkel..</Select.Option>
+                    <Select.Option value="%" key="0">
+                      Du har ikke valgt noen sykkel..
+                    </Select.Option>
                     {this.distinctBikeType.map(trestrictions => (
-                      <Select.Option key={trestrictions.id}>{trestrictions.typeName} </Select.Option>
+                      <Select.Option key={trestrictions.id} value={trestrictions.id}>
+                        {trestrictions.typeName}
+                      </Select.Option>
                     ))}
                   </Select>
                   <br />
@@ -351,9 +355,7 @@ class EquipTypeDetails extends Component {
   }
 
   save(type) {
-    connection.query('update EquipmentType set price = ? where id = ?', [this.state.priceEquip, type.id], error => {
-      if (error) console.error(error);
-    });
+    equipmentService.updateEquipmentType(this.state.priceEquip, type.id);
 
     let index = this.state.equipTypeDetails
       .map(function(e) {
@@ -459,64 +461,48 @@ class AddEquipment extends Component {
           <div className="container">
             <h5>Legg inn nytt sykkelutstyr</h5>
             <br />
-            <div className="container">
-              <Row>
-                <Column width={3}>
-                  <Row>
-                    <Form.Label>Utstyrstype:</Form.Label>
-                  </Row>
-                  <Row>
-                    <Select onChange={this.onChangeType}>
-                      {this.equipmentTypes.map(type => (
-                        <Select.Option key={type.id} dataKey={type.id}>
-                          {type.typeName} {type.brand} {type.year} {type.comment}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Row>
-                </Column>
-                <Column width={3}>
-                  <Row>
-                    <Form.Label>Lokasjon: </Form.Label>
-                  </Row>
-                  <Row>
-                    <Select onChange={this.onChangeLocation}>
-                      {this.locations.map(lokasjon => (
-                        <Select.Option key={lokasjon.id} dataKey={lokasjon.id}>
-                          {lokasjon.name}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Row>
-                </Column>
-              </Row>
-              <br />
-              <Row>
-                <Column width={3}>
-                  <Row>
-                    <Form.Label>Antall:</Form.Label>
-                  </Row>
-                  <Row>
-                    <Form.Input type="number" onChange={event => (this.antall = event.target.value)} />
-                  </Row>
-                </Column>
-              </Row>
-              <br />
-              <Row>
-                <Column>
-                  <ButtonOutline.Success onClick={this.add}>Add</ButtonOutline.Success>
-                </Column>
-                <Column right>
-                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-                </Column>
-              </Row>
-            </div>
+            <Row>
+              <Column width={3}>
+                <Form.Label>Utstyrstype:</Form.Label>
+                <Select onChange={this.onChangeType} value="EquipmentTypes">
+                  {this.equipmentTypes.map(type => (
+                    <Select.Option key={type.id} dataKey={type.id} value={type.id}>
+                      {type.typeName} {type.brand} {type.year} {type.comment}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Column>
+              <Column width={3}>
+                <Form.Label>Lokasjon: </Form.Label>
+                <Select onChange={this.onChangeLocation} value="Locations">
+                  {this.locations.map(lokasjon => (
+                    <Select.Option key={lokasjon.id} dataKey={lokasjon.id} value={lokasjon.id}>
+                      {lokasjon.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Column>
+            </Row>
+            <br />
+            <Row>
+              <Column width={3}>
+                <Form.Label>Antall:</Form.Label>
+                <Form.Input type="number" onChange={event => (this.antall = event.target.value)} />
+              </Column>
+            </Row>
+            <br />
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+              </Column>
+            </Row>
           </div>
         </Card>
         <br />
-        <div>
-          <NewEquipmentType />
-        </div>
+        <NewEquipmentType />
         <br />
       </div>
     );
@@ -567,6 +553,7 @@ class NewEquipmentType extends Component {
         <Card>
           <div className="container">
             <h5>Ny utstyrstype</h5>
+            <br />
             <Row>
               <Column>
                 <Form.Label>Type:</Form.Label>
@@ -588,7 +575,7 @@ class NewEquipmentType extends Component {
             <br />
             <Row>
               <Column>
-                <ButtonOutline.Success onClick={this.add}>Add</ButtonOutline.Success>
+                <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
               </Column>
               <Column right>
                 <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>

@@ -196,7 +196,7 @@ class SelectedBike extends Component {
                 <Table.Td>
                   <Select name="locationSelect" value={this.bikeLoc} onChange={this.onChangeLocation}>
                     {this.locations.map(loc => (
-                      <Select.Option key={loc.id} dataKey={loc.id}>
+                      <Select.Option key={loc.id} id={loc.id}>
                         {loc.name}
                       </Select.Option>
                     ))}
@@ -209,7 +209,9 @@ class SelectedBike extends Component {
                     onChange={event => (this.bikeStatus = event.target.value)}
                   >
                     {this.state.statusOnBike.map(status => (
-                      <Select.Option key={status}>{status}</Select.Option>
+                      <Select.Option key={status} id={status}>
+                        {status}
+                      </Select.Option>
                     ))}
                   </Select>
                 </Table.Td>
@@ -219,9 +221,9 @@ class SelectedBike extends Component {
           <br />
           <CenterContent>
             <div className="form-group">
-              <label for="comment">
+              <Form.Label htmlFor="comment">
                 <b>Skriv inn en kommentar om sykkelen:</b>
-              </label>
+              </Form.Label>
               <textarea
                 className="form-control"
                 id="comment"
@@ -695,12 +697,12 @@ class NewBikeType extends Component {
                 <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
                 <Form.Label>Hjulstørrelse:</Form.Label>
                 <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
-                <Form.Label>Antall gir:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.gears = event.target.value)} />
               </Column>
               <Column>
                 <Form.Label>Girsystem:</Form.Label>
                 <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
+                <Form.Label>Antall gir:</Form.Label>
+                <Form.Input type="text" onChange={event => (this.gears = event.target.value)} />
                 <Form.Label>Bremsesystem:</Form.Label>
                 <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
                 <Form.Label>Vekt:</Form.Label>
@@ -709,18 +711,16 @@ class NewBikeType extends Component {
                 <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
                 <Form.Label>Pris:</Form.Label>
                 <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
-                <br />
-                <br />
-                <Row>
-                  <Column>
-                    <Button.Success onClick={this.add}>Add</Button.Success>
-                  </Column>
-                  <Column right>
-                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-                  </Column>
-                </Row>
               </Column>
-              <br />
+            </Row>
+            <br />
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+              </Column>
             </Row>
           </div>
         </Card>

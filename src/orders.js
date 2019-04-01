@@ -79,7 +79,7 @@ class Orders extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Ordrer</h1>
         </NavBar>
-        <Card role='main'>
+        <Card role="main">
           <Row>
             <Column width={5}>
               <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
@@ -106,7 +106,7 @@ class Orders extends Component {
               >
                 {this.state.searchWord}
               </Form.Input>
-
+              <br />
               <ClickTable>
                 <ClickTable.Thead>
                   <ClickTable.Th>Ordredato</ClickTable.Th>
@@ -144,10 +144,9 @@ class Orders extends Component {
   mounted() {
     rentalService.getAllSales(results => {
       for (let i = 0; i < results.length; i++) {
-        if(i == 0){
+        if (i == 0) {
           results[i].selectedSale = true;
-        }
-        else{
+        } else {
           results[i].selectedSale = false;
         }
       }
@@ -166,7 +165,7 @@ class SelectedOrder extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ state: (this.state.order = nextProps.activeOrder) });
-    if(this.state.order){
+    if (this.state.order) {
       this.updateOrder();
     }
   }
@@ -182,7 +181,6 @@ class SelectedOrder extends Component {
   }
 
   render() {
-    console.log(this.props.activeOrder);
     if (!this.state.order) return null;
 
     return (
@@ -319,8 +317,7 @@ class SelectedOrder extends Component {
 
   mounted() {
     orderService.getOrder('1', result => {
-      this.setState({ order : result});
-      console.log(result);
+      this.setState({ order: result });
     });
 
     orderService.getBikesFromOrder('1', bikes => {

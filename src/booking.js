@@ -193,18 +193,26 @@ class Booking extends Component {
               <Column width={3}>
                 <Form.Label>Lokasjon:</Form.Label>
                 <Select name="locationSelect" value={this.state.locationSelect} onChange={this.handleChange}>
-                  <Select.Option value="%">Any Location</Select.Option>
+                  <Select.Option value="%" id="0">
+                    Alle lokasjoner
+                  </Select.Option>
                   {this.locations.map(loc => (
-                    <Select.Option>{loc.name}</Select.Option>
+                    <Select.Option id={loc.id} key={loc.id} value={loc.name}>
+                      {loc.name}
+                    </Select.Option>
                   ))}
                 </Select>
               </Column>
               <Column width={3}>
                 <Form.Label>Sykkeltype:</Form.Label>
                 <Select name="typeSelect" value={this.state.typeSelect} onChange={this.handleChange}>
-                  <Select.Option value="%">Any Type of bike</Select.Option>
+                  <Select.Option value="%" id="0">
+                    Alle sykkeltyper
+                  </Select.Option>
                   {this.bikeTypes.map(type => (
-                    <Select.Option key={type.id}>{type.typeName}</Select.Option>
+                    <Select.Option id={type.id} key={type.id} value={type.typeName}>
+                      {type.typeName}
+                    </Select.Option>
                   ))}
                 </Select>
               </Column>

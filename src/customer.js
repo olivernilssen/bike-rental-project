@@ -60,7 +60,9 @@ class Customers extends Component {
         </NavBar>
 
         <Column right>
-          <Button.Light>Legg til ny kunde</Button.Light>
+          <NavLink to="/addCustomer">
+            <Button.Light>Legg til ny kunde</Button.Light>
+          </NavLink>
         </Column>
         <Card>
           <Row>
@@ -103,9 +105,9 @@ class Customers extends Component {
   mounted() {
     customerService.getCustomerSearch('%', results => {
       for (let i = 0; i < results.length; i++) {
-        if(i == 0){
+        if (i == 0) {
           results[i].selectedCust = true;
-        }else {
+        } else {
           results[i].selectedCust = false;
         }
       }
@@ -141,15 +143,19 @@ class SelectedCustomer extends Component {
   handleClose() {
     this.setState({ showError: false });
     this.setState({ showConfirm: false });
-
-
   }
 
   handleShow() {
-    if (this.active.firstName == "" || this.active.lastName == ""
-      || this.active.email == "" || this.active.tlf == ""
-      || this.active.streetAddress == "" || this.active.streetNum == ""
-      || this.active.postalNum == "" || this.active.place == "") {
+    if (
+      this.active.firstName == '' ||
+      this.active.lastName == '' ||
+      this.active.email == '' ||
+      this.active.tlf == '' ||
+      this.active.streetAddress == '' ||
+      this.active.streetNum == '' ||
+      this.active.postalNum == '' ||
+      this.active.place == ''
+    ) {
       this.setState({ showError: true });
     } else {
       this.setState({ showError: false });
@@ -221,11 +227,7 @@ class SelectedCustomer extends Component {
                 onChange={event => (this.active.place = event.target.value)}
               />
               <br />
-              <ButtonOutline.Success
-                onClick={this.handleShow}
-              >
-                Lagre
-              </ButtonOutline.Success>
+              <ButtonOutline.Success onClick={this.handleShow}>Lagre</ButtonOutline.Success>
               <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
             </Column>
@@ -250,9 +252,7 @@ class SelectedCustomer extends Component {
             <Modal.Header closeButton>
               <Modal.Title>Noe gikk galt</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-              Sjekk at alle felt er utfylt korrekt, og prøv igjen.
-            </Modal.Body>
+            <Modal.Body>Sjekk at alle felt er utfylt korrekt, og prøv igjen.</Modal.Body>
             <Modal.Footer>
               <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
             </Modal.Footer>
@@ -426,7 +426,6 @@ class SelectedCustomer extends Component {
   }
 }
 
-
 class AddCustomer extends Component {
   firstName = '';
   lastName = '';
@@ -449,48 +448,59 @@ class AddCustomer extends Component {
             <h5>Ny kunde</h5>
             <br />
             <Row>
-              <Column>
+              <Column width={5}>
                 <Form.Label>Fornavn:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
+              </Column>
+              <Column width={5}>
                 <Form.Label>Etternavn:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
-                <br /> <br />
-                <Form.Label>Gateaddresse:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
-                <Form.Label>Gatenummer:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
-                <br /> <br />
-                <Row>
-                  <Column>
-                    <ButtonOutline.Success
-                      onClick={e => {
-                        if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                      }}
-                    >
-                      Legg til
-                    </ButtonOutline.Success>
-                  </Column>
-                </Row>
               </Column>
-              <Column>
+            </Row>
+            <Row>
+              <Column width={5}>
                 <Form.Label>Email:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
+              </Column>
+              <Column width={5}>
                 <Form.Label>Telefon:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.tlf = event.target.value)} />
-                <br /> <br />
+              </Column>
+            </Row>
+            <Row>
+              <Column width={8}>
+                <Form.Label>Gateaddresse:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
+              </Column>
+              <Column width={2}>
+                <Form.Label>Gatenummer:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
+              </Column>
+            </Row>
+            <Row>
+              <Column width={5}>
                 <Form.Label>Postnummer:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.postalNum = event.target.value)} />
+              </Column>
+              <Column width={5}>
                 <Form.Label>Poststed:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
-                <br />
-                <br />
-                <Row>
-                  <Column right>
-                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-                  </Column>
-                </Row>
               </Column>
-              <br />
+            </Row>
+            <br />
+            <Row>
+              <Column>
+                <ButtonOutline.Success
+                  onClick={e => {
+                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                  }}
+                >
+                  Legg til
+                </ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+              </Column>
             </Row>
           </div>
         </Card>

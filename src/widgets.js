@@ -444,12 +444,7 @@ class FormInput extends Component {
 class Option extends Component {
   render() {
     return (
-      <option
-        selected={this.props.selected}
-        value={this.props.value}
-        key={this.props.key}
-        data-key={this.props.dataKey}
-      >
+      <option selected={this.props.selected} value={this.props.value} id={this.props.id} data-key={this.props.dataKey}>
         {this.props.children}
       </option>
     );
