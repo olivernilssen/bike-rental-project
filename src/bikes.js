@@ -598,6 +598,10 @@ class BikeTypeDetails extends Component {
   }
 
   change(type) {
+    for(let i = 0; i < this.state.bikeTypeDetails.length; i++){
+      this.state.bikeTypeDetails[i].changePrice = false;
+    }
+
     let index = this.state.bikeTypeDetails
       .map(function(e) {
         return e.id;
