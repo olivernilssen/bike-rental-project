@@ -27,7 +27,7 @@ class AreaList extends Component {
           ))}
           <Column right>
             <NavLink to={'/addArea'}>
-              <ButtonOutline.Light>Legg til nytt område</ButtonOutline.Light>
+              <Button.Light>Legg til nytt område</Button.Light>
             </NavLink>
           </Column>
         </Tab>
@@ -63,9 +63,13 @@ class AddArea extends Component {
                 <br /> <br />
                 <Row>
                   <Column>
-                    <ButtonOutline.Success onClick={e => {
-                      if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                    }}>Legg til</ButtonOutline.Success>
+                    <ButtonOutline.Success
+                      onClick={e => {
+                        if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                      }}
+                    >
+                      Legg til
+                    </ButtonOutline.Success>
                   </Column>
                   <Column right>
                     <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
@@ -187,9 +191,13 @@ class AddLocation extends Component {
                 <br /> <br />
                 <Row>
                   <Column>
-                    <ButtonOutline.Success onClick={e => {
-                      if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                    }}>Add</ButtonOutline.Success>
+                    <ButtonOutline.Success
+                      onClick={e => {
+                        if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                      }}
+                    >
+                      Add
+                    </ButtonOutline.Success>
                   </Column>
                   <Column right>
                     <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>

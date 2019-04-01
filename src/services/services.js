@@ -15,10 +15,23 @@ class RentalService {
 
   searchSales(searchWord, month, success) {
     connection.query(
-
       'select distinct ot.typeName, w.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND ot.id = o.type_Id AND w.worker_id = o.soldBy_id and (o.dateOrdered like ? or o.fromDateTime like ? or o.toDateTime like ?)' +
-      'and (ot.typeName like ? or w.firstName like ? or w.lastName like ? or c.firstName like ? or c.lastName like ? or o.id like ? or o.dateOrdered like ? or o.fromDateTime like ? or o.toDateTime like ? or o.price like ?)',
-    [month, month, month, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord, searchWord],
+        'and (ot.typeName like ? or w.firstName like ? or w.lastName like ? or c.firstName like ? or c.lastName like ? or o.id like ? or o.dateOrdered like ? or o.fromDateTime like ? or o.toDateTime like ? or o.price like ?)',
+      [
+        month,
+        month,
+        month,
+        searchWord,
+        searchWord,
+        searchWord,
+        searchWord,
+        searchWord,
+        searchWord,
+        searchWord,
+        searchWord,
+        searchWord,
+        searchWord
+      ],
       (error, results) => {
         if (error) return console.error(error);
         success(results);
@@ -40,7 +53,7 @@ class RentalService {
 
   getSales(employeeID, success) {
     connection.query(
-      'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND  w.worker_id = ? AND ot.id = o.type_Id AND  w.worker_id = o.soldBy_id',
+      'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price, w.worker_id from OrderType ot, Customers c, Orders o, Workers w WHERE c.id = o.customer_id AND w.worker_id = ? AND ot.id = o.type_Id AND  w.worker_id = o.soldBy_id',
       [employeeID],
       (error, results) => {
         if (error) return console.error(error);
@@ -66,14 +79,18 @@ class RentalService {
       if (error) console.error(error);
 
       success(results);
-    })
-  }
-    // Denne funker ikke som den skal, hva er galt? får inn area_id fra
-  getLocationsByArea(area_id, success) {
-    connection.query('select l.id, l.name, l.area_id from Locations l, Area a where l.area_id = a.id and l.area_id = ?', [area_id], (error, results) => {
-      if (error) return console.error(error);
-      success(results);
     });
+  }
+  // Denne funker ikke som den skal, hva er galt? får inn area_id fra
+  getLocationsByArea(area_id, success) {
+    connection.query(
+      'select l.id, l.name, l.area_id from Locations l, Area a where l.area_id = a.id and l.area_id = ?',
+      [area_id],
+      (error, results) => {
+        if (error) return console.error(error);
+        success(results);
+      }
+    );
   }
 
   addLocation(name, streetAddress, streetNum, postalNum, place, area_id) {
@@ -99,7 +116,7 @@ class RentalService {
       if (error) return console.error(error);
 
       success(result[0]);
-    } )
+    });
   }
 
   addArea(id, areaName, success) {
@@ -110,7 +127,6 @@ class RentalService {
     });
   }
 
-
   // "b.id not in (select ob.bike_id from OrderedBike ob, " +
   // "Orders o where ob.order_id = o.id and o.fromDateTime " +
   // "between ? and ? and o.toDateTime between ? and ?) " +
@@ -118,7 +134,7 @@ class RentalService {
   getBookingSearch(locName, typeName, startDate, endDate, success) {
     connection.query(
       'select b.id, bt.typeName, bt.brand, l.name, bt.wheelSize, bt.weight_kg, bt.price from Bikes b, BikeType bt, Locations l where b.type_id = bt.id and b.location_id = l.id and l.name like ? and bt.typeName like ? and b.id not in (select ob.bike_id from OrderedBike ob, Orders o where ob.order_id = o.id and ((o.fromDateTime between ? and ?) or (o.toDateTime between ? and ?) or (o.fromDateTime <= ? and o.toDateTime >= ?))' +
-      ')order by b.id',
+        ')order by b.id',
       [locName, typeName, startDate, endDate, startDate, endDate, startDate, endDate],
       (error, results) => {
         if (error) return console.error(error);
