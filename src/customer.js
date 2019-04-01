@@ -4,6 +4,9 @@ import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Tabl
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { customerService } from './services/customersService';
 import { basket, employeeID } from './index.js';
+import { Modal } from 'react-bootstrap';
+require('react-bootstrap/ModalHeader');
+require('react-bootstrap/Modal');
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -127,10 +130,31 @@ class SelectedCustomer extends Component {
     this.setState({
       customer: nextProps.activeCustomer,
       change: false,
-      allOrders: false
+      allOrders: false,
+      showConfirm: false,
+      showError: false
     });
 
     this.active = nextProps.activeCustomer;
+  }
+
+  handleClose() {
+    this.setState({ showError: false });
+    this.setState({ showConfirm: false });
+
+
+  }
+
+  handleShow() {
+    if (this.active.firstName == "" || this.active.lastName == ""
+      || this.active.email == "" || this.active.tlf == ""
+      || this.active.streetAddress == "" || this.active.streetNum == ""
+      || this.active.postalNum == "" || this.active.place == "") {
+      this.setState({ showError: true });
+    } else {
+      this.setState({ showError: false });
+      this.setState({ showConfirm: true });
+    }
   }
 
   render() {
@@ -198,9 +222,7 @@ class SelectedCustomer extends Component {
               />
               <br />
               <ButtonOutline.Success
-                onClick={e => {
-                  if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save(e);
-                }}
+                onClick={this.handleShow}
               >
                 Lagre
               </ButtonOutline.Success>
@@ -208,6 +230,33 @@ class SelectedCustomer extends Component {
               <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
             </Column>
           </Card>
+
+          <Modal show={this.state.showConfirm} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Er informasjonen riktig?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>Er du sikker på at du vil gjøre disse endringene?</p>
+              <br />
+              <p>Trykk Utfør for å godta endringene</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
+              <Button.Success onClick={this.save}>Utfør</Button.Success>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal show={this.state.showError} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Noe gikk galt</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Sjekk at alle felt er utfylt korrekt, og prøv igjen.
+            </Modal.Body>
+            <Modal.Footer>
+              <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
+            </Modal.Footer>
+          </Modal>
         </div>
       );
     } else if (this.state.allOrders) {
@@ -376,6 +425,7 @@ class SelectedCustomer extends Component {
     this.setState({ change: false });
   }
 }
+
 
 class AddCustomer extends Component {
   firstName = '';
