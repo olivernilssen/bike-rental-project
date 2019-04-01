@@ -144,7 +144,7 @@ class SelectedBike extends Component {
           <h1>Sykler</h1>
         </NavBar>
         <Card title={'Sykkel med id: ' + this.props.match.params.id}>
-          <img src="../pictures/bike.svg" width="20%" />
+          <img src="../pictures/bike.svg" width="20%" alt="Illustrasjonsbilde av en sykkel" />
           <Table>
             <Table.Thead>
               <Table.Th>Type id:</Table.Th>

@@ -398,13 +398,13 @@ class AddCustomer extends Component {
               <Column>
                 <Form.Label>Fornavn:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
-                <Form.Label>Email:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
+                <Form.Label>Etternavn:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
                 <br /> <br />
                 <Form.Label>Gateaddresse:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
-                <Form.Label>Poststed:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
+                <Form.Label>Gatenummer:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
                 <br /> <br />
                 <Row>
                   <Column>
@@ -419,15 +419,15 @@ class AddCustomer extends Component {
                 </Row>
               </Column>
               <Column>
-                <Form.Label>Etternavn</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
+                <Form.Label>Email:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
                 <Form.Label>Telefon:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.tlf = event.target.value)} />
                 <br /> <br />
-                <Form.Label>Gatenummer:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
                 <Form.Label>Postnummer:</Form.Label>
                 <Form.Input type="text" required={true} onChange={event => (this.postalNum = event.target.value)} />
+                <Form.Label>Poststed:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
                 <br />
                 <br />
                 <Row>
