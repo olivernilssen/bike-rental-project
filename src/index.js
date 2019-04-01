@@ -111,7 +111,6 @@ class Menu extends Component {
   };
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
 
-
   toggleBikeMenu() {
     this.setState({ bikeMenu: !this.state.bikeMenu });
   }

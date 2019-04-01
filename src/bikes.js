@@ -440,6 +440,11 @@ class BikeTypeDetails extends Component {
   bikeType = null;
   showingBikes = 0;
   lock = false;
+  showChangePrice = false;
+  styleState = {
+    display: 'block',
+    clear: 'both'
+  };
   state = {
     bikes: [],
     typeIds: [],
@@ -487,6 +492,32 @@ class BikeTypeDetails extends Component {
       );
     }
 
+    const styles = {
+      priceBtn: { display: this.styleState.display }
+    };
+
+    const { priceBtn } = styles;
+
+    // let changePrice;
+    //
+    // if (priceButton) {
+    //   changePrice = (
+    //     <ButtonOutline.Info onClick={this.change} style={{ float: 'right' }}>Endre</ButtonOutline.Info>
+    //   );
+    //   price = (
+    //     {type.price}
+    //   )
+    // } else {
+    //   changePrice = (
+    //     <ButtonOutline.Success onClick={this.save} style={{ float: 'right' }}>Lagre</ButtonOutline.Success>
+    //   );
+    //   price = (
+    //     <Form.Input
+    //       type="text"
+    //     />
+    //   );
+    // }
+
     return (
       <div>
         <Card>
@@ -505,6 +536,7 @@ class BikeTypeDetails extends Component {
                   <ClickTable.Th>Vekt</ClickTable.Th>
                   <ClickTable.Th>Beregnet for</ClickTable.Th>
                   <ClickTable.Th>Dagspris</ClickTable.Th>
+                  <ClickTable.Th />
                 </ClickTable.Thead>
                 <ClickTable.Tbody>
                   {this.state.bikeTypeDetails.map(type => (
@@ -525,7 +557,8 @@ class BikeTypeDetails extends Component {
                       <ClickTable.Td>{type.brakeSystem}</ClickTable.Td>
                       <ClickTable.Td>{type.weight_kg}kg</ClickTable.Td>
                       <ClickTable.Td>{type.suitedFor}</ClickTable.Td>
-                      <ClickTable.Td>{type.price}</ClickTable.Td>
+                      <ClickTable.Td>{/*{price}*/}</ClickTable.Td>
+                      <ClickTable.Td>{/*{changePrice}*/}</ClickTable.Td>
                     </ClickTable.Tr>
                   ))}
                 </ClickTable.Tbody>
@@ -554,7 +587,7 @@ class BikeTypeDetails extends Component {
                       <Table.Td>{bike.bikeStatus}</Table.Td>
                       <Table.Td>
                         <NavLink to={'/selectedBike/' + bike.id}>
-                          <ButtonOutline.Info style={{ float: 'right' }}>Endre</ButtonOutline.Info>
+                          <ButtonOutline.Info style={{ float: 'right' }}>Ny pris</ButtonOutline.Info>
                         </NavLink>
                       </Table.Td>
                     </Table.Tr>
@@ -567,6 +600,14 @@ class BikeTypeDetails extends Component {
         <br />
       </div>
     );
+  }
+
+  change() {
+    priceButton = false;
+  }
+
+  save() {
+    priceButton = true;
   }
 
   mounted() {

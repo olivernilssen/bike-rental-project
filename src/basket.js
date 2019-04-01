@@ -311,28 +311,27 @@ class Basket extends Component {
                   </Table.Tbody>
                 </Table>
               </Column>
+              <br />
               <Row>
-                <CenterContent>
-                  <Column right>
-                    <Column>
-                      <ButtonOutline.Info onClick={this.calcDiscount} style={{ float: 'right' }}>
-                        <FontAwesomeIcon className="" icon="percent" />
-                      </ButtonOutline.Info>
-                      <Form.Input
-                        type="number"
-                        placeholder={'Rabatt'}
-                        onChange={event => (this.discount = event.target.value)}
-                        style={{ width: 100, float: 'right', border: '1 solid #F7F7F7' }}
-                      />
-                    </Column>
+                <Column right>
+                  <Column>
+                    <ButtonOutline.Info onClick={this.calcDiscount} style={{ float: 'right' }}>
+                      <FontAwesomeIcon className="" icon="percent" />
+                    </ButtonOutline.Info>
+                    <Form.Input
+                      type="number"
+                      placeholder={'Rabatt'}
+                      onChange={event => (this.discount = event.target.value)}
+                      style={{ width: 100, float: 'right', border: '1 solid #F7F7F7' }}
+                    />
                   </Column>
-                </CenterContent>
+                </Column>
               </Row>
               <br />
               <Row>
                 <Column right>
                   <Column>
-                    <h4>Total Pris: {this.discPrice}</h4>
+                    <h4>Totalpris: {this.discPrice}</h4>
                   </Column>
                   <Column>
                     <Button.Info onClick={this.handleShow}>
