@@ -32,6 +32,14 @@ class Customers extends Component {
   }
 
   chooseActive(customer) {
+    let index = this.state.customers.map(function(e) {return e.id;}).indexOf(customer.id);
+
+    for(let i = 0; i < this.state.customers.length; i++){
+      this.state.customers[i].selectedCust = false;
+    }
+
+    this.state.customers[index].selectedCust = true;
+
     customerService.getCustomer(customer.id, result => {
       this.setState({ state: (this.state.activeCustomer = result) });
     });
@@ -63,6 +71,7 @@ class Customers extends Component {
                 <ClickTable.Tbody>
                   {this.state.customers.map(customer => (
                     <ClickTable.Tr
+                      style= {customer.selectedCust ? {backgroundColor: 'lightgrey'} : {backgroundColor: ''}}
                       key={customer.id}
                       onClick={() => {
                         this.chooseActive(customer);
@@ -88,6 +97,9 @@ class Customers extends Component {
 
   mounted() {
     customerService.getCustomerSearch('%', results => {
+      for(let i = 0; i < results.length; i++){
+        results[i].selectedCust = false;
+      }
       this.state.customers = results;
     });
 
@@ -394,13 +406,13 @@ class AddCustomer extends Component {
                 <br /> <br />
                 <Row>
                   <Column>
-                    <ButtonOutline.Success
+                    <Button.Success
                       onClick={e => {
                         if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
                       }}
                     >
-                      Legg til
-                    </ButtonOutline.Success>
+                      Add
+                    </Button.Success>
                   </Column>
                 </Row>
               </Column>
@@ -418,7 +430,7 @@ class AddCustomer extends Component {
                 <br />
                 <Row>
                   <Column right>
-                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
                   </Column>
                 </Row>
               </Column>
@@ -431,7 +443,7 @@ class AddCustomer extends Component {
   }
 
   cancel() {
-    this.props.history.goBack();
+    history.push('/customers/');
   }
 
   add() {

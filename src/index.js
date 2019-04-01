@@ -202,7 +202,7 @@ class Menu extends Component {
                 <div className="subLinks">
                   <SideNavBar.SideLink to="/allBikes/">- Alle sykler</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
-                  <SideNavBar.SideLink to="/area/1/1">- Etter lokasjon</SideNavBar.SideLink>
+                  <SideNavBar.SideLink to="/area/1">- Etter lokasjon</SideNavBar.SideLink>
                   <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
                 </div>
               </div>
@@ -288,6 +288,7 @@ ReactDOM.render(
       <Menu isLoggedIn={true} />
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
+      <Route exact path="/selected/:id" component={Selected} />
       <Route path="/booking/" component={Booking} />
       <Route exact path="/equipmentQuery/:id/edit" component={EquipmentQuery} />
 

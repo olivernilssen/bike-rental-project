@@ -121,8 +121,14 @@ class EquipTypeDetails extends Component {
     equipTypeDetails: []
   };
 
-  showThisType(id) {
-    if (this.showingEquipment === id && this.lock == true) {
+  showThisType(type) {
+    let index = this.state.equipTypeDetails.map(function(e) {return e.id;}).indexOf(type.id);
+
+    for(let i = 0; i < this.state.equipTypeDetails.length; i++){
+      this.state.equipTypeDetails[i].selectedEquip = false;
+    }
+
+    if (this.showingEquipment === type.id && this.lock == true) {
       this.lock = false;
       this.state.equipments = [];
 
@@ -138,14 +144,16 @@ class EquipTypeDetails extends Component {
     } else {
       this.lock = true;
 
-      equipmentService.getEquipmentByTypeID(id, results => {
-        this.showingEquipment = id;
+      equipmentService.getEquipmentByTypeID(type.id, results => {
+        this.showingEquipment = type.id;
         this.setState(state => {
           this.state.equipments = [];
           const equipments = state.equipments.concat(results);
           return { equipments, results };
         });
       });
+      
+      this.state.equipTypeDetails[index].selectedEquip = true;
     }
   }
 
@@ -183,9 +191,10 @@ class EquipTypeDetails extends Component {
                 <ClickTable.Tbody>
                   {this.state.equipTypeDetails.map(type => (
                     <ClickTable.Tr
+                      style = {type.selectedEquip ? {backgroundColor: "lightgrey"} : {backgroundColor: ""}}
                       key={type.id}
                       onClick={() => {
-                        this.showThisType(type.id);
+                        this.showThisType(type);
                       }}
                     >
                       <ClickTable.Td>{type.brand}</ClickTable.Td>
@@ -337,6 +346,9 @@ class EquipTypeDetails extends Component {
         });
 
         equipmentService.getEquipmentTypesWhere(idResult[i].id, typeResult => {
+          for(let i = 0; i < typeResult.length; i++){
+            typeResult[i].selectedEquip = false;
+          }
           this.setState(state => {
             const equipTypeDetails = state.equipTypeDetails.concat(typeResult);
             return {

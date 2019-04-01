@@ -503,7 +503,7 @@ class Tbody extends Component {
 
 class Tr extends Component {
   render() {
-    return <tr onClick={this.props.onClick}>{this.props.children}</tr>;
+    return <tr style={this.props.style} onClick={this.props.onClick}>{this.props.children}</tr>;
   }
 }
 
