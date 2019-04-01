@@ -92,7 +92,7 @@ class Chart extends Component {
                       }
                     }
                   ]
-                }, 
+                },
                 animation: {
                   duration: 1000,
                   animateScale: true
@@ -420,9 +420,9 @@ class Selected extends Component {
           <br />
           <CenterContent>
             <div className="form-group">
-              <label for="comment">
+              <Form.Label htmlFor="comment">
                 <b>Skriv inn en kommentar om sykkelen:</b>
-              </label>
+              </Form.Label>
               <textarea
                 className="form-control"
                 id="comment"
@@ -436,7 +436,9 @@ class Selected extends Component {
 
           <Row>
             <Column>
-              <ButtonOutline.Success onClick={this.change}>Lagre</ButtonOutline.Success>
+              <ButtonOutline.Success onClick={e => {
+                if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.change(e);
+              }}>Lagre</ButtonOutline.Success>
             </Column>
 
             <Column right>
