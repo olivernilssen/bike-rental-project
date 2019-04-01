@@ -55,60 +55,62 @@ class AllBikes extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Sykler</h1>
         </NavBar>
-        <Column right>
-          <NavLink to={'/addBikes/'}>
-            <Button.Light>Legg inn ny sykkel</Button.Light>
-          </NavLink>
-        </Column>
-        <Card>
-          <Row>
-            <Column>
-              <Column right>
-                <Form.Label>Søk på sykkel etter id, type, modell eller lokasjon</Form.Label>
-                <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
+        <div role="main">
+          <Column right>
+            <NavLink to={'/addBikes/'}>
+              <Button.Light>Legg inn ny sykkel</Button.Light>
+            </NavLink>
+          </Column>
+          <Card>
+            <Row>
+              <Column>
+                <Column right>
+                  <Form.Label>Søk på sykkel etter id, type, modell eller lokasjon</Form.Label>
+                  <Form.Input onChange={this.handleChange}>{this.state.searchWord}</Form.Input>
+                </Column>
               </Column>
-            </Column>
-          </Row>
-          <br />
-          <Row>
-            <Column>
-              <Table>
-                <Table.Thead>
-                  <Table.Th>ID</Table.Th>
-                  <Table.Th>Type</Table.Th>
-                  <Table.Th>Merke</Table.Th>
-                  <Table.Th>Modell</Table.Th>
-                  <Table.Th>Årsmodell</Table.Th>
-                  <Table.Th>Beregnet for</Table.Th>
-                  <Table.Th>Dagspris</Table.Th>
-                  <Table.Th>Lokasjon</Table.Th>
-                  <Table.Th>Status</Table.Th>
-                  <Table.Th />
-                </Table.Thead>
-                <Table.Tbody>
-                  {this.state.bikes.map(bike => (
-                    <Table.Tr key={bike.id}>
-                      <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.typeName}</Table.Td>
-                      <Table.Td>{bike.brand}</Table.Td>
-                      <Table.Td>{bike.model}</Table.Td>
-                      <Table.Td>{bike.year}</Table.Td>
-                      <Table.Td>{bike.suitedFor}</Table.Td>
-                      <Table.Td>{bike.price}</Table.Td>
-                      <Table.Td>{bike.name}</Table.Td>
-                      <Table.Td>{bike.bikeStatus}</Table.Td>
-                      <Table.Td>
-                        <NavLink to={'/selectedBike/' + bike.id}>
-                          <ButtonOutline.Info>Endre</ButtonOutline.Info>
-                        </NavLink>
-                      </Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-            </Column>
-          </Row>
-        </Card>
+            </Row>
+            <br />
+            <Row>
+              <Column>
+                <Table>
+                  <Table.Thead>
+                    <Table.Th>ID</Table.Th>
+                    <Table.Th>Type</Table.Th>
+                    <Table.Th>Merke</Table.Th>
+                    <Table.Th>Modell</Table.Th>
+                    <Table.Th>Årsmodell</Table.Th>
+                    <Table.Th>Beregnet for</Table.Th>
+                    <Table.Th>Dagspris</Table.Th>
+                    <Table.Th>Lokasjon</Table.Th>
+                    <Table.Th>Status</Table.Th>
+                    <Table.Th />
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {this.state.bikes.map(bike => (
+                      <Table.Tr key={bike.id}>
+                        <Table.Td>{bike.id}</Table.Td>
+                        <Table.Td>{bike.typeName}</Table.Td>
+                        <Table.Td>{bike.brand}</Table.Td>
+                        <Table.Td>{bike.model}</Table.Td>
+                        <Table.Td>{bike.year}</Table.Td>
+                        <Table.Td>{bike.suitedFor}</Table.Td>
+                        <Table.Td>{bike.price}</Table.Td>
+                        <Table.Td>{bike.name}</Table.Td>
+                        <Table.Td>{bike.bikeStatus}</Table.Td>
+                        <Table.Td>
+                          <NavLink to={'/selectedBike/' + bike.id}>
+                            <ButtonOutline.Info>Endre</ButtonOutline.Info>
+                          </NavLink>
+                        </Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </Column>
+            </Row>
+          </Card>
+        </div>
         <br />
       </div>
     );
@@ -294,7 +296,7 @@ class BikeTypes extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Sykler</h1>
         </NavBar>
-        <Tab>
+        <Tab ariaLabel="Biketypes">
           {this.bikeTypes.map(bikeType => (
             <Tab.Item key={bikeType.typeName} to={'/bikeTypes/' + bikeType.typeName}>
               {bikeType.typeName}
@@ -488,7 +490,7 @@ class BikeTypeDetails extends Component {
     }
 
     return (
-      <div>
+      <div role="main">
         <Card>
           <Row>
             <Column>
@@ -598,7 +600,7 @@ class BikeTypeDetails extends Component {
   }
 
   change(type) {
-    for(let i = 0; i < this.state.bikeTypeDetails.length; i++){
+    for (let i = 0; i < this.state.bikeTypeDetails.length; i++) {
       this.state.bikeTypeDetails[i].changePrice = false;
     }
 
@@ -759,7 +761,7 @@ class BikeStatus extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Sykler</h1>
         </NavBar>
-        <Tab>
+        <Tab ariaLabel="Bikestatuses">
           {this.bikeStatus.map(status => (
             <Tab.Item key={status.bikeStatus} to={'/bikeStatus/' + status.bikeStatus}>
               {status.bikeStatus}
@@ -785,7 +787,7 @@ class BikesByStatus extends Component {
     if (!this.bikeStatus) return null;
 
     return (
-      <div>
+      <div role="main">
         <Card>
           <h6>Sykler med denne statusen:</h6>
           <Table>

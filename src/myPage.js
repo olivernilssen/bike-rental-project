@@ -25,7 +25,7 @@ class UserInfo extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Min side</h1>
         </NavBar>
-        <Card>
+        <Card role="main">
           <Row>
             <Column width={5}>
               <b>Fornavn:</b> {this.firstName}
@@ -220,7 +220,7 @@ class MySales extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Mine salg</h1>
         </NavBar>
-        <Card>
+        <Card role="main">
           Dette er en liste over dine salg som selger hos oss.
           <br />
           <br />

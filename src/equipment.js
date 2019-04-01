@@ -32,7 +32,7 @@ class EquipmentTypes extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Sykkelutstyr</h1>
         </NavBar>
-        <Tab>
+        <Tab ariaLabel="Equipment-types">
           {this.equipTypes.map(type => (
             <Tab.Item key={type.typeName} to={'/equipmentTypes/' + type.typeName}>
               {type.typeName}
@@ -185,7 +185,7 @@ class EquipTypeDetails extends Component {
     }
 
     return (
-      <div>
+      <div role="main">
         <Card>
           <Row>
             <Column width={12}>
@@ -196,7 +196,7 @@ class EquipTypeDetails extends Component {
                   <ClickTable.Th>Årsmodell</ClickTable.Th>
                   <ClickTable.Th>Størrelse</ClickTable.Th>
                   <ClickTable.Th>Pris</ClickTable.Th>
-                  <ClickTable.Th></ClickTable.Th>
+                  <ClickTable.Th />
                 </ClickTable.Thead>
                 <ClickTable.Tbody>
                   {this.state.equipTypeDetails.map(type => (
@@ -225,6 +225,7 @@ class EquipTypeDetails extends Component {
                       <ClickTable.Td>
                         {type.changePrice ? (
                           <ButtonOutline.Success
+                            style={{ float: 'right' }}
                             onClick={() => {
                               this.save(type);
                             }}
@@ -233,13 +234,14 @@ class EquipTypeDetails extends Component {
                             {type.changePrice ? 'Lagre' : 'Endre'}
                           </ButtonOutline.Success>
                         ) : (
-                          <ButtonOutline.Info
+                          <ButtonOutline.Secondary
+                            style={{ float: 'right' }}
                             onClick={() => {
                               this.change(type);
                             }}
                           >
                             {type.changePrice ? 'Lagre' : 'Endre'}
-                          </ButtonOutline.Info>
+                          </ButtonOutline.Secondary>
                         )}
                       </ClickTable.Td>
                     </ClickTable.Tr>
@@ -335,7 +337,7 @@ class EquipTypeDetails extends Component {
   }
 
   change(type) {
-    for(let i = 0; i < this.state.equipTypeDetails.length; i++){
+    for (let i = 0; i < this.state.equipTypeDetails.length; i++) {
       this.state.equipTypeDetails[i].changePrice = false;
     }
 
@@ -354,7 +356,10 @@ class EquipTypeDetails extends Component {
     });
 
     let index = this.state.equipTypeDetails
-      .map(function(e) {return e.id;}).indexOf(type.id);
+      .map(function(e) {
+        return e.id;
+      })
+      .indexOf(type.id);
     this.state.equipTypeDetails[index].price = this.state.priceEquip;
     this.state.equipTypeDetails[index].changePrice = false;
   }
@@ -362,13 +367,9 @@ class EquipTypeDetails extends Component {
   add() {
     if (this.selectStatus != '') {
       equipmentService.getBikeIdByName(this.selectStatus, idResult => {
-        equipmentService.addRestriction(
-          idResult[0].id,
-          this.state.equipTypeDetails[0].id,
-          () => {
-            history.push('/equipmentTypes/Skip/OtherMain');
-          }
-        );
+        equipmentService.addRestriction(idResult[0].id, this.state.equipTypeDetails[0].id, () => {
+          history.push('/equipmentTypes/Skip/OtherMain');
+        });
       });
     }
   }

@@ -57,7 +57,7 @@ export class Tab extends Component {
 
   render() {
     return (
-      <ul className="nav nav-tabs" id={this.props.id}>
+      <ul className="nav nav-tabs" id={this.props.id} role="navigation" aria-label={this.props.ariaLabel}>
         {this.props.children}
       </ul>
     );
@@ -164,7 +164,7 @@ export class SideNavBar extends Component {
 
   render() {
     return (
-      <nav className="col-md-2 d-md-block bg-light sidebar" id="navbar" role="navigation" aria-label="Main navigation">
+      <nav className="col-md-2 d-md-block bg-light sidebar" id="navbar" role="navigation" aria-label="Main">
         <div className="sidebar-sticky">
           <ul className="nav flex-column">{this.props.children}</ul>
         </div>
@@ -531,7 +531,9 @@ export class ClickTable extends Component {
   render() {
     return (
       <div className="table-responsive">
-        <table className="table table-hover">{this.props.children}</table>
+        <table className="table table-hover" aria-label="Clickable table">
+          {this.props.children}
+        </table>
       </div>
     );
   }

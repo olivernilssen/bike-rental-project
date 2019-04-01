@@ -141,7 +141,7 @@ class Booking extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Booking</h1>
         </NavBar>
-        <Card>
+        <Card role="main">
           {/* Date entry */}
           <div className="container">
             <Row>

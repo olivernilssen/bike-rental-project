@@ -17,7 +17,7 @@ class AreaList extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Lokasjoner</h1>
         </NavBar>
-        <Tab>
+        <Tab aria-label="Areas">
           {this.area.map(area => (
             <Tab.Item key={area.area_id} to={'/area/' + area.area_id}>
               {area.areaName}
@@ -97,14 +97,14 @@ class LocationInArea extends Component {
 
   render() {
     if (!this.area) return null;
-    // console.log("returnerer den");
+
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
           <h1>Lokasjoner</h1>
         </NavBar>
         <Card>
-          <Tab>
+          <Tab aria-label="Locations">
             {this.locations.map(location => (
               <Tab.Item key={location.id} to={'/area/' + this.props.match.params.area_id + '/' + location.id}>
                 {location.name}
@@ -241,7 +241,7 @@ class BikesOnLocation extends Component {
     if (!this.bikeLocations && !this.area) return null;
 
     return (
-      <div>
+      <div role="main">
         <Card>
           <Row>
             <Column>

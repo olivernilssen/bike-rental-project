@@ -212,7 +212,7 @@ class Basket extends Component {
           <h1>Handlekurv</h1>
         </NavBar>
 
-        <Card>
+        <Card role="main">
           <Row>
             <Column>
               <Form.Label>
