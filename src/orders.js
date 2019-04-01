@@ -23,6 +23,97 @@ import { emplyoeeID } from './index.js';
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
+// class Orders extends Component {
+//   state = {
+//     orders: [],
+//     searchWord: '',
+//     activeOrder: 0
+//   };
+//
+//   onChangeHandle(event) {
+//     this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchOrder());
+//   }
+//
+//   searchOrder() {
+//     let word = '%' + this.state.searchWord + '%';
+//
+//     orderService.getOrderSearch(word, results => {
+//       this.setState(state => {
+//         this.state.orders = [];
+//         const orders = state.orders.concat(results);
+//         return { orders, results };
+//       });
+//     });
+//   }
+//
+//   chooseActive(order) {
+//     orderService.getOrder(order.id, result => {
+//       this.setState({ state: (this.state.activeOrder = result) });
+//     });
+//   }
+//
+//   render() {
+//     return (
+//       <div>
+//         <H1>Ordrer</H1>
+//         <br />
+//         <Card>
+//           <Row>
+//             <Column width={5}>
+//               <Form.Input
+//                 id="testSearch"
+//                 type="search"
+//                 onChange={this.onChangeHandle}
+//                 placeholder="Søk etter bestilling"
+//               />
+//               <br /> <br />
+//               <Table>
+//                 <Table.Thead>
+//                   <Table.Th>Ordredato</Table.Th>
+//                   <Table.Th>OrdreID</Table.Th>
+//                   <Table.Th>KundeID</Table.Th>
+//                 </Table.Thead>
+//                 <Table.Tbody>
+//                   {this.state.orders.map(order => (
+//                     <Table.Tr
+//                       key={order.id}
+//                       onClick={() => {
+//                         this.chooseActive(order);
+//                       }}
+//                     >
+//                       <Table.Td>{order.dateOrdered.toString().substring(4, 16)}</Table.Td>
+//                       <Table.Td>{order.id}</Table.Td>
+//                       <Table.Td>{order.customer_id}</Table.Td>
+//                     </Table.Tr>
+//                   ))}
+//                 </Table.Tbody>
+//               </Table>
+//             </Column>
+//
+//             <Column>
+//               <SelectedOrder activeOrder={this.state.activeOrder} />
+//             </Column>
+//           </Row>
+//         </Card>
+//         <br />
+//       </div>
+//     );
+//   }
+//
+//   mounted() {
+//     orderService.getOrderSearch('%', results => {
+//       this.setState(state => {
+//         const orders = state.orders.concat(results);
+//         return { orders, results };
+//       });
+//     });
+//
+//     orderService.getOrder('1', result => {
+//       this.setState({ state: (this.state.activeOrder = result) });
+//     });
+//   }
+// }
+
 class Orders extends Component {
   state = {
     sales: [],
@@ -73,7 +164,9 @@ class Orders extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <h1>Ordrer</h1>
+          <NavBar.Link to="#">
+            <h1>Ordrer</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <Row>
@@ -126,10 +219,12 @@ class Orders extends Component {
                 </ClickTable.Tbody>
               </ClickTable>
             </Column>
+
             <Column>
               <SelectedOrder activeOrder={this.state.activeOrder} />
             </Column>
           </Row>
+
           <br />
         </Card>
         <br />
@@ -306,6 +401,7 @@ class SelectedOrder extends Component {
   mounted() {
     orderService.getOrder('1', result => {
       this.setState({ state: (this.state.order = result) });
+      // console.log(this.state.order);
     });
 
     orderService.getBikesFromOrder(this.state.order.id, bikes => {

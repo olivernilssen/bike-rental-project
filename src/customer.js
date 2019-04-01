@@ -49,7 +49,9 @@ class Customers extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <h1>Kundeliste</h1>
+          <NavBar.Link to="#">
+            <h1>Kundeliste</h1>
+          </NavBar.Link>
         </NavBar>
 
         <Column right>
@@ -134,7 +136,9 @@ class SelectedCustomer extends Component {
       return (
         <div>
           <NavBar brand="CycleOn Rentals">
-            <h1>Kundeliste</h1>
+            <NavBar.Link to="#">
+              <h1>Kundeliste</h1>
+            </NavBar.Link>
           </NavBar>
           <Card>
             <Column>
@@ -386,7 +390,9 @@ class AddCustomer extends Component {
     return (
       <div>
         <NavBar brand="CycleOn Rentals">
-          <h1>Kundeliste</h1>
+          <NavBar.Link to="#">
+            <h1>Kundeliste</h1>
+          </NavBar.Link>
         </NavBar>
         <Card>
           <div className="container">
@@ -406,13 +412,13 @@ class AddCustomer extends Component {
                 <br /> <br />
                 <Row>
                   <Column>
-                    <ButtonOutline.Success
+                    <Button.Success
                       onClick={e => {
                         if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
                       }}
                     >
-                      Legg til
-                    </ButtonOutline.Success>
+                      Add
+                    </Button.Success>
                   </Column>
                 </Row>
               </Column>
@@ -430,7 +436,7 @@ class AddCustomer extends Component {
                 <br />
                 <Row>
                   <Column right>
-                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                    <Button.Light onClick={this.cancel}>Cancel</Button.Light>
                   </Column>
                 </Row>
               </Column>
@@ -443,7 +449,7 @@ class AddCustomer extends Component {
   }
 
   cancel() {
-    this.props.history.goBack();
+    history.push('/customers/');
   }
 
   add() {

@@ -52,6 +52,8 @@ class Basket extends Component {
    * @bike - item that we click eg. a bike in our list
    */
   removeBike(bike) {
+
+
     //Removes bike from basket
     for (let i of basket) {
       if (bike == i) {
@@ -70,6 +72,8 @@ class Basket extends Component {
         i--;
       }
     }
+
+
   }
 
   /**Update Basket
@@ -166,6 +170,7 @@ class Basket extends Component {
         equipmentBasket.splice(i, 1);
       }
     }
+
 
     this.findCustomers();
   }
@@ -449,6 +454,8 @@ class Basket extends Component {
       }
     }
 
+
+
     if (equipmentBasket != 0) {
       for (let i = 0; i < equipmentBasket.length; i++) {
         this.totalPrice += equipmentBasket[i].price;
@@ -510,6 +517,7 @@ class Basket extends Component {
     if (equipmentBasket.length > 0) {
       for (let i = 0; i < equipmentBasket.length; i++) {
         orderService.makeEquipOrder(this.state.activeC[0].id, todaysDate, equipmentBasket[i].id);
+
       }
     }
 
@@ -635,7 +643,7 @@ class EquipmentQuery extends Component {
                       <Table.Td>{equip.price}</Table.Td>
                       <Table.Td>
                         <Button.Success onClick={() => this.basketAdd(equip)}>
-                          <FontAwesomeIcon icon="plus" />
+                          <FontAwesomeIcon className="navIcon" icon="plus" />
                         </Button.Success>
                       </Table.Td>
                     </Table.Tr>
@@ -693,6 +701,7 @@ class EquipmentQuery extends Component {
           let k = this.props.match.params.id;
           equipment.forEach(function(e) {
             e.bike_id = k;
+
           });
 
           this.suitableEquipment = equipment;

@@ -244,6 +244,7 @@ class Booking extends Component {
               <Column right>{notice}</Column>
             </Row>
           </div>
+
           <br />
 
           <CenterContent>
