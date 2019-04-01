@@ -270,15 +270,12 @@ class SelectedBike extends Component {
     const selectedIndex = event.target.options.selectedIndex;
     this.bikeLoc = event.target.value;
     this.setState({ state: (this.state.location_id = event.target.options[selectedIndex].getAttribute('data-key')) });
-    console.log(this.state.location_id);
   }
 
   change() {
-    console.log(this.state.location_id);
     if (this.state.location_id == null) {
     } else {
       bikeService.updateBikes(this.props.match.params.id, this.bikeStatus, this.state.location_id, this.note);
-      console.log(this.bikeLoc, this.bikeType, this.bikeStatus, this.note);
       this.props.history.goBack();
     }
   }
@@ -344,13 +341,11 @@ class AddBikes extends Component {
     this.setState({
       state: (this.state.selectedBikeID = event.target.options[selectedIndex].getAttribute('data-key'))
     });
-    console.log(this.state.selectedBikeID);
   }
 
   onChangeLocation(event) {
     const selectedIndex = event.target.options.selectedIndex;
     this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
-    console.log(this.state.curLocation);
   }
 
   render() {
@@ -408,7 +403,6 @@ class AddBikes extends Component {
         bikeService.addBike(this.state.curLocation, this.state.selectedBikeID, 'OK');
       }
     }
-
     history.push('/allBikes/');
   }
 
@@ -604,7 +598,6 @@ class BikeTypeDetails extends Component {
   }
 
   change(type) {
-    console.log('change ' + type.id);
     let index = this.state.bikeTypeDetails
       .map(function(e) {
         return e.id;
@@ -615,10 +608,7 @@ class BikeTypeDetails extends Component {
   }
 
   save(type) {
-    console.log('save');
-    connection.query('update BikeType set price = ? where id = ?', [this.state.priceBike, type.id], error => {
-      if (error) console.error(error);
-    });
+    bikeService.updateBikeType(this.state.priceBike, type.id);
 
     let index = this.state.bikeTypeDetails
       .map(function(e) {

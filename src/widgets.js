@@ -91,7 +91,13 @@ export class Column extends Component {
 class NavBarLink extends Component {
   render() {
     return this.props.to ? (
-      <NavLink className="nav-link" activeClassName="active" exact={this.props.exact} to={this.props.to}>
+      <NavLink
+        className="nav-link"
+        activeClassName="active"
+        exact={this.props.exact}
+        to={this.props.to}
+        accessKey={this.props.accessKey}
+      >
         {this.props.children}
       </NavLink>
     ) : (
@@ -110,6 +116,7 @@ export class NavBar extends Component {
       <nav
         id="top-navbar"
         className="navbar navbar-dark fixed-top bg-dark d-flex justify-content-start flex-md-nowrap p-0 shadow"
+        role="banner"
       >
         {
           <NavLink className="navbar-brand" activeClassName="active" to="/overview/">
@@ -157,7 +164,7 @@ export class SideNavBar extends Component {
 
   render() {
     return (
-      <nav className="col-md-2 d-md-block bg-light sidebar" id="navbar">
+      <nav className="col-md-2 d-md-block bg-light sidebar" id="navbar" role="navigation" aria-label="Main navigation">
         <div className="sidebar-sticky">
           <ul className="nav flex-column">{this.props.children}</ul>
         </div>
@@ -390,9 +397,6 @@ class ButtonDarkOutline extends Component {
   }
 }
 
-// Renders a light button using Bootstrap styles
-// Attributes: onClick
-
 export class ButtonOutline {
   static Success = ButtonSuccessOutline;
   static Danger = ButtonDangerOutline;
@@ -503,7 +507,11 @@ class Tbody extends Component {
 
 class Tr extends Component {
   render() {
-    return <tr style={this.props.style} onClick={this.props.onClick}>{this.props.children}</tr>;
+    return (
+      <tr style={this.props.style} onClick={this.props.onClick}>
+        {this.props.children}
+      </tr>
+    );
   }
 }
 

@@ -34,10 +34,14 @@ class BikeService {
   }
 
   getBikesbyTypeID(id, success) {
-    connection.query('select b.id, l.name, b.bikeStatus from Bikes b, Locations l where b.location_id=l.id and type_id = ?', [id], (error, results) => {
-      if (error) return console.error(error);
-      success(results);
-    });
+    connection.query(
+      'select b.id, l.name, b.bikeStatus from Bikes b, Locations l where b.location_id=l.id and type_id = ?',
+      [id],
+      (error, results) => {
+        if (error) return console.error(error);
+        success(results);
+      }
+    );
   }
 
   getBikes(success) {
@@ -158,6 +162,12 @@ class BikeService {
         success(results);
       }
     );
+  }
+
+  updateBikeType(price, id) {
+    connection.query('update BikeType set price = ? where id = ?', [price, id], error => {
+      if (error) console.error(error);
+    });
   }
 }
 

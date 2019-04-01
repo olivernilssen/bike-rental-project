@@ -192,7 +192,7 @@ class Menu extends Component {
                 <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
                 Lokasjoner
               </SideNavBar.SideLink>
-              <SideNavBar.SideLink to="/allBikes/" onClick={this.toggleBikeMenu}>
+              <SideNavBar.SideLink onClick={this.toggleBikeMenu} to="/allBikes/">
                 <FontAwesomeIcon className="navIcon" icon="bicycle" />
                 Sykler
                 <FontAwesomeIcon id="dropdownBike" icon="sort-down" />
