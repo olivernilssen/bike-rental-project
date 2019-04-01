@@ -100,7 +100,11 @@ class Customers extends Component {
   mounted() {
     customerService.getCustomerSearch('%', results => {
       for (let i = 0; i < results.length; i++) {
-        results[i].selectedCust = false;
+        if(i == 0){
+          results[i].selectedCust = true;
+        }else {
+          results[i].selectedCust = false;
+        }
       }
       this.state.customers = results;
     });

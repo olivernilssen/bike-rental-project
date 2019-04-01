@@ -28,7 +28,7 @@ class Orders extends Component {
     sales: [],
     searchWord: '',
     month: '%',
-    activeOrder: 0
+    activeOrder: null
   };
 
   onChangeHandle(event) {
@@ -79,7 +79,7 @@ class Orders extends Component {
         <NavBar brand="CycleOn Rentals">
           <h1>Ordrer</h1>
         </NavBar>
-        <Card>
+        <Card role='main'>
           <Row>
             <Column width={5}>
               <Select name="locationSelect" value={this.state.month} onChange={this.handleChangeSelect}>
@@ -144,10 +144,14 @@ class Orders extends Component {
   mounted() {
     rentalService.getAllSales(results => {
       for (let i = 0; i < results.length; i++) {
-        results[i].selectedSale = false;
+        if(i == 0){
+          results[i].selectedSale = true;
+        }
+        else{
+          results[i].selectedSale = false;
+        }
       }
-      this.setState({ sales: results });
-      this.state.activeOrder = results[0];
+      this.setState({ sales: results, activeOrder: results[0] });
     });
   }
 }
@@ -162,7 +166,12 @@ class SelectedOrder extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({ state: (this.state.order = nextProps.activeOrder) });
+    if(this.state.order){
+      this.updateOrder();
+    }
+  }
 
+  updateOrder() {
     orderService.getBikesFromOrder(this.state.order.id, bikes => {
       this.bikes = bikes;
     });
@@ -173,6 +182,7 @@ class SelectedOrder extends Component {
   }
 
   render() {
+    console.log(this.props.activeOrder);
     if (!this.state.order) return null;
 
     return (
@@ -309,14 +319,15 @@ class SelectedOrder extends Component {
 
   mounted() {
     orderService.getOrder('1', result => {
-      this.setState({ state: (this.state.order = result) });
+      this.setState({ order : result});
+      console.log(result);
     });
 
-    orderService.getBikesFromOrder(this.state.order.id, bikes => {
+    orderService.getBikesFromOrder('1', bikes => {
       this.bikes = bikes;
     });
 
-    orderService.getEquipmentFromOrder(this.state.order.id, equipments => {
+    orderService.getEquipmentFromOrder('1', equipments => {
       this.equipments = equipments;
     });
   }
