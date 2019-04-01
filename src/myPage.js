@@ -283,9 +283,9 @@ class DetailedOrder extends Component {
   bikes = [];
   equipments = [];
   sales = [];
-  orderDate = '';
-  fromDate = '';
-  toDate = '';
+  dateOrdered = '';
+  fromDateTime = '';
+  toDateTime = '';
 
   render() {
     let notice;
@@ -306,8 +306,8 @@ class DetailedOrder extends Component {
           </NavBar.Link>
         </NavBar>
         <Card>
-          Ordren er registrert på {this.sales.firstName} {this.sales.lastName} på tid/dato {this.orderDate}. Utleien
-          varer fra {this.fromDate} til {this.toDate}.
+          Ordren er registrert på {this.firstName} {this.lastName} på tid/dato {this.dateOrdered}. Utleien varer fra{' '}
+          {this.fromDateTime} til {this.toDateTime}.
           <br /> <br />
           <Row>
             <Column>
@@ -349,6 +349,7 @@ class DetailedOrder extends Component {
               </Table>
             </Column>
           </Row>
+          <br />
           <Row>
             <Column width={8}>
               <Table>
@@ -375,10 +376,10 @@ class DetailedOrder extends Component {
             </Column>
           </Row>
           <Column>
-            <h4 align="right">Totalpris: {this.sales.price} kr</h4>
-            <Button.Success align="left" type="button" onClick={() => history.push('/MySales/')}>
+            <h4 align="right">Totalpris: {this.price} kr</h4>
+            <ButtonOutline.Info align="left" type="button" onClick={() => history.push('/MySales/')}>
               Gå tilbake til salgsoversikten din
-            </Button.Success>
+            </ButtonOutline.Info>
           </Column>
         </Card>
       </div>
@@ -396,9 +397,12 @@ class DetailedOrder extends Component {
 
     rentalService.getSales(employeeID, sales => {
       this.sales = sales[this.props.match.params.id - 1];
-      this.orderDate = this.sales.dateOrdered.toString().substring(4, 24);
-      this.fromDate = this.sales.fromDateTime.toString().substring(4, 24);
-      this.toDate = this.sales.toDateTime.toString().substring(4, 24);
+      this.dateOrdered = this.sales.dateOrdered.toString().substring(4, 24);
+      this.fromDateTime = this.sales.fromDateTime.toString().substring(4, 24);
+      this.toDateTime = this.sales.toDateTime.toString().substring(4, 24);
+      this.firstName = this.sales.firstName;
+      this.lastName = this.sales.lastName;
+      this.price = this.sales.price;
     });
   }
 }

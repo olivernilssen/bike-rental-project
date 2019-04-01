@@ -48,7 +48,7 @@ class Customers extends Component {
 
         <Column right>
           <NavLink to={'/addCustomer/'}>
-            <ButtonOutline.Light>Legg til ny kunde</ButtonOutline.Light>
+            <Button.Light>Legg til ny kunde</Button.Light>
           </NavLink>
         </Column>
         <Card>

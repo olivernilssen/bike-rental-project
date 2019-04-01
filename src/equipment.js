@@ -42,7 +42,7 @@ class EquipmentTypes extends Component {
           ))}
           <Column right>
             <NavLink to={'/equipments/add/'}>
-              <ButtonOutline.Light>Legg inn nytt utstyr</ButtonOutline.Light>
+              <Button.Light>Legg inn nytt utstyr</Button.Light>
             </NavLink>
           </Column>
         </Tab>
