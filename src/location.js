@@ -52,28 +52,28 @@ class AddArea extends Component {
         <Card>
           <div className="container">
             <h5>Nytt område</h5>
-            <Row>
-              <Column>
-                <Form.Label>Navn:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.areaName = event.target.value)} />
-                <br /> <br />
-                <Row>
-                  <Column>
-                    <ButtonOutline.Success
-                      onClick={e => {
-                        if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                      }}
-                    >
-                      Legg til
-                    </ButtonOutline.Success>
-                  </Column>
-                  <Column right>
-                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-                  </Column>
-                </Row>
-              </Column>
-              <br />
-            </Row>
+            <form onSubmit={e => {
+                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                    }}>
+              <Row>
+                <Column>
+                  <Form.Label>Navn:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.areaName = event.target.value)} />
+                  <br /> <br />
+                  <Row>
+                    <Column>
+                      <ButtonOutline.Submit>
+                        Legg til
+                      </ButtonOutline.Submit>
+                    </Column>
+                    <Column right>
+                      <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                    </Column>
+                  </Row>
+                </Column>
+                <br />
+              </Row>
+            </form>
           </div>
         </Card>
       </div>
@@ -160,57 +160,58 @@ class AddLocation extends Component {
           <div className="container">
             <h5>Ny lokasjon</h5>
             <br />
-            <Row>
-              <Column width={5}>
-                <Form.Label>Navn:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.name = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Område:</Form.Label>
-                <Select value={this.curArea} onChange={event => (this.curArea = event.target.value)}>
-                  {this.areaNames.map(areaN => (
-                    <Select.Option key={areaN.id} value={areaN.areaName} id={areaN.id}>
-                      {areaN.areaName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Column>
-            </Row>
-            <Row>
-              <Column width={8}>
-                <Form.Label>Gateadresse:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.streetAddress = event.target.value)} />
-              </Column>
-              <Column width={2}>
-                <Form.Label>Gatenummer:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.streetNum = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Postnummer:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.postalNum = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Poststed:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.place = event.target.value)} />
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column>
-                <ButtonOutline.Success
-                  onClick={e => {
+            <form onSubmit={e => {
                     if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                  }}
-                >
-                  Legg til
-                </ButtonOutline.Success>
-              </Column>
-              <Column right>
-                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-              </Column>
-            </Row>
+                      }}>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Navn:</Form.Label>
+                  <Form.Input type="text"  required onChange={event => (this.name = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Område:</Form.Label>
+                  <Select value={this.curArea} required onChange={event => (this.curArea = event.target.value)}>
+                    {this.areaNames.map(areaN => (
+                      <Select.Option key={areaN.areaName} value={areaN.areaName} id={areaN.id}>
+                        {areaN.areaName}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Column>
+              </Row>
+
+              <Row>
+                <Column width={8}>
+                  <Form.Label>Gateadresse:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.streetAddress = event.target.value)} />
+                </Column>
+                <Column width={2}>
+                  <Form.Label>Gatenummer:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.streetNum = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Postnummer:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.postalNum = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Poststed:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.place = event.target.value)} />
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <ButtonOutline.Submit>
+                    Legg til
+                  </ButtonOutline.Submit>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                </Column>
+              </Row>
+            </form>
           </div>
         </Card>
         <br />

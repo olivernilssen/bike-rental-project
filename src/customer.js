@@ -175,65 +175,74 @@ class SelectedCustomer extends Component {
           <Card>
             <h5>Endre Kunde:</h5>
             <br />
-            <Form.Label>Kunde id:</Form.Label>
-            <Form.Input type="text" value={this.state.customer.id} disabled />
-            <Form.Label>Fornavn:</Form.Label>
-            <Form.Input
-              type="text"
-              value={this.active.firstName}
-              onChange={event => (this.active.firstName = event.target.value)}
-            />
-            <Form.Label>Etternavn:</Form.Label>
-            <Form.Input
-              type="text"
-              value={this.active.lastName}
-              onChange={event => (this.active.lastName = event.target.value)}
-            />
-            <Form.Label>Epost:</Form.Label>
-            <Form.Input
-              type="text"
-              value={this.active.email}
-              onChange={event => (this.active.email = event.target.value)}
-            />
-            <Form.Label>Telefon:</Form.Label>
-            <Form.Input
-              type="text"
-              value={this.active.tlf}
-              onChange={event => (this.active.tlf = event.target.value)}
-            />
-            <Form.Label>Adresse:</Form.Label>
-            <Form.Input
-              type="text"
-              value={this.active.streetAddress}
-              onChange={event => (this.active.streetAddress = event.target.value)}
-            />
-            <Form.Label>Gatenummer:</Form.Label>
-            <Form.Input
-              type="text"
-              value={this.active.streetNum}
-              onChange={event => (this.active.streetNum = event.target.value)}
-            />
-            <Form.Label>Postnummer:</Form.Label>
-            <Form.Input
-              type="text"
-              value={this.active.postalNum}
-              onChange={event => (this.active.postalNum = event.target.value)}
-            />
-            <Form.Label>Sted:</Form.Label>
-            <Form.Input
-              type="text"
-              value={this.active.place}
-              onChange={event => (this.active.place = event.target.value)}
-            />
-            <br />
-            <Row>
-              <Column>
-                <ButtonOutline.Success onClick={this.handleShow}>Lagre</ButtonOutline.Success>
-              </Column>
-              <Column right>
-                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-              </Column>
-            </Row>
+            <form onSubmit={this.handleShow}>
+              <Form.Label>Kunde id:</Form.Label>
+              <Form.Input type="text"  value={this.state.customer.id} disabled />
+              <Form.Label>Fornavn:</Form.Label>
+              <Form.Input
+                required  
+                type="text"
+                value={this.active.firstName}
+                onChange={event => (this.active.firstName = event.target.value)}
+              />
+              <Form.Label>Etternavn:</Form.Label>
+              <Form.Input
+                required
+                type="text"
+                value={this.active.lastName}
+                onChange={event => (this.active.lastName = event.target.value)}
+              />
+              <Form.Label>Epost:</Form.Label>
+              <Form.Input
+                required
+                type="email"
+                value={this.active.email}
+                onChange={event => (this.active.email = event.target.value)}
+              />
+              <Form.Label>Telefon:</Form.Label>
+              <Form.Input
+                required
+                type="number"
+                value={this.active.tlf}
+                onChange={event => (this.active.tlf = event.target.value)}
+              />
+              <Form.Label>Adresse:</Form.Label>
+              <Form.Input
+                required
+                type="text"
+                value={this.active.streetAddress}
+                onChange={event => (this.active.streetAddress = event.target.value)}
+              />
+              <Form.Label>Gatenummer:</Form.Label>
+              <Form.Input
+                required
+                type="text"
+                value={this.active.streetNum}
+                onChange={event => (this.active.streetNum = event.target.value)}
+              />
+              <Form.Label>Postnummer:</Form.Label>
+              <Form.Input
+                required
+                type="number"
+                value={this.active.postalNum}
+                onChange={event => (this.active.postalNum = event.target.value)}
+              />
+              <Form.Label>Post Sted:</Form.Label>
+              <Form.Input
+                type="text"
+                value={this.active.place}
+                onChange={event => (this.active.place = event.target.value)}
+              />
+              <br />
+              <Row>
+                <Column>
+                  <ButtonOutline.Submit>Lagre</ButtonOutline.Submit>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                </Column>
+              </Row>
+            </form>
           </Card>
 
           <Modal show={this.state.showConfirm} onHide={this.handleClose}>
@@ -458,6 +467,9 @@ class AddCustomer extends Component {
           <div className="container">
             <h5>Ny kunde</h5>
             <br />
+            <form onSubmit={e => {
+                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                  }}>
             <Row>
               <Column width={5}>
                 <Form.Label>Fornavn:</Form.Label>
@@ -471,11 +483,11 @@ class AddCustomer extends Component {
             <Row>
               <Column width={5}>
                 <Form.Label>Email:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
+                <Form.Input type="email" required={true} id="emailField" onChange={event => (this.email = event.target.value)} />
               </Column>
               <Column width={5}>
                 <Form.Label>Telefon:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.tlf = event.target.value)} />
+                <Form.Input type="number" required={true} min='8' onChange={event => (this.tlf = event.target.value)} />
               </Column>
             </Row>
             <Row>
@@ -491,7 +503,7 @@ class AddCustomer extends Component {
             <Row>
               <Column width={5}>
                 <Form.Label>Postnummer:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.postalNum = event.target.value)} />
+                <Form.Input type="number" required={true} onChange={event => (this.postalNum = event.target.value)} />
               </Column>
               <Column width={5}>
                 <Form.Label>Poststed:</Form.Label>
@@ -501,18 +513,17 @@ class AddCustomer extends Component {
             <br />
             <Row>
               <Column>
-                <ButtonOutline.Success
-                  onClick={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                  }}
+                <ButtonOutline.Submit
+                  type='submit'
                 >
                   Legg til
-                </ButtonOutline.Success>
+                </ButtonOutline.Submit>
               </Column>
               <Column right>
                 <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
               </Column>
             </Row>
+            </form>
           </div>
         </Card>
       </div>

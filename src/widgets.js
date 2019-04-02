@@ -349,6 +349,22 @@ class ButtonPrimaryOutline extends Component {
   }
 }
 
+class ButtonSubmitOutline extends Component {
+  render() {
+    return (
+      <button
+        type="submit"
+        className="btn btn-outline-primary"
+        id={this.props.id}
+        onClick={this.props.onClick}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
 class ButtonSecondaryOutline extends Component {
   render() {
     return (
@@ -405,6 +421,7 @@ export class ButtonOutline {
   static Secondary = ButtonSecondaryOutline;
   static Light = ButtonLightOutline;
   static Dark = ButtonDarkOutline;
+  static Submit = ButtonSubmitOutline;
 }
 
 // Renders a form label using Bootstrap styles
@@ -437,10 +454,12 @@ class FormInput extends Component {
         checked={this.props.checked}
         width={this.props.width}
         style={this.props.style}
+        min={this.props.min}
       />
     );
   }
 }
+
 class Option extends Component {
   render() {
     return (

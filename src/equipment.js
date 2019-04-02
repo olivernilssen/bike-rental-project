@@ -313,7 +313,7 @@ class EquipTypeDetails extends Component {
                       Du har ikke valgt noen sykkel..
                     </Select.Option>
                     {this.distinctBikeType.map(trestrictions => (
-                      <Select.Option key={trestrictions.id} value={trestrictions.id}>
+                      <Select.Option key={trestrictions.typeName} value={trestrictions.id}>
                         {trestrictions.typeName}
                       </Select.Option>
                     ))}
@@ -461,44 +461,48 @@ class AddEquipment extends Component {
           <div className="container">
             <h5>Legg inn nytt sykkelutstyr</h5>
             <br />
-            <Row>
-              <Column width={3}>
-                <Form.Label>Utstyrstype:</Form.Label>
-                <Select onChange={this.onChangeType} value="EquipmentTypes">
-                  {this.equipmentTypes.map(type => (
-                    <Select.Option key={type.id} dataKey={type.id} value={type.id}>
-                      {type.typeName} {type.brand} {type.year} {type.comment}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Column>
-              <Column width={3}>
-                <Form.Label>Lokasjon: </Form.Label>
-                <Select onChange={this.onChangeLocation} value="Locations">
-                  {this.locations.map(lokasjon => (
-                    <Select.Option key={lokasjon.id} dataKey={lokasjon.id} value={lokasjon.id}>
-                      {lokasjon.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column width={3}>
-                <Form.Label>Antall:</Form.Label>
-                <Form.Input type="number" onChange={event => (this.antall = event.target.value)} />
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column>
-                <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
-              </Column>
-              <Column right>
-                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-              </Column>
-            </Row>
+            <form onSubmit={e => {
+                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                    }}>
+              <Row>
+                <Column width={3}>
+                  <Form.Label>Utstyrstype:</Form.Label>
+                  <Select onChange={this.onChangeType} value="EquipmentTypes">
+                    {this.equipmentTypes.map(type => (
+                      <Select.Option key={type.id} dataKey={type.id} value={type.id}>
+                        {type.typeName} {type.brand} {type.year} {type.comment}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Column>
+                <Column width={3}>
+                  <Form.Label>Lokasjon: </Form.Label>
+                  <Select onChange={this.onChangeLocation} value="Locations">
+                    {this.locations.map(lokasjon => (
+                      <Select.Option key={lokasjon.id} dataKey={lokasjon.id} value={lokasjon.id}>
+                        {lokasjon.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column width={3}>
+                  <Form.Label>Antall:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.antall = event.target.value)} />
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                </Column>
+              </Row>
+            </form>
           </div>
         </Card>
         <br />
@@ -554,33 +558,37 @@ class NewEquipmentType extends Component {
           <div className="container">
             <h5>Ny utstyrstype</h5>
             <br />
-            <Row>
-              <Column>
-                <Form.Label>Type:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
-                <Form.Label>Merke:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
-                <Form.Label>Årsmodell:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
-              </Column>
-              <Column>
-                <Form.Label>Størrelse:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.comment = event.target.value)} />
-                <Form.Label>Pris:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
-                <br />
-                <br />
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column>
-                <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
-              </Column>
-              <Column right>
-                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-              </Column>
-            </Row>
+              <form onSubmit={e => {
+                      if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                    }}>
+              <Row>
+                <Column>
+                  <Form.Label>Type:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.typeName = event.target.value)} />
+                  <Form.Label>Merke:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.brand = event.target.value)} />
+                  <Form.Label>Årsmodell:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.year = event.target.value)} />
+                </Column>
+                <Column>
+                  <Form.Label>Størrelse:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.comment = event.target.value)} />
+                  <Form.Label>Pris:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.price = event.target.value)} />
+                  <br />
+                  <br />
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                </Column>
+              </Row>
+            </form>
           </div>
         </Card>
       </div>

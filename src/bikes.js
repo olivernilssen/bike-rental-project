@@ -24,6 +24,8 @@ import { bikeService } from './services/bikesService';
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
+
+
 class AllBikes extends Component {
   state = {
     bikes: [],
@@ -361,10 +363,13 @@ class AddBikes extends Component {
         <Card>
           <div className="container">
             <h5>Ny sykkel</h5>
+            <form onSubmit={e => {
+                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                  }}>
             <Row>
               <Column>
                 <Form.Label>Antall:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.antall = event.target.value)} />
+                <Form.Input type="number" required onChange={event => (this.antall = event.target.value)} />
                 <Form.Label>Type:</Form.Label>
                 <Select onChange={this.onChangeType}>
                   {this.bikeTypes.map(bikeType => (
@@ -384,7 +389,7 @@ class AddBikes extends Component {
                 <br /> <br />
                 <Row>
                   <Column>
-                    <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
+                    <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
                   </Column>
                   <Column right>
                     <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
@@ -393,6 +398,7 @@ class AddBikes extends Component {
               </Column>
               <br />
             </Row>
+            </form>
           </div>
         </Card>
       </div>
@@ -683,45 +689,49 @@ class NewBikeType extends Component {
         <Card>
           <div className="container">
             <h5>Ny sykkeltype</h5>
-            <Row>
-              <Column>
-                <Form.Label>Type:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.typeName = event.target.value)} />
-                <Form.Label>Merke:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.brand = event.target.value)} />
-                <Form.Label>Modell:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.model = event.target.value)} />
-                <Form.Label>Årsmodell:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.year = event.target.value)} />
-                <Form.Label>Rammestørrelse:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.frameSize = event.target.value)} />
-                <Form.Label>Hjulstørrelse:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.wheelSize = event.target.value)} />
-              </Column>
-              <Column>
-                <Form.Label>Girsystem:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.gearSystem = event.target.value)} />
-                <Form.Label>Antall gir:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.gears = event.target.value)} />
-                <Form.Label>Bremsesystem:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.brakeSystem = event.target.value)} />
-                <Form.Label>Vekt:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.weight_kg = event.target.value)} />
-                <Form.Label>Beregnet for:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.suitedFor = event.target.value)} />
-                <Form.Label>Pris:</Form.Label>
-                <Form.Input type="text" onChange={event => (this.price = event.target.value)} />
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column>
-                <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
-              </Column>
-              <Column right>
-                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-              </Column>
-            </Row>
+            <form onSubmit={e => {
+                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                  }}>
+              <Row>
+                <Column>
+                  <Form.Label>Type:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.typeName = event.target.value)} />
+                  <Form.Label>Merke:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.brand = event.target.value)} />
+                  <Form.Label>Modell:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.model = event.target.value)} />
+                  <Form.Label>Årsmodell:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.year = event.target.value)} />
+                  <Form.Label>Rammestørrelse:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.frameSize = event.target.value)} />
+                  <Form.Label>Hjulstørrelse:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.wheelSize = event.target.value)} />
+                </Column>
+                <Column>
+                  <Form.Label>Girsystem:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.gearSystem = event.target.value)} />
+                  <Form.Label>Antall gir:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.gears = event.target.value)} />
+                  <Form.Label>Bremsesystem:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.brakeSystem = event.target.value)} />
+                  <Form.Label>Vekt:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.weight_kg = event.target.value)} />
+                  <Form.Label>Beregnet for:</Form.Label>
+                  <Form.Input type="text" required onChange={event => (this.suitedFor = event.target.value)} />
+                  <Form.Label>Pris:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.price = event.target.value)} />
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                </Column>
+              </Row>
+            </form>
           </div>
         </Card>
       </div>
