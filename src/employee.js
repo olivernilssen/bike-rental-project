@@ -141,26 +141,11 @@ class SelectedEmployee extends Component {
   }
 
   handleClose() {
-    this.setState({ showError: false });
     this.setState({ showConfirm: false });
   }
 
   handleShow() {
-    if (
-      this.active.firstName == '' ||
-      this.active.lastName == '' ||
-      this.active.email == '' ||
-      this.active.tlf == '' ||
-      this.active.streetAddress == '' ||
-      this.active.streetNum == '' ||
-      this.active.postalNum == '' ||
-      this.active.place == ''
-    ) {
-      this.setState({ showError: true });
-    } else {
-      this.setState({ showError: false });
       this.setState({ showConfirm: true });
-    }
   }
 
   render() {
@@ -175,52 +160,61 @@ class SelectedEmployee extends Component {
           <Card>
             <h5>Endre Kunde:</h5>
             <br />
+            <form onSubmit={this.handleShow}>
             <Form.Label>Kunde id:</Form.Label>
             <Form.Input type="text" value={this.state.employee.worker_id} disabled />
             <Form.Label>Fornavn:</Form.Label>
             <Form.Input
+              required
               type="text"
               value={this.active.firstName}
               onChange={event => (this.active.firstName = event.target.value)}
             />
             <Form.Label>Etternavn:</Form.Label>
             <Form.Input
+              required
               type="text"
               value={this.active.lastName}
               onChange={event => (this.active.lastName = event.target.value)}
             />
             <Form.Label>Epost:</Form.Label>
             <Form.Input
-              type="text"
+              required
+              type="email"
               value={this.active.email}
               onChange={event => (this.active.email = event.target.value)}
             />
             <Form.Label>Telefon:</Form.Label>
             <Form.Input
-              type="text"
+              required
+              type="number"
               value={this.active.tlf}
               onChange={event => (this.active.tlf = event.target.value)}
             />
             <Form.Label>Adresse:</Form.Label>
             <Form.Input
+              required
               type="text"
               value={this.active.streetAddress}
               onChange={event => (this.active.streetAddress = event.target.value)}
             />
             <Form.Label>Gatenummer:</Form.Label>
             <Form.Input
+              required
               type="text"
               value={this.active.streetNum}
               onChange={event => (this.active.streetNum = event.target.value)}
             />
             <Form.Label>Postnummer:</Form.Label>
             <Form.Input
-              type="text"
+              required
+              type="number"
               value={this.active.postalNum}
               onChange={event => (this.active.postalNum = event.target.value)}
             />
             <Form.Label>Sted:</Form.Label>
             <Form.Input
+              required
               type="text"
               value={this.active.place}
               onChange={event => (this.active.place = event.target.value)}
@@ -228,12 +222,13 @@ class SelectedEmployee extends Component {
             <br />
             <Row>
               <Column>
-                <ButtonOutline.Success onClick={this.handleShow}>Lagre</ButtonOutline.Success>
+                <ButtonOutline.Submit>Lagre</ButtonOutline.Submit>
               </Column>
               <Column right>
                 <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
               </Column>
             </Row>
+            </form>
           </Card>
 
           <Modal show={this.state.showConfirm} onHide={this.handleClose}>
@@ -256,16 +251,6 @@ class SelectedEmployee extends Component {
               </Row>
             </Modal.Footer>
           </Modal>
-
-          <Modal show={this.state.showError} onHide={this.handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Noe gikk galt</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Sjekk at alle felt er utfylt korrekt, og prøv igjen.</Modal.Body>
-            <Modal.Footer>
-              <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
-            </Modal.Footer>
-          </Modal>
         </div>
       );
     } else if (this.state.allOrders) {
@@ -286,7 +271,7 @@ class SelectedEmployee extends Component {
                   <Table.Th />
                 </Table.Thead>
                 <Table.Tbody>
-                  {this.salesByEmployee.map(orders => (
+                  {this.ordersByEmployee.map(orders => (
                     <Table.Tr key={orders.id}>
                       <Table.Td>{orders.id}</Table.Td>
                       <Table.Td>{orders.typeName}</Table.Td>
@@ -372,7 +357,7 @@ class SelectedEmployee extends Component {
     this.setState({ allOrders: true });
 
     employeeService.getEmployeeSales(this.state.employee.worker_id, salesByEmployee => {
-      this.salesByEmployee = salesByEmployee;
+      this.ordersByEmployee = salesByEmployee;
     });
   }
 
