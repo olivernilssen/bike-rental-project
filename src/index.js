@@ -89,7 +89,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 */
 export let basket = [];
 export let equipmentBasket = [];
-export let employeeID = 1;
+export let employeeID = 3;
 export const activeCustomer = [{ id: null, lastName: '', firstName: '' }];
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
@@ -172,7 +172,7 @@ class Menu extends Component {
           </div>
         </div>
       );
-    } else {
+    } else if (employeeID == 3){
       return (
         <div>
           <NavBar brand="CycleOn Rentals" to="/overview/" />
@@ -234,6 +234,75 @@ class Menu extends Component {
               </SideNavBar.SideLink>
               <SideNavBar.SideLink onClick={this.toggleMenu} to="/employees">
                 Ansatte
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink>
+                <Button.Danger id="loggutKnapp" onClick={this.logout}>
+                  Logg ut
+                </Button.Danger>
+              </SideNavBar.SideLink>
+            </SideNavBar>
+          </Row>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <NavBar brand="CycleOn Rentals" to="/overview/" />
+          <Row>
+            <SideNavBar>
+              <SideNavHeading>
+                <span>MENY</span>
+              </SideNavHeading>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/overview/">
+                <FontAwesomeIcon className="navIcon" icon="chart-pie" />
+                Oversikt
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/booking/">
+                <FontAwesomeIcon className="navIcon" icon="calendar" />
+                Booking
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/area/1/1">
+                <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
+                Lokasjoner
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleBikeMenu} to="/allBikes/">
+                <FontAwesomeIcon className="navIcon" icon="bicycle" />
+                Sykler
+                <FontAwesomeIcon id="dropdownBike" icon="sort-down" />
+              </SideNavBar.SideLink>
+
+              <div className={'collapse navbar-collapse ' + showBike}>
+                <div className="subLinks">
+                  <SideNavBar.SideLink to="/allBikes/">- Alle sykler</SideNavBar.SideLink>
+                  <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
+                  <SideNavBar.SideLink to="/area/1/1">- Etter lokasjon</SideNavBar.SideLink>
+                  <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
+                </div>
+              </div>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/equipmentTypes/Helmet">
+                <FontAwesomeIcon className="navIcon" icon="plus-circle" />
+                Sykkelutstyr
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/orders/">
+                <FontAwesomeIcon className="navIcon" icon="archive" />
+                Ordrer
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/customers/">
+                <FontAwesomeIcon className="navIcon" icon="users" />
+                Kundeliste
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/basket/">
+                <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
+                Handlekurv <span style={spanstyle}>{basket.length}</span>
+              </SideNavBar.SideLink>
+              <SideNavHeading>
+                <span>MIN SIDE</span>
+              </SideNavHeading>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/information/">
+                Informasjon
+              </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/MySales">
+                Mine salg
               </SideNavBar.SideLink>
               <SideNavBar.SideLink>
                 <Button.Danger id="loggutKnapp" onClick={this.logout}>
