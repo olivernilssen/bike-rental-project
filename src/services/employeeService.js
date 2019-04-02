@@ -30,6 +30,18 @@ class EmployeeService {
     });
   }
 
+  getEmployeeSales(worker_id, success) {
+    connection.query(
+      'select ot.typeName, c.firstName, c.lastName, o.id, o.customer_id, o.type_id, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price, w.worker_id from OrderType ot, Customers c, Orders o, Workers w where c.id = o.customer_id and ot.id = o.type_id and  w.worker_id = o.soldBy_id and w.worker_id = ?',
+      [worker_id],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
   getEmployeeSearch(phrase, success) {
     connection.query(
       'select DISTINCT * from Workers where firstName like ? OR lastName like ? or worker_id like ?',
