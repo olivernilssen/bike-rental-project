@@ -27,6 +27,7 @@ class UserInfo extends Component {
         </NavBar>
 
         <Card role="main">
+        
           <Row>
             <Column width={5}>
               <b>Fornavn:</b> {this.firstName}
@@ -99,76 +100,76 @@ class EditUserInfo extends Component {
           <div className="container">
             <h5>Endre informasjon</h5>
             <br />
-            <Row>
-              <Column width={5}>
-                <Form.Label>Fornavn:</Form.Label>
-                <Form.Input
-                  type="text"
-                  value={this.firstName}
-                  onChange={event => (this.firstName = event.target.value)}
-                />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Etternavn:</Form.Label>
-                <Form.Input type="text" value={this.surName} onChange={event => (this.surName = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Epost:</Form.Label>
-                <Form.Input type="text" value={this.email} onChange={event => (this.email = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Telefonnummer:</Form.Label>
-                <Form.Input type="text" value={this.tel} onChange={event => (this.tel = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={8}>
-                <Form.Label>Gateadresse:</Form.Label>
-                <Form.Input type="text" value={this.street} onChange={event => (this.street = event.target.value)} />
-              </Column>
-              <Column width={2}>
-                <Form.Label>Nummer:</Form.Label>
-                <Form.Input
-                  type="text"
-                  value={this.streetNum}
-                  onChange={event => (this.streetNum = event.target.value)}
-                />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Postnummer:</Form.Label>
-                <Form.Input
-                  type="text"
-                  value={this.postalCode}
-                  onChange={event => (this.postalCode = event.target.value)}
-                />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Poststed:</Form.Label>
-                <Form.Input type="text" value={this.place} onChange={event => (this.place = event.target.value)} />
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column>
-                <ButtonOutline.Success
-                  type="button"
-                  onClick={e => {
-                    if (window.confirm('Er du sikker på at du ønsker å gjøre denne endringen?')) this.save(e);
-                  }}
-                >
-                  Lagre
-                </ButtonOutline.Success>
-              </Column>
-              <Column right>
-                <ButtonOutline.Secondary type="button" onClick={() => history.push('/information')}>
-                  Gå tilbake
-                </ButtonOutline.Secondary>
-              </Column>
-            </Row>
+            <form onSubmit={e => {
+                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
+                    }}>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Fornavn:</Form.Label>
+                  <Form.Input
+                    required
+                    type="text"
+                    value={this.firstName}
+                    onChange={event => (this.firstName = event.target.value)}
+                  />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Etternavn:</Form.Label>
+                  <Form.Input type="text" required value={this.surName} onChange={event => (this.surName = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Epost:</Form.Label>
+                  <Form.Input type="email"  required value={this.email} onChange={event => (this.email = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Telefonnummer:</Form.Label>
+                  <Form.Input type="number" required value={this.tel} onChange={event => (this.tel = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={8}>
+                  <Form.Label>Gateadresse:</Form.Label>
+                  <Form.Input type="text" required value={this.street} onChange={event => (this.street = event.target.value)} />
+                </Column>
+                <Column width={2}>
+                  <Form.Label>Gatenummer:</Form.Label>
+                  <Form.Input
+                    required
+                    type="text"
+                    value={this.streetNum}
+                    onChange={event => (this.streetNum = event.target.value)}
+                  />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Postnummer:</Form.Label>
+                  <Form.Input
+                    required
+                    type="number"
+                    value={this.postalCode}
+                    onChange={event => (this.postalCode = event.target.value)}
+                  />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Poststed:</Form.Label>
+                  <Form.Input type="text"  required value={this.place} onChange={event => (this.place = event.target.value)} />
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <ButtonOutline.Submit>Lagre</ButtonOutline.Submit>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={() => history.push('/information')}>
+                    Gå tilbake
+                  </ButtonOutline.Secondary>
+                </Column>
+              </Row>
+            </form>
           </div>
         </Card>
       </div>
