@@ -48,6 +48,7 @@ class Booking extends Component {
   currentHour = time + ':00';
   laterHour = time + 1 + ':00';
   laterHourAlt = laterTime + ':00';
+  bikeinBasket = false;
   dayRent = false;
   locations = [];
   bikeTypes = [];
@@ -100,7 +101,8 @@ class Booking extends Component {
     bike.startDate = new Date(this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00');
     bike.startDateString = this.state.startDate.toString() + ' ' + this.state.startHour.toString();
     bike.dayRent = this.dayRent;
-
+    this.bikeinBasket = true;
+    
     basket.push(bike);
     this.findAvailBikes();
   }
@@ -150,7 +152,7 @@ class Booking extends Component {
                 <Form.Input
                   type="date"
                   name="startDate"
-                  disabled={this.dayRent}
+                  disabled={this.dayRent || this.bikeinBasket ? true : false}
                   min={this.state.todaysDate}
                   value={this.state.startDate}
                   onChange={this.handleChange}
@@ -162,7 +164,7 @@ class Booking extends Component {
                 <Form.Input
                   type="date"
                   name="endDate"
-                  disabled={this.dayRent}
+                  disabled={this.dayRent || this.bikeinBasket ? true : false}
                   min={this.state.startDate}
                   value={this.state.endDate}
                   onChange={this.handleChange}
@@ -222,7 +224,7 @@ class Booking extends Component {
                 <Form.Input
                   type="time"
                   name="startHour"
-                  disabled={!this.dayRent}
+                  disabled={!this.dayRent || this.bikeinBasket ? true : false}
                   value={this.state.startHour}
                   onChange={this.handleChange}
                 />
@@ -233,7 +235,7 @@ class Booking extends Component {
                 <Form.Input
                   type="time"
                   name="endHour"
-                  disabled={!this.dayRent}
+                  disabled={!this.dayRent || this.bikeinBasket ? true : false}
                   value={this.state.endHour}
                   onChange={this.handleChange}
                 />
@@ -245,7 +247,6 @@ class Booking extends Component {
             </Row>
           </div>
           <br />
-
           <CenterContent>
             <div style={{ width: 800 + 'px' }}>
               <h4>Ledige sykler</h4>
@@ -320,6 +321,7 @@ class Booking extends Component {
           {
             for (let j = 0; j < basket.length; j++) {
               if (result[i].id == basket[j].id) {
+                this.bikeinBasket = true;
                 result.splice(i, 1);
               }
             }
@@ -335,6 +337,7 @@ class Booking extends Component {
               empty
             };
           });
+
         } else {
           this.setState({ styleState: (this.styleState.display = 'block') });
           this.setState(state => {
@@ -367,6 +370,7 @@ class Booking extends Component {
             }
             for (let j = 0; j < basket.length; j++) {
               if (result[i].id == basket[j].id) {
+                this.bikeinBasket = true;
                 result.splice(i, 1);
               }
             }

@@ -92,6 +92,7 @@ export let equipmentBasket = [];
 export let employeeID = 3;
 export const activeCustomer = [{ id: null, lastName: '', firstName: '' }];
 
+
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
 så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
 class LoginMenu extends Component {
@@ -103,13 +104,18 @@ class LoginMenu extends Component {
 /* Set state for menyen. Hva vises, alt etter hvem som er logget inn */
 class Menu extends Component {
   state = {
-    basket: basket,
+    Localbasket: this.props.Mybasket,
     isLoggedIn: true,
     bikeMenu: false,
     username: '',
     password: '',
     userinfo: null
   };
+
+  componentWillReceiveProps(nextProps) {
+    console.log("Will recieve Props");
+    this.setState({ Localbasket: nextProps.Mybasket });
+  }
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
 
   toggleBikeMenu() {
@@ -221,7 +227,7 @@ class Menu extends Component {
               </SideNavBar.SideLink>
               <SideNavBar.SideLink onClick={this.toggleMenu} to="/basket/">
                 <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
-                Handlekurv <span style={spanstyle}>{basket.length}</span>
+                Handlekurv <span style={spanstyle}>{this.state.Localbasket.length}</span>
               </SideNavBar.SideLink>
               <SideNavHeading>
                 <span>MIN SIDE</span>
@@ -293,7 +299,7 @@ class Menu extends Component {
               </SideNavBar.SideLink>
               <SideNavBar.SideLink onClick={this.toggleMenu} to="/basket/">
                 <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
-                Handlekurv <span style={spanstyle}>{basket.length}</span>
+                Handlekurv <span style={spanstyle}>{this.state.Localbasket.length}</span>
               </SideNavBar.SideLink>
               <SideNavHeading>
                 <span>MIN SIDE</span>
@@ -358,7 +364,7 @@ class Menu extends Component {
 ReactDOM.render(
   <HashRouter>
     <div>
-      <Menu isLoggedIn={true} />
+      <Menu isLoggedIn={true} Mybasket={basket}/>
       <Route exact path="/login/" component={LoginMenu} />
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
