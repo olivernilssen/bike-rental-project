@@ -239,14 +239,8 @@ class Booking extends Component {
                 />
               </Column>
             </Row>
-            {/* submit button */}
             <br />
             <Row>
-              <Column width={1}>
-                <ButtonOutline.Secondary name="submit" onClick={this.findAvailBikes}>
-                  Søk
-                </ButtonOutline.Secondary>
-              </Column>
               <Column right>{notice}</Column>
             </Row>
           </div>
