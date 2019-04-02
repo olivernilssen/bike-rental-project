@@ -49,8 +49,8 @@ class Chart extends Component {
     'November',
     'Desember'
   ];
-  newData = null;
-  newLabel = null;
+  newData = [0, 0, 0, 0];
+  newLabel = [0, 0, 0, 0];
 
   render() {
     const chartData = {
@@ -94,7 +94,7 @@ class Chart extends Component {
                   ]
                 },
                 animation: {
-                  duration: 1000,
+                  duration: 2000,
                   animateScale: true
                 }
               })
@@ -111,9 +111,10 @@ class Chart extends Component {
     let tempLabel = [];
 
     this.newData = [];
-    this.newLabel = [];
 
     rentalService.getMonthlyPrice(newdata => {
+      this.newLabel.length = newdata.length;
+      
       for (let i = 0; i < newdata.length; i++) {
         tempData.push(newdata[i].sumPrice);
         tempLabel.push(this.months[newdata[i].month - 1]);
@@ -127,9 +128,6 @@ class Chart extends Component {
   mounted() {
     let tempData = [];
     let tempLabel = [];
-
-    this.newData = [];
-    this.newLabel = [];
 
     rentalService.getMonthlyPrice(newdata => {
       for (let i = 0; i < newdata.length; i++) {
