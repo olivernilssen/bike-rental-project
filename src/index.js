@@ -29,6 +29,7 @@ import {
   EquipmentTypesMain,
   EquipmentTypesOtherMain
 } from './equipment.js';
+import { Employees, AddEmployee } from './employee.js';
 
 import {
   Card,
@@ -231,6 +232,9 @@ class Menu extends Component {
               <SideNavBar.SideLink onClick={this.toggleMenu} to="/MySales">
                 Mine salg
               </SideNavBar.SideLink>
+              <SideNavBar.SideLink onClick={this.toggleMenu} to="/employees">
+                Ansatte
+              </SideNavBar.SideLink>
               <SideNavBar.SideLink>
                 <Button.Danger id="loggutKnapp" onClick={this.logout}>
                   Logg ut
@@ -320,6 +324,8 @@ ReactDOM.render(
       <Route exact path="/EditUserInfo" component={EditUserInfo} />
       <Route exact path="/MySales/" component={MySales} />
       <Route path="/MySales/:id/edit" component={DetailedOrder} />
+      <Route path="/employees/" component={Employees} />
+      <Route exact path="/addEmployee/" component={AddEmployee} />
     </div>
   </HashRouter>,
   document.getElementById('root')
