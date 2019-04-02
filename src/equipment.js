@@ -313,7 +313,7 @@ class EquipTypeDetails extends Component {
                       Du har ikke valgt noen sykkel..
                     </Select.Option>
                     {this.distinctBikeType.map(trestrictions => (
-                      <Select.Option key={trestrictions.id} value={trestrictions.id}>
+                      <Select.Option key={trestrictions.typeName} value={trestrictions.id}>
                         {trestrictions.typeName}
                       </Select.Option>
                     ))}

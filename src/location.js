@@ -169,7 +169,7 @@ class AddLocation extends Component {
                 <Form.Label>Område:</Form.Label>
                 <Select value={this.curArea} onChange={event => (this.curArea = event.target.value)}>
                   {this.areaNames.map(areaN => (
-                    <Select.Option key={areaN.id} value={areaN.areaName} id={areaN.id}>
+                    <Select.Option key={areaN.areaName} value={areaN.areaName} id={areaN.id}>
                       {areaN.areaName}
                     </Select.Option>
                   ))}
