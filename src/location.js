@@ -4,6 +4,9 @@ import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Tabl
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
+import { Modal } from 'react-bootstrap';
+require('react-bootstrap/ModalHeader');
+require('react-bootstrap/Modal');
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -42,6 +45,15 @@ class AreaList extends Component {
 
 class AddArea extends Component {
   areaName = '';
+  showConfirm = false;
+
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  handleShow() {
+    this.showConfirm = true;
+  }
 
   render() {
     return (
@@ -52,9 +64,7 @@ class AddArea extends Component {
         <Card>
           <div className="container">
             <h5>Nytt område</h5>
-            <form onSubmit={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                    }}>
+            <form onSubmit={this.handleShow}>
               <Row>
                 <Column>
                   <Form.Label>Navn:</Form.Label>
@@ -62,9 +72,7 @@ class AddArea extends Component {
                   <br /> <br />
                   <Row>
                     <Column>
-                      <ButtonOutline.Submit>
-                        Legg til
-                      </ButtonOutline.Submit>
+                      <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
                     </Column>
                     <Column right>
                       <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
@@ -76,13 +84,34 @@ class AddArea extends Component {
             </form>
           </div>
         </Card>
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å legge til nytt område.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
 
   add() {
     rentalService.addArea(this.areaName);
-
+    this.handleClose();
     history.push('/area/1');
   }
 
@@ -142,6 +171,15 @@ class AddLocation extends Component {
   streetNum = 0;
   curArea = '';
   curAreaID = '';
+  showConfirm = false;
+
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  handleShow() {
+    this.showConfirm = true;
+  }
 
   onChangeType(event) {
     const selectedIndex = event.target.options.selectedIndex;
@@ -160,13 +198,11 @@ class AddLocation extends Component {
           <div className="container">
             <h5>Ny lokasjon</h5>
             <br />
-            <form onSubmit={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                      }}>
+            <form onSubmit={this.handleShow}>
               <Row>
                 <Column width={5}>
                   <Form.Label>Navn:</Form.Label>
-                  <Form.Input type="text"  required onChange={event => (this.name = event.target.value)} />
+                  <Form.Input type="text" required onChange={event => (this.name = event.target.value)} />
                 </Column>
                 <Column width={5}>
                   <Form.Label>Område:</Form.Label>
@@ -203,9 +239,7 @@ class AddLocation extends Component {
               <br />
               <Row>
                 <Column>
-                  <ButtonOutline.Submit>
-                    Legg til
-                  </ButtonOutline.Submit>
+                  <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
                 </Column>
                 <Column right>
                   <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
@@ -214,6 +248,27 @@ class AddLocation extends Component {
             </form>
           </div>
         </Card>
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å legge til ny lokasjon.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
         <br />
       </div>
     );
@@ -232,6 +287,7 @@ class AddLocation extends Component {
         this.curAreaID
       );
     });
+    this.handleClose();
     history.push('/area/1/1');
   }
 

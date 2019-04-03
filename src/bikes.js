@@ -20,11 +20,12 @@ import {
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
+import { Modal } from 'react-bootstrap';
+require('react-bootstrap/ModalHeader');
+require('react-bootstrap/Modal');
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
-
-
 
 class AllBikes extends Component {
   state = {
@@ -337,6 +338,7 @@ class AddBikes extends Component {
   bikeTypes = [];
   locations = [];
   typeSykkel = '';
+  showConfirm = false;
   state = {
     selectedBikeID: 1,
     curLocation: ''
@@ -354,6 +356,14 @@ class AddBikes extends Component {
     this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
   }
 
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  handleShow() {
+    this.showConfirm = true;
+  }
+
   render() {
     return (
       <div>
@@ -363,44 +373,63 @@ class AddBikes extends Component {
         <Card>
           <div className="container">
             <h5>Ny sykkel</h5>
-            <form onSubmit={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                  }}>
-            <Row>
-              <Column>
-                <Form.Label>Antall:</Form.Label>
-                <Form.Input type="number" required onChange={event => (this.antall = event.target.value)} />
-                <Form.Label>Type:</Form.Label>
-                <Select onChange={this.onChangeType}>
-                  {this.bikeTypes.map(bikeType => (
-                    <Select.Option key={bikeType.id} dataKey={bikeType.id}>
-                      {bikeType.typeName} {bikeType.brand} {bikeType.model} {bikeType.year}
-                    </Select.Option>
-                  ))}
-                </Select>
-                <Form.Label>Lokasjon: </Form.Label>
-                <Select onChange={this.onChangeLocation}>
-                  {this.locations.map(lokasjon => (
-                    <Select.Option key={lokasjon.id} dataKey={lokasjon.id}>
-                      {lokasjon.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-                <br /> <br />
-                <Row>
-                  <Column>
-                    <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
-                  </Column>
-                  <Column right>
-                    <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-                  </Column>
-                </Row>
-              </Column>
-              <br />
-            </Row>
+            <form onSubmit={this.handleShow}>
+              <Row>
+                <Column>
+                  <Form.Label>Antall:</Form.Label>
+                  <Form.Input type="number" required onChange={event => (this.antall = event.target.value)} />
+                  <Form.Label>Type:</Form.Label>
+                  <Select onChange={this.onChangeType}>
+                    {this.bikeTypes.map(bikeType => (
+                      <Select.Option key={bikeType.id} dataKey={bikeType.id}>
+                        {bikeType.typeName} {bikeType.brand} {bikeType.model} {bikeType.year}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                  <Form.Label>Lokasjon: </Form.Label>
+                  <Select onChange={this.onChangeLocation}>
+                    {this.locations.map(lokasjon => (
+                      <Select.Option key={lokasjon.id} dataKey={lokasjon.id}>
+                        {lokasjon.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                  <br /> <br />
+                  <Row>
+                    <Column>
+                      <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
+                    </Column>
+                    <Column right>
+                      <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                    </Column>
+                  </Row>
+                </Column>
+                <br />
+              </Row>
             </form>
           </div>
         </Card>
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å legge til ny sykkel.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -413,6 +442,7 @@ class AddBikes extends Component {
         bikeService.addBike(this.state.curLocation, this.state.selectedBikeID, 'OK');
       }
     }
+    this.handleClose();
     history.push('/allBikes/');
   }
 
@@ -679,6 +709,15 @@ class NewBikeType extends Component {
   weight_kg = 0;
   suitedFor = '';
   price = 0;
+  showConfirm = false;
+
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  handleShow() {
+    this.showConfirm = true;
+  }
 
   render() {
     return (
@@ -689,9 +728,7 @@ class NewBikeType extends Component {
         <Card>
           <div className="container">
             <h5>Ny sykkeltype</h5>
-            <form onSubmit={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                  }}>
+            <form onSubmit={this.handleShow}>
               <Row>
                 <Column>
                   <Form.Label>Type:</Form.Label>
@@ -734,6 +771,27 @@ class NewBikeType extends Component {
             </form>
           </div>
         </Card>
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å legge til ny sykkeltype.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -753,7 +811,7 @@ class NewBikeType extends Component {
       this.suitedFor,
       this.price
     );
-
+    this.handleClose();
     history.push('/bikeTypes/Terreng');
   }
 

@@ -68,14 +68,12 @@ class EquipmentService {
     );
   }
 
-  addRestriction(biketype, equipmenttype, success) {
+  addRestriction(biketype, equipmenttype) {
     connection.query(
       'insert into Restrictions (bikeType_id, equipmentType_id) values (?, ?)',
       [biketype, equipmenttype],
       error => {
         if (error) return console.error(error);
-
-        success();
       }
     );
   }
@@ -90,13 +88,6 @@ class EquipmentService {
         success();
       }
     );
-  }
-
-  getBikeIdByName(name, success) {
-    connection.query('select id from BikeType where typeName = ?', [name], (error, idResult) => {
-      if (error) return console.error(error);
-      success(idResult[0]);
-    });
   }
 
   getTypeNameForSuitableEquipment(id, success) {

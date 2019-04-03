@@ -18,7 +18,10 @@ import {
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { equipmentService } from './services/equipmentService';
-import { connection } from './services/mysql_connection';
+import { bikeService } from './services/bikesService';
+import { Modal } from 'react-bootstrap';
+require('react-bootstrap/ModalHeader');
+require('react-bootstrap/Modal');
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -64,56 +67,16 @@ class EquipmentTypes extends Component {
   }
 }
 
-class EquipmentTypesOtherMain extends Component {
-  render() {
-    return (
-      <div>
-        <NavBar brand="CycleOn Rentals">
-          <h1>Sykkelutstyr</h1>
-        </NavBar>
-        <Card>
-          <Row>
-            <Column>
-              Opprettelsen av begrensningen var vellykket.
-              <br />
-              <br />
-            </Column>
-          </Row>
-        </Card>
-      </div>
-    );
-  }
-}
-
-class EquipmentTypesMain extends Component {
-  render() {
-    return (
-      <div>
-        <NavBar brand="CycleOn Rentals">
-          <h1>Sykkelutstyr</h1>
-        </NavBar>
-        <Card>
-          <Row>
-            <Column>
-              Slettingen av begrensningen var vellykket.
-              <br />
-              <br />
-            </Column>
-          </Row>
-        </Card>
-      </div>
-    );
-  }
-}
-
 class EquipTypeDetails extends Component {
   handler = '';
   restrictions = [];
   equipType = null;
   distinctBikeType = null;
   lock = false;
-  selectStatus = '';
+  bikeType = '';
   showingEquipment = 0;
+  showInfo = false;
+  infoText = '';
 
   state = {
     priceEquip: 0,
@@ -164,6 +127,15 @@ class EquipTypeDetails extends Component {
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  handleClose() {
+    this.showInfo = false;
+    this.mounted();
+  }
+
+  handleShow() {
+    this.showInfo = true;
   }
 
   render() {
@@ -230,8 +202,7 @@ class EquipTypeDetails extends Component {
                               this.save(type);
                             }}
                           >
-                            {' '}
-                            {type.changePrice ? 'Lagre' : 'Endre'}
+                            Lagre
                           </ButtonOutline.Success>
                         ) : (
                           <ButtonOutline.Secondary
@@ -240,7 +211,7 @@ class EquipTypeDetails extends Component {
                               this.change(type);
                             }}
                           >
-                            {type.changePrice ? 'Lagre' : 'Endre'}
+                            Endre
                           </ButtonOutline.Secondary>
                         )}
                       </ClickTable.Td>
@@ -282,7 +253,7 @@ class EquipTypeDetails extends Component {
                   <Table>
                     <Table.Thead>
                       <Table.Th>Navn</Table.Th>
-                      <Table.Th>Endre</Table.Th>
+                      <Table.Th />
                     </Table.Thead>
                     <Table.Tbody>
                       <Table.Tr>{noRestr}</Table.Tr>
@@ -290,7 +261,10 @@ class EquipTypeDetails extends Component {
                         <Table.Tr key={restrictions.id}>
                           <Table.Td>{restrictions.typeName}</Table.Td>
                           <Table.Td>
-                            <ButtonOutline.Success onClick={() => this.delete(restrictions.id)}>
+                            <ButtonOutline.Success
+                              style={{ float: 'right' }}
+                              onClick={() => this.delete(restrictions.id)}
+                            >
                               Tillat
                             </ButtonOutline.Success>
                           </Table.Td>
@@ -304,18 +278,10 @@ class EquipTypeDetails extends Component {
               <Row>
                 <Column>
                   <h6>Velg ny sykkeltype å begrense for dette utstyret:</h6>
-                  <Select
-                    name="typeSelect"
-                    value={this.selectStatus}
-                    onChange={event => (this.selectStatus = event.target.value)}
-                  >
-                    <Select.Option value="%" key="0">
-                      Du har ikke valgt noen sykkel..
-                    </Select.Option>
+                  <Select name="typeSelect" onChange={event => (this.bikeType = event.target.value)}>
+                    <Select.Option>Du har ikke valgt noen sykkel..</Select.Option>
                     {this.distinctBikeType.map(trestrictions => (
-                      <Select.Option key={trestrictions.typeName} value={trestrictions.id}>
-                        {trestrictions.typeName}
-                      </Select.Option>
+                      <Select.Option key={trestrictions.typeName}>{trestrictions.typeName}</Select.Option>
                     ))}
                   </Select>
                   <br />
@@ -333,8 +299,18 @@ class EquipTypeDetails extends Component {
             </Column>
           </Row>
         </Card>
-        <br />
 
+        <Modal show={this.showInfo} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Info</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{this.infoText}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <ButtonOutline.Secondary onClick={this.handleClose}>Lukk</ButtonOutline.Secondary>
+          </Modal.Footer>
+        </Modal>
         <br />
       </div>
     );
@@ -367,20 +343,22 @@ class EquipTypeDetails extends Component {
   }
 
   add() {
-    if (this.selectStatus != '') {
-      equipmentService.getBikeIdByName(this.selectStatus, idResult => {
-        equipmentService.addRestriction(idResult[0].id, this.state.equipTypeDetails[0].id, () => {
-          history.push('/equipmentTypes/Skip/OtherMain');
-        });
+    this.infoText = 'Opprettelsen av begrensningen var vellykket';
+
+    if (this.bikeType != '' || this.bikeType != undefined) {
+      bikeService.getTypeID(this.bikeType, idResult => {
+        equipmentService.addRestriction(idResult[0].id, this.state.equipTypeDetails[0].id);
       });
     }
+    this.handleShow();
   }
 
   delete(id) {
     this.handler = id;
+    this.infoText = 'Sletting av begrensningen var vellykket.';
 
     equipmentService.deleteRestriction(this.handler, this.state.equipTypeDetails[0].id, () => {
-      history.push('/equipmentTypes/Skip/Main');
+      this.handleShow();
     });
   }
 
@@ -434,6 +412,7 @@ class AddEquipment extends Component {
   antall = 0;
   equipmentTypes = [];
   locations = [];
+  showConfirm = false;
   state = {
     selectedEquipTypeID: 1,
     curLocation: ''
@@ -451,6 +430,14 @@ class AddEquipment extends Component {
     this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
   }
 
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  handleShow() {
+    this.showConfirm = true;
+  }
+
   render() {
     return (
       <div>
@@ -461,9 +448,7 @@ class AddEquipment extends Component {
           <div className="container">
             <h5>Legg inn nytt sykkelutstyr</h5>
             <br />
-            <form onSubmit={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                    }}>
+            <form onSubmit={this.handleShow}>
               <Row>
                 <Column width={3}>
                   <Form.Label>Utstyrstype:</Form.Label>
@@ -508,6 +493,27 @@ class AddEquipment extends Component {
         <br />
         <NewEquipmentType />
         <br />
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å legge til sykkelutstyret.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -520,7 +526,7 @@ class AddEquipment extends Component {
         equipmentService.addEquipment(this.state.curLocation, this.state.selectedEquipTypeID, 'OK');
       }
     }
-
+    this.handleClose();
     history.push('/equipmentTypes/Helmet');
   }
 
@@ -547,6 +553,15 @@ class NewEquipmentType extends Component {
   year = 0;
   comment = '';
   price = 0;
+  showConfirm = false;
+
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  handleShow() {
+    this.showConfirm = true;
+  }
 
   render() {
     return (
@@ -558,9 +573,7 @@ class NewEquipmentType extends Component {
           <div className="container">
             <h5>Ny utstyrstype</h5>
             <br />
-              <form onSubmit={e => {
-                      if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                    }}>
+            <form onSubmit={this.handleShow}>
               <Row>
                 <Column>
                   <Form.Label>Type:</Form.Label>
@@ -591,6 +604,27 @@ class NewEquipmentType extends Component {
             </form>
           </div>
         </Card>
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å legge til utstyrstypen.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -598,6 +632,7 @@ class NewEquipmentType extends Component {
   add() {
     equipmentService.newEquipmentType(this.typeName, this.brand, this.year, this.comment, this.price);
 
+    this.handleClose();
     history.push('/equipmentTypes/Helmet');
   }
 
@@ -609,7 +644,5 @@ class NewEquipmentType extends Component {
 module.exports = {
   EquipmentTypes,
   EquipTypeDetails,
-  AddEquipment,
-  EquipmentTypesMain,
-  EquipmentTypesOtherMain
+  AddEquipment
 };

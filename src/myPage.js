@@ -5,6 +5,9 @@ import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { orderService } from './services/ordersService';
 import { basket, employeeID } from './index.js';
+import { Modal } from 'react-bootstrap';
+require('react-bootstrap/ModalHeader');
+require('react-bootstrap/Modal');
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -27,7 +30,6 @@ class UserInfo extends Component {
         </NavBar>
 
         <Card role="main">
-        
           <Row>
             <Column width={5}>
               <b>Fornavn:</b> {this.firstName}
@@ -89,6 +91,15 @@ class EditUserInfo extends Component {
   place = '';
   postalCode = '';
   streetNum = '';
+  showConfirm = false;
+
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  handleShow() {
+    this.showConfirm = true;
+  }
 
   render() {
     return (
@@ -100,9 +111,7 @@ class EditUserInfo extends Component {
           <div className="container">
             <h5>Endre informasjon</h5>
             <br />
-            <form onSubmit={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                    }}>
+            <form onSubmit={this.handleShow}>
               <Row>
                 <Column width={5}>
                   <Form.Label>Fornavn:</Form.Label>
@@ -115,23 +124,43 @@ class EditUserInfo extends Component {
                 </Column>
                 <Column width={5}>
                   <Form.Label>Etternavn:</Form.Label>
-                  <Form.Input type="text" required value={this.surName} onChange={event => (this.surName = event.target.value)} />
+                  <Form.Input
+                    type="text"
+                    required
+                    value={this.surName}
+                    onChange={event => (this.surName = event.target.value)}
+                  />
                 </Column>
               </Row>
               <Row>
                 <Column width={5}>
                   <Form.Label>Epost:</Form.Label>
-                  <Form.Input type="email"  required value={this.email} onChange={event => (this.email = event.target.value)} />
+                  <Form.Input
+                    type="email"
+                    required
+                    value={this.email}
+                    onChange={event => (this.email = event.target.value)}
+                  />
                 </Column>
                 <Column width={5}>
                   <Form.Label>Telefonnummer:</Form.Label>
-                  <Form.Input type="number" required value={this.tel} onChange={event => (this.tel = event.target.value)} />
+                  <Form.Input
+                    type="number"
+                    required
+                    value={this.tel}
+                    onChange={event => (this.tel = event.target.value)}
+                  />
                 </Column>
               </Row>
               <Row>
                 <Column width={8}>
                   <Form.Label>Gateadresse:</Form.Label>
-                  <Form.Input type="text" required value={this.street} onChange={event => (this.street = event.target.value)} />
+                  <Form.Input
+                    type="text"
+                    required
+                    value={this.street}
+                    onChange={event => (this.street = event.target.value)}
+                  />
                 </Column>
                 <Column width={2}>
                   <Form.Label>Gatenummer:</Form.Label>
@@ -155,7 +184,12 @@ class EditUserInfo extends Component {
                 </Column>
                 <Column width={5}>
                   <Form.Label>Poststed:</Form.Label>
-                  <Form.Input type="text"  required value={this.place} onChange={event => (this.place = event.target.value)} />
+                  <Form.Input
+                    type="text"
+                    required
+                    value={this.place}
+                    onChange={event => (this.place = event.target.value)}
+                  />
                 </Column>
               </Row>
               <br />
@@ -172,6 +206,27 @@ class EditUserInfo extends Component {
             </form>
           </div>
         </Card>
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å lagre endringene.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.save}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -201,6 +256,7 @@ class EditUserInfo extends Component {
       this.postalCode,
       this.streetNum,
       () => {
+        this.handleClose();
         history.push('/information');
       }
     );
