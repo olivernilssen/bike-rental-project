@@ -127,6 +127,7 @@ class SelectedEmployee extends Component {
 
   active = '';
   ordersByEmployee = [];
+  accountPasswords = [];
 
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -155,13 +156,13 @@ class SelectedEmployee extends Component {
       return (
         <div>
           <NavBar brand="CycleOn Rentals">
-            <h1>Kundeliste</h1>
+            <h1>Liste over Ansatte</h1>
           </NavBar>
           <Card>
-            <h5>Endre Kunde:</h5>
+            <h5>Endre Ansatt:</h5>
             <br />
             <form onSubmit={this.handleShow}>
-            <Form.Label>Kunde id:</Form.Label>
+            <Form.Label>Ansatt id:</Form.Label>
             <Form.Input type="text" value={this.state.employee.worker_id} disabled />
             <Form.Label>Fornavn:</Form.Label>
             <Form.Input
@@ -218,6 +219,13 @@ class SelectedEmployee extends Component {
               type="text"
               value={this.active.place}
               onChange={event => (this.active.place = event.target.value)}
+            />
+            <Form.Label>Passord:</Form.Label>
+            <Form.Input
+              required
+              type="password"
+              value={this.active.password}
+              onChange={event => (this.active.password = event.target.value)}
             />
             <br />
             <Row>
@@ -370,6 +378,9 @@ class SelectedEmployee extends Component {
       this.setState({ state: (this.state.employee = result) });
       this.active = result;
     });
+
+    // employeeService.getAccountPassword(
+    // });
   }
 
   save() {
@@ -432,6 +443,11 @@ class AddEmployee extends Component {
   postal = 0;
   place = '';
   addressID = null;
+  username = '';
+  password = '';
+  EmployeeID = null;
+
+
 
   render() {
     return (
@@ -483,13 +499,21 @@ class AddEmployee extends Component {
                 <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
               </Column>
             </Row>
+            <Row>
+              <Column width={5}>
+                <Form.Label>Brukernavn:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.username = event.target.value)} />
+              </Column>
+              <Column width={5}>
+                <Form.Label>Passord:</Form.Label>
+                <Form.Input type="text" required={true} onChange={event => (this.password = event.target.value)} />
+              </Column>
+            </Row>
             <br />
             <Row>
               <Column>
                 <ButtonOutline.Success
-                  onClick={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                  }}
+                  onClick={this.add}
                 >
                   Legg til
                 </ButtonOutline.Success>
@@ -515,11 +539,17 @@ class AddEmployee extends Component {
       if (result === undefined) {
         employeeService.addAddress(this.postalNum, this.postal, this.street, this.streetNum);
 
-        employeeService.getAddressID(this.postalNum, this.postal, this.street, this.streetNum, newID => {
-          employeeService.addEmployee(this.firstName, this.lastName, this.email, this.tlf, newID.worker_id);
+        employeeService.getAddressID(this.postalNum, this.postal, this.street, this.streetNum, adrID => {
+          employeeService.addEmployee(this.firstName, this.lastName, this.email, this.tlf, adrID.id);
         });
+
+        employeeService.getEmployeeID(this.email, empID => {
+          console.log(empID);
+          employeeService.addUser(this.username, this.password, empID.worker_id);
+        })
       } else {
-        employeeService.addEmployee(this.firstName, this.lastName, this.email, this.tlf, result.worker_id);
+        employeeService.addEmployee(this.firstName, this.lastName, this.email, this.tlf, result.id);
+        employeeService.addUser(this.username, this.password, result.worker_id);
       }
     });
 

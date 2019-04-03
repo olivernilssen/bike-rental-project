@@ -22,6 +22,22 @@ class EmployeeService {
     );
   }
 
+  getEmployeeID(email, success) {
+    connection.query('select worker_id from Workers where email = ?',
+    [email],
+    (error, result) => {
+      if (error) return console.error(error);
+      success(result[0]);
+    })
+  }
+
+  getAccountPassword(user_id, success) {
+    connection.query('select password from Account where user_id = ?', [user_id], (error, result) => {
+      if (error) return console.error(error);
+      success(result[0]);
+    })
+  }
+
   getCustomerOrders(customer_id, success) {
     connection.query('select o.id, o.customer_id, ot.typeName, o.dateOrdered, o.fromDateTime, o.toDateTime, o.price from Orders o, OrderType ot, Customers c where o.type_id = ot.id and c.id=o.customer_id and o.customer_id = ?', [customer_id], (error, results) => {
       if (error) return console.error(error);
@@ -95,6 +111,18 @@ class EmployeeService {
     (error) => {
       if (error) return console.error(error);
     });
+  }
+
+  addUser(username, password, user_id ) {
+    connection.query("insert into Account (username, password, user_id ) values (?, ?, ?)",
+    [username, password, user_id],
+    (error) => {
+      if (error) return console.error(error);
+    });
+  }
+
+  updateUser(username, password) {
+    connection.query("update Account (username, password)")
   }
 }
 
