@@ -33,10 +33,16 @@ class AllBikes extends Component {
     searchWord: ''
   };
 
+  /**Handle bikeSearch
+   * Sets state of searchword to input value,
+   * and then calls to searchBikes()
+   * @event - event that's executed when button is clicked
+   */
   handleChange(event) {
     this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchBikes());
   }
 
+  //Search after bike
   searchBikes() {
     let searchWord = '%' + this.state.searchWord + '%';
 
@@ -119,8 +125,10 @@ class AllBikes extends Component {
     );
   }
 
-  change() {}
-
+  /** Mounted
+   * We use an sql-query to fetch all bikes from the database
+   * and stores them in the bike-array
+   */
   mounted() {
     bikeService.getAllBikesByType(results => {
       this.setState({ bikes: results });
@@ -150,6 +158,7 @@ class SelectedBike extends Component {
         </NavBar>
         <Card title={'Sykkel med id: ' + this.props.match.params.id}>
           <img src="../pictures/bike.svg" width="20%" alt="Illustrasjonsbilde av en sykkel" />
+
           <Table>
             <Table.Thead>
               <Table.Th>Type id:</Table.Th>
@@ -163,7 +172,6 @@ class SelectedBike extends Component {
               <Table.Th>For</Table.Th>
               <Table.Th>Pris</Table.Th>
             </Table.Thead>
-
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>{this.bike.type_id}</Table.Td>
@@ -181,9 +189,9 @@ class SelectedBike extends Component {
               </Table.Tr>
             </Table.Tbody>
           </Table>
+          <br />
+          <br />
 
-          <br />
-          <br />
           <Table>
             <Table.Thead>
               <Table.Th>Sykkel id</Table.Th>
@@ -191,7 +199,6 @@ class SelectedBike extends Component {
               <Table.Th>Lokasjon</Table.Th>
               <Table.Th>Status</Table.Th>
             </Table.Thead>
-
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>{this.props.match.params.id}</Table.Td>
@@ -222,6 +229,7 @@ class SelectedBike extends Component {
             </Table.Tbody>
           </Table>
           <br />
+
           <CenterContent>
             <div className="form-group">
               <Form.Label htmlFor="comment">
@@ -254,6 +262,11 @@ class SelectedBike extends Component {
     );
   }
 
+  /** Mounted
+   * We use an sql-query to fetch all locations from the database,
+   * and stores them in the locations-array.
+   * We fetch the bike with the specific id
+   */
   mounted() {
     rentalService.getLocations(result => {
       this.locations = result;
@@ -273,12 +286,19 @@ class SelectedBike extends Component {
     });
   }
 
+  /** Select location
+   * Gets the location_id from the select locations option-menu
+   * @event - the chosen option in our list
+   */
   onChangeLocation(event) {
     const selectedIndex = event.target.options.selectedIndex;
     this.bikeLoc = event.target.value;
     this.setState({ state: (this.state.location_id = event.target.options[selectedIndex].getAttribute('data-key')) });
   }
 
+  /** Change bike info
+   * Updates the bike in the database, with the chosen values
+   */
   change() {
     if (this.state.location_id == null) {
     } else {
@@ -317,6 +337,9 @@ class BikeTypes extends Component {
     );
   }
 
+  /** Mounted
+   * Gets one of each biketype from an sql-query to the database
+   */
   mounted() {
     bikeService.getDistinctBikeType(bikeTypes => {
       for (let i = 0; i < bikeTypes.length; i++) {
@@ -344,6 +367,10 @@ class AddBikes extends Component {
     curLocation: ''
   };
 
+  /** On change of biketype
+   * Sets the selected biketype to the chosen option in our list
+   * @event - the option chosen from the select option menu
+   */
   onChangeType(event) {
     const selectedIndex = event.target.options.selectedIndex;
     this.setState({
@@ -351,15 +378,21 @@ class AddBikes extends Component {
     });
   }
 
+  /** On change of locations
+   * Sets the selected location to the chosen option in our list
+   * @event - the option chosen from the select option menu
+   */
   onChangeLocation(event) {
     const selectedIndex = event.target.options.selectedIndex;
     this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
   }
 
+  /** Handle opening and closing of the modal
+   * Modal opens when submitting the form
+   */
   handleClose() {
     this.showConfirm = false;
   }
-
   handleShow() {
     this.showConfirm = true;
   }
@@ -434,6 +467,10 @@ class AddBikes extends Component {
     );
   }
 
+  /** Add the bike
+   * Adds the bike(s) to the database, with the chosen bikeType
+   * and location
+   */
   add() {
     if (this.antall <= 0) {
       return;
@@ -450,6 +487,10 @@ class AddBikes extends Component {
     history.push('/allBikes/');
   }
 
+  /** Mounted
+   * Fetch the locations stored in the database
+   * Fetch the biketypes stores in the database
+   */
   mounted() {
     rentalService.getLocations(locations => {
       this.state.curLocation = locations[0].id;
@@ -476,6 +517,12 @@ class BikeTypeDetails extends Component {
     bikeTypeDetails: null
   };
 
+  /** Show all bikes with specific brand within a biketype
+   * Bikes belonging to the specific brand will show when the brand
+   * is clicked on. When the brand is clicked again, all bikes from
+   * the chosen biketype will show
+   * @type - the brand that is clicked on
+   */
   showThisType(type) {
     this.temp = [];
     let index = this.state.bikeTypeDetails
@@ -497,7 +544,6 @@ class BikeTypeDetails extends Component {
           this.setState({ bikes: this.state.bikes.concat(results) });
         });
       }
-
       this.showingBikes = 0;
     } else {
       this.lock = true;
@@ -512,6 +558,11 @@ class BikeTypeDetails extends Component {
     }
   }
 
+  /** Handle change
+   * This check to see if there has been a change in the input
+   * for the price of the bikebrand. If there is, change the value shown
+   * @e - The chosen value
+   */
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -637,6 +688,10 @@ class BikeTypeDetails extends Component {
     );
   }
 
+  /** Change the price of the bike
+   * Stores the value chosen, to be used in the function save()
+   * @type - The bikebrand chosen
+   */
   change(type) {
     for (let i = 0; i < this.state.bikeTypeDetails.length; i++) {
       this.state.bikeTypeDetails[i].changePrice = false;
@@ -651,6 +706,11 @@ class BikeTypeDetails extends Component {
     this.state.bikeTypeDetails[index].changePrice = true;
   }
 
+  /** Save the price of the bike
+   * Updates the price chosen, to all the bikes in the chosen brand
+   * Stores this value in the database, by using an sql-query
+   * @type - The bikebrand chosen
+   */
   save(type) {
     bikeService.updateBikeType(this.state.priceBike, type.id);
 
@@ -663,6 +723,12 @@ class BikeTypeDetails extends Component {
     this.state.bikeTypeDetails[index].changePrice = false;
   }
 
+  /** Mounted
+   * Fetches all the information needed from the database
+   * Get the id from the biketype chosen, all bikes from this
+   * type, and all brands from this type with all bikes from the
+   * brand
+   */
   mounted() {
     this.state.bikes = [];
     this.state.bikeTypeDetails = [];
@@ -796,6 +862,9 @@ class NewBikeType extends Component {
     );
   }
 
+  /** Add new biketype
+   * Does a query and stores the new biketype in the database
+   */
   add() {
     bikeService.newBikeType(
       this.typeName,
@@ -840,6 +909,9 @@ class BikeStatus extends Component {
     );
   }
 
+  /** Mounted
+   * Does a query to find all the different bikestatuses
+   */
   mounted() {
     bikeService.getBikeStatus(bikeStatus => {
       this.bikeStatus = bikeStatus;
@@ -880,6 +952,9 @@ class BikesByStatus extends Component {
     );
   }
 
+  /** Mounted
+   * Does a query to find all bikes with the different bikestatuses
+   */
   mounted() {
     bikeService.getBikeStatus(bikeStatus => {
       this.bikeStatus = bikeStatus;

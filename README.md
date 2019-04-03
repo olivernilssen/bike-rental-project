@@ -1,11 +1,11 @@
-# Filer lånt fra react-input foreløbi
+# Filer lånt fra react-input foreløpig
 
 Dependencies:
 <br>
-npm install jquery --save 
+npm install jquery --save
 <br>
-npm install react-datepicker --save
+bootstrap
 <br>
-npm install --save prop-type
+chart
 <br>
-npm install --save-dev webpack 
+fontawesome
