@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { Modal } from 'react-bootstrap/Modal';
 import {
@@ -25,9 +25,7 @@ import { Orders } from './orders.js';
 import {
   EquipmentTypes,
   EquipTypeDetails,
-  AddEquipment,
-  EquipmentTypesMain,
-  EquipmentTypesOtherMain
+  AddEquipment
 } from './equipment.js';
 import { Employees, AddEmployee } from './employee.js';
 
@@ -89,15 +87,80 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 */
 export let basket = [];
 export let equipmentBasket = [];
-export let employeeID = 3;
+export let employeeID = 1;
 export const activeCustomer = [{ id: null, lastName: '', firstName: '' }];
 
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
 så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
 class LoginMenu extends Component {
+  state = {
+    username: '',
+    password: '',
+    userinfo: null
+  }
+
   render() {
-    return <div />;
+    return(
+    <div>
+        <NavBar brand="CycleOn Rentals" />
+          <div id="loggInBg">
+            <CenterContent>
+              <Card id="logg" header="Logg inn">
+                <form onSubmit={this.login}>
+                  <div className="input-group form-group">
+                    <Form.Input
+                      type="text"
+                      onChange={event => (this.state.username = event.target.value)}
+                      className="form-control"
+                      placeholder="Employee Username"
+                    />
+                  </div>
+                  <div className="input-group form-group">
+                    <Form.Input
+                      type="password"
+                      onChange={event => (this.state.password = event.target.value)}
+                      className="form-control"
+                      placeholder="Password"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
+                  </div>
+                </form>
+              </Card>
+            </CenterContent>
+          </div>
+        </div>
+    );
+  }
+
+  login() {
+    rentalService.getLoginInfo(this.state.username, results => {
+        if(results.length == 0 || results === undefined){
+          alert('Brukernavnet er ugyldig, Please try again');
+          return;
+        }
+
+      this.setState({ userinfo:  results[0] });
+
+      if (
+        this.state.username == null ||
+        this.state.password == null ||
+        this.state.username == '' ||
+        this.state.password == ''
+      ) {
+        alert('One or more fields are empty, Please try again');
+      } else if (this.state.password != this.state.userinfo.password) {
+        alert('Password is wrong, contact Admin');
+      } else if (this.state.password == this.state.userinfo.password) {
+        employeeID = this.state.userinfo.user_id;
+        this.props.isLoggedIn(true);
+        history.push('/overview/');
+      } else {
+        alert('log in name or password was wrong');
+      }
+    });
   }
 }
 
@@ -106,11 +169,16 @@ class Menu extends Component {
   state = {
     Localbasket: this.props.Mybasket,
     isLoggedIn: true,
-    bikeMenu: false,
-    username: '',
-    password: '',
-    userinfo: null
+    bikeMenu: false, 
+    admin: false
   };
+
+  getLoginData(data) {
+    this.setState({isLoggedIn: data});
+    if(employeeID == 3){
+      this.setState({admin: true});
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     console.log("Will recieve Props");
@@ -143,112 +211,14 @@ class Menu extends Component {
 
     const isLoggedIn = this.state.isLoggedIn;
     const showBike = this.state.bikeMenu ? 'show' : '';
+    const hideAdmin = this.state.admin ? '' : 'hide';
+
+    console.log(this.state.admin);
 
     if (isLoggedIn == false) {
-      history.push('/login/');
+      history.push('');
       return (
-        <div>
-          <NavBar brand="CycleOn Rentals" />
-          <div id="loggInBg">
-            <CenterContent>
-              <Card id="logg" header="Logg inn">
-                <form onSubmit={this.login}>
-                  <div className="input-group form-group">
-                    <Form.Input
-                      type="text"
-                      onChange={event => (this.state.username = event.target.value)}
-                      className="form-control"
-                      placeholder="Employee Username"
-                    />
-                  </div>
-                  <div className="input-group form-group">
-                    <Form.Input
-                      type="password"
-                      onChange={event => (this.state.password = event.target.value)}
-                      className="form-control"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
-                  </div>
-                </form>
-              </Card>
-            </CenterContent>
-          </div>
-        </div>
-      );
-    } else if (employeeID == 3){
-      return (
-        <div>
-          <NavBar brand="CycleOn Rentals" to="/overview/" />
-          <Row>
-            <SideNavBar>
-              <SideNavHeading>
-                <span>MENY</span>
-              </SideNavHeading>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/overview/">
-                <FontAwesomeIcon className="navIcon" icon="chart-pie" />
-                Oversikt
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/booking/">
-                <FontAwesomeIcon className="navIcon" icon="calendar" />
-                Booking
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/area/1/1">
-                <FontAwesomeIcon className="navIcon" icon="map-marker-alt" />
-                Lokasjoner
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink onClick={this.toggleBikeMenu} to="/allBikes/">
-                <FontAwesomeIcon className="navIcon" icon="bicycle" />
-                Sykler
-                <FontAwesomeIcon id="dropdownBike" icon="sort-down" />
-              </SideNavBar.SideLink>
-
-              <div className={'collapse navbar-collapse ' + showBike}>
-                <div className="subLinks">
-                  <SideNavBar.SideLink to="/allBikes/">- Alle sykler</SideNavBar.SideLink>
-                  <SideNavBar.SideLink to="/bikeTypes/Terreng">- Etter sykkeltype</SideNavBar.SideLink>
-                  <SideNavBar.SideLink to="/area/1/1">- Etter lokasjon</SideNavBar.SideLink>
-                  <SideNavBar.SideLink to="/bikeStatus/OK">- Etter status</SideNavBar.SideLink>
-                </div>
-              </div>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/equipmentTypes/Helmet">
-                <FontAwesomeIcon className="navIcon" icon="plus-circle" />
-                Sykkelutstyr
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/orders/">
-                <FontAwesomeIcon className="navIcon" icon="archive" />
-                Ordrer
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/customers/">
-                <FontAwesomeIcon className="navIcon" icon="users" />
-                Kundeliste
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/basket/">
-                <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
-                Handlekurv <span style={spanstyle}>{this.state.Localbasket.length}</span>
-              </SideNavBar.SideLink>
-              <SideNavHeading>
-                <span>MIN SIDE</span>
-              </SideNavHeading>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/information/">
-                Informasjon
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/MySales">
-                Mine salg
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink onClick={this.toggleMenu} to="/employees">
-                Ansatte
-              </SideNavBar.SideLink>
-              <SideNavBar.SideLink>
-                <Button.Danger id="loggutKnapp" onClick={this.logout}>
-                  Logg ut
-                </Button.Danger>
-              </SideNavBar.SideLink>
-            </SideNavBar>
-          </Row>
-        </div>
+        <LoginMenu isLoggedIn={this.getLoginData}></LoginMenu>
       );
     } else {
       return (
@@ -310,6 +280,11 @@ class Menu extends Component {
               <SideNavBar.SideLink onClick={this.toggleMenu} to="/MySales">
                 Mine salg
               </SideNavBar.SideLink>
+              <div className={hideAdmin}>
+                <SideNavBar.SideLink onClick={this.toggleMenu} to="/employees">
+                  Ansatte
+                </SideNavBar.SideLink>
+              </div>
               <SideNavBar.SideLink>
                 <Button.Danger id="loggutKnapp" onClick={this.logout}>
                   Logg ut
@@ -322,50 +297,26 @@ class Menu extends Component {
     }
   }
 
-  mounted() {
-    rentalService.getArea(area => {
-      this.area = area;
-    });
-  }
-
-  //DENNE TRENGES MER ARBEID MED, foreløbig virkning med ukryptert passord
-  login() {
-    rentalService.getLoginInfo(this.state.username, results => {
-      this.setState({ state: (this.state.userinfo = results[0]) });
-
-      if (
-        this.state.username == null ||
-        this.state.password == null ||
-        this.state.username == '' ||
-        this.state.password == ''
-      ) {
-        alert('One or more fields are empty, Please try again');
-      } else if (this.state.password != this.state.userinfo.password) {
-        alert('Password is wrong, contact Admin');
-      } else if (this.state.password == this.state.userinfo.password) {
-        employeeID = this.state.userinfo.user_id;
-        this.setState({ isLoggedIn: true });
-        history.push('/overview/');
-      } else {
-        alert('log in name or password was wrong');
-      }
-    });
-    console.log(this.state.password);
-  }
-
   logout() {
     // history.push('/login/');
     this.setState({ isLoggedIn: false });
     this.state.username = '';
     this.state.password = '';
+    this.setState({admin: false});
+    history.push('/login/')
+  }
+
+  mounted() {
+    rentalService.getArea(area => {
+      this.area = area;
+    });
   }
 }
 
 ReactDOM.render(
   <HashRouter>
     <div>
-      <Menu isLoggedIn={true} Mybasket={basket}/>
-      <Route exact path="/login/" component={LoginMenu} />
+      <Menu Mybasket={basket}/>
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
       <Route exact path="/equipmentQuery/:id/edit" component={EquipmentQuery} />
@@ -389,8 +340,6 @@ ReactDOM.render(
       <Route exact path="/addLocation/" component={AddLocation} />
 
       <Route path="/equipmentTypes/" component={EquipmentTypes} />
-      <Route path="/equipmentTypes/Skip/Main" component={EquipmentTypesMain} />
-      <Route path="/equipmentTypes/Skip/OtherMain" component={EquipmentTypesOtherMain} />
       <Route exact path="/equipmentTypes/:typeName/" component={EquipTypeDetails} />
       <Route exact path="/equipments/add" component={AddEquipment} />
       <Route exact path="/basket/" component={Basket} />

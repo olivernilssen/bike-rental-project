@@ -119,7 +119,7 @@ export class NavBar extends Component {
         role="banner"
       >
         {
-          <NavLink className="navbar-brand" activeClassName="active" to="/overview/">
+          <NavLink className="navbar-brand" activeClassName="active" to="/#/">
             {this.props.brand}
           </NavLink>
         }
@@ -133,6 +133,7 @@ class SideNavBarLink extends Component {
   render() {
     return this.props.to ? (
       <NavLink
+        diabled={this.props.diabled}
         className="nav-link"
         activeClassName="active"
         exact={this.props.exact}
