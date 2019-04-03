@@ -256,7 +256,7 @@ class SelectedEmployee extends Component {
     } else if (this.state.allOrders) {
       return (
         <Card>
-          <h5>Tidligere ordre</h5>
+          <h5>Tidligere salg</h5>
           <br />
           <Row>
             <Column>
@@ -341,7 +341,7 @@ class SelectedEmployee extends Component {
               <ButtonOutline.Success onClick={this.change}>Endre</ButtonOutline.Success>
             </Column>
             <Column>
-              <ButtonOutline.Info onClick={this.allOrders}>Se tidligere ordre</ButtonOutline.Info>
+              <ButtonOutline.Info onClick={this.allOrders}>Se tidligere Salg</ButtonOutline.Info>
             </Column>
           </Row>
         </Card>

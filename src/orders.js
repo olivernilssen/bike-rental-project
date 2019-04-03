@@ -19,6 +19,9 @@ import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { orderService } from './services/ordersService';
 import { rentalService } from './services/services';
 import { emplyoeeID } from './index.js';
+import { Modal } from 'react-bootstrap';
+require('react-bootstrap/ModalHeader');
+require('react-bootstrap/Modal');
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
@@ -160,7 +163,8 @@ class SelectedOrder extends Component {
   equipments = [];
 
   state = {
-    order: this.props.activeOrder
+    order: this.props.activeOrder,
+    showConfirm: false
   };
 
   componentWillReceiveProps(nextProps) {
@@ -180,10 +184,19 @@ class SelectedOrder extends Component {
     });
   }
 
+  handleClose() {
+    this.setState({ showConfirm: false });
+  }
+
+  handleShow() {
+      this.setState({ showConfirm: true });
+  }
+
   render() {
     if (!this.state.order) return null;
 
     return (
+      <div>
       <Card>
         <div className="container">
           <h5>Valgt ordre: {this.state.order.id}</h5>
@@ -311,9 +324,39 @@ class SelectedOrder extends Component {
             </Column>
           </Row>
         </div>
+        <Row>
+          <Column>
+          <br />
+            <ButtonOutline.Danger style={{float: 'right'}} onClick={this.handleShow}>Slett ordre</ButtonOutline.Danger>
+          </Column>
+        </Row>
       </Card>
+
+      <Modal show={this.state.showConfirm} onHide={this.handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Slette ordre?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Er du sikker på at du vil slette denne ordren?</p>
+          <br />
+          <p>Trykk Slett for å slette ordre</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Row>
+            <Column>
+              <ButtonOutline.Success onClick={this.remove}>Slett</ButtonOutline.Success>
+            </Column>
+            <Column right>
+              <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+            </Column>
+          </Row>
+        </Modal.Footer>
+      </Modal>
+      </div>
     );
   }
+
+
 
   mounted() {
     orderService.getOrder('1', result => {
@@ -327,6 +370,21 @@ class SelectedOrder extends Component {
     orderService.getEquipmentFromOrder('1', equipments => {
       this.equipments = equipments;
     });
+  }
+
+  remove() {
+    orderService.deleteOrderedBike(this.state.order.id, bikes => {
+      this.bikes = bikes;
+    } )
+    orderService.deleteOrderedEquipment(this.state.order.id, equipments => {
+      this.equipments = equipments;
+    } )
+    orderService.deleteOrder(this.state.order.id, orders => {
+      this.orders = orders;
+    })
+
+    history.push('/overview/');
+
   }
 }
 

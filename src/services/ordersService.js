@@ -68,16 +68,34 @@ class OrderService {
 
   makeBikeOrder(cID, today, bikeID) {
     connection.query('insert into OrderedBike (order_id, bike_id) values ((select id from Orders where customer_id = ? and dateOrdered = ?), ?)',
-    [cID, today, bikeID], 
+    [cID, today, bikeID],
     (error) => {
       if(error) console.error(error);
     })
   }
 
   makeEquipOrder(cID, today, equipID){
-    connection.query('insert into OrderedEquipment (order_id, equip_id) values ((select id from Orders where customer_id = ? and dateOrdered = ?), ?)', 
-    [cID, today, equipID], 
+    connection.query('insert into OrderedEquipment (order_id, equip_id) values ((select id from Orders where customer_id = ? and dateOrdered = ?), ?)',
+    [cID, today, equipID],
     (error) => {
+      if(error) return console.error(error);
+    })
+  }
+
+  deleteOrderedBike(id) {
+    connection.query('DELETE FROM OrderedBike where order_id=?', [id], (error) => {
+      if(error) return console.error(error);
+    })
+  }
+
+  deleteOrderedEquipment(id) {
+    connection.query('DELETE FROM OrderedEquipment where order_id=?', [id], (error) => {
+      if(error) return console.error(error);
+    })
+  }
+
+  deleteOrder(id) {
+    connection.query('DELETE FROM Orders where id=?', [id], (error) => {
       if(error) return console.error(error);
     })
   }
