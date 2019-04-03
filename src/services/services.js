@@ -131,11 +131,9 @@ class RentalService {
     });
   }
 
-  addArea(id, areaName, success) {
-    connection.query('insert into Area (id, areaName) value (null, ?)', [id, areaName], (error, results) => {
+  addArea(id, areaName) {
+    connection.query('insert into Area (id, areaName) value (null, ?)', [id, areaName], error => {
       if (error) return console.error(error);
-
-      success(results);
     });
   }
 

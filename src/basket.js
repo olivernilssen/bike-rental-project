@@ -387,21 +387,40 @@ class Basket extends Component {
             <Modal.Title>Er informasjonen riktig?</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>Er du sikker på at du vil legge inn en order for kunde: </p>
             <p>
+              <b>Kunde: </b>
               {this.state.activeC[0].firstName} {this.state.activeC[0].lastName}
             </p>
+
             <p>
-              Antall sykler: {this.state.inBasket.length} og antall utstyr: {equipmentBasket.length}
+              <b>Antall sykler: </b>
+              {this.state.inBasket.length}
             </p>
-            <p>Pris: {this.discPrice} </p>
-            <p>Ansatt med ID: {employeeID}</p>
+
+            <p>
+              <b>Antall utstyr: </b>
+              {equipmentBasket.length}
+            </p>
+
+            <p>
+              <b>Pris:</b> {this.discPrice}{' '}
+            </p>
+            <p>
+              <b>Ansatt med ID: </b>
+              {employeeID}
+            </p>
             <br />
             <p>Trykk Utfør for å legge inn bestilling</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
-            <Button.Success onClick={this.transaction}>Utfør</Button.Success>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.transaction}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
           </Modal.Footer>
         </Modal>
 
@@ -410,10 +429,10 @@ class Basket extends Component {
             <Modal.Title>Noe gikk galt</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Sjekk at all informasjonen er riktig og at du har lagt til kunde og elementer i handlekurven
+            Sjekk at all informasjonen er riktig og at du har lagt til kunde og elementer i handlekurven.
           </Modal.Body>
           <Modal.Footer>
-            <Button.Success onClick={this.handleClose}>Avbryt</Button.Success>
+            <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
           </Modal.Footer>
         </Modal>
       </div>
@@ -517,7 +536,10 @@ class Basket extends Component {
     equipmentBasket.length = 0;
     this.totalPrice = 0;
     this.discPrice = 0;
+    this.removeCustomer();
     this.updateBasket();
+    this.handleClose();
+    history.push('/overview/');
   }
 }
 

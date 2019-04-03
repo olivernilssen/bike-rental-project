@@ -133,34 +133,18 @@ class SelectedCustomer extends Component {
       customer: nextProps.activeCustomer,
       change: false,
       allOrders: false,
-      showConfirm: false,
-      showError: false
+      showConfirm: false
     });
 
     this.active = nextProps.activeCustomer;
   }
 
   handleClose() {
-    this.setState({ showError: false });
     this.setState({ showConfirm: false });
   }
 
   handleShow() {
-    if (
-      this.active.firstName == '' ||
-      this.active.lastName == '' ||
-      this.active.email == '' ||
-      this.active.tlf == '' ||
-      this.active.streetAddress == '' ||
-      this.active.streetNum == '' ||
-      this.active.postalNum == '' ||
-      this.active.place == ''
-    ) {
-      this.setState({ showError: true });
-    } else {
-      this.setState({ showError: false });
-      this.setState({ showConfirm: true });
-    }
+    this.setState({ showConfirm: true });
   }
 
   render() {
@@ -177,10 +161,10 @@ class SelectedCustomer extends Component {
             <br />
             <form onSubmit={this.handleShow}>
               <Form.Label>Kunde id:</Form.Label>
-              <Form.Input type="text"  value={this.state.customer.id} disabled />
+              <Form.Input type="text" value={this.state.customer.id} disabled />
               <Form.Label>Fornavn:</Form.Label>
               <Form.Input
-                required  
+                required
                 type="text"
                 value={this.active.firstName}
                 onChange={event => (this.active.firstName = event.target.value)}
@@ -263,16 +247,6 @@ class SelectedCustomer extends Component {
                   <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
                 </Column>
               </Row>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal show={this.state.showError} onHide={this.handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Noe gikk galt</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Sjekk at alle felt er utfylt korrekt, og prøv igjen.</Modal.Body>
-            <Modal.Footer>
-              <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
             </Modal.Footer>
           </Modal>
         </div>
@@ -456,6 +430,15 @@ class AddCustomer extends Component {
   postal = 0;
   place = '';
   addressID = null;
+  showConfirm = false;
+
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  handleShow() {
+    this.showConfirm = true;
+  }
 
   render() {
     return (
@@ -467,65 +450,90 @@ class AddCustomer extends Component {
           <div className="container">
             <h5>Ny kunde</h5>
             <br />
-            <form onSubmit={e => {
-                    if (window.confirm('Er du sikker på at informasjonen er korrekt?')) this.add(e);
-                  }}>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Fornavn:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Etternavn:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Email:</Form.Label>
-                <Form.Input type="email" required={true} id="emailField" onChange={event => (this.email = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Telefon:</Form.Label>
-                <Form.Input type="number" required={true} min='8' onChange={event => (this.tlf = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={8}>
-                <Form.Label>Gateaddresse:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
-              </Column>
-              <Column width={2}>
-                <Form.Label>Gatenummer:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Postnummer:</Form.Label>
-                <Form.Input type="number" required={true} onChange={event => (this.postalNum = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Poststed:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column>
-                <ButtonOutline.Submit
-                  type='submit'
-                >
-                  Legg til
-                </ButtonOutline.Submit>
-              </Column>
-              <Column right>
-                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-              </Column>
-            </Row>
+            <form onSubmit={this.handleShow}>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Fornavn:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Etternavn:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Email:</Form.Label>
+                  <Form.Input
+                    type="email"
+                    required={true}
+                    id="emailField"
+                    onChange={event => (this.email = event.target.value)}
+                  />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Telefon:</Form.Label>
+                  <Form.Input
+                    type="number"
+                    required={true}
+                    min="8"
+                    onChange={event => (this.tlf = event.target.value)}
+                  />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={8}>
+                  <Form.Label>Gateaddresse:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
+                </Column>
+                <Column width={2}>
+                  <Form.Label>Gatenummer:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Postnummer:</Form.Label>
+                  <Form.Input type="number" required={true} onChange={event => (this.postalNum = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Poststed:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                </Column>
+              </Row>
             </form>
           </div>
         </Card>
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å legge til kunden.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -548,7 +556,7 @@ class AddCustomer extends Component {
         customerService.addCustomer(this.firstName, this.lastName, this.email, this.tlf, result.id);
       }
     });
-
+    this.handleClose();
     history.push('/customers/');
   }
 }
