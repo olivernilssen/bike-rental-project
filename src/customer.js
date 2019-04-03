@@ -18,10 +18,21 @@ class Customers extends Component {
     activeCustomer: null
   };
 
+  /**handle change 
+   * change the searchword whenever there 
+   * is an input in the search box, then call to searchCustomers()
+   * to print out the new list. 
+   * @event - event/value of the clicked element
+   */
   onChangeHandle(event) {
     this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchCustomer());
   }
 
+  /** Search Customer
+   * Uses a query to search through the database
+   * to return a new list of customers 
+   * that only show relevant customers towards search word
+   */
   searchCustomer() {
     let word = '%' + this.state.searchWord + '%';
 
@@ -34,6 +45,13 @@ class Customers extends Component {
     });
   }
 
+  /**
+   * Will change the activeCustomer state, and send it to 
+   * the child component, aswell as updated the value in 
+   * each customer in customerlist to reflect 
+   * which customer is currently clicked 
+   * @customer - clicked customer from table row
+   */
   chooseActive(customer) {
     let index = this.state.customers
       .map(function(e) {
@@ -128,6 +146,12 @@ class SelectedCustomer extends Component {
   active = '';
   ordersByCustomer = [];
 
+  /**
+   * This method will be called whenever the child component 
+   * "SelectedCustomer" recieves new information/props from
+   * its parent component "Customer". Whenever activeCustomer
+   * is changed, the child component props will aslo change. 
+   */
   componentWillReceiveProps(nextProps) {
     this.setState({
       customer: nextProps.activeCustomer,
@@ -139,10 +163,16 @@ class SelectedCustomer extends Component {
     this.active = nextProps.activeCustomer;
   }
 
+  /**handle close
+   * closes the modal by setting showConfirm = false
+   */
   handleClose() {
     this.setState({ showConfirm: false });
   }
 
+  /**handle Show
+   * Shows the modal by setting showConfirm = true
+   */
   handleShow() {
     this.setState({ showConfirm: true });
   }
@@ -347,10 +377,20 @@ class SelectedCustomer extends Component {
     }
   }
 
+  /**change
+   * Show the editing window by setting change to true
+   * and that prompts the render to rerender with 
+   * the correct return statement and will then change the
+   * current window
+   */
   change() {
     this.setState({ change: true });
   }
 
+  /**allOrders
+   * Shows all orders for chosen customer by running it 
+   * by the database and showing the allOrders window on top
+   */
   allOrders() {
     this.setState({ allOrders: true });
 
@@ -359,9 +399,15 @@ class SelectedCustomer extends Component {
     });
   }
 
+  
+   /**Cancel
+   * Sets change and allOrders to false so that 
+   * the editing window is no longer available
+   */
   cancel() {
     this.setState({ change: false, allOrders: false });
   }
+
 
   mounted() {
     customerService.getCustomer('1', result => {
@@ -370,6 +416,12 @@ class SelectedCustomer extends Component {
     });
   }
 
+  
+   /**Save
+   * Save the edited parameters for the customer. But checks if 
+   * entered address is already in database, otherwise create a new
+   * address entry. Then save the customer with new or old address id. 
+   */
   save() {
     //Check if address already in database
     customerService.getAddressID(
@@ -432,13 +484,23 @@ class AddCustomer extends Component {
   addressID = null;
   showConfirm = false;
 
+   /**HandleClose
+   * Handles the closing of the modal that pops up 
+   * will close it by returing the this.showConfirm = false
+   */
   handleClose() {
     this.showConfirm = false;
   }
 
+   /**HandleShow 
+   * Handles the opening the modal that pops up when prompted
+   * will open by returing this.showConfirm = false
+   */
   handleShow() {
     this.showConfirm = true;
   }
+
+
 
   render() {
     return (
@@ -538,14 +600,23 @@ class AddCustomer extends Component {
     );
   }
 
+   /**Cancel
+   * Returns to the previous page 
+   * Stop the user from adding a new customer
+   */
   cancel() {
     this.props.history.goBack();
   }
 
+   /**HandleClose
+   * Adds a new customer by running it through the 
+   * database and services files. Adds it using 
+   * user input and pushes back to customers main site. 
+   */
   add() {
+
     //Check if address already in database
     customerService.getAddressID(this.postalNum, this.postal, this.street, this.streetNum, result => {
-      // console.log(result);
       if (result === undefined) {
         customerService.addAddress(this.postalNum, this.postal, this.street, this.streetNum);
 
