@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Component } from 'react-simplified';
+import { Component, sharedComponentData } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
@@ -85,6 +85,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
   BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
 */
+export const shared = sharedComponentData({basketLength: 0});
 export let basket = [];
 export let equipmentBasket = [];
 export let employeeID = 1;
@@ -269,7 +270,7 @@ class Menu extends Component {
               </SideNavBar.SideLink>
               <SideNavBar.SideLink onClick={this.toggleMenu} to="/basket/">
                 <FontAwesomeIcon className="navIcon" icon="shopping-cart" />
-                Handlekurv <span style={spanstyle}>{this.state.Localbasket.length}</span>
+                Handlekurv <span style={spanstyle}>{shared.basketLength}</span>
               </SideNavBar.SideLink>
               <SideNavHeading>
                 <span>MIN SIDE</span>

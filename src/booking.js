@@ -19,7 +19,7 @@ import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { rentalService } from './services/services';
 
-import { basket, equipmentBasket } from './index.js';
+import { basket, equipmentBasket, shared } from './index.js';
 
 import createHashHistory from 'history/createHashHistory';
 import { bikeService } from './services/bikesService';
@@ -101,9 +101,10 @@ class Booking extends Component {
     bike.startDate = new Date(this.state.startDate.toString() + ' ' + this.state.startHour.toString() + ':00');
     bike.startDateString = this.state.startDate.toString() + ' ' + this.state.startHour.toString();
     bike.dayRent = this.dayRent;
-    this.bikeinBasket = true;
-    
+  
     basket.push(bike);
+    shared.basketLength = basket.length;
+
     this.findAvailBikes();
   }
 
