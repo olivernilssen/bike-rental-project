@@ -34,6 +34,12 @@ class Orders extends Component {
     activeOrder: null
   };
 
+  /**handle change
+   * change the searchword whenever there
+   * is an input in the search box, then call to searchSales()
+   * to print out the new list.
+   * @event - event/value of the clicked element
+   */
   onChangeHandle(event) {
     this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchSales());
   }
@@ -42,6 +48,11 @@ class Orders extends Component {
     this.setState({ month: (this.state.month = event.target.value) }, this.searchSales());
   }
 
+  /** Search Sales
+   * Uses a query to search through the database
+   * to return a new list of sales
+   * that only show relevant sales towards search word
+   */
   searchSales() {
     let searchWord = '%' + this.state.searchWord + '%';
     let month = '%' + this.state.month + '%';
@@ -58,6 +69,13 @@ class Orders extends Component {
     });
   }
 
+  /**
+   * Will change the activeOrder state, and send it to
+   * the child component, aswell as updated the value in
+   * each order in orderlist to reflect
+   * which order is currently clicked
+   * @order - clicked order from table row
+   */
   chooseActive(order) {
     let index = this.state.sales
       .map(function(e) {
@@ -167,6 +185,12 @@ class SelectedOrder extends Component {
     showConfirm: false
   };
 
+  /**
+   * This method will be called whenever the child component
+   * "SelectedOrder" recieves new information/props from
+   * its parent component "Orders". Whenever activeOrder
+   * is changed, the child component props will aslo change.
+   */
   componentWillReceiveProps(nextProps) {
     this.setState({ state: (this.state.order = nextProps.activeOrder) });
     if (this.state.order) {
@@ -184,12 +208,18 @@ class SelectedOrder extends Component {
     });
   }
 
+  /**handle close
+   * closes the modal by setting showConfirm = false
+   */
   handleClose() {
     this.setState({ showConfirm: false });
   }
 
+  /**handle Show
+   * Shows the modal by setting showConfirm = true
+   */
   handleShow() {
-      this.setState({ showConfirm: true });
+    this.setState({ showConfirm: true });
   }
 
   render() {
@@ -197,166 +227,166 @@ class SelectedOrder extends Component {
 
     return (
       <div>
-      <Card>
-        <div className="container">
-          <h5>Valgt ordre: {this.state.order.id}</h5>
-          <br />
+        <Card>
+          <div className="container">
+            <h5>Valgt ordre: {this.state.order.id}</h5>
+            <br />
+            <Row>
+              <Column>
+                <Row>
+                  <Column width={4}>
+                    <b>Bestillingsdato:</b>
+                  </Column>
+                  <Column>{this.state.order.dateOrdered.toString().substring(4, 24)}</Column>
+                </Row>
+                <Row>
+                  <Column width={4}>
+                    <b>Ordre id:</b>
+                  </Column>
+                  <Column>{this.state.order.id}</Column>
+                </Row>
+                <Row>
+                  <Column width={4}>
+                    <b>Kunde id:</b>
+                  </Column>
+                  <Column>{this.state.order.customer_id}</Column>
+                </Row>
+                <Row>
+                  <Column width={4}>
+                    <b>Kundenavn:</b>
+                  </Column>
+                  <Column>
+                    {this.state.order.firstName} {this.state.order.lastName}
+                  </Column>
+                </Row>
+                <Row>
+                  <Column width={4}>
+                    <b>Leietype:</b>
+                  </Column>
+                  <Column>{this.state.order.typeName}</Column>
+                </Row>
+                <Row>
+                  <Column width={4}>
+                    <b>Fra dato:</b>
+                  </Column>
+                  <Column>{this.state.order.fromDateTime.toString().substring(4, 16)}</Column>
+                </Row>
+                <Row>
+                  <Column width={4}>
+                    <b>Til dato:</b>
+                  </Column>
+                  <Column>{this.state.order.toDateTime.toString().substring(4, 16)}</Column>
+                </Row>
+                <Row>
+                  <Column width={4}>
+                    <b>Pris:</b>
+                  </Column>
+                  <Column>{this.state.order.price}</Column>
+                </Row>
+                <br />
+              </Column>
+            </Row>
+            <Row>
+              <Column>
+                <h6>Sykler:</h6>
+                <Table>
+                  <Table.Tbody>
+                    <Table.Tr>
+                      <Table.Td>
+                        <b>ID</b>
+                      </Table.Td>
+                      <Table.Td>
+                        <b>Sykkeltype</b>
+                      </Table.Td>
+                      <Table.Td>
+                        <b>Merke</b>
+                      </Table.Td>
+                      <Table.Td>
+                        <b>Modell</b>
+                      </Table.Td>
+                      <Table.Td>
+                        <b>Pris</b>
+                      </Table.Td>
+                    </Table.Tr>
+                    {this.bikes.map(bike => (
+                      <Table.Tr key={bike.id}>
+                        <Table.Td>{bike.id}</Table.Td>
+                        <Table.Td>{bike.typeName}</Table.Td>
+                        <Table.Td>{bike.brand}</Table.Td>
+                        <Table.Td>{bike.model}</Table.Td>
+                        <Table.Td>{bike.price} kr</Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </Column>
+            </Row>
+            <br />
+            <Row>
+              <Column>
+                <h6>Utstyr</h6>
+                <Table>
+                  <Table.Tbody>
+                    <Table.Tr>
+                      <Table.Td>
+                        <b>UtstyrsID</b>
+                      </Table.Td>
+                      <Table.Td>
+                        <b>Utstyrstype</b>
+                      </Table.Td>
+                      <Table.Td>
+                        <b>Merke</b>
+                      </Table.Td>
+                      <Table.Td>
+                        <b>Pris</b>
+                      </Table.Td>
+                    </Table.Tr>
+                    {this.equipments.map(equipment => (
+                      <Table.Tr key={equipment.id}>
+                        <Table.Td>{equipment.id}</Table.Td>
+                        <Table.Td>{equipment.typeName}</Table.Td>
+                        <Table.Td>{equipment.brand}</Table.Td>
+                        <Table.Td>{equipment.price}</Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </Column>
+            </Row>
+          </div>
           <Row>
             <Column>
-              <Row>
-                <Column width={4}>
-                  <b>Bestillingsdato:</b>
-                </Column>
-                <Column>{this.state.order.dateOrdered.toString().substring(4, 24)}</Column>
-              </Row>
-              <Row>
-                <Column width={4}>
-                  <b>Ordre id:</b>
-                </Column>
-                <Column>{this.state.order.id}</Column>
-              </Row>
-              <Row>
-                <Column width={4}>
-                  <b>Kunde id:</b>
-                </Column>
-                <Column>{this.state.order.customer_id}</Column>
-              </Row>
-              <Row>
-                <Column width={4}>
-                  <b>Kundenavn:</b>
-                </Column>
-                <Column>
-                  {this.state.order.firstName} {this.state.order.lastName}
-                </Column>
-              </Row>
-              <Row>
-                <Column width={4}>
-                  <b>Leietype:</b>
-                </Column>
-                <Column>{this.state.order.typeName}</Column>
-              </Row>
-              <Row>
-                <Column width={4}>
-                  <b>Fra dato:</b>
-                </Column>
-                <Column>{this.state.order.fromDateTime.toString().substring(4, 16)}</Column>
-              </Row>
-              <Row>
-                <Column width={4}>
-                  <b>Til dato:</b>
-                </Column>
-                <Column>{this.state.order.toDateTime.toString().substring(4, 16)}</Column>
-              </Row>
-              <Row>
-                <Column width={4}>
-                  <b>Pris:</b>
-                </Column>
-                <Column>{this.state.order.price}</Column>
-              </Row>
               <br />
+              <ButtonOutline.Danger style={{ float: 'right' }} onClick={this.handleShow}>
+                Slett ordre
+              </ButtonOutline.Danger>
             </Column>
           </Row>
-          <Row>
-            <Column>
-              <h6>Sykler:</h6>
-              <Table>
-                <Table.Tbody>
-                  <Table.Tr>
-                    <Table.Td>
-                      <b>ID</b>
-                    </Table.Td>
-                    <Table.Td>
-                      <b>Sykkeltype</b>
-                    </Table.Td>
-                    <Table.Td>
-                      <b>Merke</b>
-                    </Table.Td>
-                    <Table.Td>
-                      <b>Modell</b>
-                    </Table.Td>
-                    <Table.Td>
-                      <b>Pris</b>
-                    </Table.Td>
-                  </Table.Tr>
-                  {this.bikes.map(bike => (
-                    <Table.Tr key={bike.id}>
-                      <Table.Td>{bike.id}</Table.Td>
-                      <Table.Td>{bike.typeName}</Table.Td>
-                      <Table.Td>{bike.brand}</Table.Td>
-                      <Table.Td>{bike.model}</Table.Td>
-                      <Table.Td>{bike.price} kr</Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-            </Column>
-          </Row>
-          <br />
-          <Row>
-            <Column>
-              <h6>Utstyr</h6>
-              <Table>
-                <Table.Tbody>
-                  <Table.Tr>
-                    <Table.Td>
-                      <b>UtstyrsID</b>
-                    </Table.Td>
-                    <Table.Td>
-                      <b>Utstyrstype</b>
-                    </Table.Td>
-                    <Table.Td>
-                      <b>Merke</b>
-                    </Table.Td>
-                    <Table.Td>
-                      <b>Pris</b>
-                    </Table.Td>
-                  </Table.Tr>
-                  {this.equipments.map(equipment => (
-                    <Table.Tr key={equipment.id}>
-                      <Table.Td>{equipment.id}</Table.Td>
-                      <Table.Td>{equipment.typeName}</Table.Td>
-                      <Table.Td>{equipment.brand}</Table.Td>
-                      <Table.Td>{equipment.price}</Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-            </Column>
-          </Row>
-        </div>
-        <Row>
-          <Column>
-          <br />
-            <ButtonOutline.Danger style={{float: 'right'}} onClick={this.handleShow}>Slett ordre</ButtonOutline.Danger>
-          </Column>
-        </Row>
-      </Card>
+        </Card>
 
-      <Modal show={this.state.showConfirm} onHide={this.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Slette ordre?</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Er du sikker på at du vil slette denne ordren?</p>
-          <br />
-          <p>Trykk Slett for å slette ordre</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Row>
-            <Column>
-              <ButtonOutline.Success onClick={this.remove}>Slett</ButtonOutline.Success>
-            </Column>
-            <Column right>
-              <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
-            </Column>
-          </Row>
-        </Modal.Footer>
-      </Modal>
+        <Modal show={this.state.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Slette ordre?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at du vil slette denne ordren?</p>
+            <br />
+            <p>Trykk Slett for å slette ordre</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.remove}>Slett</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
-
-
 
   mounted() {
     orderService.getOrder('1', result => {
@@ -372,19 +402,22 @@ class SelectedOrder extends Component {
     });
   }
 
+  /** remove
+   *  Deletes the order from the database in the correct sequence
+   *
+   */
   remove() {
     orderService.deleteOrderedBike(this.state.order.id, bikes => {
       this.bikes = bikes;
-    } )
+    });
     orderService.deleteOrderedEquipment(this.state.order.id, equipments => {
       this.equipments = equipments;
-    } )
+    });
     orderService.deleteOrder(this.state.order.id, orders => {
       this.orders = orders;
-    })
+    });
 
     history.push('/overview/');
-
   }
 }
 

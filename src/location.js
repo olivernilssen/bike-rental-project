@@ -47,10 +47,16 @@ class AddArea extends Component {
   areaName = '';
   showConfirm = false;
 
+  /**handle close
+   * closes the modal by setting showConfirm = false
+   */
   handleClose() {
     this.showConfirm = false;
   }
 
+  /**handle Show
+   * Shows the modal by setting showConfirm = true
+   */
   handleShow() {
     this.showConfirm = true;
   }
@@ -109,14 +115,19 @@ class AddArea extends Component {
     );
   }
 
+  /**add
+   *  gets new areaName from input, pushes it to the database,
+   *  runs handleClose() which closes the modal and returns you to
+   *  area/1
+   */
   add() {
     rentalService.addArea(this.areaName);
     this.handleClose();
-    history.push('/area/1');
+    history.goBack('/area/1');
   }
 
   cancel() {
-    history.push('/area/1/1');
+    history.goBack();
   }
 }
 
@@ -173,14 +184,23 @@ class AddLocation extends Component {
   curAreaID = '';
   showConfirm = false;
 
+  /**handle close
+   * closes the modal by setting showConfirm = false
+   */
   handleClose() {
     this.showConfirm = false;
   }
 
+  /**handle Show
+   * Shows the modal by setting showConfirm = true
+   */
   handleShow() {
     this.showConfirm = true;
   }
 
+  /** On change type
+   *  puts all Area in to options in the select
+   */
   onChangeType(event) {
     const selectedIndex = event.target.options.selectedIndex;
     this.setState({
@@ -274,6 +294,10 @@ class AddLocation extends Component {
     );
   }
 
+  /** Add
+   *  gets area id, takes input from form and uses the area id it got earlier
+   *  and inserts to database, then closes the modal and pushes to area/1/1
+   */
   add() {
     rentalService.getAreaID(this.curArea, result => {
       this.curAreaID = result.id;
@@ -292,7 +316,7 @@ class AddLocation extends Component {
   }
 
   cancel() {
-    history.push('/area/1/1');
+    history.goBack();
   }
 
   mounted() {
@@ -309,6 +333,7 @@ class BikesOnLocation extends Component {
   area = null;
 
   render() {
+    //returns table with bikes that are located in same area and same location
     if (!this.bikeLocations && !this.area) return null;
 
     return (

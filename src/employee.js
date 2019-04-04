@@ -397,9 +397,9 @@ class SelectedEmployee extends Component {
     this.setState({ change: true });
   }
 
-  /**allOrders
-   * Shows all orders for chosen employee by running it
-   * by the database and showing the allOrders window on top
+  /**allSales
+   * Shows all sales by chosen employee by running it
+   * by the database and showing the allSales window on top
    */
   allSales() {
     this.setState({ allSales: true });
@@ -410,7 +410,7 @@ class SelectedEmployee extends Component {
   }
 
   /**Cancel
-   * Sets change and allOrders to false so that
+   * Sets change and allSales to false so that
    * the editing window is no longer available
    */
   cancel() {

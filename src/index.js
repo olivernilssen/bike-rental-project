@@ -22,11 +22,7 @@ import { Booking } from './booking.js';
 import { Basket, EquipmentQuery } from './basket.js';
 import { Overview } from './overview.js';
 import { Orders } from './orders.js';
-import {
-  EquipmentTypes,
-  EquipTypeDetails,
-  AddEquipment
-} from './equipment.js';
+import { EquipmentTypes, EquipTypeDetails, AddEquipment } from './equipment.js';
 import { Employees, AddEmployee } from './employee.js';
 
 import {
@@ -85,12 +81,11 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 
   BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
 */
-export const shared = sharedComponentData({basketLength: 0});
+export const shared = sharedComponentData({ basketLength: 0 });
 export let basket = [];
 export let equipmentBasket = [];
 export let employeeID = 1;
 export const activeCustomer = [{ id: null, lastName: '', firstName: '' }];
-
 
 /* Denne er her fordi om jeg det ikke blir pushet til en komponent,
 så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
@@ -99,51 +94,51 @@ class LoginMenu extends Component {
     username: '',
     password: '',
     userinfo: null
-  }
+  };
 
   render() {
-    return(
-    <div>
+    return (
+      <div>
         <NavBar brand="CycleOn Rentals" />
-          <div id="loggInBg">
-            <CenterContent>
-              <Card id="logg" header="Logg inn">
-                <form onSubmit={this.login}>
-                  <div className="input-group form-group">
-                    <Form.Input
-                      type="text"
-                      onChange={event => (this.state.username = event.target.value)}
-                      className="form-control"
-                      placeholder="Employee Username"
-                    />
-                  </div>
-                  <div className="input-group form-group">
-                    <Form.Input
-                      type="password"
-                      onChange={event => (this.state.password = event.target.value)}
-                      className="form-control"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
-                  </div>
-                </form>
-              </Card>
-            </CenterContent>
-          </div>
+        <div id="loggInBg">
+          <CenterContent>
+            <Card id="logg" header="Logg inn">
+              <form onSubmit={this.login}>
+                <div className="input-group form-group">
+                  <Form.Input
+                    type="text"
+                    onChange={event => (this.state.username = event.target.value)}
+                    className="form-control"
+                    placeholder="Employee Username"
+                  />
+                </div>
+                <div className="input-group form-group">
+                  <Form.Input
+                    type="password"
+                    onChange={event => (this.state.password = event.target.value)}
+                    className="form-control"
+                    placeholder="Password"
+                  />
+                </div>
+                <div className="form-group">
+                  <Form.Input type="submit" value="Login" className="btn float-right login_btn" />
+                </div>
+              </form>
+            </Card>
+          </CenterContent>
         </div>
+      </div>
     );
   }
 
   login() {
     rentalService.getLoginInfo(this.state.username, results => {
-        if(results.length == 0 || results === undefined){
-          alert('Brukernavnet er ugyldig, Please try again');
-          return;
-        }
+      if (results.length == 0 || results === undefined) {
+        alert('Brukernavnet er ugyldig, Please try again');
+        return;
+      }
 
-      this.setState({ userinfo:  results[0] });
+      this.setState({ userinfo: results[0] });
 
       if (
         this.state.username == null ||
@@ -175,14 +170,14 @@ class Menu extends Component {
   };
 
   getLoginData(data) {
-    this.setState({isLoggedIn: data});
-    if(employeeID == 3){
-      this.setState({admin: true});
+    this.setState({ isLoggedIn: data });
+    if (employeeID == 3) {
+      this.setState({ admin: true });
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("Will recieve Props");
+    console.log('Will recieve Props');
     this.setState({ Localbasket: nextProps.Mybasket });
   }
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
@@ -218,9 +213,7 @@ class Menu extends Component {
 
     if (isLoggedIn == false) {
       history.push('');
-      return (
-        <LoginMenu isLoggedIn={this.getLoginData}></LoginMenu>
-      );
+      return <LoginMenu isLoggedIn={this.getLoginData} />;
     } else {
       return (
         <div>
@@ -303,8 +296,8 @@ class Menu extends Component {
     this.setState({ isLoggedIn: false });
     this.state.username = '';
     this.state.password = '';
-    this.setState({admin: false});
-    history.push('/login/')
+    this.setState({ admin: false });
+    history.push('/login/');
   }
 
   mounted() {
@@ -317,7 +310,7 @@ class Menu extends Component {
 ReactDOM.render(
   <HashRouter>
     <div>
-      <Menu Mybasket={basket}/>
+      <Menu Mybasket={basket} />
       <Route exact path="/overview/" component={Overview} />
       <Route path="/booking/" component={Booking} />
       <Route exact path="/equipmentQuery/:id/edit" component={EquipmentQuery} />

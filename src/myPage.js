@@ -93,10 +93,16 @@ class EditUserInfo extends Component {
   streetNum = '';
   showConfirm = false;
 
+  /**handle close
+   * closes the modal by setting showConfirm = false
+   */
   handleClose() {
     this.showConfirm = false;
   }
 
+  /**handle Show
+   * Shows the modal by setting showConfirm = true
+   */
   handleShow() {
     this.showConfirm = true;
   }
