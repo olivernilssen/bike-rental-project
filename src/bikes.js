@@ -935,6 +935,7 @@ class BikesByStatus extends Component {
               <Table.Th>ID</Table.Th>
               <Table.Th>Lokasjon</Table.Th>
               <Table.Th>Sykkeltype</Table.Th>
+              <Table.Th />
             </Table.Thead>
             <Table.Tbody>
               {this.bikes.map(bike => (
@@ -942,6 +943,11 @@ class BikesByStatus extends Component {
                   <Table.Td>{bike.id}</Table.Td>
                   <Table.Td>{bike.name}</Table.Td>
                   <Table.Td>{bike.typeName}</Table.Td>
+                  <Table.Td>
+                    <NavLink style={{ float: 'right' }} to={'/selectedBike/' + bike.id}>
+                      <ButtonOutline.Secondary>Endre</ButtonOutline.Secondary>
+                    </NavLink>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
