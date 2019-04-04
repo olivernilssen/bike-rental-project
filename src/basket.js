@@ -183,7 +183,7 @@ class Basket extends Component {
 
   /**Rendered
    * We render whats in the baskets for bikes AND equipments
-   * We add puttons and return statements
+   * We add buttons and return statements
    */
   render() {
     if (this.state.activeC[0].id == null) this.state.displayCustomer = 'block';
