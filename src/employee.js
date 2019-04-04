@@ -20,7 +20,7 @@ class Employees extends Component {
 
   /**handle change
    * change the searchword whenever there
-   * is an input in the search box, then call to searchCustomers()
+   * is an input in the search box, then call to searchEmployee()
    * to print out the new list.
    * @event - event/value of the clicked element
    */
@@ -28,10 +28,10 @@ class Employees extends Component {
     this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchEmployees());
   }
 
-  /** Search Customer
+  /** Search Employee
    * Uses a query to search through the database
-   * to return a new list of customers
-   * that only show relevant customers towards search word
+   * to return a new list of employees
+   * that only show relevant employees towards search word
    */
   searchEmployee() {
     let word = '%' + this.state.searchWord + '%';
@@ -46,11 +46,11 @@ class Employees extends Component {
   }
 
   /**
-   * Will change the activeCustomer state, and send it to
+   * Will change the activeEmployee state, and send it to
    * the child component, aswell as updated the value in
-   * each customer in customerlist to reflect
-   * which customer is currently clicked
-   * @customer - clicked customer from table row
+   * each employee in employeelist to reflect
+   * which employee is currently clicked
+   * @customer - clicked employee from table row
    */
   chooseActive(employee) {
     let index = this.state.employees
@@ -150,7 +150,7 @@ class SelectedEmployee extends Component {
   /**
    * This method will be called whenever the child component
    * "SelectedEmployee" recieves new information/props from
-   * its parent component "Employees". Whenever activeCustomer
+   * its parent component "Employees". Whenever activeEmployee
    * is changed, the child component props will aslo change.
    */
   componentWillReceiveProps(nextProps) {
@@ -440,7 +440,6 @@ class SelectedEmployee extends Component {
       this.active.streetAddress,
       this.active.streetNum,
       result => {
-        // console.log(result);
         if (result === undefined) {
           employeeService.addAddress(
             this.active.postalNum,
@@ -495,6 +494,23 @@ class AddEmployee extends Component {
   username = '';
   password = '';
   EmployeeID = null;
+  showConfirm = false;
+
+  /**HandleClose
+   * Handles the closing of the modal that pops up
+   * will close it by returing the this.showConfirm = false
+   */
+  handleClose() {
+    this.showConfirm = false;
+  }
+
+  /**HandleShow
+   * Handles the opening the modal that pops up when prompted
+   * will open by returing this.showConfirm = false
+   */
+  handleShow() {
+    this.showConfirm = true;
+  }
 
   render() {
     return (
@@ -506,67 +522,90 @@ class AddEmployee extends Component {
           <div className="container">
             <h5>Ny ansatt</h5>
             <br />
-            <Row>
-              <Column width={5}>
-                <Form.Label>Fornavn:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Etternavn:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Email:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Telefon:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.tlf = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={8}>
-                <Form.Label>Gateaddresse:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
-              </Column>
-              <Column width={2}>
-                <Form.Label>Gatenummer:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Postnummer:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.postalNum = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Poststed:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
-              </Column>
-            </Row>
-            <Row>
-              <Column width={5}>
-                <Form.Label>Brukernavn:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.username = event.target.value)} />
-              </Column>
-              <Column width={5}>
-                <Form.Label>Passord:</Form.Label>
-                <Form.Input type="text" required={true} onChange={event => (this.password = event.target.value)} />
-              </Column>
-            </Row>
-            <br />
-            <Row>
-              <Column>
-                <ButtonOutline.Success onClick={this.add}>Legg til</ButtonOutline.Success>
-              </Column>
-              <Column right>
-                <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
-              </Column>
-            </Row>
+            <form onSubmit={this.handleShow}>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Fornavn:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.firstName = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Etternavn:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.lastName = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Email:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.email = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Telefon:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.tlf = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={8}>
+                  <Form.Label>Gateaddresse:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.street = event.target.value)} />
+                </Column>
+                <Column width={2}>
+                  <Form.Label>Gatenummer:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.streetNum = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Postnummer:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.postalNum = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Poststed:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.postal = event.target.value)} />
+                </Column>
+              </Row>
+              <Row>
+                <Column width={5}>
+                  <Form.Label>Brukernavn:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.username = event.target.value)} />
+                </Column>
+                <Column width={5}>
+                  <Form.Label>Passord:</Form.Label>
+                  <Form.Input type="text" required={true} onChange={event => (this.password = event.target.value)} />
+                </Column>
+              </Row>
+              <br />
+              <Row>
+                <Column>
+                  <ButtonOutline.Submit>Legg til</ButtonOutline.Submit>
+                </Column>
+                <Column right>
+                  <ButtonOutline.Secondary onClick={this.cancel}>Cancel</ButtonOutline.Secondary>
+                </Column>
+              </Row>
+            </form>
           </div>
         </Card>
+
+        <Modal show={this.showConfirm} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Er informasjonen riktig?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Er du sikker på at informasjonen er riktig?</p>
+            <br />
+            <p>Trykk Utfør for å legge til ansatt.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Column>
+                <ButtonOutline.Success onClick={this.add}>Utfør</ButtonOutline.Success>
+              </Column>
+              <Column right>
+                <ButtonOutline.Secondary onClick={this.handleClose}>Avbryt</ButtonOutline.Secondary>
+              </Column>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -587,7 +626,6 @@ class AddEmployee extends Component {
   add() {
     //Check if address already in database
     employeeService.getAddressID(this.postalNum, this.postal, this.street, this.streetNum, result => {
-      // console.log(result);
       if (result === undefined) {
         employeeService.addAddress(this.postalNum, this.postal, this.street, this.streetNum);
 
@@ -596,19 +634,17 @@ class AddEmployee extends Component {
         });
 
         employeeService.getEmployeeID(this.email, empID => {
-          console.log(empID);
           employeeService.addUser(this.username, this.password, empID.worker_id);
         });
       } else {
         employeeService.addEmployee(this.firstName, this.lastName, this.email, this.tlf, result.id);
 
         employeeService.getEmployeeID(this.email, empID => {
-          console.log(empID);
           employeeService.addUser(this.username, this.password, empID.worker_id);
         });
       }
     });
-
+    this.handleClose();
     history.push('/employees/');
   }
 }
