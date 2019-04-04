@@ -549,7 +549,11 @@ class AddEmployee extends Component {
         })
       } else {
         employeeService.addEmployee(this.firstName, this.lastName, this.email, this.tlf, result.id);
-        employeeService.addUser(this.username, this.password, result.worker_id);
+
+        employeeService.getEmployeeID(this.email, empID => {
+          console.log(empID);
+          employeeService.addUser(this.username, this.password, empID.worker_id);
+        })
       }
     });
 

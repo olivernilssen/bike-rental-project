@@ -170,8 +170,8 @@ class Menu extends Component {
   state = {
     Localbasket: this.props.Mybasket,
     isLoggedIn: true,
-    bikeMenu: false, 
-    admin: false
+    bikeMenu: false,
+    admin: true
   };
 
   getLoginData(data) {
