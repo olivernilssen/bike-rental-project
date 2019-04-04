@@ -932,9 +932,9 @@ class BikesByStatus extends Component {
           <h6>Sykler med denne statusen:</h6>
           <Table>
             <Table.Thead>
-              <Table.Th>ID</Table.Th>
-              <Table.Th>Lokasjon</Table.Th>
-              <Table.Th>Sykkeltype</Table.Th>
+              <Table.Th width={200}>ID</Table.Th>
+              <Table.Th width={400}>Lokasjon</Table.Th>
+              <Table.Th width={400}>Sykkeltype</Table.Th>
               <Table.Th />
             </Table.Thead>
             <Table.Tbody>

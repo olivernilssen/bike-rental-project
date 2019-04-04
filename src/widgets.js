@@ -510,7 +510,11 @@ class Thead extends Component {
 
 class Th extends Component {
   render() {
-    return <th scope="col">{this.props.children}</th>;
+    return (
+      <th scope="col" width={this.props.width}>
+        {this.props.children}
+      </th>
+    );
   }
 }
 
@@ -532,7 +536,7 @@ class Tr extends Component {
 
 class Td extends Component {
   render() {
-    return <td>{this.props.children}</td>;
+    return <td width={this.props.width}>{this.props.children}</td>;
   }
 }
 
