@@ -16,7 +16,6 @@ class OrderService {
       [id],
       (error, results) => {
         if (error) return console.error(error);
-
         success(results[0]);
       }
     );

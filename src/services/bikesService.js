@@ -1,5 +1,4 @@
 import { connection } from './mysql_connection';
-import { start } from 'repl';
 
 class BikeService {
   getBikeTypes(success) {

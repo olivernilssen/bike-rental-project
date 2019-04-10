@@ -97,7 +97,7 @@ class Basket extends Component {
    * @event - event that happens (eg. keypress)
    */
   handleChangePhrase(event) {
-    this.setState({ state: (this.state.phrase = event.target.value) }, this.findCustomers());
+    this.setState({phrase : event.target.value}, this.findCustomers());
   }
 
   /**Find all customers
