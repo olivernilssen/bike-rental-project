@@ -18,26 +18,6 @@ export class Card extends Component {
   }
 }
 
-class ListItem extends Component {
-  render() {
-    return this.props.to ? (
-      <NavLink className="list-group-item" activeClassName="active" to={this.props.to}>
-        {this.props.children}
-      </NavLink>
-    ) : (
-      <li className="list-group-item">{this.props.children}</li>
-    );
-  }
-}
-
-export class List extends Component {
-  static Item = ListItem;
-
-  render() {
-    return <ul className="list-group">{this.props.children}</ul>;
-  }
-}
-
 class TabItem extends Component {
   render() {
     return this.props.to ? (
@@ -174,24 +154,6 @@ export class SideNavBar extends Component {
   }
 }
 
-// Renders a success button using Bootstrap styles
-// Attributes: onClick
-class ButtonSuccess extends Component {
-  render() {
-    return (
-      <button
-        type="button"
-        className="btn btn-success"
-        id={this.props.id}
-        onClick={this.props.onClick}
-        style={this.props.style}
-      >
-        {this.props.children}
-      </button>
-    );
-  }
-}
-
 // Renders a danger button using Bootstrap styles
 // Attributes: onClick
 class ButtonDanger extends Component {
@@ -229,23 +191,6 @@ class ButtonLight extends Component {
   }
 }
 
-class ButtonPrimary extends Component {
-  render() {
-    return (
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={this.props.onClick}
-        data-toggle={this.props.dataToggle}
-        data-target={this.props.dataTarget}
-        style={this.props.style}
-      >
-        {this.props.children}
-      </button>
-    );
-  }
-}
-
 class ButtonInfo extends Component {
   render() {
     return (
@@ -263,31 +208,11 @@ class ButtonInfo extends Component {
   }
 }
 
-class ButtonSecondary extends Component {
-  render() {
-    return (
-      <button
-        type="button"
-        className="btn btn-secondary"
-        onClick={this.props.onClick}
-        data-toggle={this.props.dataToggle}
-        data-target={this.props.dataTarget}
-        style={this.props.style}
-      >
-        {this.props.children}
-      </button>
-    );
-  }
-}
-
 // Renders a button using Bootstrap styles
 export class Button {
-  static Success = ButtonSuccess;
   static Danger = ButtonDanger;
   static Light = ButtonLight;
-  static Primary = ButtonPrimary;
   static Info = ButtonInfo;
-  static Secondary = ButtonSecondary;
 }
 
 class ButtonSuccessOutline extends Component {
@@ -324,22 +249,6 @@ class ButtonInfoOutline extends Component {
       <button
         type="button"
         className="btn btn-outline-info"
-        id={this.props.id}
-        onClick={this.props.onClick}
-        style={this.props.style}
-      >
-        {this.props.children}
-      </button>
-    );
-  }
-}
-
-class ButtonPrimaryOutline extends Component {
-  render() {
-    return (
-      <button
-        type="button"
-        className="btn btn-outline-primary"
         id={this.props.id}
         onClick={this.props.onClick}
         style={this.props.style}
@@ -418,7 +327,6 @@ export class ButtonOutline {
   static Success = ButtonSuccessOutline;
   static Danger = ButtonDangerOutline;
   static Info = ButtonInfoOutline;
-  static Primary = ButtonPrimaryOutline;
   static Secondary = ButtonSecondaryOutline;
   static Light = ButtonLightOutline;
   static Dark = ButtonDarkOutline;
@@ -573,12 +481,6 @@ export class Table extends Component {
         </table>
       </div>
     );
-  }
-}
-
-export class H1 extends Component {
-  render() {
-    return <h1 className="display-4">{this.props.children}</h1>;
   }
 }
 
