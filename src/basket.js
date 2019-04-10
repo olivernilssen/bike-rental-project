@@ -97,7 +97,7 @@ class Basket extends Component {
    * @event - event that happens (eg. keypress)
    */
   handleChangePhrase(event) {
-    this.setState({phrase : event.target.value}, this.findCustomers());
+    this.setState({ phrase: event.target.value }, this.findCustomers());
   }
 
   /**Find all customers
@@ -655,9 +655,9 @@ class EquipmentQuery extends Component {
                       <Table.Td>{equip.objectStatus}</Table.Td>
                       <Table.Td>{equip.price}</Table.Td>
                       <Table.Td>
-                        <Button.Success onClick={() => this.basketAdd(equip)}>
+                        <ButtonOutline.Success onClick={() => this.basketAdd(equip)}>
                           <FontAwesomeIcon icon="plus" />
-                        </Button.Success>
+                        </ButtonOutline.Success>
                       </Table.Td>
                     </Table.Tr>
                   ))}
