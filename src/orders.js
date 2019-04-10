@@ -2,23 +2,17 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import {
   Card,
-  Tab,
-  List,
   Row,
   Column,
   NavBar,
-  Button,
   ButtonOutline,
   Form,
   Table,
   ClickTable,
-  H1,
   Select
 } from './widgets';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { orderService } from './services/ordersService';
 import { rentalService } from './services/services';
-import { emplyoeeID } from './index.js';
 import { Modal } from 'react-bootstrap';
 require('react-bootstrap/ModalHeader');
 require('react-bootstrap/Modal');

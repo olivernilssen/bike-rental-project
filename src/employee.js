@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, ClickTable, H1 } from './widgets';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { Card, Row, Column, NavBar, Button, ButtonOutline, Form, Table, ClickTable } from './widgets';
+import { NavLink } from 'react-router-dom';
 import { employeeService } from './services/employeeService';
-import { basket, employeeID } from './index.js';
 import { Modal } from 'react-bootstrap';
 require('react-bootstrap/ModalHeader');
 require('react-bootstrap/Modal');

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab, List, Row, Column, NavBar, Button, ButtonOutline, Form, Table, H1, Select } from './widgets';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { Card, Tab , Row, Column, NavBar, Button, ButtonOutline, Form, Table, Select } from './widgets';
+import { NavLink } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
 import { Modal } from 'react-bootstrap';

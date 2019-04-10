@@ -1,28 +1,18 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import {
   Card,
-  Tab,
-  List,
   Row,
   Column,
   NavBar,
-  Button,
   ButtonOutline,
-  Form,
-  Table,
-  H1,
-  Select,
-  CenterContent
+  Table
 } from './widgets';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { rentalService } from './services/services';
-import { bikeService } from './services/bikesService';
-import { orderService } from './services/OrdersService';
 
 import createHashHistory from 'history/createHashHistory';
-const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 let today = new Date();
 let day = today.getDate();

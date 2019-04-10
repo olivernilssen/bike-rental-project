@@ -4,7 +4,7 @@ import { Card, Row, Column, NavBar, Button, ButtonOutline, Form, Table, H1, Sele
 import { NavLink } from 'react-router-dom';
 import { customerService } from './services/customersService';
 import { orderService } from './services/ordersService';
-import { basket, activeCustomer, equipmentBasket, employeeID } from './index.js';
+import { basket, shared, activeCustomer, equipmentBasket, employeeID } from './index.js';
 import { Modal } from 'react-bootstrap';
 require('react-bootstrap/ModalHeader');
 require('react-bootstrap/Modal');
@@ -57,6 +57,7 @@ class Basket extends Component {
       if (bike == i) {
         this.totalPrice -= basket[basket.indexOf(i)].displayPrice;
         basket.splice(basket.indexOf(i), 1);
+        shared.basketLength = basket.length;
         this.updateBasket();
         this.calcDiscount();
       }

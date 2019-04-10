@@ -3,7 +3,6 @@ import { Component, sharedComponentData } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route } from 'react-router-dom';
 import { rentalService } from './services/services';
-import { Modal } from 'react-bootstrap/Modal';
 import {
   BikeTypes,
   BikeTypeDetails,
@@ -27,10 +26,7 @@ import { Employees, AddEmployee } from './employee.js';
 
 import {
   Card,
-  Tabs,
-  Link,
   Row,
-  Column,
   NavBar,
   SideNavBar,
   SideNavHeading,

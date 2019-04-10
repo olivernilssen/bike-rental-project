@@ -3,7 +3,6 @@ import { Component } from 'react-simplified';
 import {
   Card,
   Tab,
-  List,
   Row,
   Column,
   NavBar,
@@ -12,10 +11,9 @@ import {
   Form,
   Table,
   ClickTable,
-  H1,
   Select
 } from './widgets';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { equipmentService } from './services/equipmentService';
 import { bikeService } from './services/bikesService';

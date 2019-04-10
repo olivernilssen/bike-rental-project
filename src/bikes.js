@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { connection } from './services/mysql_connection';
 import {
   Card,
   Tab,
-  List,
   Row,
   Column,
   NavBar,
@@ -13,11 +11,10 @@ import {
   Form,
   Table,
   ClickTable,
-  H1,
   Select,
   CenterContent
 } from './widgets';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
 import { Modal } from 'react-bootstrap';
