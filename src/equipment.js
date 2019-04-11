@@ -1,18 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import {
-  Card,
-  Tab,
-  Row,
-  Column,
-  NavBar,
-  Button,
-  ButtonOutline,
-  Form,
-  Table,
-  ClickTable,
-  Select
-} from './widgets';
+import { Card, Tab, Row, Column, NavBar, Button, ButtonOutline, Form, Table, ClickTable, Select } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { equipmentService } from './services/equipmentService';
@@ -23,6 +11,8 @@ require('react-bootstrap/Modal');
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
+
+/* The navigation on top of the equipment page */
 
 class EquipmentTypes extends Component {
   equipTypes = [];
@@ -50,6 +40,10 @@ class EquipmentTypes extends Component {
   }
 
   mounted() {
+
+    /* Gets all unique types of equipment for the navigation
+    on top of the equipment page, so you can move between them.  */
+
     equipmentService.getDistinctEquipType(types => {
       for (let i = 0; i < types.length; i++) {
         for (let j = 0; j < types.length; j++) {
@@ -64,6 +58,16 @@ class EquipmentTypes extends Component {
     });
   }
 }
+
+/* The main table on the equipment page with
+all types of the selected equipment as well
+as the table on the left underneath which
+shows all items of that type and which may
+be filtered by clicking on the first table
+
+Finally includes the table where you can
+add and see restrictions between equipment
+types and bicycle types.*/
 
 class EquipTypeDetails extends Component {
   handler = '';
@@ -82,6 +86,9 @@ class EquipTypeDetails extends Component {
     typeIds: [],
     equipTypeDetails: []
   };
+
+  /* Allows the user to filter the items
+  shown according to size selected. */
 
   showThisType(type) {
     let index = this.state.equipTypeDetails
@@ -123,22 +130,34 @@ class EquipTypeDetails extends Component {
     }
   }
 
+  //Updates variable across component
+
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+
+  //Handles opening/closing feedback messages
 
   handleClose() {
     this.showInfo = false;
     this.mounted();
   }
-
   handleShow() {
     this.showInfo = true;
   }
 
+
   render() {
+
+
+  //Stops tables from loading if empty
+
     if (!this.equipType) return null;
     if (!this.distinctBikeType) return null;
+
+
+    /* Explains filtering functionality when you click
+    on an equipment type in the main table */
 
     let notice;
 
@@ -147,6 +166,10 @@ class EquipTypeDetails extends Component {
         <p style={{ color: 'red' }}>Trykk på samme leiegjenstand igjen for å se beholdning for alle størrelser/typer</p>
       );
     }
+
+
+    /* Message shown while there are no
+    restrictions for the viewed equipment type */
 
     let noRestr;
 
@@ -314,6 +337,8 @@ class EquipTypeDetails extends Component {
     );
   }
 
+  /* Opens box so you can change price of given equipment */
+
   change(type) {
     for (let i = 0; i < this.state.equipTypeDetails.length; i++) {
       this.state.equipTypeDetails[i].changePrice = false;
@@ -328,6 +353,8 @@ class EquipTypeDetails extends Component {
     this.state.equipTypeDetails[index].changePrice = true;
   }
 
+  /* Saves new price you've put in for a given equipment */
+
   save(type) {
     equipmentService.updateEquipmentType(this.state.priceEquip, type.id);
 
@@ -340,6 +367,9 @@ class EquipTypeDetails extends Component {
     this.state.equipTypeDetails[index].changePrice = false;
   }
 
+  /* Uses id of bike from table to add a restriction
+  to every bike which shares the same type name.*/
+
   add() {
     this.infoText = 'Opprettelsen av begrensningen var vellykket';
 
@@ -351,6 +381,10 @@ class EquipTypeDetails extends Component {
     this.handleShow();
   }
 
+  /* Uses id of equipment passed from table
+  to delete restriction for every equipment of same type.
+  Shows confirmation message as well. */
+
   delete(id) {
     this.handler = id;
     this.infoText = 'Sletting av begrensningen var vellykket.';
@@ -361,21 +395,32 @@ class EquipTypeDetails extends Component {
   }
 
   mounted() {
+
+    /* Gets restrictions based on the name of the equipment
+    which is taken from the name used in the navigation. */
+
     equipmentService.getRestrictions(this.props.match.params.typeName, results => {
       this.restrictions = results;
       this.lock = false;
     });
 
+    //Empties them for reuse
     this.state.equipments = [];
     this.state.equipTypeDetails = [];
 
+   //Gets all types of equipment
     equipmentService.getEquipmentTypes(type => {
       this.equipType = type;
     });
 
+  //Gets all unique types of bicycles
     equipmentService.getDistinctBikeType(this.props.match.params.typeName, distinctType => {
       this.distinctBikeType = distinctType;
     });
+
+
+    /* Deduces information it needs from id taken from the
+    application navigation to display relevant lists of equipment */
 
     equipmentService.getTypeID(this.props.match.params.typeName, idResult => {
       this.state.typeIds = idResult;
@@ -403,8 +448,14 @@ class EquipTypeDetails extends Component {
         });
       }
     });
+
+
   }
 }
+
+/* First half of screen which shows when you
+click the button to add new equipment. The box
+allows you to add new bike equipment. */
 
 class AddEquipment extends Component {
   antall = 0;
@@ -416,22 +467,26 @@ class AddEquipment extends Component {
     curLocation: ''
   };
 
+  /* Registers across the components what
+  location and type you have selected for
+  the equipment which you want to add. */
+
   onChangeType(event) {
     const selectedIndex = event.target.options.selectedIndex;
     this.setState({
       state: (this.state.selectedEquipTypeID = event.target.options[selectedIndex].getAttribute('data-key'))
     });
   }
-
   onChangeLocation(event) {
     const selectedIndex = event.target.options.selectedIndex;
     this.setState({ state: (this.state.curLocation = event.target.options[selectedIndex].getAttribute('data-key')) });
   }
 
+  //Handles opening/closing feedback messages
+
   handleClose() {
     this.showConfirm = false;
   }
-
   handleShow() {
     this.showConfirm = true;
   }
@@ -516,6 +571,8 @@ class AddEquipment extends Component {
     );
   }
 
+  // Adds the new equipment to the database
+
   add() {
     if (this.antall <= 0) {
       return;
@@ -528,9 +585,13 @@ class AddEquipment extends Component {
     history.push('/equipmentTypes/Helmet');
   }
 
+// Returns you to the main equipment page if you click "Cancel"
+
   cancel() {
     history.push('/equipmentTypes/Helmet');
   }
+
+  //Gets all the locations so you can select them
 
   mounted() {
     rentalService.getLocations(locations => {
@@ -538,12 +599,19 @@ class AddEquipment extends Component {
       this.locations = locations;
     });
 
+
+  //Gets all the equipment types so you can select them
+
     equipmentService.getEquipmentTypes(type => {
       this.selectedEquipment = type[0].id;
       this.equipmentTypes = type;
     });
   }
 }
+
+/* Second half of screen which shows when you
+click the button to add new equipment. The box
+allows you to add entirely new bike types. */
 
 class NewEquipmentType extends Component {
   typeName = '';
@@ -553,10 +621,12 @@ class NewEquipmentType extends Component {
   price = 0;
   showConfirm = false;
 
+
+    //Handles opening/closing feedback messages
+
   handleClose() {
     this.showConfirm = false;
   }
-
   handleShow() {
     this.showConfirm = true;
   }
@@ -627,12 +697,17 @@ class NewEquipmentType extends Component {
     );
   }
 
+  /* Adds your new equipment type with all entered
+  information into the database */
+
   add() {
     equipmentService.newEquipmentType(this.typeName, this.brand, this.year, this.comment, this.price);
 
     this.handleClose();
     history.push('/equipmentTypes/Helmet');
   }
+
+  // Returns you to the main equipment page if you click "Cancel"
 
   cancel() {
     history.push('/equipmentTypes/Helmet');
