@@ -24,16 +24,7 @@ import { Orders } from './orders.js';
 import { EquipmentTypes, EquipTypeDetails, AddEquipment } from './equipment.js';
 import { Employees, AddEmployee } from './employee.js';
 
-import {
-  Card,
-  Row,
-  NavBar,
-  SideNavBar,
-  SideNavHeading,
-  Button,
-  Form,
-  CenterContent
-} from './widgets';
+import { Card, Row, NavBar, SideNavBar, SideNavHeading, Button, Form, CenterContent } from './widgets';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -70,17 +61,17 @@ library.add(
 );
 
 import createHashHistory from 'history/createHashHistory';
-const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
 /*
-  FOR Å TESTE INNLOGGIN BRUK 
+  FOR Å TESTE INNLOGGIN BRUK
   BRUKERNAVN: Peter001 PASSORD: 1234 FOR EN SELGER
   BRUKERNAVN: Karl003 PASSORD: 1234 FOR EN ADMIN
   !OBS OBS!
 
-  FOR Å SLIPPE Å LOGGE INN HVER GANG DU OPPDATERER MED CTRL+R UNDER INSPEKSJON AV APPLIKASJONEN 
-  ENDRE FØLGENDE VARIABLER: 
-    employeeID = 1 for selger ELLER employeeID = 3 for en Admin. 
+  FOR Å SLIPPE Å LOGGE INN HVER GANG DU OPPDATERER MED CTRL+R UNDER INSPEKSJON AV APPLIKASJONEN
+  ENDRE FØLGENDE VARIABLER:
+    employeeID = 1 for selger ELLER employeeID = 3 for en Admin.
     state.isLoggedIn = true. (DENNE LIGGER I KOMPONENTEN MENU)
 */
 export const shared = sharedComponentData({ basketLength: 0 });
@@ -178,22 +169,22 @@ class Menu extends Component {
   /**
    * Get login data based on what happens in the child
    * component in LoginMenu
-   * This data will be used to check if the used is 
+   * This data will be used to check if the used is
    * logged in, and what type of user it is.
-   * @param {*} data 
+   * @param {*} data
    */
   getLoginData(data) {
     this.setState({ isLoggedIn: data });
-    
-    if(employeeID != 0 || employeeID != null || employeeID != ""){
+
+    if (employeeID != 0 || employeeID != null || employeeID != '') {
       rentalService.getEmployee(employeeID, result => {
-        console.log(result)
-        this.setState({user: result})
+        console.log(result);
+        this.setState({ user: result });
       });
 
       //this should be checking towards all users that are
       //admin, but unfortunalty time has limited us
-      for(let i = 0; i < this.state.adminIDs.length; i++){
+      for (let i = 0; i < this.state.adminIDs.length; i++) {
         if (employeeID == this.state.adminIDs[i].worker_id) {
           this.setState({ admin: true });
         }
@@ -201,13 +192,13 @@ class Menu extends Component {
     }
   }
 
-  //Whenever the this.props.Mybasket is updated, call 
+  //Whenever the this.props.Mybasket is updated, call
   //this function.
   componentWillReceiveProps(nextProps) {
     console.log('Will recieve Props');
     this.setState({ Localbasket: nextProps.Mybasket });
   }
-  
+
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
   toggleBikeMenu() {
     this.setState({ bikeMenu: !this.state.bikeMenu });
@@ -318,7 +309,7 @@ class Menu extends Component {
   }
 
   //Log out of the application, set isLoggedin = false
-  //and push to login menu and reset the given 
+  //and push to login menu and reset the given
   //username and password
   logout() {
     this.setState({ isLoggedIn: false });
@@ -333,14 +324,15 @@ class Menu extends Component {
       this.area = area;
     });
 
-    if(employeeID != 0 || employeeID != null || employeeID != ""){
+    if (employeeID != 0 || employeeID != null || employeeID != '') {
       rentalService.getEmployee(employeeID, result => {
-        this.setState({user: result})
-      });}
+        this.setState({ user: result });
+      });
+    }
 
     rentalService.getAdminID(Ids => {
       this.state.adminIDs = Ids;
-    })
+    });
   }
 }
 
