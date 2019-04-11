@@ -73,9 +73,12 @@ import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 /*
-  HER SKAL ALLE ELEMENTER SETTES SAMMEN TIL FOR Å LAGE SELVE APPLIKASJONEN
+  !OBS OBS!
 
-  BRUKER IMPORT AV ELEMENTER SOM TRENGS FRA ANDRE .JS FILER
+  FOR Å SLIPPE Å LOGGE INN HVER GANG DU OPPDATERER MED CTRL+R UNDER INSPEKSJON AV APPLIKASJONEN 
+  ENDRE FØLGENDE VARIABLER: 
+    employeeID = 1 for selger ELLER employeeID = 3 for en Admin. 
+    state.isLoggedIn = true. (DENNE LIGGER I KOMPONENTEN MENU)
 */
 export const shared = sharedComponentData({ basketLength: 0 });
 export let basket = [];
