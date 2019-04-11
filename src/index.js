@@ -83,8 +83,10 @@ export let equipmentBasket = [];
 export let employeeID = 1;
 export const activeCustomer = [{ id: null, lastName: '', firstName: '' }];
 
-/* Denne er her fordi om jeg det ikke blir pushet til en komponent,
-så ser du alt av innhold fra tidligere komponenter selv etter utlogging */
+/**
+ * Login menu component which is called if the user is not
+ * logged in, or the log in information is false.
+ */
 class LoginMenu extends Component {
   state = {
     username: '',
@@ -165,19 +167,31 @@ class Menu extends Component {
     admin: true
   };
 
+  /**
+   * Get login data based on what happens in the child
+   * component in LoginMenu
+   * This data will be used to check if the used is 
+   * logged in, and what type of user it is.
+   * @param {*} data 
+   */
   getLoginData(data) {
     this.setState({ isLoggedIn: data });
+    
+    //this should be checking towards all users that are
+    //admin, but unfortunalty time has limited us
     if (employeeID == 3) {
       this.setState({ admin: true });
     }
   }
 
+  //Whenever the this.props.Mybasket is updated, call 
+  //this function.
   componentWillReceiveProps(nextProps) {
     console.log('Will recieve Props');
     this.setState({ Localbasket: nextProps.Mybasket });
   }
+  
   //Endre denne til false for å starte med innloggings portalen ved oppstart av applikasjon
-
   toggleBikeMenu() {
     this.setState({ bikeMenu: !this.state.bikeMenu });
   }
@@ -201,11 +215,10 @@ class Menu extends Component {
       spanstyle.display = 'none';
     }
 
+    //This will change depending on if they equal true or false
     const isLoggedIn = this.state.isLoggedIn;
     const showBike = this.state.bikeMenu ? 'show' : '';
     const hideAdmin = this.state.admin ? '' : 'hide';
-
-    console.log(this.state.admin);
 
     if (isLoggedIn == false) {
       history.push('');
@@ -287,8 +300,10 @@ class Menu extends Component {
     }
   }
 
+  //Log out of the application, set isLoggedin = false
+  //and push to login menu and reset the given 
+  //username and password
   logout() {
-    // history.push('/login/');
     this.setState({ isLoggedIn: false });
     this.state.username = '';
     this.state.password = '';
