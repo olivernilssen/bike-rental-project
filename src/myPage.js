@@ -11,6 +11,10 @@ require('react-bootstrap/Modal');
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
+
+/* Page that shows when you click Information in the navigation
+bar on the left. Shows info about the logged in user. */
+
 class UserInfo extends Component {
   firstName = '';
   surName = '';
@@ -68,6 +72,10 @@ class UserInfo extends Component {
   }
 
   mounted() {
+
+    /* Gets the information about the user logged
+     in based on the global variable employeeID. */
+
     rentalService.getEmployee(employeeID, employee => {
       this.firstName = employee.firstName;
       this.surName = employee.lastName;
@@ -78,8 +86,16 @@ class UserInfo extends Component {
       this.place = employee.place;
       this.postalCode = employee.postalNum;
     });
+
+
   }
 }
+
+
+
+/* Page that shows whne you click to edit
+the registered information about
+user who is currently logged in */
 
 class EditUserInfo extends Component {
   firstName = '';
@@ -237,6 +253,10 @@ class EditUserInfo extends Component {
   }
 
   mounted() {
+
+    /* Gets the information about the user logged
+     in based on the global variable employeeID. */
+
     rentalService.getEmployee(employeeID, employee => {
       this.firstName = employee.firstName;
       this.surName = employee.lastName;
@@ -248,6 +268,8 @@ class EditUserInfo extends Component {
       this.postalCode = employee.postalNum;
     });
   }
+
+  /* Saves entered information to database. */
 
   save() {
     rentalService.updateEmployee(
@@ -267,6 +289,10 @@ class EditUserInfo extends Component {
     );
   }
 }
+
+
+/* What shows when you click on
+"My Sales" on the navigation bar */
 
 class MySales extends Component {
   sales = [];
@@ -324,11 +350,25 @@ class MySales extends Component {
   }
 
   mounted() {
+
+
+    /* Gets information on sales
+    by user who is currently logged in */
+
     rentalService.getSales(employeeID, sales => {
       this.sales = sales;
     });
   }
+
+
 }
+
+
+
+/* What shows when you choose to view
+detailed information about a specific order
+on the "My Sales" page */
+
 
 class DetailedOrder extends Component {
   bikes = [];
@@ -436,17 +476,28 @@ class DetailedOrder extends Component {
   }
 
   mounted() {
+
+    /* Gets bikes in the order based on the
+    order id also used in the navigation code */
+
     orderService.getBikesFromOrder(this.props.match.params.id, bikes => {
       this.bikes = bikes;
     });
+
+    /* Gets equipment in the order based on the
+    order id also used in the navigation code */
 
     orderService.getEquipmentFromOrder(this.props.match.params.id, equipments => {
       this.equipments = equipments;
     });
 
+    /* Just used to get the total price of the order */
+
     rentalService.getSale(this.props.match.params.id, sale => {
       this.sale = sale;
     });
+
+
   }
 }
 
