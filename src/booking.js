@@ -13,9 +13,7 @@ import {
 } from './widgets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { rentalService } from './services/services';
-
 import { basket, shared } from './index.js';
-
 import { bikeService } from './services/bikesService';
 
 let today = new Date();
@@ -62,6 +60,7 @@ class Booking extends Component {
     clear: 'both'
   };
 
+
   handleCheckChange() {
     if (this.dayRent == false) {
       this.dayRent = true;
@@ -72,10 +71,12 @@ class Booking extends Component {
     }
   }
 
+
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value }, this.findAvailBikes);
   }
 
+  
   chooseBike(bike) {
     // history.push('/equipmentQuery/' + bike.id + '/edit');
     if (basket.length == 0) {

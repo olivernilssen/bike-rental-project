@@ -32,11 +32,19 @@ class Basket extends Component {
     clear: 'both'
   };
 
+  /**Handle close
+   * Close any of the two modals 
+   */
   handleClose() {
     this.setState({ showError: false });
     this.setState({ showConfirm: false });
   }
 
+  /**Handle Show
+   * Shows one out of two modals. Either the error Modal
+   * or the Confirm your purchase Modal, depending 
+   * if we have the correct information
+   */
   handleShow() {
     if (this.state.activeC[0].id == null || this.state.inBasket == null || this.state.inBasket.length == 0) {
       this.setState({ showError: true });
@@ -199,6 +207,8 @@ class Basket extends Component {
     const { btnStyle } = styles;
     let notice;
 
+    //If the equipment basket is empty, show a text that says
+    //it is empty
     if (equipmentBasket.length == 0) {
       notice = (
         <Table.Tr>
@@ -451,30 +461,37 @@ class Basket extends Component {
     } else {
       for (let i = 0; i < this.state.inBasket.length; i++) {
         if (this.state.inBasket[i].dayRent == false) {
+
+          //calculate the amount of days the bikes are rented for
           let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
           let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          
+          //if the days are less than 1 day, then calculate the hour rate
           if (timeDiff > 1) {
             this.state.inBasket[i].displayPrice =
               this.state.inBasket[i].price + this.state.inBasket[i].price * 0.5 * diffDays;
           }
           this.totalPrice += this.state.inBasket[i].displayPrice;
-          console.log(diffDays + ' Antall dager');
+    
         } else {
           let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
           let diffHours = Math.ceil(timeDiff / (1000 * 3600));
           this.state.inBasket[i].displayPrice = (this.state.inBasket[i].price / 4) * diffHours;
           this.totalPrice += this.state.inBasket[i].displayPrice;
-          console.log(diffHours + ' Antall timer');
+        
         }
       }
     }
 
+    //if the equipmentbasket is not empty, then 
+    //add the price to the total price
     if (equipmentBasket != 0) {
       for (let i = 0; i < equipmentBasket.length; i++) {
         this.totalPrice += equipmentBasket[i].price;
       }
     }
 
+    //Show the discounted price as the totalprice
     this.discPrice = this.totalPrice;
 
     customerService.getCustomerSearch('%', results => {
@@ -507,7 +524,6 @@ class Basket extends Component {
     let orderType = 1;
 
     let todaysDate = year + '-' + month + '-' + day + ' ' + time + ':' + minutes + ':00';
-    console.log(todaysDate);
 
     if (this.state.inBasket[0].dayRent == true) {
       orderType = 2;
@@ -558,19 +574,35 @@ class EquipmentQuery extends Component {
     inEqBasket: equipmentBasket
   };
 
+
+  /** handle change
+   * set the state of whichever target.name equals, to 
+   * the new target value
+   * then call the specify function.
+   */
   handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value }, this.specify());
+  }
+
+  /** basket Add
+   * Adds an equipment to the seperate 
+   * basket for equipments. 
+   * @equipment - element that is clicked in available equipment
+   */
+  basketAdd(equipment) {
+    equipmentBasket.push(equipment);
     this.specify();
   }
 
-  basketAdd(e) {
-    equipmentBasket.push(e);
-    this.specify();
-  }
-
-  basketRemove(e) {
+  /** basket remove
+   * Iterates throught the list of equipments
+   * if any of them is equal to the clicked element
+   * it will be removed from the basket.
+   * @equipment - element that is clicked in the equipment basket
+   */
+  basketRemove(equipment) {
     for (var i = 0; equipmentBasket.length > i; i++) {
-      if (equipmentBasket[i].id == e.id) {
+      if (equipmentBasket[i].id == equipment.id) {
         equipmentBasket.splice(i, 1);
       }
     }
@@ -755,6 +787,7 @@ class EquipmentQuery extends Component {
     });
   }
 
+  
   specify() {
     equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
       equipmentService.getSuitableEquipment(
