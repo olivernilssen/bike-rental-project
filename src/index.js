@@ -73,9 +73,6 @@ import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 
 /*
-  FOR Å TESTE INNLOGGIN BRUK 
-  BRUKERNAVN: Peter001 PASSORD: 1234 FOR EN SELGER
-  BRUKERNAVN: Karl003 PASSORD: 1234 FOR EN ADMIN
   !OBS OBS!
 
   FOR Å SLIPPE Å LOGGE INN HVER GANG DU OPPDATERER MED CTRL+R UNDER INSPEKSJON AV APPLIKASJONEN 
