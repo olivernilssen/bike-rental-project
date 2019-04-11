@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Bar } from 'react-chartjs-2';
-import {
-  Card,
-  Row,
-  Column,
-  NavBar,
-  ButtonOutline,
-  Table
-} from './widgets';
+import { Card, Row, Column, NavBar, ButtonOutline, Table } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { rentalService } from './services/services';
 
 import createHashHistory from 'history/createHashHistory';
+
+/* This page is the elements that show
+when you are on the Overview page */
+
+
+//Creates the dates used by the chart
 
 let today = new Date();
 let day = today.getDate();
@@ -23,6 +22,9 @@ let day2 = day + 2;
 if (day < 10) day = '0' + day;
 if (day2 < 10) day2 = '0' + day2;
 if (month < 10) month = '0' + month;
+
+
+//The chart on top of the overview page
 
 class Chart extends Component {
   months = [
@@ -95,7 +97,10 @@ class Chart extends Component {
     );
   }
 
-  //Brukes til å oppdatere charts når den tid kommer alt etter år :)
+
+  /* Updates the chart, simple function
+  that may become useful if we add more functionality. */
+
   updateChart() {
     let tempData = [];
     let tempLabel = [];
@@ -119,6 +124,8 @@ class Chart extends Component {
     let tempData = [];
     let tempLabel = [];
 
+    //Gets information for the chart
+
     rentalService.getMonthlyPrice(newdata => {
       for (let i = 0; i < newdata.length; i++) {
         tempData.push(newdata[i].sumPrice);
@@ -131,6 +138,14 @@ class Chart extends Component {
   }
 }
 
+/* These are the two tables shown
+on the overview which lets you register
+both the return and delivery of the bikes.
+
+Note that the buttons for delivery etc.
+do not do anything on their own. They
+just redirect you to where you can
+change this status yourself. */
 
 class RentedBikes extends Component {
   todaysDate = year + '-' + month + '-' + day + '%';
@@ -215,15 +230,21 @@ class RentedBikes extends Component {
   }
 
   mounted() {
+
+//Retrieves bikes which await return for the first table
     rentalService.getRentedBikes(rented => {
       this.rentedBikes = rented;
     });
 
+//Retrieves bikes which await delivery for the second table
     rentalService.getOrderedBikes(this.todaysDate, ordered => {
       this.orderedBikes = ordered;
     });
   }
 }
+
+
+//Puts the overview page together
 
 class Overview extends Component {
   render() {
