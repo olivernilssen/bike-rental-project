@@ -33,7 +33,7 @@ class Basket extends Component {
   };
 
   /**Handle close
-   * Close any of the two modals 
+   * Close any of the two modals
    */
   handleClose() {
     this.setState({ showError: false });
@@ -42,7 +42,7 @@ class Basket extends Component {
 
   /**Handle Show
    * Shows one out of two modals. Either the error Modal
-   * or the Confirm your purchase Modal, depending 
+   * or the Confirm your purchase Modal, depending
    * if we have the correct information
    */
   handleShow() {
@@ -465,25 +465,25 @@ class Basket extends Component {
           //calculate the amount of days the bikes are rented for
           let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
           let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-          
+
           //if the days are less than 1 day, then calculate the hour rate
           if (timeDiff > 1) {
             this.state.inBasket[i].displayPrice =
               this.state.inBasket[i].price + this.state.inBasket[i].price * 0.5 * diffDays;
           }
           this.totalPrice += this.state.inBasket[i].displayPrice;
-    
+
         } else {
           let timeDiff = Math.abs(this.state.inBasket[i].endDate - this.state.inBasket[i].startDate);
           let diffHours = Math.ceil(timeDiff / (1000 * 3600));
           this.state.inBasket[i].displayPrice = (this.state.inBasket[i].price / 4) * diffHours;
           this.totalPrice += this.state.inBasket[i].displayPrice;
-        
+
         }
       }
     }
 
-    //if the equipmentbasket is not empty, then 
+    //if the equipmentbasket is not empty, then
     //add the price to the total price
     if (equipmentBasket != 0) {
       for (let i = 0; i < equipmentBasket.length; i++) {
@@ -576,7 +576,7 @@ class EquipmentQuery extends Component {
 
 
   /** handle change
-   * set the state of whichever target.name equals, to 
+   * set the state of whichever target.name equals, to
    * the new target value
    * then call the specify function.
    */
@@ -585,8 +585,8 @@ class EquipmentQuery extends Component {
   }
 
   /** basket Add
-   * Adds an equipment to the seperate 
-   * basket for equipments. 
+   * Adds an equipment to the seperate
+   * basket for equipments.
    * @equipment - element that is clicked in available equipment
    */
   basketAdd(equipment) {
@@ -787,7 +787,10 @@ class EquipmentQuery extends Component {
     });
   }
 
-  
+
+/* Basically an inelegant, but functional way to
+redo all the searches under certain circumstances */
+
   specify() {
     equipmentService.getTypeNameForSuitableEquipment(this.props.match.params.id, typeName => {
       equipmentService.getSuitableEquipment(
