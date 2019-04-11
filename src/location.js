@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Card, Tab , Row, Column, NavBar, Button, ButtonOutline, Form, Table, Select } from './widgets';
+import { Card, Tab, Row, Column, NavBar, Button, ButtonOutline, Form, Table, Select } from './widgets';
 import { NavLink } from 'react-router-dom';
 import { rentalService } from './services/services';
 import { bikeService } from './services/bikesService';
@@ -11,6 +11,9 @@ require('react-bootstrap/Modal');
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path
 
+/** Area list
+ *  collects areaNames and puts them in tabs
+ */
 class AreaList extends Component {
   area = [];
 
@@ -136,7 +139,7 @@ class LocationInArea extends Component {
   locations = [];
 
   render() {
-    if (!this.area) return null;
+    if (!this.area) return null; // if location is not a part of this area, don't show it
 
     return (
       <div>
@@ -166,6 +169,7 @@ class LocationInArea extends Component {
       this.area = area;
     });
 
+    //gets locations with area_id
     rentalService.getLocationsByArea(this.props.match.params.area_id, locations => {
       this.locations = locations;
     });
