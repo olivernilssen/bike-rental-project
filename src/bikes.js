@@ -39,7 +39,12 @@ class AllBikes extends Component {
     this.setState({ state: (this.state.searchWord = event.target.value) }, this.searchBikes());
   }
 
-  //Search after bike
+  /**search bikes
+   * Search for bikes depending on user input
+   * Always set searchword to %% at the start, 
+   * so if the input is empty, then it will 
+   * print out eveything.
+   */
   searchBikes() {
     let searchWord = '%' + this.state.searchWord + '%';
 
@@ -304,6 +309,7 @@ class SelectedBike extends Component {
     }
   }
 
+  //Goes back to previous page by cancelling action
   cancel() {
     this.props.history.goBack();
   }
@@ -390,6 +396,7 @@ class AddBikes extends Component {
   handleClose() {
     this.showConfirm = false;
   }
+
   handleShow() {
     this.showConfirm = true;
   }
@@ -774,6 +781,12 @@ class NewBikeType extends Component {
   price = 0;
   showConfirm = false;
 
+
+  /**Handle close and show of Modal
+   * Handle the closure and showing of the Modal
+   * set show confirm equlas true to show
+   * and vice verca
+   */
   handleClose() {
     this.showConfirm = false;
   }
