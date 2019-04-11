@@ -2,8 +2,11 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { NavLink } from 'react-router-dom';
 
-// Renders an information card using Bootstrap styles
-// Attributes: title
+/* Renders the different Bootstrap-based
+visual components the application is built from */
+
+
+//Used to box content throughout the application
 export class Card extends Component {
   render() {
     return (
@@ -18,6 +21,7 @@ export class Card extends Component {
   }
 }
 
+//Entries in tables
 class TabItem extends Component {
   render() {
     return this.props.to ? (
@@ -32,6 +36,7 @@ class TabItem extends Component {
   }
 }
 
+//Table itself
 export class Tab extends Component {
   static Item = TabItem;
 
@@ -44,15 +49,14 @@ export class Tab extends Component {
   }
 }
 
-// Renders a row using Bootstrap styles
+//Horizontal formating of content
 export class Row extends Component {
   render() {
     return <div className="row">{this.props.children}</div>;
   }
 }
 
-// Renders a column with specified width using Bootstrap styles
-// Properties: width, right
+//Vertical formating of content
 export class Column extends Component {
   render() {
     return (
@@ -66,8 +70,7 @@ export class Column extends Component {
   }
 }
 
-// Renders a NavBar link using Bootstrap styles
-// Attributes: exact, to
+//Horizontal navigation bar links
 class NavBarLink extends Component {
   render() {
     return this.props.to ? (
@@ -86,8 +89,7 @@ class NavBarLink extends Component {
   }
 }
 
-// Renders a NavBar using Bootstrap styles
-// Attributes: brand
+//The horizontal navigation bar itself
 export class NavBar extends Component {
   static Link = NavBarLink;
 
@@ -109,6 +111,7 @@ export class NavBar extends Component {
   }
 }
 
+//Links on the navigation bar on the left side of the page
 class SideNavBarLink extends Component {
   render() {
     return this.props.to ? (
@@ -128,6 +131,7 @@ class SideNavBarLink extends Component {
   }
 }
 
+//Headings on the navigation bar on the left side
 export class SideNavHeading extends Component {
   render() {
     return (
@@ -138,8 +142,7 @@ export class SideNavHeading extends Component {
   }
 }
 
-// Renders a NavBar using Bootstrap styles
-// Attributes: brand
+//The navigation bar on the left side itself
 export class SideNavBar extends Component {
   static SideLink = SideNavBarLink;
 
@@ -154,8 +157,7 @@ export class SideNavBar extends Component {
   }
 }
 
-// Renders a danger button using Bootstrap styles
-// Attributes: onClick
+//Red buttons
 class ButtonDanger extends Component {
   render() {
     return (
@@ -172,8 +174,7 @@ class ButtonDanger extends Component {
   }
 }
 
-// Renders a light button using Bootstrap styles
-// Attributes: onClick
+//Minimalistic buttons
 class ButtonLight extends Component {
   render() {
     return (
@@ -191,6 +192,7 @@ class ButtonLight extends Component {
   }
 }
 
+//Blue button
 class ButtonInfo extends Component {
   render() {
     return (
@@ -208,13 +210,16 @@ class ButtonInfo extends Component {
   }
 }
 
-// Renders a button using Bootstrap styles
+/* Exports various button types, allowing
+ you to refer to them as Button.Danger etc. */
+
 export class Button {
   static Danger = ButtonDanger;
   static Light = ButtonLight;
   static Info = ButtonInfo;
 }
 
+//More subtle version of the green button
 class ButtonSuccessOutline extends Component {
   render() {
     return (
@@ -225,8 +230,7 @@ class ButtonSuccessOutline extends Component {
   }
 }
 
-// Renders a danger button using Bootstrap styles
-// Attributes: onClick
+//More subtle version of the green button
 class ButtonDangerOutline extends Component {
   render() {
     return (
@@ -243,6 +247,7 @@ class ButtonDangerOutline extends Component {
   }
 }
 
+//More subtle version of the blue button
 class ButtonInfoOutline extends Component {
   render() {
     return (
@@ -259,6 +264,7 @@ class ButtonInfoOutline extends Component {
   }
 }
 
+//More subtle version of the green button
 class ButtonSubmitOutline extends Component {
   render() {
     return (
@@ -275,6 +281,7 @@ class ButtonSubmitOutline extends Component {
   }
 }
 
+//More subtle version of a gray button
 class ButtonSecondaryOutline extends Component {
   render() {
     return (
@@ -291,6 +298,7 @@ class ButtonSecondaryOutline extends Component {
   }
 }
 
+//More subtle version of the minimalistic button
 class ButtonLightOutline extends Component {
   render() {
     return (
@@ -307,6 +315,7 @@ class ButtonLightOutline extends Component {
   }
 }
 
+//Subtle version of a black button
 class ButtonDarkOutline extends Component {
   render() {
     return (
@@ -323,6 +332,9 @@ class ButtonDarkOutline extends Component {
   }
 }
 
+/* Exports various button types, allowing
+ you to refer to them as ButtonOutline.Danger etc. */
+
 export class ButtonOutline {
   static Success = ButtonSuccessOutline;
   static Danger = ButtonDangerOutline;
@@ -333,7 +345,7 @@ export class ButtonOutline {
   static Submit = ButtonSubmitOutline;
 }
 
-// Renders a form label using Bootstrap styles
+// Styling for labels on input forms
 class FormLabel extends Component {
   render() {
     return (
@@ -344,8 +356,7 @@ class FormLabel extends Component {
   }
 }
 
-// Renders a form input using Bootstrap styles
-// Attributes: type, value, onChange, required, pattern
+//The input forms themselves
 class FormInput extends Component {
   render() {
     return (
@@ -369,6 +380,7 @@ class FormInput extends Component {
   }
 }
 
+//The items in a selection form that drops down
 class Option extends Component {
   render() {
     return (
@@ -379,6 +391,7 @@ class Option extends Component {
   }
 }
 
+//The drop-down selection form itself
 export class Select extends Component {
   static Option = Option;
 
@@ -396,6 +409,7 @@ export class Select extends Component {
   }
 }
 
+// Used to center content on a page like the login screen
 export class CenterContent extends Component {
   render() {
     return (
@@ -405,6 +419,14 @@ export class CenterContent extends Component {
     );
   }
 }
+
+
+/*
+
+  The rest of the widgets is just stylizing
+  for various table elements.
+
+*/
 
 class Thead extends Component {
   render() {
