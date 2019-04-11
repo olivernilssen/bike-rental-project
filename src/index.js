@@ -80,7 +80,7 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 export const shared = sharedComponentData({ basketLength: 0 });
 export let basket = [];
 export let equipmentBasket = [];
-export let employeeID = 1;
+export let employeeID = null;
 export const activeCustomer = [{ id: null, lastName: '', firstName: '' }];
 
 /**
@@ -161,10 +161,12 @@ class LoginMenu extends Component {
 /* Set state for menyen. Hva vises, alt etter hvem som er logget inn */
 class Menu extends Component {
   state = {
+    user: null,
+    adminIDs: [],
     Localbasket: this.props.Mybasket,
-    isLoggedIn: true,
+    isLoggedIn: false,
     bikeMenu: false,
-    admin: true
+    admin: false
   };
 
   /**
@@ -177,10 +179,19 @@ class Menu extends Component {
   getLoginData(data) {
     this.setState({ isLoggedIn: data });
     
-    //this should be checking towards all users that are
-    //admin, but unfortunalty time has limited us
-    if (employeeID == 3) {
-      this.setState({ admin: true });
+    if(employeeID != 0 || employeeID != null || employeeID != ""){
+      rentalService.getEmployee(employeeID, result => {
+        console.log(result)
+        this.setState({user: result})
+      });
+
+      //this should be checking towards all users that are
+      //admin, but unfortunalty time has limited us
+      for(let i = 0; i < this.state.adminIDs.length; i++){
+        if (employeeID == this.state.adminIDs[i].worker_id) {
+          this.setState({ admin: true });
+        }
+      }
     }
   }
 
@@ -275,7 +286,7 @@ class Menu extends Component {
                 Handlekurv <span style={spanstyle}>{shared.basketLength}</span>
               </SideNavBar.SideLink>
               <SideNavHeading>
-                <span>MIN SIDE</span>
+                <span>Min Side</span>
               </SideNavHeading>
               <SideNavBar.SideLink onClick={this.toggleMenu} to="/information/">
                 Informasjon
@@ -315,6 +326,15 @@ class Menu extends Component {
     rentalService.getArea(area => {
       this.area = area;
     });
+
+    if(employeeID != 0 || employeeID != null || employeeID != ""){
+      rentalService.getEmployee(employeeID, result => {
+        this.setState({user: result})
+      });}
+
+    rentalService.getAdminID(Ids => {
+      this.state.adminIDs = Ids;
+    })
   }
 }
 

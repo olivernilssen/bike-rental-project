@@ -1,5 +1,4 @@
 import { connection } from './mysql_connection';
-import { start } from 'repl';
 
 class RentalService {
   getEmployee(employeeID, success) {
@@ -161,6 +160,14 @@ class RentalService {
         success(results);
       }
     );
+  }
+
+  getAdminID(success) {
+    connection.query('select * from Administration', (error, result) =>
+    {
+      if (error) return console.error(error);
+      success(result);
+    });
   }
 
   getLoginInfo(username, success) {

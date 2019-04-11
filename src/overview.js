@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Bar } from 'react-chartjs-2';
-import { Card, Row, Column, NavBar, ButtonOutline, Table } from './widgets';
+import {
+  Card,
+  Row,
+  Column,
+  NavBar,
+  ButtonOutline,
+  Table
+} from './widgets';
 import { NavLink } from 'react-router-dom';
 import { rentalService } from './services/services';
+import { employeeID } from './index.js'
 
 import createHashHistory from 'history/createHashHistory';
-
-/* This page is the elements that show
-when you are on the Overview page */
-
-
-//Creates the dates used by the chart
 
 let today = new Date();
 let day = today.getDate();
@@ -24,8 +26,13 @@ if (day2 < 10) day2 = '0' + day2;
 if (month < 10) month = '0' + month;
 
 
-//The chart on top of the overview page
-
+/**
+ * Chart is from react-chart-2.js
+ * and is a library that we used to create a nice 
+ * little chart on our overview page
+ * It gets information based on how much money they have earned each month
+ * and displays it accordingly in a graph.
+ */
 class Chart extends Component {
   months = [
     'Januar',
@@ -97,10 +104,8 @@ class Chart extends Component {
     );
   }
 
-
-  /* Updates the chart, simple function
-  that may become useful if we add more functionality. */
-
+  //Used to update the charts, supposed to have buttons for each year
+  //but there was no time to implement that in the end unfortunatly 
   updateChart() {
     let tempData = [];
     let tempLabel = [];
@@ -120,11 +125,12 @@ class Chart extends Component {
     });
   }
 
+  /**
+   * Gets all the monhtly sale income + sets tempdata til 0 first to start animation. 
+   */
   mounted() {
     let tempData = [];
     let tempLabel = [];
-
-    //Gets information for the chart
 
     rentalService.getMonthlyPrice(newdata => {
       for (let i = 0; i < newdata.length; i++) {
@@ -138,14 +144,6 @@ class Chart extends Component {
   }
 }
 
-/* These are the two tables shown
-on the overview which lets you register
-both the return and delivery of the bikes.
-
-Note that the buttons for delivery etc.
-do not do anything on their own. They
-just redirect you to where you can
-change this status yourself. */
 
 class RentedBikes extends Component {
   todaysDate = year + '-' + month + '-' + day + '%';
@@ -230,23 +228,19 @@ class RentedBikes extends Component {
   }
 
   mounted() {
-
-//Retrieves bikes which await return for the first table
     rentalService.getRentedBikes(rented => {
       this.rentedBikes = rented;
     });
 
-//Retrieves bikes which await delivery for the second table
     rentalService.getOrderedBikes(this.todaysDate, ordered => {
       this.orderedBikes = ordered;
     });
   }
 }
 
-
-//Puts the overview page together
-
 class Overview extends Component {
+  state = {user: ''};
+
   render() {
     return (
       <div>
@@ -254,7 +248,9 @@ class Overview extends Component {
           <h1>Oversikt</h1>
         </NavBar>
         <div role="main">
+        
           <Card style={{ minWidth: '400px' }}>
+            <h3>Du er på logget som: {this.state.user.firstName} {this.state.user.lastName}</h3>
             <Chart />
           </Card>
           <br />
@@ -262,6 +258,14 @@ class Overview extends Component {
         </div>
       </div>
     );
+  }
+
+  mounted(){
+    if(employeeID != 0 || employeeID != null || employeeID != ""){
+      rentalService.getEmployee(employeeID, result => {
+        this.setState({user: result})
+      });
+    }
   }
 }
 
